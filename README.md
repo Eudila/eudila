@@ -12,4 +12,4 @@ La identidad sigue el brandbook Eudila v1.0 de uso interno, guardado fuera del r
 
 ## Integración
 
-Joaco puede crear la app Next.js en la raíz sin sobrescribir este prototipo. Agustín puede portar desde `prototype/app.js` el estado único, las rutas y el selector de emoción, y desde `prototype/ayuda.html` la pantalla de ayuda. La barra global de ANI-61 debe mantener visible el acceso a ayuda en todas las rutas. Revisar `git log --all --name-only` antes de abrir el repositorio al público y mantener el repositorio antiguo privado como archivo.
+Joaco puede crear la app Next.js en la raíz sin sobrescribir este prototipo. Agustín puede portar desde `prototype/app.js` el estado único, las rutas y el selector de emoción, y desde `prototype/ayuda.html` la pantalla de ayuda. La barra global de ANI-61 debe mantener visible el acceso a ayuda en todas las rutas. El repositorio anterior queda donde está; el trabajo nuevo sigue en `Eudila/eudila`.
