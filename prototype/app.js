@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import { catalog } from "./config.js";
+import { adjacentRoute, newDraft, restoreDraft, steps, types } from "./flow-state.js";
 
 const DRAFT_KEY = "eudila-draft-v1";
 const DISCARDED_KEY = "eudila-draft-discarded";
-const steps = ["animo", "emocion", "factores"];
 const moods = [
   { label: "Muy desagradable", accent: "#892FC9", orb: "#A845DA", ambient: "#32134D", points: 9, depth: .27, lightInk: true },
   { label: "Desagradable", accent: "#5B4CE1", orb: "#8A68D8", ambient: "#26235B", points: 14, depth: .17, lightInk: true },
@@ -31,13 +31,8 @@ let closeTarget = "";
 let modalOrigin = null;
 
 function readDraft() {
-  try {
-    const value = JSON.parse(sessionStorage.getItem(DRAFT_KEY));
-    if (Number.isInteger(value?.mood) && value.mood >= 1 && value.mood <= 7 && Array.isArray(value.factors)) {
-      return { mood: value.mood, emotionId: value.emotionId == null ? null : String(value.emotionId), factors: value.factors.map(String) };
-    }
-  } catch { /* A bad or unavailable session store starts a fresh draft. */ }
-  return null;
+  try { return restoreDraft(sessionStorage.getItem(DRAFT_KEY)); }
+  catch { return null; }
 }
 
 function persistDraft() {
@@ -46,7 +41,7 @@ function persistDraft() {
 
 function ensureDraft() {
   if (!draft) {
-    draft = { mood: 4, emotionId: null, factors: [] };
+    draft = newDraft();
     persistDraft();
   }
 }
@@ -106,7 +101,7 @@ function orbMarkup(mood) {
 function flowHeader(index) {
   return `<div class="flow-nav">
     <button class="circle-button" type="button" data-back aria-label="Volver">‹</button>
-    <span>Registro · ${index + 1} de 3</span>
+    <span>Registro · ${index + 1} de ${steps.length}</span>
     <button class="circle-button" type="button" data-close aria-label="Cerrar registro">×</button>
   </div>`;
 }
@@ -123,8 +118,27 @@ function renderHome() {
   document.querySelector("#start-record").addEventListener("click", () => {
     try { sessionStorage.removeItem(DISCARDED_KEY); } catch { /* Navigation still works. */ }
     ensureDraft();
-    navigate("registro/animo");
+    navigate("registro/tipo");
   });
+}
+
+function renderType() {
+  app.innerHTML = `<section class="flow-screen detail-screen">
+    ${flowHeader(0)}
+    <div class="flow-body detail-body">
+      <h1>¿A qué momento corresponde este registro?</h1>
+      <fieldset class="type-options">
+        <legend class="sr-only">Momento del registro</legend>
+        ${types.map(type => `<label class="type-option"><input type="radio" name="record-type" value="${type}" ${draft.type === type ? "checked" : ""}><span>${type === "libre" ? "Registro libre" : type[0].toUpperCase() + type.slice(1)}</span></label>`).join("")}
+      </fieldset>
+    </div>
+    <button class="primary-button flow-next" type="button" data-next ${draft.type ? "" : "disabled"}>Siguiente</button>
+  </section>`;
+  document.querySelectorAll('[name="record-type"]').forEach(input => input.addEventListener("change", () => {
+    draft.type = input.value;
+    persistDraft();
+    document.querySelector("[data-next]").disabled = false;
+  }));
 }
 
 function paintMood() {
@@ -145,7 +159,7 @@ function paintMood() {
 
 function renderMood() {
   app.innerHTML = `<section class="flow-screen mood-screen">
-    ${flowHeader(0)}
+    ${flowHeader(1)}
     <div class="flow-body">
       <h1>¿Cómo te sentís ahora?</h1>
       <div id="orb-host" class="orb-host"></div>
@@ -169,7 +183,7 @@ function selectedEmotion() { return emotions.find(item => String(item.id) === dr
 
 function renderEmotion() {
   app.innerHTML = `<section class="flow-screen detail-screen">
-    ${flowHeader(1)}
+    ${flowHeader(2)}
     <div class="flow-body detail-body">
       <h1>¿Qué emoción describe mejor lo que sentís?</h1>
       <p class="step-context" id="emotion-mood"></p>
@@ -233,7 +247,7 @@ function openEmotions(event) {
 
 function renderFactors() {
   app.innerHTML = `<section class="flow-screen detail-screen">
-    ${flowHeader(2)}
+    ${flowHeader(3)}
     <div class="flow-body detail-body">
       <h1>¿Qué factores influyeron hoy?</h1>
       <p class="step-context">Podés elegir más de uno.</p>
@@ -261,20 +275,21 @@ function renderFactors() {
 function render() {
   if (isFlow(activeRoute)) ensureDraft();
   shell.toggleAttribute("data-flow", isFlow(activeRoute));
-  if (activeRoute === "registro/animo") renderMood();
+  if (activeRoute === "registro/tipo") renderType();
+  else if (activeRoute === "registro/animo") renderMood();
   else if (activeRoute === "registro/emocion") renderEmotion();
   else if (activeRoute === "registro/factores") renderFactors();
   else renderHome();
 
   document.querySelector("[data-close]")?.addEventListener("click", () => askToClose());
   document.querySelector("[data-back]")?.addEventListener("click", () => {
-    const index = steps.indexOf(activeRoute.split("/")[1]);
-    if (index === 0) askToClose();
-    else navigate(`registro/${steps[index - 1]}`);
+    const previous = adjacentRoute(activeRoute, -1);
+    if (previous) navigate(previous);
+    else askToClose();
   });
   document.querySelector("[data-next]")?.addEventListener("click", () => {
-    const index = steps.indexOf(activeRoute.split("/")[1]);
-    if (index < steps.length - 1) navigate(`registro/${steps[index + 1]}`);
+    const next = adjacentRoute(activeRoute, 1);
+    if (next) navigate(next);
   });
   if (renderedRoute !== activeRoute) {
     const heading = app.querySelector("h1");

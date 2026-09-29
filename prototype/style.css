@@ -134,6 +134,10 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .detail-body h1 { margin-left: 0; margin-right: 0; }
 .step-context { margin: 0 0 24px; color: rgb(255 255 255 / .85); }
 .chip-list { display: flex; flex-wrap: wrap; gap: 10px; }
+.type-options { display: grid; gap: 12px; margin: 0; padding: 0; border: 0; }
+.type-option { display: flex; align-items: center; gap: 14px; min-height: 54px; border: 1px solid rgb(255 255 255 / .55); border-radius: 14px; padding: 12px 16px; cursor: pointer; }
+.type-option:has(input:checked) { border-color: #2EC0BC; background: rgb(46 192 188 / .2); }
+.type-option input { width: 18px; height: 18px; accent-color: #2EC0BC; }
 .chip-button { border: 1px solid rgb(255 255 255 / .55); border-radius: 999px; padding: 12px 16px; background: transparent; color: white; }
 .chip-button[aria-pressed="true"] { border-color: #2EC0BC; background: #2EC0BC; color: #1D1D1F; font-weight: 700; }
 .detail-screen .text-button { align-self: flex-start; margin-top: 24px; color: white; }
