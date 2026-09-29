@@ -1,0 +1,40 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: AGPL-3.0-only -->
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#FBFBFD">
+  <title>Ayuda ahora · eudila</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="app-shell help-page">
+    <header class="topbar">
+      <a class="wordmark" href="./index.html" aria-label="eudila, volver al registro">eudila</a>
+    </header>
+    <main class="help-content">
+      <h1>Ayuda ahora</h1>
+
+      <section class="phone-option" aria-labelledby="cas-title">
+        <h2 id="cas-title">Centro de Asistencia al Suicida</h2>
+        <p>De 8:00 a 0:00. La línea puede estar ocupada.</p>
+        <a class="phone-link" href="tel:135">Llamar al 135 <span>Capital Federal y Gran Buenos Aires</span></a>
+        <a class="phone-link" href="tel:08003451435">Llamar al 0800 345 1435 <span>Desde todo el país</span></a>
+      </section>
+
+      <section class="phone-option" aria-labelledby="national-title">
+        <h2 id="national-title">Urgencias de salud mental</h2>
+        <p>Atención nacional, las 24 horas.</p>
+        <a class="phone-link" href="tel:08009990091">Llamar al 0800 999 0091 <span>Desde todo el país</span></a>
+      </section>
+
+      <p class="source-note">Números, cobertura y horarios: <a href="https://www.asistenciaalsuicida.org.ar/ayuda">Centro de Asistencia al Suicida</a>, sus <a href="https://www.asistenciaalsuicida.org.ar/horarios-de-atencion">horarios de atención</a> y <a href="https://www.argentina.gob.ar/node/513585">Ministerio de Salud de la Nación</a>. Verificado el 29/09/2026.</p>
+      <a class="back-link" href="./index.html">Volver a eudila</a>
+    </main>
+  </div>
+  <script>
+    if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js");
+  </script>
+</body>
+</html>

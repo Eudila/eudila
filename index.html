@@ -1,0 +1,42 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: AGPL-3.0-only -->
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#FBFBFD">
+  <title>eudila</title>
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <div class="app-shell" id="shell">
+    <header class="topbar">
+      <a class="wordmark" href="./index.html" id="home-link" aria-label="eudila, inicio">eudila</a>
+      <a class="help-link" href="./ayuda.html">Ayuda ahora</a>
+    </header>
+    <main id="app" tabindex="-1">
+      <p>Preparando el registro…</p>
+    </main>
+  </div>
+
+  <dialog id="close-dialog" aria-labelledby="close-title">
+    <h2 id="close-title">¿Descartar este registro?</h2>
+    <p>Si salís, se borrará lo que cargaste en este registro.</p>
+    <form method="dialog" class="dialog-actions">
+      <button value="cancel" class="text-button">Seguir registrando</button>
+      <button value="discard" class="solid-button">Descartar</button>
+    </form>
+  </dialog>
+
+  <dialog id="emotion-dialog" aria-labelledby="emotion-dialog-title">
+    <div class="dialog-heading">
+      <h2 id="emotion-dialog-title">Todas las emociones</h2>
+      <button id="emotion-close" class="icon-button" type="button" aria-label="Cerrar lista">×</button>
+    </div>
+    <label for="emotion-search">Buscar una emoción</label>
+    <input id="emotion-search" type="search" autocomplete="off">
+    <div id="emotion-results" class="emotion-results"></div>
+  </dialog>
+</body>
+</html>
