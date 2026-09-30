@@ -19,7 +19,7 @@ html { min-height: 100%; }
 body { min-height: 100svh; margin: 0; }
 button, input { font: inherit; }
 button { cursor: pointer; }
-a { color: #0C8A86; }
+a { color: #0C6663; }
 :focus-visible { outline: 3px solid #0C8A86; outline-offset: 3px; }
 button:disabled { cursor: not-allowed; opacity: .55; }
 
@@ -80,6 +80,12 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .app-shell[data-flow] .wordmark, .app-shell[data-flow] .help-link { color: #fff; }
 .app-shell[data-flow] .help-link:hover { background: rgb(255 255 255 / .14); }
 .app-shell[data-flow] :focus-visible { outline-color: white; }
+.app-shell[data-flow]:not([data-mood]) { color: #1D1D1F; background: #FBFBFD; }
+.app-shell[data-flow]:not([data-mood]) .topbar { background: #FBFBFD; }
+.app-shell[data-flow]:not([data-mood]) .wordmark { color: #1D1D1F; }
+.app-shell[data-flow]:not([data-mood]) .help-link { color: #0C6663; }
+.app-shell[data-flow]:not([data-mood]) .help-link:hover { background: rgb(12 138 134 / .1); }
+.app-shell[data-flow]:not([data-mood]) :focus-visible { outline-color: #0C8A86; }
 
 #app { display: flex; flex: 1; flex-direction: column; }
 .home-screen { display: flex; flex: 1; flex-direction: column; justify-content: space-between; gap: 48px; padding: 18vh 28px 36px; }
@@ -94,7 +100,7 @@ button:disabled { cursor: not-allowed; opacity: .55; }
   border-radius: 999px;
   min-height: 50px;
   padding: 12px 24px;
-  background: #0C8A86;
+  background: #0C6663;
   color: white;
   font-weight: 750;
   transition: filter 160ms ease-out, transform 160ms ease-out;
@@ -112,10 +118,12 @@ button:disabled { cursor: not-allowed; opacity: .55; }
   padding: 12px 24px max(28px, env(safe-area-inset-bottom));
 }
 .mood-screen { background: linear-gradient(180deg, var(--ambient) 0%, color-mix(in srgb, var(--ambient) 72%, #1D1D1F) 56%, #071416 100%); }
-.detail-screen { background: linear-gradient(180deg, #0F5654 0%, #173B3A 56%, #0A2424 100%); }
+.detail-screen { background: #FBFBFD; }
 .flow-nav { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: .86rem; font-weight: 700; }
 .circle-button { width: 34px; height: 34px; flex: none; border: 0; border-radius: 50%; background: rgb(255 255 255 / .15); color: white; font-size: 1.45rem; line-height: 1; }
 .circle-button:hover { background: rgb(255 255 255 / .25); }
+.detail-screen .circle-button { background: #EBEBEF; color: #1D1D1F; }
+.detail-screen .circle-button:hover { background: #D8D8DD; }
 .flow-body { display: flex; flex: 1; flex-direction: column; align-items: center; justify-content: center; min-height: 0; text-align: center; }
 .flow-body h1 { max-width: 17ch; margin: 16px auto 24px; font-size: 1.85rem; letter-spacing: -.025em; line-height: 1.16; text-wrap: balance; }
 .flow-body h1:focus, .home-copy h1:focus { outline: none; }
@@ -129,20 +137,20 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .range-ends { display: flex; justify-content: space-between; gap: 12px; width: min(100%, 330px); margin-top: 22px; font-size: .66rem; font-weight: 750; letter-spacing: .02em; }
 .range-ends span:last-child { text-align: right; }
 .flow-next { width: 100%; background: var(--accent); color: var(--action-ink); }
-.detail-screen .flow-next { background: #2EC0BC; color: white; }
+.detail-screen .flow-next { background: #0C6663; color: white; }
 .detail-body { align-items: stretch; justify-content: flex-start; padding: 8vh 0 24px; text-align: left; }
 .detail-body h1 { margin-left: 0; margin-right: 0; }
-.step-context { margin: 0 0 24px; color: rgb(255 255 255 / .85); }
+.step-context { margin: 0 0 24px; color: #55555A; }
 .chip-list { display: flex; flex-wrap: wrap; gap: 10px; }
 .type-options { display: grid; gap: 12px; margin: 0; padding: 0; border: 0; }
-.type-option { display: flex; align-items: center; gap: 14px; min-height: 54px; border: 1px solid rgb(255 255 255 / .55); border-radius: 14px; padding: 12px 16px; cursor: pointer; }
-.type-option:has(input:checked) { border-color: #2EC0BC; background: rgb(46 192 188 / .2); }
-.type-option input { width: 18px; height: 18px; accent-color: #2EC0BC; }
-.chip-button { border: 1px solid rgb(255 255 255 / .55); border-radius: 999px; padding: 12px 16px; background: transparent; color: white; }
-.chip-button[aria-pressed="true"] { border-color: #2EC0BC; background: #2EC0BC; color: #1D1D1F; font-weight: 700; }
-.detail-screen .text-button { align-self: flex-start; margin-top: 24px; color: white; }
+.type-option { display: flex; align-items: center; gap: 14px; min-height: 54px; border: 1px solid #B5B5BA; border-radius: 14px; padding: 12px 16px; cursor: pointer; }
+.type-option:has(input:checked) { border-color: #0C8A86; background: #E5F5F4; }
+.type-option input { width: 18px; height: 18px; accent-color: #0C8A86; }
+.chip-button { border: 1px solid #B5B5BA; border-radius: 999px; padding: 12px 16px; background: transparent; color: #1D1D1F; }
+.chip-button[aria-pressed="true"] { border-color: #0C6663; background: #0C6663; color: white; font-weight: 700; }
+.detail-screen .text-button { align-self: flex-start; margin-top: 24px; color: #0C6663; }
 .selected-emotion { min-height: 1.5em; font-weight: 700; }
-.catalog-message { padding: 16px; border-radius: 12px; background: rgb(255 255 255 / .12); line-height: 1.4; }
+.catalog-message { padding: 16px; border-radius: 12px; background: #EBEBEF; line-height: 1.4; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
 dialog { width: min(calc(100% - 32px), 460px); max-height: min(80svh, 600px); border: 0; border-radius: 14px; padding: 24px; background: #FBFBFD; color: #1D1D1F; }
@@ -164,7 +172,7 @@ dialog p { line-height: 1.45; }
 .phone-option { margin: 40px 0; }
 .phone-option h2 { margin: 0 0 8px; font-size: 1.2rem; }
 .phone-option p { margin: 0 0 20px; color: #55555A; }
-.phone-link { display: block; margin: 12px 0; border-radius: 12px; padding: 16px; background: #0C8A86; color: white; font-size: 1.12rem; font-weight: 750; text-decoration: none; }
+.phone-link { display: block; margin: 12px 0; border-radius: 12px; padding: 16px; background: #0C6663; color: white; font-size: 1.12rem; font-weight: 750; text-decoration: none; }
 .phone-link:hover { background: #0B7773; }
 .phone-link span { display: block; margin-top: 4px; font-size: .85rem; font-weight: 500; }
 .help-content .source-note { margin: 32px 0; font-size: .82rem; }

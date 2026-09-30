@@ -7,11 +7,11 @@ const DISCARDED_KEY = "eudila-draft-discarded";
 const moods = [
   { label: "Muy desagradable", accent: "#892FC9", orb: "#A845DA", ambient: "#32134D", points: 9, depth: .27, lightInk: true },
   { label: "Desagradable", accent: "#5B4CE1", orb: "#8A68D8", ambient: "#26235B", points: 14, depth: .17, lightInk: true },
-  { label: "Algo desagradable", accent: "#209AE7", orb: "#3BBADF", ambient: "#123F60", points: 12, depth: .08, lightInk: true },
-  { label: "Neutral", accent: "#2EC0BC", orb: "#5FD3D0", ambient: "#0F5654", points: 0, depth: 0, lightInk: true },
+  { label: "Algo desagradable", accent: "#209AE7", orb: "#3BBADF", ambient: "#123F60", points: 12, depth: .08, lightInk: false },
+  { label: "Neutral", accent: "#2EC0BC", orb: "#5FD3D0", ambient: "#0F5654", points: 0, depth: 0, lightInk: false },
   { label: "Algo agradable", accent: "#77CB47", orb: "#B6D57A", ambient: "#285B25", points: 1, depth: .14, lightInk: false },
   { label: "Agradable", accent: "#FE9613", orb: "#F2B24A", ambient: "#6C3B0B", points: 7, depth: .13, lightInk: false },
-  { label: "Muy agradable", accent: "#FF4A4B", orb: "#E65175", ambient: "#712127", points: 9, depth: .19, lightInk: true }
+  { label: "Muy agradable", accent: "#FF4A4B", orb: "#E65175", ambient: "#712127", points: 9, depth: .19, lightInk: false }
 ];
 
 const shell = document.querySelector("#shell");
@@ -56,7 +56,7 @@ function routeFromUrl() {
 function isFlow(route) { return route.startsWith("registro/"); }
 
 function navigate(route, replace = false) {
-  history[replace ? "replaceState" : "pushState"]({}, "", `#/${route}`);
+  history[replace ? "replaceState" : "pushState"]({ eudilaEntry: true }, "", `#/${route}`);
   activeRoute = route;
   render();
 }
@@ -275,6 +275,7 @@ function renderFactors() {
 function render() {
   if (isFlow(activeRoute)) ensureDraft();
   shell.toggleAttribute("data-flow", isFlow(activeRoute));
+  shell.toggleAttribute("data-mood", activeRoute === "registro/animo");
   if (activeRoute === "registro/tipo") renderType();
   else if (activeRoute === "registro/animo") renderMood();
   else if (activeRoute === "registro/emocion") renderEmotion();
@@ -347,7 +348,7 @@ window.addEventListener("popstate", () => {
     return;
   }
   if (isFlow(activeRoute) && !isFlow(target) && draft) {
-    history.pushState({}, "", `#/${activeRoute}`);
+    history.pushState({ eudilaEntry: true }, "", `#/${activeRoute}`);
     askToClose(target);
     return;
   }
@@ -356,5 +357,9 @@ window.addEventListener("popstate", () => {
 });
 
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js");
+if (isFlow(activeRoute) && !history.state?.eudilaEntry) {
+  history.replaceState({ eudilaEntry: true }, "", "#/");
+  history.pushState({ eudilaEntry: true }, "", `#/${activeRoute}`);
+}
 render();
 loadCatalog();
