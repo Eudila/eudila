@@ -1,6 +1,6 @@
 # ANI-70 · Plan para cerrar la accesibilidad del registro
 
-**Estado:** In Progress. **Responsable:** Agustín. **Referencia visual:** Eudila Brandbook v1.0, de uso interno; no copiarlo a este repositorio. **Meta:** comprobar el flujo completo de la app con teclado, lector de pantalla y celular físico, y corregir los problemas encontrados antes de pasar ANI-70 a Done.
+**Estado:** Done con alcance revisado por Agustín el 01/10/2026. **Responsable:** Agustín. **Referencia visual:** Eudila Brandbook v1.0, de uso interno; no copiarlo a este repositorio. **Criterio de cierre vigente:** comprobar que el prototipo se renderiza correctamente en los tamaños probados. El plan de accesibilidad integral que sigue queda como guía para la app final.
 
 ## Punto de partida
 
@@ -25,7 +25,7 @@ El prototipo de [`prototype/`](../../prototype/) ya permite recorrer cuatro paso
 
 ## Dependencias y orden
 
-La auditoría del prototipo y las correcciones independientes pueden empezar ahora. El cierre depende de [ANI-48](https://linear.app/anima-org/issue/ANI-48/scaffold-nextjs-con-typescript-y-tailwind), [ANI-61](https://linear.app/anima-org/issue/ANI-61/layout-base-y-navegacion-por-tabs), [ANI-96](https://linear.app/anima-org/issue/ANI-96/investigar-y-definir-el-catalogo-de-emociones-y-factores-de-vida), [ANI-50](https://linear.app/anima-org/issue/ANI-50/esquema-de-base-de-datos-registros-emociones-y-factores) y [ANI-66](https://linear.app/anima-org/issue/ANI-66/paso-5-confirmacion-y-guardado-en-supabase). No marcar ANI-70 Done por un pase de axe del prototipo.
+La validación integral de la app final sigue dependiendo de [ANI-48](https://linear.app/anima-org/issue/ANI-48/scaffold-nextjs-con-typescript-y-tailwind), [ANI-61](https://linear.app/anima-org/issue/ANI-61/layout-base-y-navegacion-por-tabs), [ANI-96](https://linear.app/anima-org/issue/ANI-96/investigar-y-definir-el-catalogo-de-emociones-y-factores-de-vida), [ANI-50](https://linear.app/anima-org/issue/ANI-50/esquema-de-base-de-datos-registros-emociones-y-factores) y [ANI-66](https://linear.app/anima-org/issue/ANI-66/paso-5-confirmacion-y-guardado-en-supabase). El cierre reducido de ANI-70 no acredita esa validación.
 
 ## Ejecución del 01/10/2026
 
@@ -33,4 +33,5 @@ La auditoría del prototipo y las correcciones independientes pueden empezar aho
 - **Teclado:** probado en Chrome 154 (macOS) desde Inicio hasta Factores con datos de catálogo simulados solo en el navegador: Tab, Shift+Tab, Enter/Espacio, flechas del ánimo, diálogo de emociones, búsqueda, Escape, regreso del foco, selección de factores, Atrás del navegador, cancelación/descarte y acceso a Ayuda. El borrador se elimina al confirmar descarte.
 - **Reflujo:** Inicio, Tipo, Ánimo, Emoción, Factores y Ayuda en 320 × 568, 390 × 844 y 520 × 900, con texto al 100 % y 200 %: sin desborde horizontal. Diálogos de emoción y descarte sin desborde a 320 y 390 px con texto al 200 %.
 - **axe-core 4.13.0:** cero violaciones WCAG A/AA detectadas en las seis vistas, ambos diálogos y error de catálogo. Los resultados `incomplete` de contraste corresponden a degradés/círculos y a un texto del diálogo superpuesto. Revisión manual: contraste mínimo 5,44:1 para el icono blanco sobre los siete ambientes con círculo traslúcido; 5,08:1 para texto en las siete acciones de ánimo; 14,15:1 para icono Grafito sobre círculo Nube gris. El texto de diálogo usa Grafito sobre Nube. El movimiento reducido fija el orbe y elimina las transiciones.
-- **Pendiente para cerrar ANI-70:** repetir esta validación con el catálogo aprobado, el guardado y el resumen en la app integrada; comprobar anuncios con lector de pantalla y probar en un teléfono físico. Al 01/10, ANI-48, ANI-61, ANI-96, ANI-50 y ANI-66 siguen en Backlog. El catálogo simulado no se publica como contenido clínico.
+- **Fuera del criterio de cierre revisado:** repetir esta validación con el catálogo aprobado, el guardado y el resumen en la app integrada; comprobar anuncios con lector de pantalla y probar en un teléfono físico. Al 01/10, ANI-48, ANI-61, ANI-96, ANI-50 y ANI-66 siguen en Backlog. El catálogo simulado no se publica como contenido clínico.
+- **Cierre visual:** 36 de 36 combinaciones de seis vistas, tres anchos (320, 390 y 520 px) y texto al 100 % y 200 % sin desborde horizontal; títulos visibles al navegar y diálogos sin desborde a 320 y 390 px. Se revisaron capturas del ancho mínimo y del flujo en tamaño habitual.
