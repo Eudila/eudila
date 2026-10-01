@@ -5,7 +5,7 @@
 **Objetivo:** entregar el texto completo, verificable y aprobado para que Joaco pueda maquetar ANI-76.
 **Arquitectura:** un documento Markdown con el texto público en su orden de lectura: presentación, gobiernos, contacto y desarrolladores. Las notas editoriales y la evidencia quedan en este plan. El contenido describe el prototipo publicado; la exportación se identifica como prevista hasta completar ANI-94/ANI-95.
 **Tecnologías:** Markdown, Git, Python 3 para servir el prototipo; fuentes primarias SNIC y Scientific Reports.
-**Estado:** en ejecución; aprobación editorial pendiente.
+**Estado:** Done · aprobado por Agustín y publicado en `main` el 01/10/2026.
 
 ## Selección y diseño
 
@@ -41,8 +41,8 @@ Contacto: issues públicos del repo, habilitados y accesibles, con aviso breve d
 - [x] Contacto real y comandos reproducidos desde clon temporal.
 - [x] Prestaciones actuales contrastadas; PDF/CSV/JSON claramente previstos en ambas secciones.
 - [x] Revisión independiente resuelta.
-- [ ] Aprobación editorial explícita de Agustín.
-- [ ] Documento publicado y ANI-75 confirmado en Done.
+- [x] Aprobación editorial explícita de Agustín, recibida el 01/10/2026.
+- [x] Documento publicado y ANI-75 confirmado en Done.
 
 ## Evidencia de ejecución · 01/10/2026
 
@@ -52,4 +52,6 @@ Contacto: issues públicos del repo, habilitados y accesibles, con aviso breve d
 - Todos los enlaces externos del copy respondieron HTTP 200 con redirecciones: informe oficial, artículo, repo, README, licencia, NOTICE, issues y pull requests. Los destinos Markdown del README existen.
 - `git diff --check`: sin errores. Solo documentación; no se modifica comportamiento, dependencias ni assets del prototipo.
 - Revisión independiente con `superpowers:requesting-code-review`: sin hallazgos críticos ni importantes. El revisor contrastó ambas fuentes, destinos y prestaciones con el código; reprodujo los comandos desde otro clon temporal y confirmó HTTP 200 y prueba de estado sin fallos. Considera el documento listo para revisión editorial y maquetación.
-- Aprobación editorial solicitada con enlace al texto completo; pendiente de respuesta antes de publicación y Done.
+- Agustín aprobó el contenido de forma explícita el 01/10/2026 («me gustó, commitea y marca done»).
+- Commit `3b1b30a9a29ece7b97041e543e61f16483e2f02f` publicado en `main` de `Eudila/eudila`; `git rev-parse HEAD origin/main` confirmó el mismo SHA después del push.
+- ANI-75 quedó en Done el 01/10/2026 tras verificar la publicación.
