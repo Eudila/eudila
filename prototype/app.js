@@ -101,7 +101,7 @@ function orbMarkup(mood) {
 function flowHeader(index) {
   return `<div class="flow-nav">
     <button class="circle-button" type="button" data-back aria-label="Volver">‹</button>
-    <span>Registro · ${index + 1} de ${steps.length}</span>
+    <span id="step-progress">Registro · ${index + 1} de ${steps.length}</span>
     <button class="circle-button" type="button" data-close aria-label="Cerrar registro">×</button>
   </div>`;
 }
@@ -278,6 +278,12 @@ function renderFactors() {
 }
 
 function render() {
+  const focused = document.activeElement;
+  const focusTarget = app.contains(focused)
+    ? focused.matches("[data-back]") ? "[data-back]"
+      : focused.matches("[data-close]") ? "[data-close]"
+      : focused.id ? `#${CSS.escape(focused.id)}` : "h1"
+    : null;
   if (isFlow(activeRoute)) ensureDraft();
   shell.toggleAttribute("data-flow", isFlow(activeRoute));
   shell.toggleAttribute("data-mood", activeRoute === "registro/animo");
@@ -297,14 +303,14 @@ function render() {
     const next = adjacentRoute(activeRoute, 1);
     if (next) navigate(next);
   });
-  if (renderedRoute !== activeRoute) {
-    const heading = app.querySelector("h1");
-    if (heading) {
-      heading.tabIndex = -1;
-      heading.focus({ preventScroll: true });
-    }
-    renderedRoute = activeRoute;
+  const heading = app.querySelector("h1");
+  if (isFlow(activeRoute)) heading?.setAttribute("aria-describedby", "step-progress");
+  if (renderedRoute !== activeRoute || focusTarget) {
+    const target = renderedRoute !== activeRoute ? heading : app.querySelector(focusTarget) || heading;
+    if (target === heading) heading.tabIndex = -1;
+    target?.focus(renderedRoute !== activeRoute ? undefined : { preventScroll: true });
   }
+  renderedRoute = activeRoute;
 }
 
 async function loadCatalog() {
