@@ -89,11 +89,11 @@ function shapePath(mood) {
 function orbMarkup(mood) {
   const path = shapePath(mood);
   return `<svg class="orb" viewBox="0 0 220 220" aria-hidden="true">
-    <path d="${path}" fill="currentColor" opacity=".18"/>
-    <path d="${path}" transform="translate(110 110) scale(.82) translate(-110 -110)" fill="currentColor" opacity=".30"/>
-    <path d="${path}" transform="translate(110 110) scale(.63) translate(-110 -110)" fill="currentColor" opacity=".48"/>
-    <path d="${path}" transform="translate(110 110) scale(.45) translate(-110 -110)" fill="currentColor" opacity=".7"/>
-    <path d="${path}" transform="translate(110 110) scale(.29) translate(-110 -110)" fill="currentColor" opacity=".9"/>
+    <g class="orb-layer"><path d="${path}" fill="currentColor" opacity=".18"/></g>
+    <g class="orb-layer"><path d="${path}" transform="translate(110 110) scale(.82) translate(-110 -110)" fill="currentColor" opacity=".30"/></g>
+    <g class="orb-layer"><path d="${path}" transform="translate(110 110) scale(.63) translate(-110 -110)" fill="currentColor" opacity=".48"/></g>
+    <g class="orb-layer"><path d="${path}" transform="translate(110 110) scale(.45) translate(-110 -110)" fill="currentColor" opacity=".7"/></g>
+    <g class="orb-layer"><path d="${path}" transform="translate(110 110) scale(.29) translate(-110 -110)" fill="currentColor" opacity=".9"/></g>
     <circle cx="110" cy="110" r="17" fill="white" opacity=".94"/>
   </svg>`;
 }
@@ -187,7 +187,7 @@ function renderEmotion() {
     <div class="flow-body detail-body">
       <h1>¿Qué emoción describe mejor lo que sentís?</h1>
       <p class="step-context" id="emotion-mood"></p>
-      <div id="quick-options" class="chip-list" aria-label="Emociones sugeridas"></div>
+      <div id="quick-options" class="chip-list" role="group" aria-label="Emociones sugeridas"></div>
       <button class="text-button" type="button" id="all-emotions" ${emotions.length ? "" : "disabled"}>Ver todas las emociones</button>
       <p class="selected-emotion" id="selected-emotion" aria-live="polite"></p>
       ${emotions.length ? "" : `<p class="catalog-message" role="status">${catalogProblem}</p>`}
@@ -202,6 +202,7 @@ function renderEmotion() {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "chip-button";
+    button.dataset.emotionId = String(item.id);
     button.textContent = item.nombre;
     button.setAttribute("aria-pressed", String(String(item.id) === draft.emotionId));
     button.addEventListener("click", () => chooseEmotion(item));
@@ -214,7 +215,11 @@ function chooseEmotion(item) {
   draft.emotionId = String(item.id);
   persistDraft();
   if (emotionDialog.open) emotionDialog.close();
-  render();
+  document.querySelector("#selected-emotion").textContent = `Elegiste: ${item.nombre}`;
+  document.querySelector("[data-next]").disabled = false;
+  document.querySelectorAll("#quick-options .chip-button").forEach(button => {
+    button.setAttribute("aria-pressed", String(button.dataset.emotionId === draft.emotionId));
+  });
 }
 
 function fillEmotionResults() {
@@ -251,7 +256,7 @@ function renderFactors() {
     <div class="flow-body detail-body">
       <h1>¿Qué factores influyeron hoy?</h1>
       <p class="step-context">Podés elegir más de uno.</p>
-      <div id="factor-options" class="chip-list" aria-label="Factores de vida"></div>
+      <div id="factor-options" class="chip-list" role="group" aria-label="Factores de vida"></div>
       ${factors.length ? "" : `<p class="catalog-message" role="status">${catalogProblem.replace("emociones", "factores de vida")}</p>`}
     </div>
   </section>`;

@@ -118,7 +118,7 @@ button:disabled { cursor: not-allowed; opacity: .55; }
   padding: 12px 24px max(28px, env(safe-area-inset-bottom));
 }
 .mood-screen { background: linear-gradient(180deg, var(--ambient) 0%, color-mix(in srgb, var(--ambient) 72%, #1D1D1F) 56%, #071416 100%); }
-.detail-screen { background: #FBFBFD; }
+.detail-screen { background: #FBFBFD; color: #1D1D1F; }
 .flow-nav { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: .86rem; font-weight: 700; }
 .circle-button { width: 34px; height: 34px; flex: none; border: 0; border-radius: 50%; background: rgb(255 255 255 / .15); color: white; font-size: 1.45rem; line-height: 1; }
 .circle-button:hover { background: rgb(255 255 255 / .25); }
@@ -126,10 +126,12 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .detail-screen .circle-button:hover { background: #D8D8DD; }
 .flow-body { display: flex; flex: 1; flex-direction: column; align-items: center; justify-content: center; min-height: 0; text-align: center; }
 .flow-body h1 { max-width: 17ch; margin: 16px auto 24px; font-size: 1.85rem; letter-spacing: -.025em; line-height: 1.16; text-wrap: balance; }
-.flow-body h1:focus, .home-copy h1:focus { outline: none; }
 .orb-host { width: min(56vw, 250px); aspect-ratio: 1; display: grid; place-items: center; color: var(--orb-color); }
 .orb { display: block; width: 100%; height: 100%; filter: drop-shadow(0 0 13px color-mix(in srgb, var(--orb-color) 65%, transparent)); animation: breathe 4s ease-in-out infinite; }
 @keyframes breathe { 50% { transform: scale(1.018); } }
+.orb-layer { transform-box: view-box; transform-origin: center; animation: orb-turn 126s linear infinite; }
+.orb-layer:nth-child(even) { animation-direction: reverse; }
+@keyframes orb-turn { to { transform: rotate(1turn); } }
 .mood-label { min-height: 2.3em; margin: 12px 0 18px; font-size: 1.9rem; font-weight: 800; letter-spacing: -.025em; text-wrap: balance; }
 #mood-range { width: min(100%, 330px); height: 8px; appearance: none; border-radius: 999px; background: linear-gradient(90deg, #892FC9, #5B4CE1, #209AE7, #2EC0BC, #77CB47, #FE9613, #FF4A4B); }
 #mood-range::-webkit-slider-thumb { appearance: none; width: 30px; height: 30px; border: 7px solid white; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 8px rgb(255 255 255 / .16); }
