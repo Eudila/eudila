@@ -16,4 +16,6 @@ Para comprobar ANI-69 en un navegador real: `uv run --with playwright python pro
 
 ## Integración
 
+El [contenido de la landing](docs/content/landing.md) y su [plan de verificación y aprobación](docs/plans/2026-10-01-ani-75-contenido-landing.md) están preparados para ANI-75/ANI-76. El texto distingue el prototipo disponible de las funciones previstas; su aprobación editorial se registra en el plan antes del cierre de ANI-75.
+
 Joaco puede crear la app Next.js en la raíz sin sobrescribir este prototipo. Agustín puede portar desde `prototype/app.js` el estado único, las rutas y el selector de emoción, y desde `prototype/ayuda.html` la pantalla de ayuda. La barra global de ANI-61 debe mantener visible el acceso a ayuda en todas las rutas. El repositorio anterior queda donde está; el trabajo nuevo sigue en `Eudila/eudila`.
