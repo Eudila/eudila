@@ -1,0 +1,28 @@
+# ANI-70 · Plan para cerrar la accesibilidad del registro
+
+**Estado:** In Progress. **Responsable:** Agustín. **Referencia visual:** Eudila Brandbook v1.0, de uso interno; no copiarlo a este repositorio. **Meta:** comprobar el flujo completo de la app con teclado, lector de pantalla y celular físico, y corregir los problemas encontrados antes de pasar ANI-70 a Done.
+
+## Punto de partida
+
+El prototipo de [`prototype/`](../../prototype/) ya permite recorrer cuatro pasos y abrir la ayuda. En [aafc291](https://github.com/Eudila/eudila/commit/aafc291) se corrigió la pérdida de foco al elegir una emoción, se añadieron grupos semánticos y se comprobó el movimiento reducido. Un primer pase de axe-core 4.13.0 dio cero violaciones en inicio, tipo, ánimo, emoción, diálogo, factores y ayuda. axe dejó el contraste del degradé de ánimo para revisión manual; los siete ambientes y los círculos de navegación superaron 4,5:1 con texto blanco. Esto **no valida todavía la app final**: faltan catálogo real, confirmación, guardado, resumen y prueba en dispositivo físico.
+
+## Reglas de diseño durante las correcciones
+
+- Mantener Nube `#FBFBFD` y Grafito `#1D1D1F` fuera del registro; durante el ánimo, usar los siete estados, sus ambientes y el orbe de cinco capas del brandbook. Wordmark siempre en minúsculas. No reemplazar la identidad por estilos genéricos de accesibilidad.
+- Usar Figtree en preguntas y estados, tipografía del sistema en controles; una pregunta por pantalla, voseo breve y lenguaje sin juicio.
+- Conservar la respiración de 4 s, el giro alternado de 0,05 rad/s y los cambios de estado de 600 ms cuando el sistema permita movimiento. Con `prefers-reduced-motion: reduce`, el orbe queda fijo y los cambios son inmediatos.
+- Si un par de colores del brandbook no alcanza contraste, conservar el tono de marca y ajustar el color del texto o de la superficie de acción. Objetivo: [WCAG 2.2 AA](https://www.w3.org/TR/WCAG22/); ampliar el área táctil de los círculos de navegación hacia 44 × 44 px sin cambiar su diámetro visual de 32 pt.
+
+## Secuencia de trabajo
+
+1. **Auditar lo que existe.** Usar `$impeccable audit` sobre inicio, cuatro pasos, diálogo y ayuda. Registrar por pantalla nombre/rol/estado de controles, orden de Tab, foco visible, contraste, ancho a 320 y 390 px, zoom de texto al 200 % y `prefers-reduced-motion`. Guardar solo hallazgos reproducibles, con captura y severidad. Ejecutar `node --test prototype/flow-state.test.mjs` como control del estado actual.
+2. **Corregir el recorrido con teclado.** Desde inicio hasta factores: Tab y Shift+Tab, flechas de la escala, Enter/Espacio en chips, apertura/cierre del diálogo con Escape, regreso del foco, Atrás del navegador, descarte y acceso a Ayuda. El foco debe seguir visible y nunca caer en `body` por una reconstrucción de pantalla. Aplicar `$impeccable adapt` a problemas de tamaño/reflujo y `$impeccable harden` a estados y errores.
+3. **Comprobar los anuncios.** Con lector de pantalla, verificar pregunta y número de paso, etiqueta y valor de ánimo, emoción/factores seleccionados, catálogo vacío o fallido y diálogo de descarte. Cuando exista ANI-66, incluir carga, error recuperable, reintento y guardado exitoso. Los mensajes de estado deben anunciarse sin desplazar el foco innecesariamente; revisar [WCAG 4.1.3](https://www.w3.org/WAI/WCAG22/Understanding/status-messages.html).
+4. **Repetir axe por estado visible.** Correr axe con WCAG 2.2 A/AA en cada pantalla, con el diálogo abierto y con errores visibles; axe no inspecciona las vistas ocultas. Resolver toda violación seria o crítica y revisar manualmente cada resultado `incomplete`, especialmente el degradé. Mantener un único registro de resultados y cambios. [API de axe-core](https://github.com/dequelabs/axe-core/blob/develop/doc/API.md).
+5. **Probar el flujo real al integrarse.** Repetir 1–4 en la app Next.js cuando estén ANI-48/ANI-61, el catálogo de ANI-96/ANI-50 y el guardado de ANI-66. Simular conexión lenta y caída durante el guardado: el borrador debe conservarse, el error debe ser entendible y anunciado, y se debe poder reintentar. Tras guardar, comprobar el anuncio de éxito y el resumen al recargar. Los datos ficticios solo sirven para pruebas locales; no se publican como catálogo.
+6. **Validar en un teléfono físico.** Abrir la app en al menos un iPhone con Safari/VoiceOver o Android con Chrome/TalkBack. Probar teclado/lector según el dispositivo, tacto, zoom, orientación, ayuda y guardado/error. Anotar modelo, sistema, navegador, fecha, pasos y problemas; una ventana de escritorio angosta no reemplaza esta prueba.
+7. **Cerrar con evidencia.** Ejecutar build/lint/test de la app cuando existan, repetir el recorrido y axe después de las correcciones, hacer un último `$impeccable polish` sin alterar la identidad visual y adjuntar a ANI-70 resultados, dispositivo probado y commits. Pasar a Done solo con el flujo completo operable sin mouse, cero violaciones serias/críticas de axe y prueba física registrada.
+
+## Dependencias y orden
+
+La auditoría del prototipo y las correcciones independientes pueden empezar ahora. El cierre depende de [ANI-48](https://linear.app/anima-org/issue/ANI-48/scaffold-nextjs-con-typescript-y-tailwind), [ANI-61](https://linear.app/anima-org/issue/ANI-61/layout-base-y-navegacion-por-tabs), [ANI-96](https://linear.app/anima-org/issue/ANI-96/investigar-y-definir-el-catalogo-de-emociones-y-factores-de-vida), [ANI-50](https://linear.app/anima-org/issue/ANI-50/esquema-de-base-de-datos-registros-emociones-y-factores) y [ANI-66](https://linear.app/anima-org/issue/ANI-66/paso-5-confirmacion-y-guardado-en-supabase). No marcar ANI-70 Done por un pase de axe del prototipo.
