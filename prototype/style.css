@@ -92,8 +92,11 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .app-shell[data-flow]:not([data-mood]) :focus-visible { outline-color: #0C8A86; }
 
 #app { display: flex; flex: 1; flex-direction: column; }
-.home-screen { display: flex; flex: 1; flex-direction: column; justify-content: space-between; gap: 48px; padding: 18vh 28px 36px; }
+.home-screen { display: flex; flex: 1; flex-direction: column; justify-content: space-between; gap: 48px; padding: 5vh 28px 36px; }
 .home-copy { max-width: 42ch; }
+.home-orb { width: 104px; aspect-ratio: 1; margin-bottom: 24px; color: #5FD3D0; }
+.home-orb .orb, .home-orb .orb-layer { animation: none; }
+.home-orb .orb { filter: none; }
 .home-kicker { color: #0C6663; font-size: .95rem; font-weight: 700; }
 .home-copy h1 { max-width: 12ch; margin: 24px 0; font-size: clamp(2.4rem, 10vw, 3.4rem); letter-spacing: -.035em; line-height: 1.04; text-wrap: balance; }
 .home-copy h1, .flow-body h1, .mood-label { font-family: Figtree, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }

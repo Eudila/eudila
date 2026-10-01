@@ -109,6 +109,7 @@ function flowHeader(index) {
 function renderHome() {
   app.innerHTML = `<section class="home-screen">
     <div class="home-copy">
+      <div class="home-orb" aria-hidden="true">${orbMarkup(moods[3])}</div>
       <p class="home-kicker">Un espejo tranquilo para cada estado de ánimo.</p>
       <h1>¿Cómo te sentís ahora?</h1>
       <p>Un momento para registrar lo que sentís, a tu manera.</p>
@@ -120,6 +121,34 @@ function renderHome() {
     ensureDraft();
     navigate("registro/tipo");
   });
+}
+
+function playIntro() {
+  try {
+    if (sessionStorage.getItem("eudila-intro-seen")) return;
+    sessionStorage.setItem("eudila-intro-seen", "1");
+  } catch { return; /* Keep the static state when storage is unavailable. */ }
+
+  const orb = app.querySelector(".home-orb");
+  const motion = matchMedia("(prefers-reduced-motion: reduce)");
+  if (!orb?.animate || motion.matches || document.hidden) return;
+
+  const intro = orb.animate([
+    { opacity: .6, transform: "scale(.94)" },
+    { opacity: 1, transform: "scale(1)" }
+  ], { duration: 600, easing: "cubic-bezier(.32, .72, 0, 1)" });
+  const listeners = new AbortController();
+  const finish = () => {
+    intro.cancel();
+    listeners.abort();
+  };
+  const options = { signal: listeners.signal };
+  shell.addEventListener("pointerdown", finish, options);
+  window.addEventListener("keydown", finish, options);
+  window.addEventListener("popstate", finish, options);
+  document.addEventListener("visibilitychange", finish, options);
+  motion.addEventListener("change", finish, options);
+  intro.finished.then(finish, finish);
 }
 
 function renderType() {
@@ -373,4 +402,5 @@ if (isFlow(activeRoute) && !history.state?.eudilaEntry) {
   history.pushState({ eudilaEntry: true }, "", `#/${activeRoute}`);
 }
 render();
+playIntro();
 loadCatalog();
