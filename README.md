@@ -27,13 +27,28 @@ npm run start
 
 `npm run start` sirve el build en <http://localhost:3000>; detené primero el servidor de desarrollo para liberar ese puerto. `npm run format` aplica la configuración compartida de Prettier al scaffold. ESLint y Prettier conservan el prototipo independiente; Prettier también deja los documentos de referencia sin modificar.
 
+### Tokens de diseño
+
+`app/globals.css` define los tokens de Tailwind con `@theme static`: paleta de marca, siete estados de ánimo, tipografía, espaciado, anchos, radios y sombra. Los componentes usan utilidades como `bg-surface`, `text-muted`, `text-question`, `max-w-phone` y `rounded-control`, o variables CSS para las muestras. Los valores provisionales siguen el brandbook interno; se revisan juntos en <http://localhost:3000/tokens>.
+
+Cambiar `--color-primary` en ese archivo actualiza la muestra institucional y la variante `--color-action`, usada por enlaces y acciones. El color institucional se reserva para acentos; la variante de acción permite texto blanco legible. Cada estado tiene un token `-ink` con el color de texto adecuado para su acento. El prototipo independiente conserva su propia hoja de estilos.
+
+Para comprobar cobertura de tokens, contraste AA, navegación por teclado, reflujo con texto al 200 % y propagación del color primario:
+
+```sh
+uv run --with playwright python app/tokens/tokens.test.py
+```
+
+El script inicia y detiene su servidor de desarrollo. Para comprobar un build servido por `npm run start`, indicá `TOKENS_BASE_URL=http://localhost:3000` delante del comando. Usa Chrome en macOS; `CHROME_BIN` permite elegir otro Chromium. En otros sistemas, instalá el navegador con `uv run --with playwright playwright install chromium`. Playwright solo se usa en la comprobación.
+
 ### Estructura
 
 | Ruta                                    | Contenido                                                                                                             |
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
 | `app/layout.tsx`                        | Layout raíz, idioma `es`, metadata y Figtree local.                                                                   |
 | `app/page.tsx`                          | Pantalla inicial de Next.js. Las futuras rutas del registro e historial se agregan dentro de `app/` según App Router. |
-| `app/globals.css`                       | Tailwind y los colores/tipografías de base existentes.                                                                |
+| `app/globals.css`                       | Tokens compartidos de marca, estados de ánimo, tipografía y composición.                                              |
+| `app/tokens/page.tsx`                   | Galería de todos los tokens en `/tokens`.                                                                             |
 | `prototype/`                            | Prototipo independiente y sus comprobaciones. No es una ruta de Next.js.                                              |
 | `prototype/fonts/`                      | Figtree y su licencia OFL. El layout reutiliza este archivo sin descargar fuentes durante el build.                   |
 | `docs/`                                 | Planes y contenido editorial.                                                                                         |
