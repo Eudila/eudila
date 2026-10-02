@@ -186,6 +186,7 @@ try:
                         box = control.bounding_box()
                         assert box["height"] >= 44 and box["width"] >= 44, (route, box)
                         assert box["y"] >= 0 and box["y"] + box["height"] <= height, (route, width, percent, box)
+                        assert control.evaluate("e => { const r = e.getBoundingClientRect(); return e.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)); }"), (route, width, percent, "control tapado")
                     before = [help_link.bounding_box(), nav.bounding_box()]
                     main.evaluate("e => e.scrollTop = e.scrollHeight")
                     assert [help_link.bounding_box(), nav.bounding_box()] == before
@@ -205,28 +206,28 @@ try:
         main_box = page.locator("#contenido").bounding_box()
         assert main_box["height"] > 0 and main_box["y"] + main_box["height"] <= nav.bounding_box()["y"]
         insets.evaluate("e => e.remove()")
+        assert page.get_by_role("link", name="Ayuda ahora", exact=True).evaluate("e => { const r = e.getBoundingClientRect(); return e.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)); }")
         page.keyboard.press("Tab")
         skip = page.get_by_role("link", name="Ir al contenido")
         assert skip.evaluate("e => e === document.activeElement")
         page.keyboard.press("Enter")
         assert page.locator("#contenido").evaluate("e => e === document.activeElement")
         page.get_by_role("heading", level=1).click()
-        page.set_viewport_size({"width": 390, "height": 844})
-        page.screenshot(path=str(Path(tempfile.gettempdir()) / "eudila-ani-61-layout.png"))
-        page.goto(base + "/ayuda", wait_until="networkidle")
-        page.screenshot(path=str(Path(tempfile.gettempdir()) / "eudila-ani-61-ayuda.png"))
         page.goto(base + "/tokens", wait_until="networkidle")
         page.set_viewport_size({"width": 1280, "height": 900})
         shell = page.locator(".app-shell").bounding_box()
         assert shell["width"] == 520 and shell["x"] == (1280 - 520) / 2
         page.screenshot(path=str(Path(tempfile.gettempdir()) / "eudila-ani-52-tokens.png"), full_page=True)
-        static_page = browser.new_page(java_script_enabled=False)
+        # Capturar desde un contexto limpio después de la secuencia de zoom e insets.
+        static_page = browser.new_page(java_script_enabled=False, viewport={"width": 390, "height": 844})
         assert static_page.goto(base + "/hoy").status == 200
         static_page.get_by_role("link", name="Ayuda ahora", exact=True).click()
         static_page.wait_for_url(base + "/ayuda")
         assert static_page.locator('a[href="tel:135"]').count() == 1
+        static_page.screenshot(path=str(Path(tempfile.gettempdir()) / "eudila-ani-61-ayuda.png"))
         static_page.get_by_role("navigation").get_by_role("link", name="Registrar", exact=True).click()
         static_page.wait_for_url(base + "/")
+        static_page.screenshot(path=str(Path(tempfile.gettempdir()) / "eudila-ani-61-layout.png"))
         static_page.close()
         assert not errors, errors
         browser.close()
