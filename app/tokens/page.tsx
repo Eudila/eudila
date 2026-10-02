@@ -83,7 +83,7 @@ function Swatch({ token, label }: { token: string; label: string }) {
 
 export default function Tokens() {
   return (
-    <main className="mx-auto max-w-gallery space-y-12 px-6 py-8">
+    <div className="mx-auto w-full max-w-gallery space-y-12 px-6 py-8">
       <header className="space-y-4">
         <Link
           href="/"
@@ -269,6 +269,6 @@ export default function Tokens() {
           <code className="font-sans break-all">--shadow-shell</code>
         </p>
       </section>
-    </main>
+    </div>
   );
 }

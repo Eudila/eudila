@@ -13,7 +13,7 @@ npm ci
 npm run dev
 ```
 
-Abrí <http://localhost:3000>. Para detener el servidor, presioná Ctrl+C. La pantalla inicial usa la identidad y los textos del prototipo; el registro y la ayuda todavía se ejecutan en el prototipo independiente. La app Next.js usa App Router, React, TypeScript estricto y Tailwind CSS 4.
+Abrí <http://localhost:3000>. Para detener el servidor, presioná Ctrl+C. La pantalla inicial usa la identidad y los textos del prototipo; el flujo de registro todavía se ejecuta en el prototipo independiente. La app Next.js usa App Router, React, TypeScript estricto y Tailwind CSS 4.
 
 Para comprobar el código y generar la versión de producción:
 
@@ -27,13 +27,21 @@ npm run start
 
 `npm run start` sirve el build en <http://localhost:3000>; detené primero el servidor de desarrollo para liberar ese puerto. `npm run format` aplica la configuración compartida de Prettier al scaffold. ESLint y Prettier conservan el prototipo independiente; Prettier también deja los documentos de referencia sin modificar.
 
+### Navegación y ayuda
+
+El layout raíz mantiene la cabecera con **Ayuda ahora** y una barra inferior de tres secciones: **Registrar** (`/`), **Hoy** (`/hoy`) y **Calendario** (`/calendario`). Hoy y Calendario son destinos provisionales; el resumen y el calendario real siguen en ANI-68/ANI-71. Registrar también se reconoce como sección activa en las futuras rutas `/registro/*`.
+
+El contenido central se desplaza dentro de un shell de ancho teléfono, centrado en desktop. Cabecera y barra reservan su propio espacio, incluyen safe areas y siguen visibles con texto ampliado. Hay enlace de salto al contenido, foco visible y estado activo mediante `aria-current`. Las futuras páginas heredan el layout; deben aportar contenido dentro del `main` compartido.
+
+`/ayuda` contiene los teléfonos, coberturas y horarios del prototipo, contrastados nuevamente con las fuentes enlazadas el 01/10/2026. Se abre en un toque, sin sesión ni consulta a la base. La revisión clínica del texto y el soporte offline de la app Next.js siguen pendientes en ANI-67.
+
 ### Tokens de diseño
 
 `app/globals.css` define los tokens de Tailwind con `@theme static`: paleta de marca, siete estados de ánimo, tipografía, espaciado, anchos, radios y sombra. Los componentes usan utilidades como `bg-surface`, `text-muted`, `text-question`, `max-w-phone` y `rounded-control`, o variables CSS para las muestras. Los valores provisionales siguen el brandbook interno; se revisan juntos en <http://localhost:3000/tokens>.
 
 Cambiar `--color-primary` en ese archivo actualiza la muestra institucional y la variante `--color-action`, usada por enlaces y acciones. El color institucional se reserva para acentos; la variante de acción permite texto blanco legible. Cada estado tiene un token `-ink` con el color de texto adecuado para su acento. El prototipo independiente conserva su propia hoja de estilos.
 
-Para comprobar cobertura de tokens, contraste AA, navegación por teclado, reflujo con texto al 200 % y propagación del color primario:
+Para comprobar cobertura de tokens, contraste AA, propagación del color primario, navegación con mouse/teclado, historial del navegador, ayuda en todas las rutas y reflujo con texto al 200 %:
 
 ```sh
 uv run --with playwright python app/tokens/tokens.test.py
@@ -45,7 +53,10 @@ El script inicia y detiene su servidor de desarrollo. Para comprobar un build se
 
 | Ruta                                    | Contenido                                                                                                             |
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| `app/layout.tsx`                        | Layout raíz, idioma `es`, metadata y Figtree local.                                                                   |
+| `app/layout.tsx`                        | Shell raíz con cabecera, ayuda persistente, contenido y navegación; idioma, metadata y Figtree local.                 |
+| `app/navigation.tsx`                    | Tres secciones y estado activo a partir de la ruta.                                                                   |
+| `app/hoy/`, `app/calendario/`           | Destinos provisionales del resumen y calendario.                                                                      |
+| `app/ayuda/page.tsx`                    | Ayuda con teléfonos en HTML y fuentes oficiales.                                                                      |
 | `app/page.tsx`                          | Pantalla inicial de Next.js. Las futuras rutas del registro e historial se agregan dentro de `app/` según App Router. |
 | `app/globals.css`                       | Tokens compartidos de marca, estados de ánimo, tipografía y composición.                                              |
 | `app/tokens/page.tsx`                   | Galería de todos los tokens en `/tokens`.                                                                             |
@@ -76,4 +87,4 @@ Para comprobar ANI-69 en un navegador real: `uv run --with playwright python pro
 
 El [contenido de la landing](docs/content/landing.md) y su [plan de verificación y aprobación](docs/plans/2026-10-01-ani-75-contenido-landing.md) están preparados para ANI-75/ANI-76. El texto distingue el prototipo disponible de las funciones previstas; su aprobación editorial se registra en el plan antes del cierre de ANI-75.
 
-La base Next.js de ANI-48 está en `app/`. Agustín puede portar desde `prototype/app.js` el estado único, las rutas y el selector de emoción, y desde `prototype/ayuda.html` la pantalla de ayuda. La barra global de ANI-61 debe mantener visible el acceso a ayuda en todas las rutas. El repositorio anterior queda donde está; el trabajo nuevo sigue en `Eudila/eudila`.
+La base Next.js de ANI-48 y el layout de ANI-61 están en `app/`. Agustín puede portar desde `prototype/app.js` el estado único, las rutas y el selector de emoción dentro del contenido compartido, conservando el acceso global a ayuda. `/ayuda` ya integra la información factual del prototipo; ANI-67 completa el texto revisado y el funcionamiento offline. El repositorio anterior queda donde está; el trabajo nuevo sigue en `Eudila/eudila`.

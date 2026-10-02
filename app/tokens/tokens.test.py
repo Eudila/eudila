@@ -9,7 +9,7 @@ import socket
 import subprocess
 import tempfile
 
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright, expect
 
 
 project = Path(__file__).resolve().parents[2]
@@ -81,10 +81,14 @@ try:
         page = browser.new_page(reduced_motion="reduce")
         errors = []
         page.on("pageerror", lambda error: errors.append(str(error)))
-        # El scaffold todavía no define favicon; comprobar los errores de la app.
-        page.on("console", lambda message: errors.append(message.text) if message.type == "error" and not message.location["url"].endswith("/favicon.ico") else None)
+        # Los dos destinos inexistentes se prueban abajo; el scaffold no tiene favicon.
+        expected_404 = {base + path for path in ["/favicon.ico", "/registro/tipo", "/no-existe"]}
+        page.on("console", lambda message: errors.append((message.text, message.location["url"])) if message.type == "error" and not (message.text.startswith("Failed to load resource: the server responded with a status of 404") and message.location["url"] in expected_404) else None)
         assert page.goto(base + "/tokens", wait_until="networkidle").status == 200
         assert page.title() == "Identidad visual · eudila"
+        assert "viewport-fit=cover" in page.locator('meta[name="viewport"]').get_attribute("content")
+        nav = page.get_by_role("navigation", name="Secciones")
+        assert nav.get_by_role("link").all_text_contents() == ["Registrar", "Hoy", "Calendario"]
         page.evaluate("document.fonts.ready")
         assert "figtree" in page.get_by_role("heading", level=1).evaluate("e => getComputedStyle(e).fontFamily").lower()
         shown = set(page.locator("[data-token]").evaluate_all("elements => elements.map(e => e.dataset.token)"))
@@ -100,6 +104,7 @@ try:
         assert contrast(foreground, background) >= 4.5
         muted = page.locator("header p.text-muted")
         assert contrast(colors(muted)[0], background) >= 4.5
+        page.locator("#contenido").focus()
         page.keyboard.press("Tab")
         link = page.get_by_role("link", name="Volver al inicio")
         assert link.evaluate("e => e === document.activeElement")
@@ -128,11 +133,105 @@ try:
                     assert page.get_by_role("heading", level=1).is_visible()
             page.evaluate("document.documentElement.style.fontSize = '100%'")
 
-        assert not errors, errors
+        # Navegación por mouse y teclado, historia y selección accesible.
+        for label, route in [("Hoy", "/hoy"), ("Calendario", "/calendario"), ("Registrar", "/")]:
+            link = nav.get_by_role("link", name=label, exact=True)
+            link.click()
+            page.wait_for_url(base + route)
+            expect(link).to_have_attribute("aria-current", "page")
+            assert nav.locator('[aria-current="page"]').count() == 1
+        page.go_back()
+        page.wait_for_url(base + "/calendario")
+        expect(nav.get_by_role("link", name="Calendario")).to_have_attribute("aria-current", "page")
+        page.go_forward()
+        page.wait_for_url(base + "/")
+        for label, route in [("Hoy", "/hoy"), ("Calendario", "/calendario"), ("Registrar", "/")]:
+            page.locator("#contenido").focus()
+            for _ in range(["Registrar", "Hoy", "Calendario"].index(label) + 1):
+                page.keyboard.press("Tab")
+            link = nav.get_by_role("link", name=label, exact=True)
+            assert link.evaluate("e => e === document.activeElement")
+            assert link.evaluate("e => parseFloat(getComputedStyle(e).outlineWidth)") > 0
+            page.keyboard.press("Enter")
+            page.wait_for_url(base + route)
+            expect(link).to_have_attribute("aria-current", "page")
+
+        # Todas las rutas comparten shell, incluidas errores y futuros pasos.
+        routes = ["/", "/hoy", "/calendario", "/ayuda", "/tokens", "/registro/tipo", "/no-existe"]
+        for route in routes:
+            status = 404 if route in ["/registro/tipo", "/no-existe"] else 200
+            assert page.goto(base + route, wait_until="networkidle").status == status
+            main = page.locator("#contenido")
+            assert page.get_by_role("main").count() == 1
+            assert page.get_by_role("heading", level=1).count() == 1
+            assert nav.get_by_role("link").count() == 3
+            selected = {"/": "Registrar", "/hoy": "Hoy", "/calendario": "Calendario"}.get(route)
+            if selected:
+                expect(nav.get_by_role("link", name=selected, exact=True)).to_have_attribute("aria-current", "page")
+            elif route == "/registro/tipo":
+                # Next usa /_not-found en producción; en dev conserva el pathname.
+                assert nav.locator('[aria-current="page"]').count() <= 1
+                assert nav.locator('[aria-current="page"]').all_text_contents() in [[], ["Registrar"]]
+            else:
+                assert nav.locator('[aria-current="page"]').count() == 0
+            help_link = page.get_by_role("link", name="Ayuda ahora", exact=True)
+            for width, height in [(320, 568), (390, 844), (520, 900), (1280, 900), (844, 390)]:
+                for percent in [100, 200]:
+                    page.set_viewport_size({"width": width, "height": height})
+                    page.evaluate(f"document.documentElement.style.fontSize = '{percent}%'")
+                    assert page.evaluate("document.documentElement.scrollWidth === innerWidth && document.documentElement.scrollHeight <= innerHeight"), (route, width, percent)
+                    assert main.evaluate("e => e.scrollWidth <= e.clientWidth"), (route, width, percent)
+                    assert main.bounding_box()["height"] > 0
+                    for control in [help_link, *nav.get_by_role("link").all()]:
+                        box = control.bounding_box()
+                        assert box["height"] >= 44 and box["width"] >= 44, (route, box)
+                        assert box["y"] >= 0 and box["y"] + box["height"] <= height, (route, width, percent, box)
+                    before = [help_link.bounding_box(), nav.bounding_box()]
+                    main.evaluate("e => e.scrollTop = e.scrollHeight")
+                    assert [help_link.bounding_box(), nav.bounding_box()] == before
+                    assert main.evaluate("e => e.scrollTop + e.clientHeight >= e.scrollHeight - 1")
+            page.evaluate("document.documentElement.style.fontSize = '100%'")
+            help_link.click()
+            page.wait_for_url(base + "/ayuda")
+            expect(page.get_by_role("heading", name="Ayuda ahora", exact=True)).to_be_visible()
+            assert page.reload(wait_until="networkidle").status == 200
+            assert page.locator('a[href^="tel:"]').evaluate_all("links => links.map(a => a.getAttribute('href'))") == ["tel:135", "tel:08003451435", "tel:08009990091"]
+
+        page.goto(base + "/", wait_until="networkidle")
+        page.set_viewport_size({"width": 390, "height": 844})
+        insets = page.add_style_tag(content=".app-shell {padding-inline: 20px} .app-header {padding-top: 44px} .app-navigation {padding-bottom: 34px}")
+        assert page.get_by_role("link", name="Ayuda ahora", exact=True).bounding_box()["y"] >= 44
+        assert nav.bounding_box()["y"] + nav.bounding_box()["height"] == 844
+        main_box = page.locator("#contenido").bounding_box()
+        assert main_box["height"] > 0 and main_box["y"] + main_box["height"] <= nav.bounding_box()["y"]
+        insets.evaluate("e => e.remove()")
+        page.keyboard.press("Tab")
+        skip = page.get_by_role("link", name="Ir al contenido")
+        assert skip.evaluate("e => e === document.activeElement")
+        page.keyboard.press("Enter")
+        assert page.locator("#contenido").evaluate("e => e === document.activeElement")
+        page.get_by_role("heading", level=1).click()
+        page.set_viewport_size({"width": 390, "height": 844})
+        page.screenshot(path=str(Path(tempfile.gettempdir()) / "eudila-ani-61-layout.png"))
+        page.goto(base + "/ayuda", wait_until="networkidle")
+        page.screenshot(path=str(Path(tempfile.gettempdir()) / "eudila-ani-61-ayuda.png"))
+        page.goto(base + "/tokens", wait_until="networkidle")
         page.set_viewport_size({"width": 1280, "height": 900})
+        shell = page.locator(".app-shell").bounding_box()
+        assert shell["width"] == 520 and shell["x"] == (1280 - 520) / 2
         page.screenshot(path=str(Path(tempfile.gettempdir()) / "eudila-ani-52-tokens.png"), full_page=True)
+        static_page = browser.new_page(java_script_enabled=False)
+        assert static_page.goto(base + "/hoy").status == 200
+        static_page.get_by_role("link", name="Ayuda ahora", exact=True).click()
+        static_page.wait_for_url(base + "/ayuda")
+        assert static_page.locator('a[href="tel:135"]').count() == 1
+        static_page.get_by_role("navigation").get_by_role("link", name="Registrar", exact=True).click()
+        static_page.wait_for_url(base + "/")
+        static_page.close()
+        assert not errors, errors
         browser.close()
         print(f"ANI-52: {len(defined)} tokens cubiertos, 15 pares AA (mínimo {min(ratios):.2f}:1), tema compartido, teclado y 16 combinaciones responsive correctos.")
+        print("ANI-61: 3 secciones, mouse/teclado, historia, ayuda en 7 rutas y 70 combinaciones responsive correctos.")
 finally:
     if server:
         server.terminate()
