@@ -1,0 +1,294 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+"use client";
+
+import { createContext, useContext, useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import {
+  newDraft,
+  restoreDraft,
+  steps,
+  types,
+} from "@/prototype/flow-state.js";
+import { moods, shapePath } from "@/prototype/moods.js";
+
+const draftKey = "eudila-draft-v1";
+type Draft = {
+  type: string | null;
+  mood: number;
+  emotionId: string | null;
+  factors: string[];
+};
+const DraftContext = createContext<{
+  draft: Draft;
+  ready: boolean;
+  persistent: boolean;
+  update: (draft: Draft) => void;
+  discard: () => void;
+} | null>(null);
+
+export function RegistroProvider({ children }: { children: React.ReactNode }) {
+  const [draft, setDraft] = useState<Draft>(newDraft);
+  const [ready, setReady] = useState(false);
+  const [persistent, setPersistent] = useState(true);
+
+  useEffect(() => {
+    let restored = null;
+    try {
+      restored = restoreDraft(sessionStorage.getItem(draftKey));
+    } catch {
+      // Sincronizar almacenamiento externo tras la hidratación del servidor.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setPersistent(false);
+    }
+    setDraft(restored ?? newDraft());
+    setReady(true);
+  }, []);
+
+  function update(next: Draft) {
+    setDraft(next);
+    try {
+      sessionStorage.setItem(draftKey, JSON.stringify(next));
+    } catch {
+      setPersistent(false);
+    }
+  }
+
+  function discard() {
+    setDraft(newDraft());
+    try {
+      sessionStorage.removeItem(draftKey);
+    } catch {
+      setPersistent(false);
+    }
+  }
+
+  return (
+    <DraftContext value={{ draft, ready, persistent, update, discard }}>
+      {children}
+    </DraftContext>
+  );
+}
+
+export default function Registro({ paso }: { paso: string }) {
+  const state = useContext(DraftContext)!;
+  const { draft, ready, persistent, update, discard } = state;
+  const router = useRouter();
+  const pathname = usePathname();
+  const title = useRef<HTMLHeadingElement>(null);
+  const dialog = useRef<HTMLDialogElement>(null);
+  const index = steps.indexOf(paso);
+  const mood = moods[draft.mood - 1];
+  const action =
+    "inline-flex min-h-action items-center justify-center rounded-control bg-action px-6 py-3 font-semibold text-white hover:underline disabled:cursor-not-allowed disabled:opacity-50";
+  const textAction =
+    "inline-flex min-h-touch items-center justify-center rounded-control px-3 py-2 text-action underline";
+
+  useEffect(() => {
+    if (ready) title.current?.focus();
+  }, [pathname, ready]);
+
+  function close() {
+    dialog.current?.showModal();
+  }
+
+  return (
+    <section className="relative flex flex-1 flex-col gap-6 px-6 py-6">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        {index > 0 ? (
+          <Link href={`/registro/${steps[index - 1]}`} className={textAction}>
+            Volver
+          </Link>
+        ) : (
+          <button type="button" onClick={close} className={textAction}>
+            Volver
+          </button>
+        )}
+        <p className="text-muted">
+          Registro · {index + 1} de {steps.length}
+        </p>
+        <button
+          type="button"
+          onClick={close}
+          className={textAction}
+          aria-label="Cerrar registro"
+        >
+          Cerrar
+        </button>
+      </div>
+      <h1
+        ref={title}
+        tabIndex={-1}
+        className="font-display text-question leading-question font-bold tracking-brand text-balance"
+      >
+        {paso === "tipo"
+          ? "¿A qué momento corresponde este registro?"
+          : paso === "animo"
+            ? "¿Cómo te sentís ahora?"
+            : "¿Qué emoción describe mejor lo que sentís?"}
+      </h1>
+      {!ready ? (
+        <p role="status">Preparando tu registro…</p>
+      ) : (
+        <>
+          {!persistent && (
+            <p role="status" className="text-muted">
+              El borrador sigue en esta pantalla, pero no podemos conservarlo si
+              recargás o cerrás la pestaña.
+            </p>
+          )}
+          {paso === "tipo" && (
+            <>
+              <p className="text-muted">
+                Elegí el momento que querés registrar. Puede ser distinto de la
+                hora actual.
+              </p>
+              <fieldset className="flex flex-col gap-3">
+                <legend className="sr-only">Momento del registro</legend>
+                {types.map((type) => (
+                  <label
+                    key={type}
+                    className="flex min-h-action cursor-pointer items-center gap-3 rounded-control border border-line px-4 py-3 has-checked:border-action has-checked:bg-action has-checked:text-white"
+                  >
+                    <input
+                      type="radio"
+                      name="record-type"
+                      value={type}
+                      checked={draft.type === type}
+                      onChange={() => update({ ...draft, type })}
+                      className="size-5 shrink-0 accent-action"
+                    />
+                    {type === "libre"
+                      ? "Registro libre"
+                      : type[0].toUpperCase() + type.slice(1)}
+                  </label>
+                ))}
+              </fieldset>
+              <p className="text-muted">
+                Registro libre sirve para cualquier momento.
+              </p>
+              <button
+                type="button"
+                disabled={!draft.type}
+                className={`${action} mt-auto`}
+                onClick={() => router.push("/registro/animo")}
+              >
+                Siguiente
+              </button>
+            </>
+          )}
+          {paso === "animo" && (
+            <>
+              <svg
+                viewBox="0 0 220 220"
+                aria-hidden="true"
+                className="mx-auto h-auto w-48 max-w-full shrink-0"
+                style={{ color: `var(--color-mood-${draft.mood}-orb)` }}
+              >
+                {[1, 0.82, 0.63, 0.45, 0.29].map((scale, i) => (
+                  <path
+                    key={scale}
+                    d={shapePath(mood)}
+                    transform={`translate(110 110) scale(${scale}) translate(-110 -110)`}
+                    fill="currentColor"
+                    opacity={[0.18, 0.3, 0.48, 0.7, 0.9][i]}
+                  />
+                ))}
+                <circle
+                  cx="110"
+                  cy="110"
+                  r="17"
+                  fill="var(--color-white)"
+                  opacity=".94"
+                />
+              </svg>
+              <p
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+                className="text-center text-state font-semibold"
+              >
+                {mood.label}
+              </p>
+              <div>
+                <label htmlFor="mood-range" className="sr-only">
+                  Estado de ánimo
+                </label>
+                <input
+                  id="mood-range"
+                  type="range"
+                  min="1"
+                  max="7"
+                  step="1"
+                  value={draft.mood}
+                  aria-valuetext={`${mood.label}, ${draft.mood} de 7`}
+                  onChange={(event) =>
+                    update({ ...draft, mood: Number(event.target.value) })
+                  }
+                  className="min-h-touch w-full cursor-pointer accent-action"
+                />
+                <div className="flex justify-between gap-6 text-muted">
+                  <span>Muy desagradable</span>
+                  <span className="text-right">Muy agradable</span>
+                </div>
+              </div>
+              <p className="text-center text-muted">
+                {draft.mood} de 7 · No hay una respuesta correcta.
+              </p>
+              <Link href="/registro/emocion" className={`${action} mt-auto`}>
+                Siguiente
+              </Link>
+            </>
+          )}
+          {paso === "emocion" && (
+            <>
+              <p>Elegiste: {mood.label}</p>
+              <p role="status" className="text-muted">
+                El catálogo de emociones todavía no está disponible. Tu borrador
+                se conserva; podés volver y cambiar el ánimo.
+              </p>
+              <Link href="/registro/animo" className={`${textAction} mt-auto`}>
+                Cambiar ánimo
+              </Link>
+            </>
+          )}
+        </>
+      )}
+      <dialog
+        ref={dialog}
+        aria-labelledby="close-title"
+        aria-describedby="close-description"
+        className="m-auto max-h-full max-w-copy overflow-y-auto rounded-dialog bg-surface p-6 text-text backdrop:bg-graphite/50"
+        style={{ width: "calc(100% - var(--spacing) * 12)" }}
+      >
+        <h2 id="close-title" className="text-question font-bold">
+          ¿Cerrar este registro?
+        </h2>
+        <p id="close-description" className="mt-3">
+          Si cerrás, se descarta lo que elegiste.
+        </p>
+        <div className="mt-6 flex flex-col gap-3">
+          <button
+            type="button"
+            autoFocus
+            className={action}
+            onClick={() => dialog.current?.close()}
+          >
+            Seguir registrando
+          </button>
+          <button
+            type="button"
+            className={textAction}
+            onClick={() => {
+              discard();
+              dialog.current?.close();
+              router.replace("/");
+            }}
+          >
+            Descartar registro
+          </button>
+        </div>
+      </dialog>
+    </section>
+  );
+}

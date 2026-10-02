@@ -135,6 +135,23 @@ try:
                 assert page.get_by_role("button", name="Empezar registro").is_visible()
                 page.close()
 
+        # La escala compartida también debe estar disponible al arrancar sin red.
+        offline_context = browser.new_context(reduced_motion="reduce")
+        offline_page = offline_context.new_page()
+        offline_page.goto(base)
+        offline_page.evaluate("navigator.serviceWorker.ready")
+        offline_page.wait_for_function("navigator.serviceWorker.controller !== null")
+        assert offline_page.evaluate("caches.match(new URL('moods.js', location.href)).then(Boolean)"), "Falta moods.js en la caché offline"
+        offline_context.set_offline(True)
+        offline_page.reload()
+        offline_page.get_by_role("button", name="Empezar registro").click()
+        offline_page.get_by_label("Tarde").check()
+        offline_page.get_by_role("button", name="Siguiente").click()
+        offline_page.get_by_role("slider", name="Estado de ánimo").press("End")
+        assert offline_page.locator("#mood-label").inner_text() == "Muy agradable"
+        offline_page.get_by_role("link", name="Ayuda ahora").click()
+        offline_page.get_by_role("heading", name="Ayuda ahora").wait_for()
+        offline_context.close()
         browser.close()
         print("ANI-69: entrada, salto, sesión, navegación, reduced-motion y reflujo correctos")
 finally:

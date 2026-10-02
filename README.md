@@ -13,7 +13,7 @@ npm ci
 npm run dev
 ```
 
-Abrí <http://localhost:3000>. Para detener el servidor, presioná Ctrl+C. La pantalla inicial usa la identidad y los textos del prototipo; el flujo de registro todavía se ejecuta en el prototipo independiente. La app Next.js usa App Router, React, TypeScript estricto y Tailwind CSS 4.
+Abrí <http://localhost:3000>. Para detener el servidor, presioná Ctrl+C. La pantalla inicial permite empezar el registro en Next.js: tipo, ánimo y entrada al paso de emoción. El selector completo de emoción y los pasos siguientes continúan en el prototipo independiente hasta integrar el catálogo y el guardado. La app Next.js usa App Router, React, TypeScript estricto y Tailwind CSS 4.
 
 Para comprobar el código y generar la versión de producción:
 
@@ -29,7 +29,7 @@ npm run start
 
 ### Navegación y ayuda
 
-El layout raíz mantiene la cabecera con **Ayuda ahora** y una barra inferior de tres secciones: **Registrar** (`/`), **Hoy** (`/hoy`) y **Calendario** (`/calendario`). Hoy y Calendario son destinos provisionales; el resumen y el calendario real siguen en ANI-68/ANI-71. Registrar también se reconoce como sección activa en las futuras rutas `/registro/*`.
+El layout raíz mantiene la cabecera con **Ayuda ahora** y una barra inferior de tres secciones: **Registrar** (`/`), **Hoy** (`/hoy`) y **Calendario** (`/calendario`). Hoy y Calendario son destinos provisionales; el resumen y el calendario real siguen en ANI-68/ANI-71. Registrar también se reconoce como sección activa en las rutas `/registro/*`.
 
 El contenido central se desplaza dentro de un shell de ancho teléfono, centrado en desktop. Cabecera y barra reservan su propio espacio, incluyen safe areas y siguen visibles con texto ampliado. Hay enlace de salto al contenido, foco visible y estado activo mediante `aria-current`. Las futuras páginas heredan el layout; deben aportar contenido dentro del `main` compartido.
 
@@ -41,7 +41,7 @@ El contenido central se desplaza dentro de un shell de ancho teléfono, centrado
 
 Cambiar `--color-primary` en ese archivo actualiza la muestra institucional y la variante `--color-action`, usada por enlaces y acciones. El color institucional se reserva para acentos; la variante de acción permite texto blanco legible. Cada estado tiene un token `-ink` con el color de texto adecuado para su acento. El prototipo independiente conserva su propia hoja de estilos.
 
-Para comprobar cobertura de tokens, contraste AA, propagación del color primario, navegación con mouse/teclado, historial del navegador, ayuda en todas las rutas y reflujo con texto al 200 %:
+Para comprobar cobertura de tokens, contraste AA, propagación del color primario, navegación con mouse/teclado, historial del navegador, ayuda en todas las rutas, reflujo con texto al 200 % y los pasos de tipo/ánimo (selección, anuncios accesibles, recarga y descarte):
 
 ```sh
 uv run --with playwright python app/tokens/tokens.test.py
@@ -57,6 +57,7 @@ El script inicia y detiene su servidor de desarrollo. Para comprobar un build se
 | `app/navigation.tsx`                    | Tres secciones y estado activo a partir de la ruta.                                                                   |
 | `app/hoy/`, `app/calendario/`           | Destinos provisionales del resumen y calendario.                                                                      |
 | `app/ayuda/page.tsx`                    | Ayuda con teléfonos en HTML y fuentes oficiales.                                                                      |
+| `app/registro/`                         | Pasos de tipo y ánimo, entrada a emoción y proveedor del borrador compartido.                                         |
 | `app/page.tsx`                          | Pantalla inicial de Next.js. Las futuras rutas del registro e historial se agregan dentro de `app/` según App Router. |
 | `app/globals.css`                       | Tokens compartidos de marca, estados de ánimo, tipografía y composición.                                              |
 | `app/tokens/page.tsx`                   | Galería de todos los tokens en `/tokens`.                                                                             |
@@ -75,16 +76,16 @@ Next.js genera `.next/` y `next-env.d.ts`; no se versionan. No se crean carpetas
 
 `prototype/` permite probar el flujo, la identidad visual y la pantalla de ayuda mientras se integra la app definitiva. Para abrirlo, ejecutá `python3 -m http.server 8000` y visitá `http://localhost:8000/prototype/`. No requiere instalar dependencias. La ayuda queda disponible sin conexión después de la primera carga.
 
-El prototipo sigue separado de la app Next.js. El borrador vive en `sessionStorage` y aún no se guarda como registro terminado. El paso de tipo usa provisionalmente las opciones enumeradas en ANI-63 hasta que Noelia las confirme. Falta integrar el esquema y catálogo de ANI-50/ANI-96, y la confirmación y guardado de ANI-66. `prototype/config.js` espera la URL y la clave pública de lectura de la base; no usa categorías del mock viejo. La pantalla de ayuda contiene teléfonos y horarios contrastados con fuentes oficiales; falta incorporar el texto final de ANI-59 cuando Noelia lo entregue.
+El prototipo sigue separado de la app Next.js. El borrador vive en `sessionStorage` y aún no se guarda como registro terminado. El paso de tipo comparte las opciones de ANI-63, documentadas y revisadas contra el ticket en su plan de implementación. Falta integrar el esquema y catálogo de ANI-50/ANI-96, y la confirmación y guardado de ANI-66. `prototype/config.js` espera la URL y la clave pública de lectura de la base; no usa categorías del mock viejo. La pantalla de ayuda contiene teléfonos y horarios contrastados con fuentes oficiales; falta incorporar el texto final de ANI-59 cuando Noelia lo entregue.
 
 La identidad sigue el brandbook Eudila v1.0 de uso interno, guardado fuera del repositorio público. Las ocho capturas de `fotos inspiracion/` del checkout original orientan la estructura de una pregunta por pantalla y acciones al pie. Sus ilustraciones y categorías de muestra no se distribuyen acá.
 
 El inicio muestra el orbe Neutral con una entrada de 600 ms una sola vez por sesión de pestaña. Un toque o una tecla la terminan sin consumir la acción; el registro y Ayuda siguen disponibles durante la entrada. Volver o recargar muestra el estado final. Con movimiento reducido, almacenamiento inaccesible o pestaña inicialmente oculta, el orbe aparece estático. Una pestaña nueva independiente permite ver nuevamente la entrada; las pestañas duplicadas o abiertas con un `opener` pueden heredar la marca de sesión y omitirla.
 
-Para comprobar ANI-69 en un navegador real: `uv run --with playwright python prototype/splash.test.py`. El script inicia su propio servidor local y usa Chrome en macOS; `CHROME_BIN` permite indicar otro ejecutable Chromium. En otros sistemas, se puede instalar el navegador de Playwright con `uv run --with playwright playwright install chromium`. Playwright se usa solo en la comprobación, no en la app. El estado del registro se comprueba con `node --test prototype/flow-state.test.mjs`.
+Para comprobar ANI-69 en un navegador real: `uv run --with playwright python prototype/splash.test.py`. El script inicia su propio servidor local y usa Chrome en macOS; `CHROME_BIN` permite indicar otro ejecutable Chromium. En otros sistemas, se puede instalar el navegador de Playwright con `uv run --with playwright playwright install chromium`. Playwright se usa solo en la comprobación, no en la app. La comprobación del splash también arranca el prototipo sin red y verifica la escala y Ayuda. El estado del registro se comprueba con `node --test prototype/flow-state.test.mjs`.
 
 ## Integración
 
 El [contenido de la landing](docs/content/landing.md) y su [plan de verificación y aprobación](docs/plans/2026-10-01-ani-75-contenido-landing.md) están preparados para ANI-75/ANI-76. El texto distingue el prototipo disponible de las funciones previstas; su aprobación editorial se registra en el plan antes del cierre de ANI-75.
 
-La base Next.js de ANI-48 y el layout de ANI-61 están en `app/`. Agustín puede portar desde `prototype/app.js` el estado único, las rutas y el selector de emoción dentro del contenido compartido, conservando el acceso global a ayuda. `/ayuda` ya integra la información factual del prototipo; ANI-67 completa el texto revisado y el funcionamiento offline. El repositorio anterior queda donde está; el trabajo nuevo sigue en `Eudila/eudila`.
+La base Next.js de ANI-48, el layout de ANI-61 y los primeros pasos de ANI-63 están en `app/`. `/registro/tipo` ofrece Mañana, Tarde, Noche y Registro libre, sin horarios obligatorios. `/registro/animo` usa la escala nativa de siete niveles y anuncia el valor elegido. El borrador se conserva entre rutas y en `sessionStorage`, con aviso si el navegador bloquea ese almacenamiento. Cerrar pide confirmación y descarta; Ayuda y las tabs conservan el borrador. Las opciones y su revisión están documentadas en [el plan de ANI-63](docs/plans/2026-10-02-ani-63-registro.md). `/registro/emocion` muestra el catálogo pendiente: ANI-64 integra su selector cuando estén disponibles ANI-96/ANI-50. El prototipo y Next.js comparten el estado, su validación y la escala del orbe. `/ayuda` ya integra la información factual del prototipo; ANI-67 completa el texto revisado y el funcionamiento offline. El repositorio anterior queda donde está; el trabajo nuevo sigue en `Eudila/eudila`.

@@ -23,14 +23,24 @@
 
 ## Criterios de cierre
 
-- [ ] Elegir los cuatro tipos con mouse y teclado, y avanzar.
-- [ ] Cambiar ánimo con mouse/flechas; reflejar los siete estados y límites.
-- [ ] Valor anunciado por `aria-valuetext` y región viva; foco visible.
-- [ ] Avanzar a emoción; volver, recargar y abrir ayuda sin perder selecciones.
-- [ ] Cierre confirmado descarta; cancelar/Escape conserva.
-- [ ] Layout sin desbordes a 320 px y con texto ampliado.
-- [ ] Checks pasan; revisión y commit publicados; Linear en Done.
+- [x] Elegir los cuatro tipos con mouse y teclado, y avanzar.
+- [x] Cambiar ánimo con mouse/flechas; reflejar los siete estados y límites.
+- [x] Valor anunciado por `aria-valuetext` y región viva; foco visible.
+- [x] Avanzar a emoción; volver, recargar y abrir ayuda sin perder selecciones.
+- [x] Cierre confirmado descarta; cancelar/Escape conserva.
+- [x] Layout sin desbordes a 320 px y con texto ampliado.
+- [x] Checks pasan y revisión independiente sin hallazgos pendientes.
+- [ ] Publicación y cierre en Linear (se registran tras verificar el remoto).
 
 ## Evidencia
 
-Pendiente de ejecución.
+Verificado el 02/10/2026:
+
+- `npm run lint`, `npm run typecheck`, `npm run format:check` y `npm run build`: exit 0. Build prerenderiza tipo, ánimo y emoción.
+- `TOKENS_BASE_URL=http://127.0.0.1:3063 uv run --with playwright python app/tokens/tokens.test.py`: exit 0 contra `npm run start`. Cuatro tipos, siete valores con forma y color diferentes, mouse y flechas/Home/End, `aria-valuetext`, región viva, foco, atrás/adelante, recarga, Ayuda, descarte y datos inválidos. Conserva emoción/factores ya presentes y funciona en memoria cuando Storage lanza SecurityError.
+- La misma comprobación conserva 66 tokens, 15 pares de contraste AA (mínimo 5.08:1), nueve rutas y 90 combinaciones de tamaño/texto. Verifica reflujo del ánimo con texto al 200 %.
+- `node --test prototype/flow-state.test.mjs`: un check, cero fallos.
+- `uv run --with playwright python prototype/splash.test.py`: exit 0; incluye arranque offline, ánimo y Ayuda tras la primera carga.
+- Revisión independiente de `review_ani63`: corregidos precache de `moods.js` y foco del diálogo; revisión posterior sin hallazgos pendientes. El check offline reprodujo la falta del módulo antes de la corrección y pasó después. Caché del prototipo actualizada a v6.
+- La verificación responsive reprodujo dos desbordes: elementos `sr-only` sin contenedor posicionado y el orbe de 384 px a texto al 200 %. `section.relative` y `max-w-full` resuelven las causas; la suite completa pasa después de ambos cambios.
+- Opciones revisadas técnicamente contra ANI-63, el estado de ANI-62 y su implementación: mismas cuatro claves y etiquetas, elección libre del momento y sin franjas horarias nuevas. La aprobación de catálogos clínicos continúa en ANI-96; no se incorporan a este cambio.

@@ -81,8 +81,8 @@ try:
         page = browser.new_page(reduced_motion="reduce")
         errors = []
         page.on("pageerror", lambda error: errors.append(str(error)))
-        # Los dos destinos inexistentes se prueban abajo; el scaffold no tiene favicon.
-        expected_404 = {base + path for path in ["/favicon.ico", "/registro/tipo", "/no-existe"]}
+        # El destino inexistente se prueba abajo; el scaffold no tiene favicon.
+        expected_404 = {base + path for path in ["/favicon.ico", "/no-existe", "/registro/no-existe"]}
         page.on("console", lambda message: errors.append((message.text, message.location["url"])) if message.type == "error" and not (message.text.startswith("Failed to load resource: the server responded with a status of 404") and message.location["url"] in expected_404) else None)
         assert page.goto(base + "/tokens", wait_until="networkidle").status == 200
         assert page.title() == "Identidad visual · eudila"
@@ -146,8 +146,8 @@ try:
         page.go_forward()
         page.wait_for_url(base + "/")
         for label, route in [("Hoy", "/hoy"), ("Calendario", "/calendario"), ("Registrar", "/")]:
-            page.locator("#contenido").focus()
-            for _ in range(["Registrar", "Hoy", "Calendario"].index(label) + 1):
+            nav.get_by_role("link", name="Registrar", exact=True).focus()
+            for _ in range(["Registrar", "Hoy", "Calendario"].index(label)):
                 page.keyboard.press("Tab")
             link = nav.get_by_role("link", name=label, exact=True)
             assert link.evaluate("e => e === document.activeElement")
@@ -157,9 +157,9 @@ try:
             expect(link).to_have_attribute("aria-current", "page")
 
         # Todas las rutas comparten shell, incluidas errores y futuros pasos.
-        routes = ["/", "/hoy", "/calendario", "/ayuda", "/tokens", "/registro/tipo", "/no-existe"]
+        routes = ["/", "/hoy", "/calendario", "/ayuda", "/tokens", "/registro/tipo", "/registro/animo", "/registro/emocion", "/no-existe"]
         for route in routes:
-            status = 404 if route in ["/registro/tipo", "/no-existe"] else 200
+            status = 404 if route == "/no-existe" else 200
             assert page.goto(base + route, wait_until="networkidle").status == status
             main = page.locator("#contenido")
             assert page.get_by_role("main").count() == 1
@@ -168,10 +168,8 @@ try:
             selected = {"/": "Registrar", "/hoy": "Hoy", "/calendario": "Calendario"}.get(route)
             if selected:
                 expect(nav.get_by_role("link", name=selected, exact=True)).to_have_attribute("aria-current", "page")
-            elif route == "/registro/tipo":
-                # Next usa /_not-found en producción; en dev conserva el pathname.
-                assert nav.locator('[aria-current="page"]').count() <= 1
-                assert nav.locator('[aria-current="page"]').all_text_contents() in [[], ["Registrar"]]
+            elif route.startswith("/registro/"):
+                expect(nav.get_by_role("link", name="Registrar", exact=True)).to_have_attribute("aria-current", "page")
             else:
                 assert nav.locator('[aria-current="page"]').count() == 0
             help_link = page.get_by_role("link", name="Ayuda ahora", exact=True)
@@ -229,10 +227,144 @@ try:
         static_page.wait_for_url(base + "/")
         static_page.screenshot(path=str(Path(tempfile.gettempdir()) / "eudila-ani-61-layout.png"))
         static_page.close()
+        # ANI-63: controles nativos y un único borrador entre pasos y Ayuda.
+        page.set_viewport_size({"width": 390, "height": 844})
+        page.goto(base + "/", wait_until="networkidle")
+        page.get_by_role("link", name="Empezar registro").click()
+        page.wait_for_url(base + "/registro/tipo")
+        expect(page.get_by_role("button", name="Siguiente", exact=True)).to_be_disabled()
+        labels = ["Mañana", "Tarde", "Noche", "Registro libre"]
+        assert page.get_by_role("radio").count() == 4
+        for label in labels:
+            radio = page.get_by_role("radio", name=label, exact=True)
+            radio.click()
+            expect(radio).to_be_checked()
+        page.get_by_role("radio", name="Mañana", exact=True).focus()
+        page.keyboard.press("Space")
+        for label in labels[1:] + labels[:1]:
+            page.keyboard.press("ArrowRight")
+            expect(page.get_by_role("radio", name=label, exact=True)).to_be_checked()
+        page.keyboard.press("Tab")
+        expect(page.get_by_role("button", name="Siguiente", exact=True)).to_be_focused()
+        page.keyboard.press("Enter")
+        page.wait_for_url(base + "/registro/animo")
+        expect(page.get_by_role("heading", level=1)).to_be_focused()
+        slider = page.get_by_role("slider", name="Estado de ánimo")
+        expect(slider).to_have_value("4")
+        box = slider.bounding_box()
+        slider.click(position={"x": box["width"] - 2, "y": box["height"] / 2})
+        expect(slider).to_have_value("7")
+        slider.press("Home")
+        moods = ["Muy desagradable", "Desagradable", "Algo desagradable", "Neutral", "Algo agradable", "Agradable", "Muy agradable"]
+        shapes, accents = [], []
+        for value, label in enumerate(moods, 1):
+            expect(slider).to_have_value(str(value))
+            expect(slider).to_have_attribute("aria-valuetext", f"{label}, {value} de 7")
+            expect(page.get_by_role("status")).to_have_text(label)
+            shapes.append(page.locator("section svg path").first.get_attribute("d"))
+            accents.append(page.locator("section svg").evaluate("e => getComputedStyle(e).color"))
+            slider.press("ArrowRight")
+        expect(slider).to_have_value("7")
+        assert len(set(shapes)) == len(set(accents)) == 7
+        slider.press("Home")
+        slider.press("ArrowLeft")
+        expect(slider).to_have_value("1")
+        slider.press("End")
+        slider.press("ArrowLeft")
+        expect(slider).to_have_value("6")
+        assert slider.evaluate("e => parseFloat(getComputedStyle(e).outlineWidth)") > 0
+        for width, height in [(320, 568), (390, 844), (844, 390), (1280, 900)]:
+            for percent in [100, 200]:
+                page.set_viewport_size({"width": width, "height": height})
+                page.evaluate(f"document.documentElement.style.fontSize = '{percent}%'")
+                assert page.locator("#contenido").evaluate("e => e.scrollWidth <= e.clientWidth"), (width, percent)
+                slider.scroll_into_view_if_needed()
+                assert slider.bounding_box()["height"] >= 44
+        page.evaluate("document.documentElement.style.fontSize = '100%'")
+        page.set_viewport_size({"width": 390, "height": 844})
+        page.screenshot(path=str(Path(tempfile.gettempdir()) / "eudila-ani-63-animo.png"))
+        page.get_by_role("link", name="Siguiente", exact=True).click()
+        page.wait_for_url(base + "/registro/emocion")
+        expect(page.get_by_role("status")).to_contain_text("El catálogo de emociones todavía no está disponible")
+        page.go_back()
+        page.wait_for_url(base + "/registro/animo")
+        expect(slider).to_have_value("6")
+        page.reload(wait_until="networkidle")
+        expect(slider).to_have_value("6")
+        page.get_by_role("link", name="Ayuda ahora", exact=True).click()
+        page.wait_for_url(base + "/ayuda")
+        page.go_back()
+        page.wait_for_url(base + "/registro/animo")
+        expect(slider).to_have_value("6")
+        page.get_by_role("link", name="Volver", exact=True).click()
+        page.wait_for_url(base + "/registro/tipo")
+        expect(page.get_by_role("radio", name="Mañana", exact=True)).to_be_checked()
+        page.screenshot(path=str(Path(tempfile.gettempdir()) / "eudila-ani-63-tipo.png"))
+        page.get_by_role("radio", name="Noche", exact=True).click()
+        page.get_by_role("button", name="Volver", exact=True).click()
+        page.keyboard.press("Escape")
+        expect(page.get_by_role("button", name="Volver", exact=True)).to_be_focused()
+        page.get_by_role("button", name="Siguiente", exact=True).click()
+        page.wait_for_url(base + "/registro/animo")
+        expect(slider).to_have_value("6")
+        page.go_back()
+        page.wait_for_url(base + "/registro/tipo")
+        expect(page.get_by_role("radio", name="Noche", exact=True)).to_be_checked()
+        page.go_forward()
+        page.wait_for_url(base + "/registro/animo")
+        expect(slider).to_have_value("6")
+        page.get_by_role("button", name="Cerrar registro").click()
+        expect(page.get_by_role("dialog")).to_be_visible()
+        expect(page.get_by_role("button", name="Seguir registrando")).to_be_focused()
+        page.keyboard.press("Escape")
+        expect(page.get_by_role("dialog")).not_to_be_visible()
+        expect(page.get_by_role("button", name="Cerrar registro")).to_be_focused()
+        expect(slider).to_have_value("6")
+        page.get_by_role("button", name="Cerrar registro").click()
+        page.get_by_role("button", name="Descartar registro").click()
+        page.wait_for_url(base + "/")
+        assert page.evaluate("sessionStorage.getItem('eudila-draft-v1')") is None
+        page.get_by_role("link", name="Empezar registro").click()
+        page.wait_for_url(base + "/registro/tipo")
+        expect(page.get_by_role("button", name="Siguiente", exact=True)).to_be_disabled()
+        # Entradas directas y restauración validada, conservando campos de pasos posteriores.
+        page.evaluate("sessionStorage.setItem('eudila-draft-v1', JSON.stringify({type:'tarde',mood:5,emotionId:'e1',factors:['f1']}))")
+        page.goto(base + "/registro/animo", wait_until="networkidle")
+        expect(slider).to_have_value("5")
+        slider.press("ArrowLeft")
+        stored = page.evaluate("JSON.parse(sessionStorage.getItem('eudila-draft-v1'))")
+        assert stored == {"type": "tarde", "mood": 4, "emotionId": "e1", "factors": ["f1"]}
+        page.evaluate("sessionStorage.setItem('eudila-draft-v1', '{invalid')")
+        page.reload(wait_until="networkidle")
+        expect(slider).to_have_value("4")
+        page.evaluate("sessionStorage.setItem('eudila-draft-v1', JSON.stringify({type:'fake',mood:99,factors:[]}))")
+        page.reload(wait_until="networkidle")
+        expect(slider).to_have_value("4")
+        assert page.goto(base + "/registro/no-existe", wait_until="networkidle").status == 404
+        blocked_context = browser.new_context()
+        blocked_context.add_init_script("for (const method of ['getItem','setItem','removeItem']) Storage.prototype[method] = () => { throw new DOMException('Blocked', 'SecurityError'); };")
+        blocked = blocked_context.new_page()
+        blocked.on("pageerror", lambda error: errors.append(str(error)))
+        blocked.goto(base + "/registro/tipo", wait_until="networkidle")
+        expect(blocked.get_by_role("status")).to_contain_text("no podemos conservarlo")
+        blocked.get_by_role("radio", name="Registro libre", exact=True).click()
+        blocked.get_by_role("button", name="Siguiente", exact=True).click()
+        blocked.wait_for_url(base + "/registro/animo")
+        blocked.get_by_role("slider").press("End")
+        blocked.get_by_role("link", name="Ayuda ahora", exact=True).click()
+        blocked.wait_for_url(base + "/ayuda")
+        blocked.go_back()
+        blocked.wait_for_url(base + "/registro/animo")
+        expect(blocked.get_by_role("slider")).to_have_value("7")
+        blocked.get_by_role("button", name="Cerrar registro").click()
+        blocked.get_by_role("button", name="Descartar registro").click()
+        blocked.wait_for_url(base + "/")
+        blocked_context.close()
         assert not errors, errors
         browser.close()
         print(f"ANI-52: {len(defined)} tokens cubiertos, 15 pares AA (mínimo {min(ratios):.2f}:1), tema compartido, teclado y 16 combinaciones responsive correctos.")
-        print("ANI-61: 3 secciones, mouse/teclado, historia, ayuda en 7 rutas y 70 combinaciones responsive correctos.")
+        print("ANI-61: 3 secciones, mouse/teclado, historia, ayuda en 9 rutas y 90 combinaciones responsive correctos.")
+        print("ANI-63: cuatro tipos, siete ánimos, mouse/teclado, semántica accesible, rutas, recarga, ayuda, descarte y almacenamiento bloqueado correctos.")
 finally:
     if server:
         server.terminate()
