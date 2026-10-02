@@ -40,6 +40,7 @@ export default function RootLayout({
               </p>
               <Link
                 href="/ayuda"
+                prefetch={false}
                 className="inline-flex min-h-touch max-w-full items-center justify-center rounded-pill bg-action px-4 py-3 text-title font-semibold text-white hover:underline"
               >
                 Ayuda ahora
