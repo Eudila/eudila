@@ -1,0 +1,10 @@
+.next/
+out/
+build/
+node_modules/
+prototype/
+docs/
+LICENSE
+NOTICE.md
+package-lock.json
+next-env.d.ts

@@ -1,0 +1,21 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+@import "tailwindcss";
+
+@theme inline {
+  --color-cloud: #fbfbfd;
+  --color-graphite: #1d1d1f;
+  --color-muted: #55555a;
+  --font-display: var(--font-figtree), system-ui, sans-serif;
+}
+
+:root {
+  color-scheme: light;
+  background: var(--color-cloud);
+  color: var(--color-graphite);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+  min-height: 100svh;
+}
