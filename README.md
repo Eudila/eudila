@@ -33,7 +33,20 @@ El layout raíz mantiene la cabecera con **Ayuda ahora** y una barra inferior de
 
 El contenido central se desplaza dentro de un shell de ancho teléfono, centrado en desktop. Cabecera y barra reservan su propio espacio, incluyen safe areas y siguen visibles con texto ampliado. Hay enlace de salto al contenido, foco visible y estado activo mediante `aria-current`. Las futuras páginas heredan el layout; deben aportar contenido dentro del `main` compartido.
 
-`/ayuda` contiene los teléfonos, coberturas y horarios del prototipo, contrastados nuevamente con las fuentes enlazadas el 01/10/2026. Se abre en un toque, sin sesión ni consulta a la base. La revisión clínica del texto y el soporte offline de la app Next.js siguen pendientes en ANI-67.
+`/ayuda` contiene los teléfonos, coberturas y horarios del prototipo, contrastados nuevamente con las fuentes enlazadas el 02/10/2026. Se abre en un toque, sin sesión ni consulta a la base. La revisión clínica del texto final de ANI-59 sigue pendiente para cerrar ANI-67.
+
+En producción, al abrir cualquier página de la app se prepara una copia local de Ayuda, sus estilos y la fuente. Una vez preparada, permite consultar los teléfonos sin internet, incluso sin haber visitado antes `/ayuda`, tras recargar o en otra pestaña. Las llamadas requieren señal telefónica. La preparación inicial necesita conexión, HTTPS (o localhost) y un navegador que permita Service Worker, Cache Storage y Web Locks; puede perderse si el navegador borra el almacenamiento. Sin esas capacidades, Ayuda sigue disponible online. El servidor de desarrollo no instala esta copia.
+
+La copia se actualiza al volver a abrir la app con conexión; una falla conserva la versión anterior. Solo se guardan la página pública de Ayuda y sus recursos de presentación: no se cachean registros, borradores, APIs ni respuestas RSC. Next.js conserva su navegación online; cuando falla la solicitud de Ayuda, el navegador abre el HTML local con enlaces telefónicos que funcionan sin JavaScript. El [plan de ANI-67](docs/plans/2026-10-02-ani-67-ayuda.md) registra requisitos, verificación y el insumo clínico pendiente.
+
+Para comprobar la preparación, acceso global, enlaces telefónicos, recarga y nueva pestaña offline, estilos, teclado, texto al 200 %, renovación concurrente de la copia, cachés ajenas, fallback cuando el navegador impide el worker y conservación del borrador ante una red lenta con Storage bloqueado:
+
+```sh
+npm run build
+uv run --with playwright python app/ayuda/ayuda.test.py
+```
+
+La comprobación inicia y detiene su servidor de producción en un puerto libre. `HELP_BASE_URL=http://localhost:3000` permite usar un build servido previamente con `npm run start`. Usa Chrome en macOS y acepta `CHROME_BIN`, como la comprobación de tokens descrita abajo.
 
 ### Tokens de diseño
 

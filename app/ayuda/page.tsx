@@ -68,7 +68,7 @@ export default function Help() {
         >
           Ministerio de Salud de la Nación
         </a>
-        . Verificado el 01/10/2026.
+        . Verificado el 02/10/2026.
       </p>
     </div>
   );
