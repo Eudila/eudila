@@ -30,7 +30,7 @@
 - [x] Cierre confirmado descarta; cancelar/Escape conserva.
 - [x] Layout sin desbordes a 320 px y con texto ampliado.
 - [x] Checks pasan y revisión independiente sin hallazgos pendientes.
-- [ ] Publicación y cierre en Linear (se registran tras verificar el remoto).
+- [x] Publicación remota verificada; el cierre y la evidencia se registran en ANI-63.
 
 ## Evidencia
 
@@ -44,3 +44,7 @@ Verificado el 02/10/2026:
 - Revisión independiente de `review_ani63`: corregidos precache de `moods.js` y foco del diálogo; revisión posterior sin hallazgos pendientes. El check offline reprodujo la falta del módulo antes de la corrección y pasó después. Caché del prototipo actualizada a v6.
 - La verificación responsive reprodujo dos desbordes: elementos `sr-only` sin contenedor posicionado y el orbe de 384 px a texto al 200 %. `section.relative` y `max-w-full` resuelven las causas; la suite completa pasa después de ambos cambios.
 - Opciones revisadas técnicamente contra ANI-63, el estado de ANI-62 y su implementación: mismas cuatro claves y etiquetas, elección libre del momento y sin franjas horarias nuevas. La aprobación de catálogos clínicos continúa en ANI-96; no se incorporan a este cambio.
+
+## Publicación
+
+Integrado por fast-forward a `main`, publicado y contrastado con `git ls-remote`: `a37123c69374ede031cd35c611026887d15a931b`. La revisión final no tiene hallazgos pendientes. La tarea [ANI-63](https://linear.app/anima-org/issue/ANI-63/paso-1-y-2-del-registro-tipo-y-escala-de-animo) registra el cierre después de publicar esta evidencia.
