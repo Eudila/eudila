@@ -11,6 +11,7 @@ import {
   types,
 } from "@/prototype/flow-state.js";
 import { moods, shapePath } from "@/prototype/moods.js";
+import Emociones from "./emociones";
 
 const draftKey = "eudila-draft-v1";
 type Draft = {
@@ -125,7 +126,9 @@ export default function Registro({ paso }: { paso: string }) {
           ? "¿A qué momento corresponde este registro?"
           : paso === "animo"
             ? "¿Cómo te sentís ahora?"
-            : "¿Qué emoción describe mejor lo que sentís?"}
+            : paso === "emocion"
+              ? "¿Qué emoción describe mejor lo que sentís?"
+              : "¿Qué factores influyeron hoy?"}
       </h1>
       {!ready ? (
         <p role="status">Preparando tu registro…</p>
@@ -243,14 +246,21 @@ export default function Registro({ paso }: { paso: string }) {
           {paso === "emocion" && (
             <>
               <p>Elegiste: {mood.label}</p>
-              <p role="status" className="text-muted">
-                El catálogo de emociones todavía no está disponible. Tu borrador
-                se conserva; podés volver y cambiar el ánimo.
-              </p>
+              <Emociones
+                selectedId={draft.emotionId}
+                choose={(emotionId) => update({ ...draft, emotionId })}
+              />
               <Link href="/registro/animo" className={`${textAction} mt-auto`}>
                 Cambiar ánimo
               </Link>
             </>
+          )}
+          {paso === "factores" && (
+            <p role="status" className="text-muted">
+              El paso de factores todavía no está disponible. Tu borrador se
+              conserva; podés volver y cambiar la emoción. Este registro aún no
+              se guardó.
+            </p>
           )}
         </>
       )}

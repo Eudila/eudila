@@ -2,7 +2,7 @@
 import { notFound } from "next/navigation";
 import Registro from "../registro";
 
-const implemented = ["tipo", "animo", "emocion"];
+const implemented = ["tipo", "animo", "emocion", "factores"];
 
 export function generateStaticParams() {
   return implemented.map((paso) => ({ paso }));
