@@ -13,7 +13,7 @@ npm ci
 npm run dev
 ```
 
-Abrí <http://localhost:3000>. Para detener el servidor, presioná Ctrl+C. La pantalla inicial permite empezar el registro en Next.js: tipo, ánimo y entrada al paso de emoción. El selector completo de emoción y los pasos siguientes continúan en el prototipo independiente hasta integrar el catálogo y el guardado. La app Next.js usa App Router, React, TypeScript estricto y Tailwind CSS 4.
+Abrí <http://localhost:3000>. Para detener el servidor, presioná Ctrl+C. La pantalla inicial permite empezar el registro en Next.js: tipo, ánimo y selector de emoción. Sin configurar el catálogo, el paso de emoción explica que todavía no está disponible. El paso de factores y el guardado siguen pendientes; el borrador no es un registro terminado. La app Next.js usa App Router, React, TypeScript estricto y Tailwind CSS 4.
 
 Para comprobar el código y generar la versión de producción:
 
@@ -57,7 +57,7 @@ El script inicia y detiene su servidor de desarrollo. Para comprobar un build se
 | `app/navigation.tsx`                    | Tres secciones y estado activo a partir de la ruta.                                                                   |
 | `app/hoy/`, `app/calendario/`           | Destinos provisionales del resumen y calendario.                                                                      |
 | `app/ayuda/page.tsx`                    | Ayuda con teléfonos en HTML y fuentes oficiales.                                                                      |
-| `app/registro/`                         | Pasos de tipo y ánimo, entrada a emoción y proveedor del borrador compartido.                                         |
+| `app/registro/`                         | Tipo, ánimo, selector de emoción, estado pendiente de factores y borrador compartido.                                 |
 | `app/page.tsx`                          | Pantalla inicial de Next.js. Las futuras rutas del registro e historial se agregan dentro de `app/` según App Router. |
 | `app/globals.css`                       | Tokens compartidos de marca, estados de ánimo, tipografía y composición.                                              |
 | `app/tokens/page.tsx`                   | Galería de todos los tokens en `/tokens`.                                                                             |
@@ -88,6 +88,28 @@ Para comprobar ANI-69 en un navegador real: `uv run --with playwright python pro
 
 El [contenido de la landing](docs/content/landing.md) y su [plan de verificación y aprobación](docs/plans/2026-10-01-ani-75-contenido-landing.md) están preparados para ANI-75/ANI-76. El texto distingue el prototipo disponible de las funciones previstas; su aprobación editorial se registra en el plan antes del cierre de ANI-75.
 
-El [guion del prototipo comercial](docs/content/prototipo-comercial.md) de ANI-79 define seis pantallas para ANI-80, con indicadores, un mapa ficticio, datos simulados consistentes y los límites de lo que puede presentarse. Distingue los pasos que ya funcionan en la app del servicio institucional propuesto; su dashboard todavía es una maqueta por construir.
+El [guion del prototipo comercial](docs/content/prototipo-comercial.md) de ANI-79 define seis pantallas para ANI-80, con indicadores, un mapa ficticio, datos simulados consistentes y los límites de lo que puede presentarse. Distingue los pasos que ya funcionan en la app del servicio institucional propuesto. La maqueta autónoma con datos simulados está entregada en los adjuntos de [ANI-80](https://linear.app/anima-org/issue/ANI-80/prototipo-visual-del-dashboard-institucional), fuera del repo de producto.
 
-La base Next.js de ANI-48, el layout de ANI-61 y los primeros pasos de ANI-63 están en `app/`. `/registro/tipo` ofrece Mañana, Tarde, Noche y Registro libre, sin horarios obligatorios. `/registro/animo` usa la escala nativa de siete niveles y anuncia el valor elegido. El borrador se conserva entre rutas y en `sessionStorage`, con aviso si el navegador bloquea ese almacenamiento. Cerrar pide confirmación y descarta; Ayuda y las tabs conservan el borrador. Las opciones y su revisión están documentadas en [el plan de ANI-63](docs/plans/2026-10-02-ani-63-registro.md). `/registro/emocion` muestra el catálogo pendiente: ANI-64 integra su selector cuando estén disponibles ANI-96/ANI-50. El prototipo y Next.js comparten el estado, su validación y la escala del orbe. `/ayuda` ya integra la información factual del prototipo; ANI-67 completa el texto revisado y el funcionamiento offline. El repositorio anterior queda donde está; el trabajo nuevo sigue en `Eudila/eudila`.
+La base Next.js de ANI-48, el layout de ANI-61 y los primeros pasos de ANI-63 están en `app/`. `/registro/tipo` ofrece Mañana, Tarde, Noche y Registro libre, sin horarios obligatorios. `/registro/animo` usa la escala nativa de siete niveles y anuncia el valor elegido. El borrador se conserva entre rutas y en `sessionStorage`, con aviso si el navegador bloquea ese almacenamiento. Cerrar pide confirmación y descarta; Ayuda y las tabs conservan el borrador. Las opciones y su revisión están documentadas en [el plan de ANI-63](docs/plans/2026-10-02-ani-63-registro.md). `/registro/emocion` incluye chips sugeridos, buscador, lista completa en diálogo nativo, Escape y retorno del foco. La selección se conserva entre rutas y tras recarga. `/registro/factores` indica la integración pendiente, conserva el borrador y no simula guardado. El prototipo y Next.js comparten el estado, la validación del catálogo y la escala del orbe. `/ayuda` ya integra la información factual del prototipo; la entrega offline de ANI-67 está en [PR #1](https://github.com/Eudila/eudila/pull/1) y falta el texto clínico aprobado antes del cierre. El repositorio anterior queda donde está; el trabajo nuevo sigue en `Eudila/eudila`.
+
+### Conectar el catálogo de emociones
+
+ANI-64 sigue pendiente del catálogo aprobado de ANI-96 y de las semillas y migraciones de ANI-50. No se incluyen categorías ficticias. El contrato de lectura reutiliza el del prototipo: `/rest/v1/emociones?select=id,nombre,sugerida&order=nombre.asc`, con IDs únicos, nombre no vacío y `sugerida` booleana. ANI-50 debe confirmar ese contrato; si cambia, adaptar el lector compartido `prototype/catalog.js`.
+
+Configurar en `.env.local` o en el entorno **antes de `npm run dev` o `npm run build`**:
+
+```sh
+NEXT_PUBLIC_CATALOG_URL=https://<proyecto>.supabase.co
+NEXT_PUBLIC_CATALOG_ANON_KEY=<clave-publica-anon>
+```
+
+Estas variables se incluyen en el JavaScript público del build: usar únicamente la clave pública de lectura, nunca `service_role` ni credenciales privadas. Sin variables, Next.js reutiliza la configuración vacía de `prototype/config.js` y muestra el catálogo pendiente. Datos inválidos, IDs duplicados, errores de red o catálogo vacío no se presentan como lista válida; hay reintento sin descartar el borrador.
+
+Para comprobar el selector y el lector con etiquetas ficticias únicamente dentro de los tests:
+
+```sh
+node --test prototype/flow-state.test.mjs prototype/catalog.test.mjs
+uv run --with playwright python app/registro/emociones.test.py
+```
+
+El [plan de pendientes de Agustín](docs/plans/2026-10-03-agustin-pendientes.md) registra los requisitos restantes. El [paquete TechWeek](docs/techweek/README.md) incluye PDF de trabajo, QR al repo, video de 60 s, capturas y actas de clonado/ensayo; no acredita pruebas humanas ni publicación de la landing.

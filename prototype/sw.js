@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-const CACHE = "eudila-shell-v6";
-const FILES = ["./", "./index.html", "./ayuda.html", "./style.css", "./app.js", "./config.js", "./flow-state.js", "./moods.js", "./fonts/Figtree.ttf"];
+const CACHE = "eudila-shell-v7";
+const FILES = ["./", "./index.html", "./ayuda.html", "./style.css", "./app.js", "./config.js", "./catalog.js", "./flow-state.js", "./moods.js", "./fonts/Figtree.ttf"];
 
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(FILES)));

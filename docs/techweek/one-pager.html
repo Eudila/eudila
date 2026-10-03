@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Eudila · TechWeek · documento de trabajo</title>
+  <style>
+    @font-face { font-family: Figtree; src: url('../../prototype/fonts/Figtree.ttf'); }
+    @page { size: A4; margin: 0; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #fff; color: #1d1d1f; font-family: Figtree, sans-serif; }
+    main { width: 210mm; height: 297mm; padding: 15mm 18mm; }
+    .draft { margin: 0 0 7mm; font-size: 10pt; color: #535357; }
+    h1 { font-size: 40pt; line-height: 1; letter-spacing: -.035em; margin: 0 0 5mm; }
+    .lead { font-size: 22pt; line-height: 1.15; font-weight: 600; margin: 0 0 6mm; max-width: 155mm; }
+    p { font-size: 11pt; line-height: 1.45; margin: 0 0 5mm; }
+    h2 { font-size: 14pt; margin: 6mm 0 3mm; }
+    .screens { display: flex; gap: 8mm; margin: 6mm 0; }
+    figure { margin: 0; flex: 1; }
+    figure img { height: 76mm; width: auto; max-width: 100%; border: 1px solid #b5b5ba; }
+    figcaption { font-size: 9pt; margin-top: 2mm; }
+    .access { display: flex; gap: 6mm; border-top: 1px solid #b5b5ba; padding-top: 5mm; margin-top: 6mm; }
+    .access img { width: 29mm; height: 29mm; }
+    .access p { font-size: 10pt; }
+    a { color: #126763; overflow-wrap: anywhere; }
+    footer { margin-top: 5mm; font-size: 9pt; line-height: 1.35; color: #535357; }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="draft">Documento de trabajo · 03/10/2026 · URL de landing y contacto definitivo pendientes</p>
+    <h1>eudila</h1>
+    <p class="lead">Un espejo tranquilo para cada estado de ánimo.</p>
+    <p>Una app abierta para registrar cómo te sentís y acercarte a recursos de ayuda. Para gobiernos y equipos de salud que quieran estudiar y adaptar una herramienta a su contexto.</p>
+    <div class="screens">
+      <figure><img src="animo.png" alt="Captura real: escala de siete estados de ánimo en Neutral"><figcaption>Escala de ánimo · app real</figcaption></figure>
+      <figure><img src="ayuda.png" alt="Captura real: pantalla de ayuda con teléfonos y cobertura"><figcaption>Ayuda en un toque · app real</figcaption></figure>
+    </div>
+    <h2>Qué podés probar hoy</h2>
+    <p>Elegir el momento, usar la escala de ánimo, volver sin perder el borrador y abrir Ayuda. El selector está implementado para conectar el catálogo aprobado; todavía falta ese catálogo y el guardado del historial.</p>
+    <h2>Una conversación para construir juntos</h2>
+    <p>El servicio institucional está en definición. Queremos conocer las necesidades de provincias, municipios y equipos de salud. La maqueta del dashboard comercial está disponible con datos simulados; no es un observatorio operativo.</p>
+    <div class="access">
+      <img src="qr-repo.png" alt="QR al repositorio público Eudila/eudila">
+      <div><p><strong>Explorá el código · AGPL-3.0</strong><br><a href="https://github.com/Eudila/eudila">github.com/Eudila/eudila</a></p>
+      <p>Contacto provisional: <a href="https://github.com/Eudila/eudila/issues">issues públicos del proyecto</a>.<br>No envíes datos personales o de salud; no es atención clínica.</p></div>
+    </div>
+    <footer>En desarrollo. No realiza diagnósticos, no evalúa riesgo individual ni reemplaza atención profesional. PDF, CSV/JSON y calendario del historial propio todavía no están disponibles.<br>El QR de landing se agrega cuando exista su URL publicada y verificada.</footer>
+  </main>
+</body>
+</html>

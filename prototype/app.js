@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import { catalog } from "./config.js";
+import { loadCatalogRows } from "./catalog.js";
 import { moods, shapePath } from "./moods.js";
 import { adjacentRoute, newDraft, restoreDraft, steps, types } from "./flow-state.js";
 
@@ -327,18 +328,13 @@ function render() {
 
 async function loadCatalog() {
   if (!catalog.url || !catalog.anonKey) return;
-  const base = catalog.url.replace(/\/$/, "");
-  const headers = { apikey: catalog.anonKey, Authorization: `Bearer ${catalog.anonKey}` };
   try {
-    const [emotionResponse, factorResponse] = await Promise.all([
-      fetch(`${base}/rest/v1/emociones?select=id,nombre,sugerida&order=nombre.asc`, { headers }),
-      fetch(`${base}/rest/v1/factores_vida?select=id,nombre&order=nombre.asc`, { headers })
+    const [emotionRows, factorRows] = await Promise.all([
+      loadCatalogRows("emociones", catalog),
+      loadCatalogRows("factores_vida", catalog)
     ]);
-    if (!emotionResponse.ok || !factorResponse.ok) throw new Error("Catalog unavailable");
-    const [emotionRows, factorRows] = await Promise.all([emotionResponse.json(), factorResponse.json()]);
-    if (!Array.isArray(emotionRows) || !Array.isArray(factorRows)) throw new Error("Invalid catalog");
-    emotions = emotionRows.filter(row => row && row.id != null && typeof row.nombre === "string" && typeof row.sugerida === "boolean");
-    factors = factorRows.filter(row => row && row.id != null && typeof row.nombre === "string");
+    emotions = emotionRows;
+    factors = factorRows;
     catalogProblem = "El catálogo está vacío. Volvé a intentarlo más tarde.";
   } catch {
     catalogProblem = "No se pudo cargar el catálogo. Volvé a intentarlo más tarde.";
