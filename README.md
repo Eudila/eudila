@@ -99,6 +99,8 @@ Para comprobar ANI-69 en un navegador real: `uv run --with playwright python pro
 
 ## Integración
 
+La [verificación de clonado y el protocolo de prueba externa](docs/techweek/clonado.md) de ANI-78 registran el quickstart comprobado desde un clon nuevo, el commit probado y los resultados. La prueba de una persona ajena al setup en una máquina limpia sigue pendiente.
+
 El [texto de Ayuda y su revisión documental](docs/content/ayuda.md) y el [plan de cierre de ANI-67](docs/plans/2026-10-04-ani-67-cierre.md) fijan la versión exacta, fuentes contrastadas el 04/10/2026 y evidencia técnica. Agustín aceptó explícitamente integrar y cerrar con revisión documental asistida por IA, dejando constancia de que no hubo aprobación clínica profesional.
 
 El [catálogo de emociones y factores de vida](docs/content/catalogo-emociones-factores.md) de ANI-96 define las etiquetas, seis sugerencias iniciales, alternativas de respuesta y criterios con fuentes. Los [datos semilla JSON](data/catalogo-v1.json) están listos para ANI-50; la base y sus endpoints siguen pendientes. Comprobaciones: `node --test data/catalogo.test.mjs` y `uv run --with playwright python data/catalogo.browser.test.py`. Esta última simula respuestas REST dentro de la prueba, sin agregar listas al frontend.
