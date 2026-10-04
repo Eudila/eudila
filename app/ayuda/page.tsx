@@ -9,6 +9,10 @@ export default function Help() {
       <h1 className="font-display text-question leading-question font-bold tracking-brand text-balance">
         Ayuda ahora
       </h1>
+      <p className="text-muted">
+        Podés consultar los números sin internet. Para llamar necesitás señal
+        telefónica.
+      </p>
       <section aria-labelledby="cas-title" className="space-y-4">
         <h2 id="cas-title" className="text-title font-semibold">
           Centro de Asistencia al Suicida
@@ -68,7 +72,7 @@ export default function Help() {
         >
           Ministerio de Salud de la Nación
         </a>
-        . Verificado el 02/10/2026.
+        . Verificado el 04/10/2026.
       </p>
     </div>
   );

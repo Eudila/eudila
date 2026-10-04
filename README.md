@@ -99,6 +99,8 @@ Para comprobar ANI-69 en un navegador real: `uv run --with playwright python pro
 
 ## Integración
 
+La [propuesta de texto de Ayuda](docs/content/ayuda.md) y el [plan de cierre de ANI-67](docs/plans/2026-10-04-ani-67-cierre.md) fijan la versión exacta, fuentes contrastadas el 04/10/2026 y evidencia técnica. La revisión clínica documentada que exige el ticket sigue pendiente; no se acredita por los tests.
+
 El [catálogo de emociones y factores de vida](docs/content/catalogo-emociones-factores.md) de ANI-96 define las etiquetas, seis sugerencias iniciales, alternativas de respuesta y criterios con fuentes. Los [datos semilla JSON](data/catalogo-v1.json) están listos para ANI-50; la base y sus endpoints siguen pendientes. Comprobaciones: `node --test data/catalogo.test.mjs` y `uv run --with playwright python data/catalogo.browser.test.py`. Esta última simula respuestas REST dentro de la prueba, sin agregar listas al frontend.
 
 El [contenido de la landing](docs/content/landing.md) y su [plan de verificación y aprobación](docs/plans/2026-10-01-ani-75-contenido-landing.md) están preparados para ANI-75/ANI-76. El texto distingue el prototipo disponible de las funciones previstas; su aprobación editorial se registra en el plan antes del cierre de ANI-75.

@@ -14,6 +14,7 @@ import threading
 from playwright.sync_api import sync_playwright, expect
 
 project = Path(__file__).resolve().parents[2]
+documented_copy = (project / "docs/content/ayuda.md").read_text().split("```text\n", 1)[1].split("```", 1)[0]
 subprocess.run(["node", str(project / "app/ayuda/worker.test.mjs")], check=True)
 server = None
 proxy = None
@@ -85,6 +86,7 @@ try:
         page.get_by_role("link", name="Ayuda ahora", exact=True).click()
         page.wait_for_url(base + "/ayuda")
         expect(page.get_by_role("heading", name="Ayuda ahora", exact=True)).to_be_visible()
+        assert " ".join(page.locator("#contenido").inner_text().split()) == " ".join(documented_copy.split()), "La pantalla difiere del texto presentado para revisión"
         phones = ["tel:135", "tel:08003451435", "tel:08009990091"]
         assert page.locator('a[href^="tel:"]').evaluate_all("xs => xs.map(x => x.getAttribute('href'))") == phones
         assert page.evaluate("sessionStorage.getItem('eudila-draft-v1')") == draft
