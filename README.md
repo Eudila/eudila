@@ -14,7 +14,7 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Abrí <http://localhost:3000>. Para detener el servidor, presioná Ctrl+C. La app permite completar tipo, ánimo, emoción, factores opcionales y confirmación; consultar Hoy, Calendario y el detalle de cada día; descargar CSV/JSON e imprimir un informe para guardar como PDF. En vista previa, los registros viven solo en la sesión de esa pestaña. El banner permanente distingue este modo de una cuenta sincronizada. La app Next.js usa App Router, React, TypeScript estricto y Tailwind CSS 4.
+Abrí <http://localhost:3000>. Para detener el servidor, presioná Ctrl+C. La app permite completar tipo, ánimo, emoción, factores opcionales y confirmación; consultar Hoy, Calendario, el detalle de cada día, evolución y factores; descargar CSV/JSON e imprimir un informe para guardar como PDF. En vista previa, los registros viven solo en la sesión de esa pestaña. El aviso permanente distingue este modo de una cuenta sincronizada; al abrirlo explica la conservación temporal y la pérdida al cerrar la pestaña. La app Next.js usa App Router, React, TypeScript estricto y Tailwind CSS 4.
 
 Para comprobar el código y generar la versión de producción:
 
@@ -137,3 +137,24 @@ El script inicia un servidor de producción en un puerto libre y lo detiene al t
 El CSV contiene una fila por registro y las columnas `id`, `recorded_at` (instante UTC ISO), `fecha_local` (AAAA-MM-DD), `hora_local` (HH:mm:ss), `tipo`, `escala` (1–7), `escala_etiqueta`, `emocion_id`, `emocion`, `factor_ids`, `factores` y `origen`. `factor_ids` y `factores` contienen arrays JSON en el mismo orden; están vacíos (`[]`) cuando no hay factores. `origen` distingue `preview` de `example`. El archivo usa UTF-8 con BOM, coma, comillas dobles y líneas CRLF. Para evitar fórmulas de planilla, se antepone un apóstrofo a valores que empiezan con `=`, `+`, `-` o `@`, incluso tras espacios; para una importación exacta, preferí JSON.
 
 El JSON es un array de registros sin envoltorio, con `id`, `recordedAt`, `type`, `mood`, `emotion: {id, nombre}`, `factors: [{id, nombre}]` y `source`. Conserva las selecciones y sus IDs íntegros. Este formato corresponde al modelo de vista previa, no al esquema pendiente de Supabase. Los nombres de archivo siguen `eudila-vista-previa-historial-AAAA-MM-DD.csv|json|pdf`.
+
+### Evolución y factores · ANI-73 / ANI-74
+
+Desde Hoy y Calendario, **Ver evolución** abre `/evolucion` y **Ver factores de vida** abre `/factores`. Ambas vistas comparten un selector de últimos 7/30/90 días, incluido hoy, y conservan la selección en `?rango=7|30|90` (por defecto 30). La navegación interna, los detalles y el historial del navegador conservan el rango.
+
+El gráfico muestra promedios diarios observados de la escala 1–7. La tabla accesible presenta los mismos valores/conteos y permite abrir cada día. Fechas y horas siguen la zona del navegador; no se incluyen instantes futuros, incluso del mismo día. Un día sin registro no se estima ni se convierte en cero. Los registros originales siguen disponibles.
+
+La regla **provisional de presentación** permite unir puntos solamente con al menos 14 registros distribuidos en 7 fechas distintas dentro del rango. Aun cumpliéndola, solo se unen días consecutivos con registros: los huecos quedan separados. Con menos datos se muestran puntos sin líneas. No es un umbral clínico validado ni una detección de tendencias; su revisión profesional, junto con los textos de análisis, sigue en ANI-99.
+
+Los factores se agrupan por UUID, con una aparición por registro/factor y conteos en cada uno de los siete ánimos. Un registro puede aparecer en varios factores; también se informa cuántos no tienen factores. `/factores/[id]?rango=...` muestra la cronología de ese factor y su gráfico. Los conteos describen las selecciones y no establecen causas ni patrones. Los ejemplos permanecen identificados como ficticios; la fuente real autenticada sigue en ANI-98.
+
+Comprobación de lógica, UI, URL/rangos, fechas, detalle, teclado, texto ampliado y ausencia de envío de registros:
+
+```sh
+node --experimental-strip-types --test app/analisis/data.test.mjs
+NEXT_PUBLIC_FRONTEND_PREVIEW=true npm run build
+uv run --with playwright python app/analisis/browser.test.py
+ANALYSIS_PREVIEW=false uv run --with playwright python app/analisis/browser.test.py
+```
+
+La comprobación inicia/detiene producción para preview; el último comando inicia desarrollo con preview y catálogo desactivados para verificar la ausencia de análisis de una cuenta ficticia. Acepta `ANALYSIS_BASE_URL`, `ANALYSIS_ARTIFACT_DIR` y `CHROME_BIN`. El [plan y evidencia](docs/plans/2026-10-04-ani-73-74.md) registra los criterios de Done frontend y los pendientes conservados.

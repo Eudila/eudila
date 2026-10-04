@@ -30,7 +30,7 @@ export default function Navigation() {
   return (
     <nav
       aria-label="Secciones"
-      className="app-navigation grid grid-cols-3 gap-2 border-t border-line px-2 pt-2"
+      className="app-navigation grid grid-cols-3 border-t border-line"
     >
       {sections.map(([href, label]) => {
         const active =
@@ -41,7 +41,7 @@ export default function Navigation() {
             key={href}
             href={href}
             aria-current={active ? "page" : undefined}
-            className={`flex min-h-action min-w-0 items-center justify-center rounded-control px-2 py-3 text-center text-title hover:underline ${active ? "font-semibold text-action underline" : "text-muted"}`}
+            className={`app-tab flex min-w-0 items-center justify-center rounded-control text-center text-title hover:underline ${active ? "font-semibold text-action underline" : "text-muted"}`}
           >
             {label}
           </Link>

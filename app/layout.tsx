@@ -32,7 +32,7 @@ export default function RootLayout({
           <RegistroProvider>
             <div className="app-shell mx-auto grid max-w-phone bg-surface">
               <div>
-                <header className="app-header flex flex-wrap items-center justify-between gap-3 px-6 pb-3">
+                <header className="app-header flex flex-wrap items-center justify-between">
                   <a
                     href="#contenido"
                     className="sr-only min-h-touch text-action underline focus:not-sr-only"
@@ -45,20 +45,45 @@ export default function RootLayout({
                   <Link
                     href="/ayuda"
                     prefetch={false}
-                    className="inline-flex min-h-touch max-w-full items-center justify-center rounded-pill bg-action px-4 py-3 text-title font-semibold text-white hover:underline"
+                    className="app-help inline-flex max-w-full items-center justify-center rounded-pill bg-action text-title font-semibold text-white hover:underline"
                   >
                     Ayuda ahora
                   </Link>
                 </header>
                 {previewEnabled && (
-                  <p
-                    data-frontend-preview
-                    className="border-y border-line bg-action/5 px-6 py-2 text-muted"
-                  >
-                    <strong>Vista previa</strong> · Los registros se conservan
-                    solo en esta pestaña. Al cerrarla, se pierden. Los ejemplos
-                    se cargan cuando vos los elegís.
-                  </p>
+                  <div data-frontend-preview>
+                    <button
+                      type="button"
+                      popoverTarget="preview-notice"
+                      className="app-preview-toggle block w-full border-y border-line bg-action/5 text-left text-muted underline"
+                    >
+                      <strong>Vista previa</strong> · En esta pestaña
+                    </button>
+                    <div
+                      id="preview-notice"
+                      popover="auto"
+                      className="preview-notice rounded-control border border-line bg-surface text-text"
+                      role="note"
+                      aria-labelledby="preview-notice-title"
+                    >
+                      <h2 id="preview-notice-title" className="font-semibold">
+                        Sobre la vista previa
+                      </h2>
+                      <p className="my-3">
+                        Los registros se conservan solo en esta pestaña. Al
+                        cerrarla, se pierden. Los ejemplos se cargan cuando vos
+                        los elegís.
+                      </p>
+                      <button
+                        type="button"
+                        popoverTarget="preview-notice"
+                        popoverTargetAction="hide"
+                        className="app-help text-action underline"
+                      >
+                        Cerrar aviso de vista previa
+                      </button>
+                    </div>
+                  </div>
                 )}
               </div>
               <main
