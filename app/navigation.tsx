@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 
 const sections = [
   ["/", "Registrar"],
@@ -12,6 +13,20 @@ const sections = [
 
 export default function Navigation() {
   const pathname = usePathname();
+  useEffect(() => {
+    if (
+      process.env.NODE_ENV !== "production" ||
+      !("serviceWorker" in navigator)
+    )
+      return;
+    navigator.serviceWorker
+      .register("/help-sw.js", { updateViaCache: "none" })
+      .then(() => navigator.serviceWorker.ready)
+      .then((registration) => registration.active?.postMessage("refresh-help"))
+      .catch(() => {
+        // Si el navegador impide la copia local, Ayuda sigue disponible online.
+      });
+  }, []);
   return (
     <nav
       aria-label="Secciones"
