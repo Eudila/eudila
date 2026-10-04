@@ -1,0 +1,119 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+.history-report {
+  border-top: 1px solid var(--color-line);
+  padding-top: 1.5rem;
+}
+.history-report header,
+.history-report section,
+.history-report footer {
+  margin-bottom: 1.5rem;
+}
+.history-report h3 {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.history-report p + p {
+  margin-top: 0.5rem;
+}
+.history-report table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.75rem;
+}
+.history-report th,
+.history-report td {
+  text-align: left;
+  border-bottom: 1px solid var(--color-line);
+  padding: 0.5rem 0.25rem;
+  overflow-wrap: anywhere;
+}
+.history-report th {
+  font-weight: 600;
+}
+.history-report td:last-child,
+.history-report th:last-child {
+  text-align: right;
+}
+.report-records > li {
+  padding-block: 1rem;
+  border-bottom: 1px solid var(--color-line);
+}
+.report-missing-days {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+@media print {
+  @page {
+    size: A4;
+    margin: 18mm;
+  }
+  html,
+  body {
+    height: auto !important;
+    background: white !important;
+    color: black !important;
+    font-size: 11pt;
+  }
+  .app-shell {
+    display: block !important;
+    height: auto !important;
+    max-width: none !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+  .app-header,
+  .app-navigation,
+  [data-frontend-preview],
+  .export-controls {
+    display: none !important;
+  }
+  #contenido {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  .export-page {
+    padding: 0 !important;
+  }
+  .history-report {
+    border: 0;
+    padding: 0;
+    color: black;
+    font-family: sans-serif;
+  }
+  .history-report h2 {
+    font-size: 20pt;
+  }
+  .history-report h3 {
+    font-size: 13pt;
+    break-after: avoid;
+  }
+  .history-report section {
+    break-inside: auto;
+  }
+  .history-report header {
+    break-inside: avoid;
+  }
+  .history-report th,
+  .history-report td,
+  .report-records > li {
+    border-color: black;
+  }
+  .history-report thead {
+    display: table-header-group;
+  }
+  .history-report tr,
+  .report-records > li {
+    break-inside: avoid;
+  }
+  .history-report p,
+  .report-missing-days li {
+    orphans: 2;
+    widows: 2;
+  }
+  .history-report footer {
+    margin-top: 1rem;
+    border-top: 1px solid black;
+    padding-top: 0.75rem;
+  }
+}

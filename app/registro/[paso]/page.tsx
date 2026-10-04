@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import { notFound } from "next/navigation";
 import Registro from "../registro";
-
-const implemented = ["tipo", "animo", "emocion"];
+import { nextSteps as implemented } from "@/prototype/flow-state.js";
 
 export function generateStaticParams() {
   return implemented.map((paso) => ({ paso }));

@@ -4,16 +4,17 @@ Repositorio nuevo para la app de registro emocional. El historial empieza acá y
 
 ## App Next.js
 
-Requisitos: Git y **Node.js 22 (22.13 o superior) o Node.js 24+**, con npm. No hace falta configurar variables de entorno ni levantar una base de datos para ejecutar este scaffold.
+Requisitos: Git y **Node.js 22 (22.13 o superior) o Node.js 24+**, con npm. No hace falta levantar una base de datos. `.env.example` habilita explícitamente la vista previa del frontend; copiá ese archivo para recorrer todas las pantallas.
 
 ```sh
 git clone https://github.com/Eudila/eudila.git
 cd eudila
 npm ci
+cp .env.example .env.local
 npm run dev
 ```
 
-Abrí <http://localhost:3000>. Para detener el servidor, presioná Ctrl+C. La pantalla inicial permite empezar el registro en Next.js: tipo, ánimo y entrada al paso de emoción. El selector completo de emoción y los pasos siguientes continúan en el prototipo independiente hasta integrar el catálogo y el guardado. La app Next.js usa App Router, React, TypeScript estricto y Tailwind CSS 4.
+Abrí <http://localhost:3000>. Para detener el servidor, presioná Ctrl+C. La app permite completar tipo, ánimo, emoción, factores opcionales y confirmación; consultar Hoy, Calendario y el detalle de cada día; descargar CSV/JSON e imprimir un informe para guardar como PDF. En vista previa, los registros viven solo en la sesión de esa pestaña. El banner permanente distingue este modo de una cuenta sincronizada. La app Next.js usa App Router, React, TypeScript estricto y Tailwind CSS 4.
 
 Para comprobar el código y generar la versión de producción:
 
@@ -29,7 +30,7 @@ npm run start
 
 ### Navegación y ayuda
 
-El layout raíz mantiene la cabecera con **Ayuda ahora** y una barra inferior de tres secciones: **Registrar** (`/`), **Hoy** (`/hoy`) y **Calendario** (`/calendario`). Hoy y Calendario son destinos provisionales; el resumen y el calendario real siguen en ANI-68/ANI-71. Registrar también se reconoce como sección activa en las rutas `/registro/*`.
+El layout raíz mantiene la cabecera con **Ayuda ahora** y una barra inferior de tres secciones: **Registrar** (`/`), **Hoy** (`/hoy`) y **Calendario** (`/calendario`). Hoy muestra los registros del día, Calendario permite recorrer meses y abrir cada día. Desde ambas secciones se accede a `/exportar`. Las fechas siguen la zona horaria del navegador. Registrar también se reconoce como sección activa en las rutas `/registro/*`.
 
 El contenido central se desplaza dentro de un shell de ancho teléfono, centrado en desktop. Cabecera y barra reservan su propio espacio, incluyen safe areas y siguen visibles con texto ampliado. Hay enlace de salto al contenido, foco visible y estado activo mediante `aria-current`. Las futuras páginas heredan el layout; deben aportar contenido dentro del `main` compartido.
 
@@ -68,9 +69,9 @@ El script inicia y detiene su servidor de desarrollo. Para comprobar un build se
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
 | `app/layout.tsx`                        | Shell raíz con cabecera, ayuda persistente, contenido y navegación; idioma, metadata y Figtree local.                 |
 | `app/navigation.tsx`                    | Tres secciones y estado activo a partir de la ruta.                                                                   |
-| `app/hoy/`, `app/calendario/`           | Destinos provisionales del resumen y calendario.                                                                      |
+| `app/hoy/`, `app/calendario/`           | Resumen diario, calendario mensual y detalle por fecha.                                                               |
 | `app/ayuda/page.tsx`                    | Ayuda con teléfonos en HTML y fuentes oficiales.                                                                      |
-| `app/registro/`                         | Pasos de tipo y ánimo, entrada a emoción y proveedor del borrador compartido.                                         |
+| `app/registro/`                         | Cinco pasos, catálogos, confirmación y borrador compartido.                                                           |
 | `app/page.tsx`                          | Pantalla inicial de Next.js. Las futuras rutas del registro e historial se agregan dentro de `app/` según App Router. |
 | `app/globals.css`                       | Tokens compartidos de marca, estados de ánimo, tipografía y composición.                                              |
 | `app/tokens/page.tsx`                   | Galería de todos los tokens en `/tokens`.                                                                             |
@@ -109,4 +110,30 @@ El [contenido de la landing](docs/content/landing.md) y su [plan de verificació
 
 El [guion del prototipo comercial](docs/content/prototipo-comercial.md) de ANI-79 define seis pantallas para ANI-80, con indicadores, un mapa ficticio, datos simulados consistentes y los límites de lo que puede presentarse. Distingue los pasos que ya funcionan en la app del servicio institucional propuesto; su dashboard todavía es una maqueta por construir.
 
-La base Next.js de ANI-48, el layout de ANI-61 y los primeros pasos de ANI-63 están en `app/`. `/registro/tipo` ofrece Mañana, Tarde, Noche y Registro libre, sin horarios obligatorios. `/registro/animo` usa la escala nativa de siete niveles y anuncia el valor elegido. El borrador se conserva entre rutas y en `sessionStorage`, con aviso si el navegador bloquea ese almacenamiento. Cerrar pide confirmación y descarta; Ayuda y las tabs conservan el borrador. Las opciones y su revisión están documentadas en [el plan de ANI-63](docs/plans/2026-10-02-ani-63-registro.md). `/registro/emocion` muestra el catálogo pendiente de cargar en la base: ANI-64 integra su selector cuando ANI-50 publique las filas definidas en ANI-96. El prototipo y Next.js comparten el estado, su validación y la escala del orbe. `/ayuda` integra el texto v2, la revisión documental aceptada y el funcionamiento offline de ANI-67. El repositorio anterior queda donde está; el trabajo nuevo sigue en `Eudila/eudila`.
+La base Next.js de ANI-48, el layout de ANI-61 y los primeros pasos de ANI-63 están en `app/`. `/registro/tipo` ofrece Mañana, Tarde, Noche y Registro libre, sin horarios obligatorios. `/registro/animo` usa la escala nativa de siete niveles y anuncia el valor elegido. El borrador se conserva entre rutas y en `sessionStorage`, con aviso si el navegador bloquea ese almacenamiento. Cerrar pide confirmación y descarta; Ayuda y las tabs conservan el borrador. Las opciones y su revisión están documentadas en [el plan de ANI-63](docs/plans/2026-10-02-ani-63-registro.md). `/registro/emocion` integra el selector de ANI-64: sugerencias, lista completa con búsqueda, teclado y conservación del UUID en el borrador. Con `NEXT_PUBLIC_FRONTEND_PREVIEW=false`, se habilita al configurar las variables públicas de catálogo y publicar ANI-50; sin base muestra indisponibilidad y conserva el borrador. La [guía de conexión de ANI-64](docs/content/ani-64-integracion.md) documenta el endpoint y la comprobación pendiente sobre Supabase real. `/registro/factores` permite elegir ninguno, uno o varios factores; `/registro/confirmacion` permite editar las elecciones y guardar en la vista previa. El prototipo y Next.js comparten el estado, su validación y la escala del orbe. `/ayuda` integra el texto v2, la revisión documental aceptada y el funcionamiento offline de ANI-67. El repositorio anterior queda donde está; el trabajo nuevo sigue en `Eudila/eudila`.
+
+### Selector de emoción · ANI-64
+
+Copiá `.env.example` a `.env.local` y completá `NEXT_PUBLIC_CATALOG_URL` (origen del proyecto Supabase) y `NEXT_PUBLIC_CATALOG_ANON_KEY` (clave pública anon JWT) cuando esté lista ANI-50. Las variables públicas se incorporan al build: reiniciá desarrollo o reconstruí producción al cambiarlas. Con `NEXT_PUBLIC_FRONTEND_PREVIEW=false` no se usa el archivo de semillas como catálogo de respaldo. Con el modo de vista previa habilitado explícitamente, las pantallas usan las semillas versionadas de ANI-96.
+
+La [guía de integración](docs/content/ani-64-integracion.md) fija campos, permisos, datos semilla y pruebas sobre la base real. Comprobación previa con respuestas REST interceptadas de ANI-96: `node --test prototype/catalog.test.mjs data/catalogo.test.mjs prototype/flow-state.test.mjs` y `uv run --with playwright python app/registro/emociones.test.py`. La segunda arranca y detiene Next.js automáticamente; no requiere base ni credenciales.
+
+### Frontend completo · vista previa
+
+`NEXT_PUBLIC_FRONTEND_PREVIEW=true` habilita el recorrido sin DB con el catálogo versionado de ANI-96. El historial se guarda en `sessionStorage`, exclusivamente en esta pestaña: no hay autenticación ni sincronización. Un fallo de escritura conserva el borrador y permite reintentar; datos corruptos no se borran ni sobrescriben. Los ejemplos se cargan solo mediante una acción explícita cuando el historial está vacío.
+
+`/exportar` ofrece un informe descriptivo para 7, 30, 90 días o todo el historial. **Imprimir / guardar PDF** abre el diálogo nativo del navegador: elegí guardar como PDF. CSV y JSON incluyen todo el historial de la pestaña, sin aplicar el período del informe. El PDF no formula diagnósticos ni recomendaciones. La integración de cuentas y Supabase sigue en ANI-98; la revisión clínica profesional del texto sigue en ANI-99.
+
+Comprobación del recorrido completo, errores de almacenamiento, navegación, descargas reales, impresión y PDF:
+
+```sh
+node --experimental-strip-types --test app/historial/records.test.mjs app/exportar/export.test.mjs
+NEXT_PUBLIC_FRONTEND_PREVIEW=true npm run build
+uv run --with playwright --with pypdf python app/frontend.test.py
+```
+
+El script inicia un servidor de producción en un puerto libre y lo detiene al terminar. Acepta `FRONTEND_BASE_URL` y `CHROME_BIN`. El [plan y evidencia](docs/plans/2026-10-04-frontend-app.md) registra el alcance de ANI-65/66/68/71/72/94/95 y los criterios para Done del frontend.
+
+El CSV contiene una fila por registro y las columnas `id`, `recorded_at` (instante UTC ISO), `fecha_local` (AAAA-MM-DD), `hora_local` (HH:mm:ss), `tipo`, `escala` (1–7), `escala_etiqueta`, `emocion_id`, `emocion`, `factor_ids`, `factores` y `origen`. `factor_ids` y `factores` contienen arrays JSON en el mismo orden; están vacíos (`[]`) cuando no hay factores. `origen` distingue `preview` de `example`. El archivo usa UTF-8 con BOM, coma, comillas dobles y líneas CRLF. Para evitar fórmulas de planilla, se antepone un apóstrofo a valores que empiezan con `=`, `+`, `-` o `@`, incluso tras espacios; para una importación exacta, preferí JSON.
+
+El JSON es un array de registros sin envoltorio, con `id`, `recordedAt`, `type`, `mood`, `emotion: {id, nombre}`, `factors: [{id, nombre}]` y `source`. Conserva las selecciones y sus IDs íntegros. Este formato corresponde al modelo de vista previa, no al esquema pendiente de Supabase. Los nombres de archivo siguen `eudila-vista-previa-historial-AAAA-MM-DD.csv|json|pdf`.
