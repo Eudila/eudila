@@ -9,6 +9,21 @@ export default function Help() {
       <h1 className="font-display text-question leading-question font-bold tracking-brand text-balance">
         Ayuda ahora
       </h1>
+      <section aria-labelledby="emergency-title" className="space-y-4">
+        <h2 id="emergency-title" className="text-title font-semibold">
+          Peligro inmediato
+        </h2>
+        <p className="text-muted">
+          Si vos u otra persona están en peligro inmediato, llamá al 911.
+        </p>
+        <a
+          href="tel:911"
+          className="flex min-h-touch flex-col rounded-control border border-line px-4 py-3 text-action hover:underline"
+        >
+          <span className="font-semibold">Llamar al 911</span>
+          <span className="text-muted">Emergencias · Desde todo el país</span>
+        </a>
+      </section>
       <p className="text-muted">
         Podés consultar los números sin internet. Para llamar necesitás señal
         telefónica.
@@ -71,6 +86,13 @@ export default function Help() {
           href="https://www.argentina.gob.ar/node/513585"
         >
           Ministerio de Salud de la Nación
+        </a>
+        {" y "}
+        <a
+          className="text-action underline"
+          href="https://www.argentina.gob.ar/tema/emergencias"
+        >
+          Emergencias Argentina
         </a>
         . Verificado el 04/10/2026.
       </p>

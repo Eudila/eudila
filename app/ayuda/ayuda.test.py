@@ -87,11 +87,14 @@ try:
         page.wait_for_url(base + "/ayuda")
         expect(page.get_by_role("heading", name="Ayuda ahora", exact=True)).to_be_visible()
         assert " ".join(page.locator("#contenido").inner_text().split()) == " ".join(documented_copy.split()), "La pantalla difiere del texto presentado para revisión"
-        phones = ["tel:135", "tel:08003451435", "tel:08009990091"]
+        phones = ["tel:911", "tel:135", "tel:08003451435", "tel:08009990091"]
         assert page.locator('a[href^="tel:"]').evaluate_all("xs => xs.map(x => x.getAttribute('href'))") == phones
         assert page.evaluate("sessionStorage.getItem('eudila-draft-v1')") == draft
         assert page.locator("script").count() == 0, "La copia offline no debe necesitar hidratación"
         page.reload(wait_until="load")
+        expect(page.get_by_role("link", name="Llamar al 911")).to_be_visible()
+        emergency = page.get_by_role("link", name="Llamar al 911")
+        assert emergency.bounding_box()["y"] + emergency.bounding_box()["height"] < page.viewport_size["height"], "La acción de peligro inmediato debe verse sin desplazar la pantalla"
         expect(page.get_by_role("link", name="Llamar al 135")).to_be_visible()
         assert page.locator(".app-shell").evaluate("x => getComputedStyle(x).display") == "grid", "Faltan estilos offline"
         page.evaluate("document.fonts.ready")

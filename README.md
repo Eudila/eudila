@@ -33,7 +33,7 @@ El layout raíz mantiene la cabecera con **Ayuda ahora** y una barra inferior de
 
 El contenido central se desplaza dentro de un shell de ancho teléfono, centrado en desktop. Cabecera y barra reservan su propio espacio, incluyen safe areas y siguen visibles con texto ampliado. Hay enlace de salto al contenido, foco visible y estado activo mediante `aria-current`. Las futuras páginas heredan el layout; deben aportar contenido dentro del `main` compartido.
 
-`/ayuda` contiene los teléfonos, coberturas y horarios del prototipo, contrastados nuevamente con las fuentes enlazadas el 04/10/2026. Se abre en un toque, sin sesión ni consulta a la base. La revisión clínica del texto final de ANI-59 sigue pendiente para cerrar ANI-67.
+`/ayuda` diferencia peligro inmediato (911) de las líneas de orientación y apoyo (135 y los dos 0800). Contiene los teléfonos, coberturas y horarios del prototipo, contrastados nuevamente con las fuentes enlazadas el 04/10/2026. Se abre en un toque, sin sesión ni consulta a la base. La revisión clínica del texto final de ANI-59 sigue pendiente para cerrar ANI-67.
 
 En producción, al abrir cualquier página de la app se prepara una copia local de Ayuda, sus estilos y la fuente. Una vez preparada, permite consultar los teléfonos sin internet, incluso sin haber visitado antes `/ayuda`, tras recargar o en otra pestaña. Las llamadas requieren señal telefónica. La preparación inicial necesita conexión, HTTPS (o localhost) y un navegador que permita Service Worker, Cache Storage y Web Locks; puede perderse si el navegador borra el almacenamiento. Sin esas capacidades, Ayuda sigue disponible online. El servidor de desarrollo no instala esta copia.
 
