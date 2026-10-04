@@ -99,11 +99,38 @@ body {
 }
 
 .app-header {
-  padding-top: max(calc(var(--spacing) * 3), env(safe-area-inset-top));
+  /* El texto puede crecer sin multiplicar también el espacio del marco. */
+  gap: 8px;
+  padding: max(12px, env(safe-area-inset-top)) 12px 12px;
 }
 
 .app-navigation {
-  padding-bottom: max(calc(var(--spacing) * 2), env(safe-area-inset-bottom));
+  gap: 8px;
+  padding: 8px 8px max(8px, env(safe-area-inset-bottom));
+}
+
+.app-help,
+.app-tab,
+.app-preview-toggle {
+  min-height: 44px;
+  padding: 6px 12px;
+}
+
+.app-tab {
+  padding: 6px 4px;
+}
+
+.preview-notice {
+  width: min(30rem, calc(100vw - 32px));
+  max-height: 60dvh;
+  margin: auto;
+  padding: 16px;
+  overflow-y: auto;
+  overflow-wrap: anywhere;
+}
+
+.preview-notice::backdrop {
+  background: rgb(0 0 0 / 0.15);
 }
 
 :focus-visible {

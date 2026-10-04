@@ -48,7 +48,7 @@ function MoodShape({ mood, small = false }: { mood: number; small?: boolean }) {
   );
 }
 
-function HistoryGate({ children }: { children: React.ReactNode }) {
+export function HistoryGate({ children }: { children: React.ReactNode }) {
   const { ready, problem, preview, retry } = useHistory();
   if (!ready) return <p role="status">Preparando tus registros…</p>;
   if (problem)
@@ -83,6 +83,12 @@ function HistoryActions() {
       </Link>
       <Link href="/exportar" className={textAction}>
         Exportar historial
+      </Link>
+      <Link href="/evolucion" className={textAction}>
+        Ver evolución
+      </Link>
+      <Link href="/factores" className={textAction}>
+        Ver factores de vida
       </Link>
     </div>
   );
