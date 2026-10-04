@@ -4,8 +4,13 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { loadCatalogRows } from "@/prototype/catalog.js";
+import {
+  previewEnabled,
+  previewEmotions,
+  previewFactors,
+} from "../frontend-preview";
 
-type Emotion = { id: string; nombre: string; sugerida: boolean };
+type Emotion = { id: string; nombre: string; sugerida?: boolean };
 const config = {
   url: process.env.NEXT_PUBLIC_CATALOG_URL || "",
   anonKey: process.env.NEXT_PUBLIC_CATALOG_ANON_KEY || "",
@@ -18,33 +23,27 @@ function searchable(value: string) {
     .toLocaleLowerCase("es-AR");
 }
 
-export default function Emociones({
-  selectedId,
-  choose,
-}: {
-  selectedId: string | null;
-  choose: (id: string) => void;
-}) {
-  const [rows, setRows] = useState<Emotion[]>([]);
+export function useCatalog(table: "emociones" | "factores_vida") {
+  const [rows, setRows] = useState<Emotion[]>(
+    previewEnabled
+      ? table === "emociones"
+        ? previewEmotions
+        : previewFactors
+      : [],
+  );
   const [status, setStatus] = useState(
-    config.url && config.anonKey ? "loading" : "unavailable",
+    previewEnabled
+      ? "ready"
+      : config.url && config.anonKey
+        ? "loading"
+        : "unavailable",
   );
   const [attempt, setAttempt] = useState(0);
-  const [query, setQuery] = useState("");
-  const dialog = useRef<HTMLDialogElement>(null);
-  const origin = useRef<HTMLButtonElement>(null);
-  const search = useRef<HTMLInputElement>(null);
-  const selected = rows.find((row) => String(row.id) === selectedId);
-  const found = rows.filter((row) =>
-    searchable(row.nombre).includes(searchable(query.trim())),
-  );
-  const button =
-    "min-h-touch rounded-control border border-line px-4 py-3 text-left hover:underline aria-pressed:border-action aria-pressed:bg-action aria-pressed:text-white";
 
   useEffect(() => {
-    if (!config.url || !config.anonKey) return;
+    if (previewEnabled || !config.url || !config.anonKey) return;
     const controller = new AbortController();
-    loadCatalogRows("emociones", config, controller.signal).then(
+    loadCatalogRows(table, config, controller.signal).then(
       (items) => {
         if (controller.signal.aborted) return;
         setRows(items);
@@ -55,7 +54,33 @@ export default function Emociones({
       },
     );
     return () => controller.abort();
-  }, [attempt]);
+  }, [attempt, table]);
+
+  function retry() {
+    setStatus("loading");
+    setAttempt((value) => value + 1);
+  }
+  return { rows, status, retry };
+}
+
+export default function Emociones({
+  selectedId,
+  choose,
+}: {
+  selectedId: string | null;
+  choose: (id: string) => void;
+}) {
+  const { rows, status, retry } = useCatalog("emociones");
+  const [query, setQuery] = useState("");
+  const dialog = useRef<HTMLDialogElement>(null);
+  const origin = useRef<HTMLButtonElement>(null);
+  const search = useRef<HTMLInputElement>(null);
+  const selected = rows.find((row) => String(row.id) === selectedId);
+  const found = rows.filter((row) =>
+    searchable(row.nombre).includes(searchable(query.trim())),
+  );
+  const button =
+    "min-h-touch rounded-control border border-line px-4 py-3 text-left hover:underline aria-pressed:border-action aria-pressed:bg-action aria-pressed:text-white";
 
   function select(row: Emotion) {
     choose(String(row.id));
@@ -76,14 +101,7 @@ export default function Emociones({
                   : "El catálogo de emociones todavía no está disponible. Tu borrador se conserva; podés volver y cambiar el ánimo."}
           </p>
           {(status === "error" || status === "empty") && (
-            <button
-              type="button"
-              className={button}
-              onClick={() => {
-                setStatus("loading");
-                setAttempt((value) => value + 1);
-              }}
-            >
+            <button type="button" className={button} onClick={retry}>
               Volver a intentar
             </button>
           )}

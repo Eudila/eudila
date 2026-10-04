@@ -21,7 +21,7 @@ with tempfile.TemporaryFile() as log:
     server = subprocess.Popen(
         ["node", "node_modules/next/dist/bin/next", "dev", "--hostname", "127.0.0.1", "--port", str(port)],
         cwd=project, stdout=log, stderr=subprocess.STDOUT,
-        env={**os.environ, "NEXT_TELEMETRY_DISABLED": "1", "NEXT_PUBLIC_CATALOG_URL": "https://catalog.invalid", "NEXT_PUBLIC_CATALOG_ANON_KEY": "public-test-key"},
+        env={**os.environ, "NEXT_TELEMETRY_DISABLED": "1", "NEXT_PUBLIC_FRONTEND_PREVIEW": "false", "NEXT_PUBLIC_CATALOG_URL": "https://catalog.invalid", "NEXT_PUBLIC_CATALOG_ANON_KEY": "public-test-key"},
     )
     try:
         deadline = monotonic() + 60
@@ -45,6 +45,9 @@ with tempfile.TemporaryFile() as log:
             def catalog(route):
                 assert route.request.headers["apikey"] == "public-test-key"
                 assert route.request.headers["authorization"] == "Bearer public-test-key"
+                if "/rest/v1/factores_vida?" in route.request.url:
+                    route.fulfill(status=200, content_type="application/json", body=json.dumps(seeds["factores_vida"]), headers={"access-control-allow-origin": "*"})
+                    return
                 assert "/rest/v1/emociones?" in route.request.url
                 assert "select=id,nombre,sugerida" in route.request.url
                 assert "order=nombre.asc" in route.request.url
@@ -118,7 +121,15 @@ with tempfile.TemporaryFile() as log:
             expect(page.get_by_role("status").filter(has_text="Elegiste:")).to_have_text("Elegiste: " + chosen["nombre"])
             page.get_by_role("link", name="Siguiente", exact=True).click()
             page.wait_for_url(base + "/registro/factores")
-            expect(page.get_by_role("status")).to_contain_text("Este registro aún no se guardó.")
+            expect(page.get_by_role("checkbox")).to_have_count(15)
+            page.get_by_role("link", name="Revisar registro").click()
+            expect(page.get_by_role("status").filter(has_text="El guardado en tu cuenta")).to_contain_text("El guardado en tu cuenta todavía no está habilitado")
+            assert page.get_by_role("button", name="Guardar en vista previa").count() == 0
+            assert page.evaluate("sessionStorage.getItem('eudila-preview-records-v1')") is None
+            page.goto(base + "/exportar")
+            expect(page.locator("main")).to_contain_text("Todavía no hay datos de cuenta para exportar")
+            assert page.get_by_role("button", name="Descargar JSON").count() == 0
+            page.goto(base + "/registro/factores")
             page.get_by_role("link", name="Volver", exact=True).click()
             expect(page.get_by_role("status").filter(has_text="Elegiste:")).to_have_text("Elegiste: " + chosen["nombre"])
             # Reflujo y diálogo con texto aumentado, sin recortar controles.
@@ -182,7 +193,7 @@ with tempfile.TemporaryFile() as log:
             # Sin variables, no hay catálogo de respaldo ni peticiones externas.
             server.terminate()
             server.wait(timeout=10)
-            unconfigured_env = {**os.environ, "NEXT_TELEMETRY_DISABLED": "1"}
+            unconfigured_env = {**os.environ, "NEXT_TELEMETRY_DISABLED": "1", "NEXT_PUBLIC_FRONTEND_PREVIEW": "false"}
             for variable in ["NEXT_PUBLIC_CATALOG_URL", "NEXT_PUBLIC_CATALOG_ANON_KEY"]:
                 unconfigured_env[variable] = ""
             server = subprocess.Popen(

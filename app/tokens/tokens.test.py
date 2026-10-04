@@ -32,7 +32,7 @@ if not base:
     server = subprocess.Popen(
         ["node", str(project / "node_modules/next/dist/bin/next"), "dev", "--hostname", "127.0.0.1", "--port", str(port)],
         cwd=project,
-        env={**os.environ, "NEXT_TELEMETRY_DISABLED": "1"},
+        env={**os.environ, "NEXT_TELEMETRY_DISABLED": "1", "NEXT_PUBLIC_FRONTEND_PREVIEW": "false", "NEXT_PUBLIC_CATALOG_URL": "", "NEXT_PUBLIC_CATALOG_ANON_KEY": ""},
         stdout=subprocess.DEVNULL,
         stderr=subprocess.STDOUT,
     )
@@ -194,7 +194,7 @@ try:
             page.wait_for_url(base + "/ayuda")
             expect(page.get_by_role("heading", name="Ayuda ahora", exact=True)).to_be_visible()
             assert page.reload(wait_until="networkidle").status == 200
-            assert page.locator('a[href^="tel:"]').evaluate_all("links => links.map(a => a.getAttribute('href'))") == ["tel:135", "tel:08003451435", "tel:08009990091"]
+            assert page.locator('a[href^="tel:"]').evaluate_all("links => links.map(a => a.getAttribute('href'))") == ["tel:911", "tel:135", "tel:08003451435", "tel:08009990091"]
 
         page.goto(base + "/", wait_until="networkidle")
         page.set_viewport_size({"width": 390, "height": 844})

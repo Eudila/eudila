@@ -7,19 +7,17 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   newDraft,
   restoreDraft,
-  steps,
+  nextSteps as steps,
   types,
 } from "@/prototype/flow-state.js";
 import { moods, shapePath } from "@/prototype/moods.js";
 import Emociones from "./emociones";
+import Factores from "./factores";
+import Confirmacion from "./confirmacion";
+import type { Draft } from "../historial/records";
+export type { Draft } from "../historial/records";
 
 const draftKey = "eudila-draft-v1";
-type Draft = {
-  type: string | null;
-  mood: number;
-  emotionId: string | null;
-  factors: string[];
-};
 const DraftContext = createContext<{
   draft: Draft;
   ready: boolean;
@@ -71,8 +69,14 @@ export function RegistroProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
+export function useDraft() {
+  const state = useContext(DraftContext);
+  if (!state) throw new Error("useDraft necesita RegistroProvider");
+  return state;
+}
+
 export default function Registro({ paso }: { paso: string }) {
-  const state = useContext(DraftContext)!;
+  const state = useDraft();
   const { draft, ready, persistent, update, discard } = state;
   const router = useRouter();
   const pathname = usePathname();
@@ -128,7 +132,9 @@ export default function Registro({ paso }: { paso: string }) {
             ? "¿Cómo te sentís ahora?"
             : paso === "emocion"
               ? "¿Qué emoción describe mejor lo que sentís?"
-              : "¿Qué factores influyeron hoy?"}
+              : paso === "factores"
+                ? "¿Qué factores influyeron hoy?"
+                : "Revisá tu registro"}
       </h1>
       {!ready ? (
         <p role="status">Preparando tu registro…</p>
@@ -255,13 +261,8 @@ export default function Registro({ paso }: { paso: string }) {
               </Link>
             </>
           )}
-          {paso === "factores" && (
-            <p role="status" className="text-muted">
-              El paso de factores todavía no está disponible. Tu borrador se
-              conserva; podés volver y cambiar la emoción. Este registro aún no
-              se guardó.
-            </p>
-          )}
+          {paso === "factores" && <Factores />}
+          {paso === "confirmacion" && <Confirmacion />}
         </>
       )}
       <dialog
