@@ -36,7 +36,8 @@ La mención original a Noelia como autora se actualiza a Agustín por la reasign
 
 - Línea base: `node --test prototype/flow-state.test.mjs`, 1/1 correcto.
 - `node --test data/catalogo.test.mjs prototype/flow-state.test.mjs`: 4/4 correctos. Comprueba forma de filas, UUID, nombres únicos, seis sugerencias, correspondencia documental, identidades derivadas de las claves y conservación de alternativas/factores en el borrador.
-- `uv run --with playwright python data/catalogo.browser.test.py`: correcto en Chrome. El lector solicita los campos y headers esperados; muestra seis sugerencias incluso con ánimo 2/7, 21 respuestas y 15 factores; conserva UUID de una alternativa, múltiples factores y recarga; permite quitar todos los factores sin errores de JavaScript.
+- `uv run --with playwright python data/catalogo.browser.test.py`: correcto en Chrome, viewport 390 × 844. El lector solicita los campos y headers esperados; muestra seis sugerencias incluso con ánimo 2/7, 21 respuestas y 15 factores; conserva UUID de una alternativa, múltiples factores y recarga; permite quitar todos los factores sin errores de JavaScript.
 - Prettier sobre JSON y prueba Node: correcto. `git diff --check`: correcto. No cambian código de la app, dependencias ni configuración de producción.
 - La primera ejecución del driver de navegador leyó una clave de almacenamiento equivocada. Se contrastó con `DRAFT_KEY` en `prototype/app.js`, se corrigió el driver a `eudila-draft-v1` y se volvió a ejecutar con resultado correcto.
-- Revisión independiente y publicación: pendientes de registrar.
+- Revisión independiente de fuentes, contenido, contrato y privacidad sobre `f82f790`: apto para publicar, sin hallazgos importantes ni menores accionables. El revisor volvió a ejecutar por su cuenta Node (3/3 del catálogo), navegador y `git diff --check`, todos correctos. No constituye una aprobación clínica ni validación psicométrica.
+- Entrega mediante [PR #3](https://github.com/Eudila/eudila/pull/3). El documento conectado a ANI-96 registra la publicación final, los vínculos para ANI-50/ANI-64/ANI-65 y el cierre en Linear.
