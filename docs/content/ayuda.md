@@ -2,9 +2,9 @@
 
 **Responsable de la entrega:** Agustín Pedernera. **Versión:** 2, 04/10/2026.
 
-**Estado:** propuesta concreta lista para revisión clínica. No se encontró evidencia de esa revisión en ANI-59. La revisión factual y técnica de esta entrega no equivale a una aprobación clínica.
+**Estado:** texto v2 aceptado por Agustín para integrar y cerrar ANI-67 el 04/10/2026. Ante la pregunta explícita de cerrar con revisión documental IA dejando constancia de que no hubo aprobación clínica profesional, el usuario respondió “acepto”. Esa decisión acepta el alcance de esta entrega; no acredita una revisión profesional.
 
-La siguiente transcripción es el contenido de `/ayuda` en la rama `ani-67-ayuda-offline`. El botón global dice “Ayuda ahora” y abre la página directamente, sin sesión ni confirmación. Los teléfonos son enlaces `tel:` de HTML.
+La siguiente transcripción es el contenido de `/ayuda` entregado mediante el PR #1. El botón global dice “Ayuda ahora” y abre la página directamente, sin sesión ni confirmación. Los teléfonos son enlaces `tel:` de HTML.
 
 ## Texto exacto de la pantalla
 
@@ -37,7 +37,7 @@ Desde todo el país
 Números, cobertura y horarios: Centro de Asistencia al Suicida, sus horarios de atención y Ministerio de Salud de la Nación y Emergencias Argentina. Verificado el 04/10/2026.
 ```
 
-La transcripción no incluye la cabecera y las tres tabs comunes a la app. En el pie, el nombre de cada fuente enlaza a su página oficial. No hay diagnóstico, promesa de mejora ni frases de aliento añadidas. La precisión clínica del mensaje y la pertinencia de recursos para una urgencia requieren la revisión expresamente solicitada por el ticket.
+La transcripción no incluye la cabecera y las tres tabs comunes a la app. En el pie, el nombre de cada fuente enlaza a su página oficial. No hay diagnóstico, promesa de mejora ni frases de aliento añadidas. La revisión documental de los recursos y de los riesgos de redacción figura abajo, con atribución y límites. El responsable aceptó explícitamente ese alcance para esta entrega.
 
 ## Verificación factual · 04/10/2026
 
@@ -69,13 +69,12 @@ La consulta offline necesita que la app haya preparado la copia local previament
 
 **Resultado de esta revisión documental:** se encontró y corrigió la omisión de peligro inmediato. Los demás datos y límites se corresponden con las fuentes citadas. Esta conclusión tiene el alcance descrito; no equivale a una evaluación clínica profesional de la pantalla ni de quienes la usan.
 
-## Registro de revisión clínica profesional
+## Aceptación del alcance · 04/10/2026
 
-**Pendiente.** Registrar sobre esta versión concreta:
+**Responsable que acepta:** Agustín Pedernera. **Referencia verificable:** conversación de ejecución de ANI-67; respuesta del usuario “acepto” a la pregunta “¿Aceptás integrar y cerrar ANI-67 con la revisión documental IA, dejando explícito que no hubo aprobación clínica profesional?”. La decisión se registra también en Linear.
 
-- Nombre y rol profesional de quien revisa.
-- Fecha y referencia verificable del dictamen.
-- Aprobación o correcciones solicitadas, incluidas indicaciones sobre atención ante peligro inmediato, cobertura y horarios.
-- Versión o commit del texto revisado e incorporación de los cambios que correspondan.
+**Versión aceptada:** v2 del texto, revisable en el [commit 2081492](https://github.com/Eudila/eudila/blob/2081492/app/ayuda/page.tsx). El cierre usa la revisión documental asistida por IA en lugar de mantener un dictamen profesional como requisito de esta entrega. No hubo aprobación clínica profesional; no se atribuyen credenciales, firma o participación a Noelia ni a otra persona.
 
-No se atribuye revisión a Noelia ni a una persona que no haya participado. Para cerrar ANI-67 se debe incorporar el registro real, integrar el texto resultante y verificar otra vez la pantalla. Este documento cubre únicamente Ayuda: no acredita la entrega de todos los textos restantes de ANI-59.
+**Resultado de la revisión independiente técnica y factual de v2:** sin hallazgos importantes. El revisor contrastó CAS y Emergencias Argentina y repitió Node 5/5, diff-check y navegador; verificó texto exacto, cuatro teléfonos, 911 visible sin scroll, consulta offline, caché y borrador. No constituye una segunda revisión profesional.
+
+Este documento cubre únicamente Ayuda: no acredita la entrega de todos los textos restantes de ANI-59. Una revisión profesional futura deberá registrar nombre, rol, fecha, versión y dictamen reales; no se informa como realizada en esta entrega.
