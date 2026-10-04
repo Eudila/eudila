@@ -99,7 +99,7 @@ Para comprobar ANI-69 en un navegador real: `uv run --with playwright python pro
 
 ## Integración
 
-La [verificación de clonado y el protocolo de prueba externa](docs/techweek/clonado.md) de ANI-78 registran el quickstart comprobado desde un clon nuevo, el commit probado y los resultados. La prueba de una persona ajena al setup en una máquina limpia sigue pendiente.
+La [verificación del clonado y arranque](docs/techweek/clonado.md) de ANI-78 registra el quickstart comprobado desde un clon nuevo de este equipo, el commit probado y los resultados. Agustín aceptó esta verificación como criterio de cierre y omitió expresamente la prueba humana externa; no se presenta como realizada.
 
 El [texto de Ayuda y su revisión documental](docs/content/ayuda.md) y el [plan de cierre de ANI-67](docs/plans/2026-10-04-ani-67-cierre.md) fijan la versión exacta, fuentes contrastadas el 04/10/2026 y evidencia técnica. Agustín aceptó explícitamente integrar y cerrar con revisión documental asistida por IA, dejando constancia de que no hubo aprobación clínica profesional.
 

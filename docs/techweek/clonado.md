@@ -1,8 +1,8 @@
-# Clonado en máquina limpia · ANI-78
+# Clonado y arranque en este equipo · ANI-78
 
 ## Estado · 04/10/2026
 
-Verificación técnica completada contra el repositorio público. **Prueba externa pendiente; ANI-78 permanece In Progress.** El criterio de cierre exige una persona ajena al setup en una máquina donde nunca corrió eudila, siguiendo solo el README y en menos de 15 minutos.
+Verificación técnica completada contra el repositorio público y aceptada para cerrar ANI-78. Agustín indicó: “nadie, lo omitamos, con que funcione aca ya lo damos por hecho”. Se acepta la verificación técnica en este equipo como criterio de cierre; se omite la prueba humana externa. No se acredita una persona externa ni una máquina diferente.
 
 [Plan de ejecución](../plans/2026-10-04-ani-78-clonado.md). [Ticket ANI-78](https://linear.app/anima-org/issue/ANI-78/prueba-de-clonado-en-una-maquina-limpia).
 
@@ -51,9 +51,9 @@ npm ci emitió avisos de deprecación de ESLint, cinco entradas de severidad alt
 
 La prueba técnica anterior del 03/10 está registrada en [PR #2](https://github.com/Eudila/eudila/pull/2), sobre otro SHA. Esta repetición usa main con ANI-67 integrada y no incorpora los cambios de ese PR.
 
-## Prueba externa: protocolo listo para usar
+## Protocolo externo original · omitido por decisión del responsable
 
-Agustín coordina la persona y le entrega únicamente la URL del repositorio y este pedido:
+El plan original proponía coordinar una persona y entregarle únicamente la URL del repositorio y este pedido. Se conserva como referencia histórica; esta prueba se omite en el cierre aceptado:
 
 > Abrí https://github.com/Eudila/eudila y levantá la app siguiendo únicamente su README. Registrá los pasos que te traben y avisá cuando la veas funcionando.
 
@@ -65,21 +65,25 @@ La persona debe ser ajena al setup y usar una máquina donde nunca corrió eudil
 4. Anotar cualquier tropiezo y tiempo perdido. Si tarda 15 minutos o más, requiere ayuda o falla un paso, corregir y publicar la solución.
 5. Repetir desde una carpeta limpia con la versión corregida. Conservar los intentos fallidos y aclarar que la repetición ya no es primera exposición.
 
-### Acta externa por completar
+### Acta externa · no realizada, requisito omitido
 
 | Dato | Resultado |
 | --- | --- |
-| Persona ajena al setup / identificación consentida | Pendiente |
-| Fecha, máquina donde nunca corrió eudila y sistema operativo | Pendiente |
-| Versiones de Git, Node y npm | Pendiente |
-| SHA público clonado | Pendiente |
-| Inicio del cronómetro | Pendiente |
-| App visible y operable / fin del cronómetro | Pendiente |
-| Duración total menor de 15 minutos | Pendiente |
-| Registro y Ayuda accesibles | Pendiente |
-| Tropiezos textuales, tiempo perdido y ayuda recibida | Pendiente |
-| Correcciones y repetición, si hubo fallos | Pendiente |
+| Persona ajena al setup / identificación consentida | No realizado; omitido por Agustín |
+| Fecha, máquina donde nunca corrió eudila y sistema operativo | No realizado; omitido por Agustín |
+| Versiones de Git, Node y npm | No realizado; omitido por Agustín |
+| SHA público clonado | No realizado; omitido por Agustín |
+| Inicio del cronómetro | No realizado; omitido por Agustín |
+| App visible y operable / fin del cronómetro | No realizado; omitido por Agustín |
+| Duración total menor de 15 minutos | No realizado; omitido por Agustín |
+| Registro y Ayuda accesibles | No realizado; omitido por Agustín |
+| Tropiezos textuales, tiempo perdido y ayuda recibida | No realizado; omitido por Agustín |
+| Correcciones y repetición, si hubo fallos | No realizado; omitido por Agustín |
+
+## Comprobación final tras aceptar el alcance
+
+El 04/10/2026 a las 20:50:41 UTC se volvió a verificar el build probado en Chrome: inicio → tipo Mañana → ánimo → Ayuda, HTTP 200, cuatro enlaces telefónicos y cero errores JavaScript. Se confirmó que app/public y dependencias de main `9be10f6` son idénticos al commit probado `59e55a1`. El servidor de producción se detuvo al finalizar. La comprobación anterior de lint/tipos/formato/build y Node 5/5 se conserva; esta fase solo modifica documentación.
 
 ## Regla de cierre
 
-Incorporar el acta externa real y cualquier corrección en main, adjuntar PR y SHA a ANI-78 y verificar Done por lectura de Linear. Hasta disponer de esa evidencia, la verificación técnica y el protocolo publicados no sustituyen el criterio externo del ticket.
+Registrar la aceptación explícita, comprobar el arranque y recorrido de producción en este equipo y conservar la evidencia técnica. Publicar esta decisión en main y Linear, adjuntar PR y commit, pasar ANI-78 a Done y verificar estado y responsable por lectura de Linear. La prueba externa queda omitida y no se presenta como realizada.
