@@ -421,7 +421,7 @@ body {
 }
 
 .app-shell[data-motion="paused"] :is(.orb-breath, .orb-turn, .orb-particle),
-.app-shell[data-mood="4"][data-mood-transition="idle"] .orb-particle {
+.app-shell[data-mood-position="4"][data-mood-transition="idle"] .orb-particle {
   animation-play-state: paused;
 }
 

@@ -44,11 +44,12 @@ MOOD_BASE_URL=http://127.0.0.1:3118 uv run --with playwright python app/design-m
 
 `MOOD_ARTIFACT_DIR` permite guardar capturas y mediciones.
 
-El orbe de ánimo tiene cinco capas iluminadas, geometrías propias de los siete estados y núcleo blanco. Forma/color/ambiente/acción cambian juntos en 600ms; respiración de 4s, giro alterno y partículas acompañan el estado. Neutral queda sin partículas. Los ciclos se pausan al ocultar la pestaña y se cancelan al salir; movimiento reducido conserva la escena fija y cambios instantáneos. El historial reutiliza el renderer estático. El slider mantiene range nativo, teclado y ARIA, con espectro, thumb blanco/punto del estado y halo de marca. [Plan](docs/plans/2026-10-05-mood-orb-motion.md) y [evidencia](docs/design/evidence/mood-motion-2026-10-05/README.md).
+El orbe de ánimo tiene cinco capas iluminadas, geometrías propias de los siete estados y núcleo blanco. Las selecciones por teclado cambian forma/color/ambiente/acción en 600ms; el arrastre sigue cada posición directamente. El slider nativo usa `step=any`: permite posiciones intermedias y conserva el lugar al soltar, con espectro, thumb blanco/punto del estado y halo. Se guarda la categoría más cercana (1–7); la posición visual fraccionaria se mantiene al navegar, y la recarga restaura la categoría guardada. “Algo agradable” agrega ondulación orgánica por capa; respiración de 4s, giro alterno y partículas acompañan el estado. Neutral exacto queda sin partículas. Los ciclos se pausan al ocultar la pestaña y se cancelan al salir; movimiento reducido conserva la escena fija y arrastre directo. El historial reutiliza el renderer estático. [Plan y comparación de la transición completa](docs/plans/2026-10-05-mood-continuous.md) y [evidencia actual](docs/design/evidence/mood-continuous-2026-10-05/README.md).
 
 ```sh
 node --experimental-strip-types --test app/mood/geometry.test.mjs
 MOTION_BASE_URL=http://127.0.0.1:3118 MOTION_ENGINES=chromium,webkit,firefox uv run --with playwright python app/mood/motion.test.py
+MOTION_BASE_URL=http://127.0.0.1:3118 MOTION_ENGINES=chromium,webkit,firefox uv run --with playwright python app/mood/continuous.test.py
 ```
 
 Para motores adicionales: `uv run --with playwright playwright install webkit firefox`. El test usa Chrome instalado en macOS o Chromium de Playwright. `MOTION_ARTIFACT_DIR` guarda capturas, grabaciones de la app y mediciones. WebKit automatizado no certifica un dispositivo iOS físico ni la app Safari.

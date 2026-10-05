@@ -24,6 +24,8 @@ const DraftContext = createContext<{
   draft: Draft;
   ready: boolean;
   persistent: boolean;
+  moodInput: { position: number; animate: boolean };
+  changeMood: (position: number, animate?: boolean) => void;
   update: (draft: Draft) => void;
   discard: () => void;
 } | null>(null);
@@ -32,6 +34,7 @@ export function RegistroProvider({ children }: { children: React.ReactNode }) {
   const [draft, setDraft] = useState<Draft>(newDraft);
   const [ready, setReady] = useState(false);
   const [persistent, setPersistent] = useState(true);
+  const [moodInput, setMoodInput] = useState({ position: 4, animate: false });
 
   useEffect(() => {
     let restored = null;
@@ -42,11 +45,13 @@ export function RegistroProvider({ children }: { children: React.ReactNode }) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setPersistent(false);
     }
-    setDraft(restored ?? newDraft());
+    const initial = restored ?? newDraft();
+    setDraft(initial);
+    setMoodInput({ position: initial.mood, animate: false });
     setReady(true);
   }, []);
 
-  function update(next: Draft) {
+  function persist(next: Draft) {
     setDraft(next);
     try {
       sessionStorage.setItem(draftKey, JSON.stringify(next));
@@ -55,8 +60,23 @@ export function RegistroProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  function update(next: Draft) {
+    persist(next);
+    if (next.mood !== draft.mood)
+      setMoodInput({ position: next.mood, animate: false });
+  }
+
+  function changeMood(value: number, animate = false) {
+    if (!Number.isFinite(value)) return;
+    const position = Math.max(1, Math.min(7, value));
+    setMoodInput({ position, animate });
+    const mood = Math.round(position);
+    if (mood !== draft.mood) persist({ ...draft, mood });
+  }
+
   function discard() {
     setDraft(newDraft());
+    setMoodInput({ position: 4, animate: false });
     try {
       sessionStorage.removeItem(draftKey);
     } catch {
@@ -65,7 +85,17 @@ export function RegistroProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <DraftContext value={{ draft, ready, persistent, update, discard }}>
+    <DraftContext
+      value={{
+        draft,
+        ready,
+        persistent,
+        moodInput,
+        changeMood,
+        update,
+        discard,
+      }}
+    >
       {children}
     </DraftContext>
   );
@@ -79,7 +109,9 @@ export function useDraft() {
 
 export default function Registro({ paso }: { paso: string }) {
   const state = useDraft();
-  const { draft, ready, persistent, update, discard } = state;
+  const { draft, ready, persistent, moodInput, changeMood, update, discard } =
+    state;
+  const scrubbing = useRef(false);
   const router = useRouter();
   const pathname = usePathname();
   const title = useRef<HTMLHeadingElement>(null);
@@ -90,6 +122,18 @@ export default function Registro({ paso }: { paso: string }) {
   const textAction = "action action-text";
   const emotional = paso === "animo";
   const navigationAction = emotional ? "mood-navigation-control" : textAction;
+
+  useEffect(() => {
+    const finish = () => {
+      scrubbing.current = false;
+    };
+    window.addEventListener("pointerup", finish);
+    window.addEventListener("pointercancel", finish);
+    return () => {
+      window.removeEventListener("pointerup", finish);
+      window.removeEventListener("pointercancel", finish);
+    };
+  }, []);
 
   function navigationIcon(direction: "back" | "close") {
     return (
@@ -250,12 +294,37 @@ export default function Registro({ paso }: { paso: string }) {
                   type="range"
                   min="1"
                   max="7"
-                  step="1"
-                  value={draft.mood}
+                  step="any"
+                  value={moodInput.position}
                   aria-valuetext={`${mood.label}, ${draft.mood} de 7`}
+                  onPointerDown={() => {
+                    scrubbing.current = true;
+                  }}
                   onChange={(event) =>
-                    update({ ...draft, mood: Number(event.target.value) })
+                    changeMood(Number(event.target.value), !scrubbing.current)
                   }
+                  onKeyDown={(event) => {
+                    const position =
+                      Math.abs(
+                        moodInput.position - Math.round(moodInput.position),
+                      ) < 1e-6
+                        ? Math.round(moodInput.position)
+                        : moodInput.position;
+                    const choices: Record<string, number> = {
+                      ArrowLeft: Math.ceil(position) - 1,
+                      ArrowDown: Math.ceil(position) - 1,
+                      ArrowRight: Math.floor(position) + 1,
+                      ArrowUp: Math.floor(position) + 1,
+                      PageDown: Math.ceil(position) - 1,
+                      PageUp: Math.floor(position) + 1,
+                      Home: 1,
+                      End: 7,
+                    };
+                    if (choices[event.key] === undefined) return;
+                    event.preventDefault();
+                    scrubbing.current = false;
+                    changeMood(choices[event.key], true);
+                  }}
                   className="mood-range min-h-touch w-full cursor-pointer"
                 />
                 <div className="mood-secondary flex justify-between gap-6">

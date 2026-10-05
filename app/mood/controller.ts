@@ -5,6 +5,8 @@ import {
   brandEase,
   mixColor,
   mixPoints,
+  positionWeights,
+  organicPoints,
   transitionDuration,
   type Color,
   type Points,
@@ -17,11 +19,24 @@ type Frame = {
   orb: Color;
   dots: number;
   sparks: number;
+  organic: number;
 };
+
+function blendFrame(from: Frame, to: Frame, progress: number): Frame {
+  return {
+    points: mixPoints(from.points, to.points, progress),
+    accent: mixColor(from.accent, to.accent, progress),
+    ambient: mixColor(from.ambient, to.ambient, progress),
+    orb: mixColor(from.orb, to.orb, progress),
+    dots: from.dots + (to.dots - from.dots) * progress,
+    sparks: from.sparks + (to.sparks - from.sparks) * progress,
+    organic: from.organic + (to.organic - from.organic) * progress,
+  };
+}
 
 export function createMoodController(
   root: HTMLDivElement,
-  initialLevel: number,
+  initialPosition: number,
 ) {
   const styles = getComputedStyle(root);
   const canvas = document.createElement("canvas");
@@ -41,11 +56,18 @@ export function createMoodController(
     orb: token(`--color-mood-${index + 1}-orb`),
     dots: index < 3 ? 1 : 0,
     sparks: index > 3 ? 1 : 0,
+    organic: index === 4 ? 1 : 0,
   }));
+  function frameAt(position: number) {
+    const { lower, upper, fraction } = positionWeights(position);
+    return blendFrame(palette[lower], palette[upper], fraction);
+  }
   const paths = root.querySelectorAll<SVGPathElement>("[data-orb-shape]");
   const media = matchMedia("(prefers-reduced-motion: reduce)");
-  let level = initialLevel;
-  let current: Frame = palette[level - 1];
+  let position = initialPosition;
+  let current: Frame = frameAt(position);
+  let organicElapsed = 0;
+  let lastTick = performance.now();
   let transition: {
     from: Frame;
     to: Frame;
@@ -66,8 +88,27 @@ export function createMoodController(
     );
     root.style.setProperty("--orb-dots-opacity", String(frame.dots));
     root.style.setProperty("--orb-sparks-opacity", String(frame.sparks));
-    const path = pathFromPoints(frame.points);
-    paths.forEach((node) => node.setAttribute("d", path));
+    paintShapes(frame);
+  }
+
+  function paintShapes(frame: Frame) {
+    const flowing = frame.organic > 0 && !media.matches;
+    paths.forEach((node, index) => {
+      let points = frame.points;
+      if (flowing) {
+        // Halo follows the outer layer; inner layers have their own ripple phase.
+        const phase =
+          (organicElapsed / 8000) * Math.PI * 2 + Math.max(0, index - 1) * 0.7;
+        const waved = organicPoints(palette[4].points, phase);
+        points = points.map((point, i) =>
+          point.map(
+            (v, axis) =>
+              v + (waved[i][axis] - palette[4].points[i][axis]) * frame.organic,
+          ),
+        );
+      }
+      node.setAttribute("d", pathFromPoints(points));
+    });
   }
 
   function cancel() {
@@ -77,31 +118,31 @@ export function createMoodController(
 
   function tick(now: number) {
     raf = null;
-    if (destroyed || !transition || document.hidden || media.matches) return;
-    transition.elapsed += Math.max(0, now - transition.last);
-    transition.last = now;
-    const progress = brandEase(transition.elapsed / transitionDuration);
-    const { from, to } = transition;
-    current = {
-      points: mixPoints(from.points, to.points, progress),
-      accent: mixColor(from.accent, to.accent, progress),
-      ambient: mixColor(from.ambient, to.ambient, progress),
-      orb: mixColor(from.orb, to.orb, progress),
-      dots: from.dots + (to.dots - from.dots) * progress,
-      sparks: from.sparks + (to.sparks - from.sparks) * progress,
-    };
-    paint(current);
-    if (transition.elapsed >= transitionDuration) {
-      current = to;
-      transition = null;
-      root.dataset.moodTransition = "idle";
-    } else raf = requestAnimationFrame(tick);
+    if (destroyed || document.hidden || media.matches) return;
+    organicElapsed += Math.max(0, now - lastTick);
+    lastTick = now;
+    if (transition) {
+      transition.elapsed += Math.max(0, now - transition.last);
+      transition.last = now;
+      current = blendFrame(
+        transition.from,
+        transition.to,
+        brandEase(transition.elapsed / transitionDuration),
+      );
+      paint(current);
+      if (transition.elapsed >= transitionDuration) {
+        current = transition.to;
+        transition = null;
+        root.dataset.moodTransition = "idle";
+      }
+    } else paintShapes(current);
+    if (transition || current.organic > 0) raf = requestAnimationFrame(tick);
   }
 
   function syncMotion() {
     cancel();
     if (media.matches) {
-      current = palette[level - 1];
+      current = frameAt(position);
       transition = null;
       paint(current);
       root.dataset.moodTransition = "idle";
@@ -109,8 +150,9 @@ export function createMoodController(
     } else if (document.hidden) root.dataset.motion = "paused";
     else {
       root.dataset.motion = "running";
-      if (transition) {
-        transition.last = performance.now();
+      lastTick = performance.now();
+      if (transition) transition.last = lastTick;
+      if (transition || current.organic > 0) {
         raf = requestAnimationFrame(tick);
       }
     }
@@ -123,16 +165,20 @@ export function createMoodController(
   syncMotion();
 
   return {
-    setLevel(next: number) {
-      if (destroyed || level === next) return;
-      level = next;
+    setPosition(next: number, immediate = false) {
+      if (destroyed || (position === next && !immediate)) return;
+      position = next;
+      const wasAnimating = raf !== null;
       cancel();
-      const target = palette[level - 1];
-      if (media.matches || document.hidden) {
+      if (!wasAnimating) lastTick = performance.now();
+      const target = frameAt(position);
+      if (immediate || media.matches || document.hidden) {
         current = target;
         transition = null;
         paint(current);
         root.dataset.moodTransition = "idle";
+        if (!media.matches && !document.hidden && current.organic > 0)
+          raf = requestAnimationFrame(tick);
       } else {
         transition = {
           from: current,

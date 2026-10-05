@@ -13,7 +13,7 @@ import { createMoodController } from "./mood/controller";
 
 export default function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const { draft, ready } = useDraft();
+  const { draft, ready, moodInput } = useDraft();
   const emotional = pathname === "/registro/animo";
   const root = useRef<HTMLDivElement>(null);
   const controller = useRef<ReturnType<typeof createMoodController> | null>(
@@ -24,7 +24,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
     if (!emotional || !ready || !root.current) return;
     const active = createMoodController(
       root.current,
-      Number(root.current.dataset.mood),
+      Number(root.current.dataset.moodPosition),
     );
     controller.current = active;
     return () => {
@@ -34,14 +34,15 @@ export default function AppShell({ children }: { children: ReactNode }) {
   }, [emotional, ready]);
 
   useLayoutEffect(() => {
-    controller.current?.setLevel(draft.mood);
-  }, [draft.mood, emotional, ready]);
+    controller.current?.setPosition(moodInput.position, !moodInput.animate);
+  }, [moodInput, emotional, ready]);
 
   return (
     <div
       ref={root}
       className="app-shell mx-auto grid max-w-phone bg-surface"
       data-mood={emotional ? draft.mood : undefined}
+      data-mood-position={emotional ? moodInput.position : undefined}
       style={
         emotional
           ? ({

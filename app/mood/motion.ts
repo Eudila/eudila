@@ -4,6 +4,29 @@ export type Points = number[][];
 
 export const transitionDuration = 600;
 
+export function positionWeights(position: number) {
+  const value =
+    Math.max(1, Math.min(7, Number.isFinite(position) ? position : 4)) - 1;
+  const lower = Math.floor(value);
+  return { lower, upper: Math.min(6, lower + 1), fraction: value - lower };
+}
+
+/** A quiet ripple of the organic contour; the center and point order stay fixed. */
+export function organicPoints(points: Points, phase: number): Points {
+  if (phase === 0) return points;
+  return points.map(([x, y]) => {
+    const dx = x - 110,
+      dy = y - 110;
+    const radius = Math.hypot(dx, dy);
+    const angle = Math.atan2(dy, dx);
+    const ripple =
+      2.5 * (Math.sin(3 * angle + phase) - Math.sin(3 * angle)) +
+      1.5 * (Math.cos(4 * angle - phase) - Math.cos(4 * angle));
+    const scale = 1 + ripple / radius;
+    return [110 + dx * scale, 110 + dy * scale];
+  });
+}
+
 /** Solve the brand cubic-bezier(.32,.72,0,1), including interrupted morphs. */
 export function brandEase(progress: number) {
   if (progress <= 0) return 0;

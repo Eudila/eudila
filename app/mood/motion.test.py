@@ -108,6 +108,7 @@ with sync_playwright() as p:
         ratios = [(max(lum(f['bg']),lum(f['ink']))+.05)/(min(lum(f['bg']),lum(f['ink']))+.05) for f in frames]
         assert min(ratios) >= 4.5, min(ratios)
         times = page.evaluate('window.transitionEvents')
+        first_start = next(t['t'] for t in times if t['mood']=='1' and t['state']=='running')
         start_time = next(t['t'] for t in times if t['mood']=='7' and t['state']=='running')
         end_time = next(t['t'] for t in times if t['mood']=='7' and t['state']=='idle')
         measured_duration = end_time - start_time
@@ -116,7 +117,7 @@ with sync_playwright() as p:
             delta = [b-a for a,b in zip(start,end)]
             return sum((v-a)*d for v,a,d in zip(current,start,delta)) / sum(d*d for d in delta)
         coordinated = []
-        for f in [f for f in frames if 30 < f['t'] < 150]:
+        for f in [f for f in frames if 30 < f['t'] - first_start < 150]:
             points = [float(n) for n in re.findall(r'-?\d+\.?\d*', f['d'])]
             shape_progress = progress(points, start_points, target_points)
             observed = [progress(f['bg'], [46,192,188], [137,47,201]),

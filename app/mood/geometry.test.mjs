@@ -103,3 +103,49 @@ test("morph continuo y tinta AA en todas las mezclas, incluso entre extremos", a
     }
   }
 });
+
+test("posiciones continuas mezclan vecinos sin cuantizar la escena", async () => {
+  const motion = await import("./motion.ts");
+  assert.equal(typeof motion.positionWeights, "function");
+  assert.deepEqual(motion.positionWeights(5.25), {
+    lower: 4,
+    upper: 5,
+    fraction: 0.25,
+  });
+  const nearFive = motion.positionWeights(4.8);
+  assert.equal(nearFive.lower, 3);
+  assert.equal(nearFive.upper, 4);
+  assert.ok(Math.abs(nearFive.fraction - 0.8) < 1e-10);
+  assert.deepEqual(motion.positionWeights(7), {
+    lower: 6,
+    upper: 6,
+    fraction: 0,
+  });
+  assert.deepEqual(motion.positionWeights(-1), {
+    lower: 0,
+    upper: 1,
+    fraction: 0,
+  });
+});
+
+test("el contorno orgánico fluye sin desplazar el núcleo ni plegarse", async () => {
+  const motion = await import("./motion.ts");
+  assert.equal(typeof motion.organicPoints, "function");
+  const base = geometry.shapePoints(geometry.moods[4]);
+  assert.deepEqual(motion.organicPoints(base, 0), base);
+  assert.notDeepEqual(motion.organicPoints(base, 1), base);
+  for (let phase = 0; phase < 15; phase += 0.1) {
+    const points = motion.organicPoints(base, phase);
+    for (let i = 0; i < points.length; i++) {
+      const [x, y] = points[i].map((v) => v - 110);
+      const [nx, ny] = points[(i + 1) % points.length].map((v) => v - 110);
+      assert.ok(Math.hypot(x, y) < 110, "contorno dentro del halo");
+      assert.ok(x * ny - y * nx > 0, "contorno sin pliegues");
+      assert.ok(
+        Math.hypot(points[i][0] - base[i][0], points[i][1] - base[i][1]) <=
+          8.01,
+        "ondulación contenida",
+      );
+    }
+  }
+});
