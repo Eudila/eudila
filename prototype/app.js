@@ -1,7 +1,11 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import { catalog } from "./config.js";
 import { loadCatalogRows } from "./catalog.js";
-import { moods, shapePath } from "./moods.js";
+import { moods } from "./moods.js";
+import { orbMarkup } from "../shared/visual/orb.js";
+import { createMoodController } from "../shared/visual/controller.js";
+import { keyboardPosition } from "../shared/visual/motion.js";
+import { playBrandIntro } from "../shared/visual/intro.js";
 import { adjacentRoute, newDraft, restoreDraft, steps, types } from "./flow-state.js";
 
 const DRAFT_KEY = "eudila-draft-v1";
@@ -15,6 +19,7 @@ const search = document.querySelector("#emotion-search");
 const results = document.querySelector("#emotion-results");
 const homeLink = document.querySelector("#home-link");
 let draft = readDraft();
+let moodPosition = draft?.mood ?? 4;
 let emotions = [];
 let factors = [];
 let catalogProblem = "El catálogo de emociones todavía no está disponible.";
@@ -22,6 +27,7 @@ let activeRoute = routeFromUrl();
 let renderedRoute = "";
 let closeTarget = "";
 let modalOrigin = null;
+let stopIntro = () => {};
 
 function readDraft() {
   try { return restoreDraft(sessionStorage.getItem(DRAFT_KEY)); }
@@ -35,6 +41,7 @@ function persistDraft() {
 function ensureDraft() {
   if (!draft) {
     draft = newDraft();
+    moodPosition = draft.mood;
     persistDraft();
   }
 }
@@ -56,6 +63,7 @@ function navigate(route, replace = false) {
 
 function discardDraft() {
   draft = null;
+  moodPosition = 4;
   try {
     sessionStorage.removeItem(DRAFT_KEY);
     sessionStorage.setItem(DISCARDED_KEY, "1");
@@ -70,18 +78,6 @@ function askToClose(target = "") {
 }
 
 
-function orbMarkup(mood) {
-  const path = shapePath(mood);
-  return `<svg class="orb" viewBox="0 0 220 220" aria-hidden="true">
-    <g class="orb-layer"><path d="${path}" fill="currentColor" opacity=".18"/></g>
-    <g class="orb-layer"><path d="${path}" transform="translate(110 110) scale(.82) translate(-110 -110)" fill="currentColor" opacity=".30"/></g>
-    <g class="orb-layer"><path d="${path}" transform="translate(110 110) scale(.63) translate(-110 -110)" fill="currentColor" opacity=".48"/></g>
-    <g class="orb-layer"><path d="${path}" transform="translate(110 110) scale(.45) translate(-110 -110)" fill="currentColor" opacity=".7"/></g>
-    <g class="orb-layer"><path d="${path}" transform="translate(110 110) scale(.29) translate(-110 -110)" fill="currentColor" opacity=".9"/></g>
-    <circle cx="110" cy="110" r="17" fill="white" opacity=".94"/>
-  </svg>`;
-}
-
 function flowHeader(index) {
   return `<div class="flow-nav">
     <button class="circle-button" type="button" data-back aria-label="Volver">‹</button>
@@ -93,12 +89,12 @@ function flowHeader(index) {
 function renderHome() {
   app.innerHTML = `<section class="home-screen">
     <div class="home-copy">
-      <div class="home-orb" aria-hidden="true">${orbMarkup(moods[3])}</div>
+      <div class="home-orb" aria-hidden="true">${orbMarkup(4, "prototype-home")}</div>
       <p class="home-kicker">Un espejo tranquilo para cada estado de ánimo.</p>
       <h1>¿Cómo te sentís ahora?</h1>
       <p>Un momento para registrar lo que sentís, a tu manera.</p>
     </div>
-    <button class="primary-button" type="button" id="start-record">Empezar registro</button>
+    <button class="primary-button action action-primary" type="button" id="start-record">Empezar registro</button>
   </section>`;
   document.querySelector("#start-record").addEventListener("click", () => {
     try { sessionStorage.removeItem(DISCARDED_KEY); } catch { /* Navigation still works. */ }
@@ -107,33 +103,6 @@ function renderHome() {
   });
 }
 
-function playIntro() {
-  try {
-    if (sessionStorage.getItem("eudila-intro-seen")) return;
-    sessionStorage.setItem("eudila-intro-seen", "1");
-  } catch { return; /* Keep the static state when storage is unavailable. */ }
-
-  const orb = app.querySelector(".home-orb");
-  const motion = matchMedia("(prefers-reduced-motion: reduce)");
-  if (!orb?.animate || motion.matches || document.hidden) return;
-
-  const intro = orb.animate([
-    { opacity: .6, transform: "scale(.94)" },
-    { opacity: 1, transform: "scale(1)" }
-  ], { duration: 600, easing: "cubic-bezier(.32, .72, 0, 1)" });
-  const listeners = new AbortController();
-  const finish = () => {
-    intro.cancel();
-    listeners.abort();
-  };
-  const options = { signal: listeners.signal };
-  shell.addEventListener("pointerdown", finish, options);
-  window.addEventListener("keydown", finish, options);
-  window.addEventListener("popstate", finish, options);
-  document.addEventListener("visibilitychange", finish, options);
-  motion.addEventListener("change", finish, options);
-  intro.finished.then(finish, finish);
-}
 
 function renderType() {
   app.innerHTML = `<section class="flow-screen detail-screen">
@@ -145,7 +114,7 @@ function renderType() {
         ${types.map(type => `<label class="type-option"><input type="radio" name="record-type" value="${type}" ${draft.type === type ? "checked" : ""}><span>${type === "libre" ? "Registro libre" : type[0].toUpperCase() + type.slice(1)}</span></label>`).join("")}
       </fieldset>
     </div>
-    <button class="primary-button flow-next" type="button" data-next ${draft.type ? "" : "disabled"}>Siguiente</button>
+    <button class="primary-button action action-primary flow-next" type="button" data-next ${draft.type ? "" : "disabled"}>Siguiente</button>
   </section>`;
   document.querySelectorAll('[name="record-type"]').forEach(input => input.addEventListener("change", () => {
     draft.type = input.value;
@@ -154,20 +123,18 @@ function renderType() {
   }));
 }
 
-function paintMood() {
+let moodController = null;
+let scrubbing = false;
+window.addEventListener("pointerup", () => { scrubbing = false; });
+window.addEventListener("pointercancel", () => { scrubbing = false; });
+
+function paintMood(position = draft.mood, animate = true) {
   const mood = moods[draft.mood - 1];
-  shell.style.setProperty("--accent", mood.accent);
-  shell.style.setProperty("--orb-color", mood.orb);
-  shell.style.setProperty("--ambient", mood.ambient);
-  shell.style.setProperty("--action-ink", mood.lightInk ? "#fff" : "#1D1D1F");
-  const orb = document.querySelector("#orb-host");
-  if (orb) orb.innerHTML = orbMarkup(mood);
-  const label = document.querySelector("#mood-label");
-  if (label) label.textContent = mood.label;
-  const live = document.querySelector("#mood-live");
-  if (live) live.textContent = mood.label;
-  const slider = document.querySelector("#mood-range");
-  if (slider) slider.setAttribute("aria-valuetext", mood.label);
+  shell.dataset.mood = String(draft.mood);
+  shell.dataset.moodPosition = String(position);
+  document.querySelector("#mood-label").textContent = mood.label;
+  document.querySelector("#mood-range").setAttribute("aria-valuetext", `${mood.label}, ${draft.mood} de 7`);
+  moodController?.setPosition(position, !animate);
 }
 
 function renderMood() {
@@ -175,20 +142,34 @@ function renderMood() {
     ${flowHeader(1)}
     <div class="flow-body">
       <h1>¿Cómo te sentís ahora?</h1>
-      <div id="orb-host" class="orb-host"></div>
-      <p id="mood-label" class="mood-label"></p>
+      <div id="orb-host" class="orb-host">${orbMarkup(draft.mood, "prototype-mood", true, "mood-orb")}</div>
+      <p id="mood-label" class="mood-label" role="status" aria-live="polite" aria-atomic="true"></p>
       <label class="sr-only" for="mood-range">Estado de ánimo</label>
-      <input id="mood-range" type="range" min="1" max="7" step="1" value="${draft.mood}">
+      <input id="mood-range" class="mood-range" type="range" min="1" max="7" step="any" value="${moodPosition}">
       <div class="range-ends"><span>Muy desagradable</span><span>Muy agradable</span></div>
-      <p class="sr-only" id="mood-live" aria-live="polite"></p>
     </div>
-    <button class="primary-button flow-next" type="button" data-next>Siguiente</button>
+    <button class="primary-button action action-primary flow-next" type="button" data-next>Siguiente</button>
   </section>`;
-  paintMood();
-  document.querySelector("#mood-range").addEventListener("input", event => {
-    draft.mood = Number(event.target.value);
+  moodController = createMoodController(shell, moodPosition);
+  paintMood(moodPosition, false);
+  const slider = document.querySelector("#mood-range");
+  const change = (position, animate) => {
+    position = Math.max(1, Math.min(7, position));
+    moodPosition = position;
+    draft.mood = Math.round(position);
+    slider.value = String(position);
     persistDraft();
-    paintMood();
+    paintMood(position, animate);
+  };
+  slider.addEventListener("pointerdown", () => { scrubbing = true; });
+  slider.addEventListener("blur", () => { scrubbing = false; });
+  slider.addEventListener("input", event => change(Number(event.target.value), !scrubbing));
+  slider.addEventListener("keydown", event => {
+    const next = keyboardPosition(Number(slider.value), event.key);
+    if (next === undefined) return;
+    event.preventDefault();
+    scrubbing = false;
+    change(next, true);
   });
 }
 
@@ -201,11 +182,11 @@ function renderEmotion() {
       <h1>¿Qué emoción describe mejor lo que sentís?</h1>
       <p class="step-context" id="emotion-mood"></p>
       <div id="quick-options" class="chip-list" role="group" aria-label="Emociones sugeridas"></div>
-      <button class="text-button" type="button" id="all-emotions" ${emotions.length ? "" : "disabled"}>Ver todas las emociones</button>
+      <button class="text-button action action-text" type="button" id="all-emotions" ${emotions.length ? "" : "disabled"}>Ver todas las emociones</button>
       <p class="selected-emotion" id="selected-emotion" aria-live="polite"></p>
       ${emotions.length ? "" : `<p class="catalog-message" role="status">${catalogProblem}</p>`}
     </div>
-    <button class="primary-button flow-next" type="button" data-next ${selectedEmotion() ? "" : "disabled"}>Siguiente</button>
+    <button class="primary-button action action-primary flow-next" type="button" data-next ${selectedEmotion() ? "" : "disabled"}>Siguiente</button>
   </section>`;
   document.querySelector("#emotion-mood").textContent = moods[draft.mood - 1].label;
   const chosen = selectedEmotion();
@@ -291,6 +272,11 @@ function renderFactors() {
 }
 
 function render() {
+  stopIntro();
+  moodController?.destroy();
+  moodController = null;
+  scrubbing = false;
+  delete shell.dataset.moodPosition;
   const focused = document.activeElement;
   const focusTarget = app.contains(focused)
     ? focused.matches("[data-back]") ? "[data-back]"
@@ -381,5 +367,5 @@ if (isFlow(activeRoute) && !history.state?.eudilaEntry) {
   history.pushState({ eudilaEntry: true }, "", `#/${activeRoute}`);
 }
 render();
-playIntro();
+stopIntro = playBrandIntro(app.querySelector(".home-orb"));
 loadCatalog();

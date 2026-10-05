@@ -22,8 +22,8 @@ async function load(relative, replacements = {}) {
 const recordsUrl = new URL("../historial/records.ts", import.meta.url).href;
 const { url: exportsUrl } = await load("../exportar/export.ts", {
   "../historial/records": recordsUrl,
-  "../../prototype/moods.js": new URL(
-    "../../prototype/moods.js",
+  "../../shared/visual/moods.js": new URL(
+    "../../shared/visual/moods.js",
     import.meta.url,
   ).href,
 });

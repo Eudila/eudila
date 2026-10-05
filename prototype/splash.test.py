@@ -14,9 +14,9 @@ class QuietHandler(SimpleHTTPRequestHandler):
         pass
 
 
-server = ThreadingHTTPServer(("127.0.0.1", 0), partial(QuietHandler, directory=Path(__file__).parent))
+server = ThreadingHTTPServer(("127.0.0.1", 0), partial(QuietHandler, directory=Path(__file__).resolve().parents[1]))
 Thread(target=server.serve_forever, daemon=True).start()
-base = f"http://127.0.0.1:{server.server_port}/"
+base = f"http://127.0.0.1:{server.server_port}/prototype/"
 chrome = os.environ.get("CHROME_BIN", "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
 track_intro = """window.introStarts = 0;
 const animate = Element.prototype.animate;
@@ -124,6 +124,14 @@ try:
         page.get_by_role("button", name="Descartar", exact=True).click()
         assert_static(page)
         assert page.evaluate("introStarts") == 0
+        page.close()
+
+        page = browser.new_page(service_workers="block")
+        page.add_init_script(track_intro)
+        page.goto(base + "ayuda.html")
+        page.get_by_role("link", name="Volver a eudila", exact=True).click()
+        assert_static(page)
+        assert page.evaluate("introStarts") == 0, "La visita directa a Ayuda no consumió la entrada"
         page.close()
 
         for width, height in [(320, 568), (390, 844), (520, 900)]:

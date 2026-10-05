@@ -23,8 +23,8 @@ async function loadTs(relative, replacements = {}) {
 const replacements = {
   "../historial/records": new URL("../historial/records.ts", import.meta.url)
     .href,
-  "../../prototype/moods.js": new URL(
-    "../../prototype/moods.js",
+  "../../shared/visual/moods.js": new URL(
+    "../../shared/visual/moods.js",
     import.meta.url,
   ).href,
 };

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import Link from "next/link";
 import { useId } from "react";
-import { moods } from "../../prototype/moods.js";
+import { moods } from "../../shared/visual/moods.js";
 import { formatDay } from "../exportar/export";
 import { parseDayKey } from "../historial/records";
 import { type analysis } from "./data";

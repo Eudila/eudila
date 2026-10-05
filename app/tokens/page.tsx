@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { moodActionStyle } from "../actions";
+import { moods } from "../../shared/visual/moods.js";
 
 export const metadata: Metadata = { title: "Identidad visual · eudila" };
 
@@ -18,16 +19,6 @@ const colors = [
   ["white", "Blanco"],
   ["mood-bottom", "Base del ambiente emocional"],
   ["mood-secondary", "Texto secundario sobre ambiente"],
-] as const;
-
-const moods = [
-  "Muy desagradable",
-  "Desagradable",
-  "Algo desagradable",
-  "Neutral",
-  "Algo agradable",
-  "Agradable",
-  "Muy agradable",
 ] as const;
 
 const typography = [
@@ -123,7 +114,7 @@ export default function Tokens() {
         <h2 id="moods-title" className="text-title font-semibold">
           Siete estados de ánimo
         </h2>
-        {moods.map((label, index) => {
+        {moods.map(({ label }, index) => {
           const token = `--color-mood-${index + 1}`;
           return (
             <div key={label} className="space-y-4">
@@ -299,7 +290,7 @@ export default function Tokens() {
             Guardando…
           </button>
         </div>
-        {moods.map((label, index) => (
+        {moods.map(({ label }, index) => (
           <div
             key={label}
             data-action-example={index + 1}

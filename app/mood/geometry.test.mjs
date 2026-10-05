@@ -2,7 +2,13 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { createHash } from "node:crypto";
-import * as geometry from "../../prototype/moods.js";
+import { readFileSync } from "node:fs";
+import * as geometry from "../../shared/visual/moods.js";
+const css = readFileSync(new URL("../globals.css", import.meta.url), "utf8");
+const accents = geometry.moods.map(
+  (_, i) =>
+    css.match(new RegExp(`--color-mood-${i + 1}:\\s*(#[a-f0-9]+)`, "i"))[1],
+);
 
 test("Algo agradable conserva una gota amplia al girar alrededor del núcleo", () => {
   const radii = geometry
@@ -75,13 +81,13 @@ test("morph continuo y tinta AA en todas las mezclas, incluso entre extremos", a
     assert.ok(progress >= last && progress <= 1);
     last = progress;
   }
-  for (const a of geometry.moods) {
-    for (const b of geometry.moods) {
+  for (const [aIndex, a] of geometry.moods.entries()) {
+    for (const [bIndex, b] of geometry.moods.entries()) {
       for (let i = 0; i <= 100; i++) {
         const t = i / 100;
         const accent = motion.mixColor(
-          motion.hexColor(a.accent),
-          motion.hexColor(b.accent),
+          motion.hexColor(accents[aIndex]),
+          motion.hexColor(accents[bIndex]),
           t,
         );
         const ink = motion.accessibleInk(accent, [29, 29, 31]);

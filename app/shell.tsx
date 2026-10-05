@@ -2,6 +2,7 @@
 "use client";
 
 import {
+  useEffect,
   useLayoutEffect,
   useRef,
   type CSSProperties,
@@ -10,12 +11,16 @@ import {
 import { usePathname } from "next/navigation";
 import { useDraft } from "./registro/registro";
 import { createMoodController } from "./mood/controller";
+import { markBrandVisited } from "../shared/visual/intro.js";
 
 export default function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const { draft, ready, moodInput } = useDraft();
   const emotional = pathname === "/registro/animo";
   const root = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (pathname !== "/") markBrandVisited();
+  }, [pathname]);
   const controller = useRef<ReturnType<typeof createMoodController> | null>(
     null,
   );

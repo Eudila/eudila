@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { moods } from "@/prototype/moods.js";
+import { moods } from "@/shared/visual/moods.js";
 import MoodOrb from "../mood/orb";
 import {
   averageMood,

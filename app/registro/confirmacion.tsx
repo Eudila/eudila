@@ -8,7 +8,7 @@ import { useDraft } from "./registro";
 import { useCatalog } from "./emociones";
 import { useHistory } from "../historial/state";
 import type { RecordEntry } from "../historial/records";
-import { moods } from "../../prototype/moods.js";
+import { moods } from "../../shared/visual/moods.js";
 
 export default function Confirmacion() {
   const { draft, discard } = useDraft();

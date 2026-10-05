@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { moods } from "../../prototype/moods.js";
+import { moods } from "../../shared/visual/moods.js";
 import { previewFactors } from "../frontend-preview";
 import { formatDay, formatTime } from "../exportar/export";
 import { localDayKey, type RecordEntry } from "../historial/records";

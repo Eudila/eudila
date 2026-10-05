@@ -10,8 +10,9 @@ import {
   nextSteps as steps,
   types,
 } from "@/prototype/flow-state.js";
-import { moods } from "@/prototype/moods.js";
+import { moods } from "@/shared/visual/moods.js";
 import MoodOrb from "../mood/orb";
+import { keyboardPosition } from "../../shared/visual/motion.js";
 import Emociones from "./emociones";
 import Factores from "./factores";
 import Confirmacion from "./confirmacion";
@@ -304,26 +305,14 @@ export default function Registro({ paso }: { paso: string }) {
                     changeMood(Number(event.target.value), !scrubbing.current)
                   }
                   onKeyDown={(event) => {
-                    const position =
-                      Math.abs(
-                        moodInput.position - Math.round(moodInput.position),
-                      ) < 1e-6
-                        ? Math.round(moodInput.position)
-                        : moodInput.position;
-                    const choices: Record<string, number> = {
-                      ArrowLeft: Math.ceil(position) - 1,
-                      ArrowDown: Math.ceil(position) - 1,
-                      ArrowRight: Math.floor(position) + 1,
-                      ArrowUp: Math.floor(position) + 1,
-                      PageDown: Math.ceil(position) - 1,
-                      PageUp: Math.floor(position) + 1,
-                      Home: 1,
-                      End: 7,
-                    };
-                    if (choices[event.key] === undefined) return;
+                    const next = keyboardPosition(
+                      moodInput.position,
+                      event.key,
+                    );
+                    if (next === undefined) return;
                     event.preventDefault();
                     scrubbing.current = false;
-                    changeMood(choices[event.key], true);
+                    changeMood(next, true);
                   }}
                   className="mood-range min-h-touch w-full cursor-pointer"
                 />

@@ -14,7 +14,9 @@
     "lint": "eslint . --max-warnings=0",
     "typecheck": "next typegen && tsc --noEmit",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "visual:tokens": "node scripts/visual-tokens.mjs",
+    "prebuild": "node scripts/visual-tokens.mjs --check"
   },
   "dependencies": {
     "next": "16.3.8",

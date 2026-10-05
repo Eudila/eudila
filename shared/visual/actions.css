@@ -1,0 +1,98 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Shared action vocabulary. Navigation and input/card radii stay separate. */
+.action {
+  display: inline-flex;
+  min-width: 0;
+  max-width: 100%;
+  min-height: max(44px, var(--spacing-touch));
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-body);
+  text-align: center;
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.action-primary,
+.action-secondary {
+  border: 2px solid transparent;
+  border-radius: var(--radius-pill);
+  /* Grow the text, not the horizontal frame, at 200% text zoom. */
+  padding: 0.75rem 20px;
+}
+
+.action-primary {
+  min-height: max(50px, var(--spacing-action));
+  background: var(--action-accent, var(--color-action));
+  color: var(--action-ink, var(--color-white));
+}
+
+.action-secondary {
+  border-color: var(--color-action);
+  background: var(--color-surface);
+  color: var(--color-action);
+}
+
+.action-text {
+  border-radius: var(--radius-control);
+  color: var(--color-action);
+  font-weight: var(--font-weight-normal);
+  text-decoration: underline;
+}
+
+.action:hover:not(:disabled) {
+  text-decoration: underline;
+}
+
+.action:focus-visible {
+  /* Light inner ring + dark outer ring work on both neutral and mood surfaces. */
+  outline: 3px solid var(--color-graphite);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px var(--color-cloud);
+}
+
+.action-primary:active:not(:disabled),
+.action-secondary:active:not(:disabled) {
+  box-shadow: inset 0 0 0 2px currentColor;
+}
+
+.action-primary:active:focus-visible,
+.action-secondary:active:focus-visible {
+  box-shadow:
+    0 0 0 3px var(--color-cloud),
+    inset 0 0 0 2px currentColor;
+}
+
+.action:disabled {
+  border-color: var(--color-line);
+  border-style: dashed;
+  background: var(--color-surface);
+  color: var(--color-muted);
+  cursor: not-allowed;
+  text-decoration: none;
+  opacity: 1;
+}
+
+.action[aria-busy="true"] {
+  cursor: progress;
+}
+
+.action-label {
+  display: grid;
+  min-width: 0;
+}
+
+.action-label > span {
+  /* Reserve idle, retry and busy labels without exposing hidden text to readers. */
+  grid-area: 1 / 1;
+}
+
+.app-help.action {
+  /* Compact utility, always available in one tap; not the screen's main CTA. */
+  min-height: 44px;
+  padding: 6px 12px;
+}

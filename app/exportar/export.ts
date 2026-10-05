@@ -5,7 +5,7 @@ import {
   type CatalogItem,
   type RecordEntry,
 } from "../historial/records";
-import { moods } from "../../prototype/moods.js";
+import { moods } from "../../shared/visual/moods.js";
 
 export type PeriodChoice = "7" | "30" | "90" | "all";
 export type Period = { start: string; end: string };

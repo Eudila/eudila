@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import { localDayKey, type RecordEntry } from "../historial/records";
-import { moods } from "../../prototype/moods.js";
+import { moods } from "../../shared/visual/moods.js";
 import { formatDay, formatTime, summarize, type Period } from "./export";
 
 export default function Report({
