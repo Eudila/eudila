@@ -93,7 +93,8 @@ El script inicia y detiene su servidor de desarrollo. Para comprobar un build se
 | `app/ayuda/page.tsx`                    | Ayuda con teléfonos en HTML y fuentes oficiales.                                                                      |
 | `app/registro/`                         | Cinco pasos, catálogos, confirmación y borrador compartido.                                                           |
 | `app/page.tsx`                          | Pantalla inicial de Next.js. Las futuras rutas del registro e historial se agregan dentro de `app/` según App Router. |
-| `app/globals.css`                       | Tokens compartidos de marca, estados de ánimo, tipografía y composición.                                              |
+| `app/globals.css`                       | Fuente editable de tokens de marca, estados de ánimo, tipografía y composición.                                       |
+| `shared/visual/`                        | Estados, árbol SVG/variantes, movimiento, entrada y CSS comunes; exportación de tokens al prototipo verificada.       |
 | `app/tokens/page.tsx`                   | Galería de todos los tokens en `/tokens`.                                                                             |
 | `prototype/`                            | Prototipo independiente y sus comprobaciones. No es una ruta de Next.js.                                              |
 | `prototype/fonts/`                      | Figtree y su licencia OFL. El layout reutiliza este archivo sin descargar fuentes durante el build.                   |
@@ -178,3 +179,11 @@ ANALYSIS_PREVIEW=false uv run --with playwright python app/analisis/browser.test
 ```
 
 La comprobación inicia/detiene producción para preview; el último comando inicia desarrollo con preview y catálogo desactivados para verificar la ausencia de análisis de una cuenta ficticia. Acepta `ANALYSIS_BASE_URL`, `ANALYSIS_ARTIFACT_DIR` y `CHROME_BIN`. El [plan y evidencia](docs/plans/2026-10-04-ani-73-74.md) registra los criterios de Done frontend y los pendientes conservados.
+
+### Entrada y fuente visual común · ANI-115/118
+
+El inicio Next.js incluye símbolo Neutral y una entrada opcional de 600 ms, una sola vez por sesión, salteable y sin bloquear el registro/Ayuda. Reduced motion, pestaña oculta o almacenamiento bloqueado mantienen el estado estático. El contenido y el símbolo se entregan desde SSR.
+
+`shared/visual/` define etiquetas/geometrías, árbol SVG, variantes animada/compacta, controlador, movimiento/teclado, entrada y CSS de acciones/range. Next.js y prototipo consumen esa misma definición sin compartir su layout o navegación. Cambiá tokens en `app/globals.css` y ejecutá `npm run visual:tokens`; no edites `shared/visual/tokens.css` generado. `npm run build` verifica que la exportación esté actualizada. Serví el prototipo desde raíz del repo para resolver `../shared/`.
+
+Contra producción de preview en 3130: `BRAND_BASE_URL=http://127.0.0.1:3130 uv run --with playwright python app/brand/brand.test.py`. Verifica entrada, sesión/salto/SSR, reflujo, material/geometría/paleta/acciones entre consumidores, ciclos, slider y compactos reales en Chromium/WebKit/Firefox. `uv run --with playwright python prototype/visual-flow.test.py` verifica recorrido, posición fraccionaria conservada al navegar, recarga entera y descarte con catálogo interceptado. [Plan](docs/plans/2026-10-05-brand-entry-shared-visuals.md) y [evidencia nueva](docs/design/evidence/brand-system-2026-10-05/README.md). Las doce brechas estéticas del informe de marca están resueltas en el alcance registrado.

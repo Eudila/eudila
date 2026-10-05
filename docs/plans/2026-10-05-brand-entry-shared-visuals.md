@@ -58,3 +58,10 @@ Se conservan cinco capas, gradientes radiales, núcleo estable, respiración de 
 ## Baseline
 
 Partimos de `4172a9e` (ANI-114). `npm ci` completado; geometría y estado del prototipo: 7 pruebas verdes. Branch aislada en `/Users/147pop/.config/superpowers/worktrees/eudila/ani-115-118-brand-system`.
+
+
+## Resultado de ejecución
+
+Tareas 1–3 implementadas conjuntamente en `092c668` porque la entrada consume el renderer/controlador común. Pruebas rojas: falta de símbolo Next, cuantización del prototipo, exportación de tokens ausente. La revisión detectó helper de emoción eliminado, CTA sin variante y pérdida de posición al navegar; se reprodujeron antes de corregir y ahora el recorrido completo del prototipo pasa los tres motores. También se unificó la política de visita directa a Ayuda del prototipo.
+
+Tarea 4: producción de preview en 3130, entrada/paridad/reflujo en tres motores verdes (12 reflows y 10 posiciones por motor), compacto real en siete estados, regresiones de movimiento/continuo/tokens/composición/flujo y 22 pruebas Node verdes; build/lint/typecheck/formato verdes. Capturas/video/mediciones en `docs/design/evidence/brand-system-2026-10-05/`. Segunda revisión independiente sin hallazgos importantes. Publicación de la rama y estados Linear registrados al cerrar; sin merge/deploy.

@@ -1,0 +1,51 @@
+{
+  "implementation_commit": "092c668",
+  "base_commit": "4172a9e",
+  "production_url": "http://127.0.0.1:3130",
+  "build_profile": "NEXT_PUBLIC_FRONTEND_PREVIEW=true",
+  "checks": {
+    "build": "pass",
+    "lint": "pass",
+    "typecheck": "pass",
+    "format": "pass",
+    "node_tests": 22,
+    "brand_engines": [
+      "chromium",
+      "webkit",
+      "firefox"
+    ],
+    "home_reflow_cases": 36,
+    "parity_positions_per_engine": 10,
+    "next_composition_reflow_cases": 84,
+    "tokens": 71,
+    "token_contrast_pairs": 15,
+    "theme_reflow_cases": 16,
+    "shell_reflow_cases": 90,
+    "frontend_flow_and_exports": "pass",
+    "prototype_flow_engines": [
+      "chromium",
+      "webkit",
+      "firefox"
+    ],
+    "prototype_splash_offline": "pass",
+    "motion_engines": [
+      "chromium",
+      "webkit",
+      "firefox"
+    ],
+    "continuous_positions_per_engine": 61,
+    "continuous_minimum_contrast": 4.716495814604192,
+    "continuous_retained_position": 5.25,
+    "continuous_integer_draft": 5,
+    "touch_engines": [
+      "chromium",
+      "webkit"
+    ]
+  },
+  "review": "second independent review: no important findings remaining",
+  "scope_notes": [
+    "Prototype catalog requests intercepted; Next history screenshot uses seven fictional preview records.",
+    "WebKit is Playwright engine coverage, not automated Safari. Previous manual Safari confirmation remains recorded in ANI-110.",
+    "All screenshots/video generated from the app; no private brand reference assets copied."
+  ]
+}
