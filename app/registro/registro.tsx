@@ -15,6 +15,7 @@ import Emociones from "./emociones";
 import Factores from "./factores";
 import Confirmacion from "./confirmacion";
 import type { Draft } from "../historial/records";
+import { moodActionStyle } from "../actions";
 export type { Draft } from "../historial/records";
 
 const draftKey = "eudila-draft-v1";
@@ -84,10 +85,8 @@ export default function Registro({ paso }: { paso: string }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const index = steps.indexOf(paso);
   const mood = moods[draft.mood - 1];
-  const action =
-    "inline-flex min-h-action items-center justify-center rounded-control bg-action px-6 py-3 font-semibold text-white hover:underline disabled:cursor-not-allowed disabled:opacity-50";
-  const textAction =
-    "inline-flex min-h-touch items-center justify-center rounded-control px-3 py-2 text-action underline";
+  const action = "action action-primary";
+  const textAction = "action action-text";
 
   useEffect(() => {
     if (ready) title.current?.focus();
@@ -157,7 +156,7 @@ export default function Registro({ paso }: { paso: string }) {
                 {types.map((type) => (
                   <label
                     key={type}
-                    className="flex min-h-action cursor-pointer items-center gap-3 rounded-control border border-line px-4 py-3 has-checked:border-action has-checked:bg-action has-checked:text-white"
+                    className="control-choice flex items-center gap-3"
                   >
                     <input
                       type="radio"
@@ -244,7 +243,11 @@ export default function Registro({ paso }: { paso: string }) {
               <p className="text-center text-muted">
                 {draft.mood} de 7 · No hay una respuesta correcta.
               </p>
-              <Link href="/registro/emocion" className={`${action} mt-auto`}>
+              <Link
+                href="/registro/emocion"
+                className={`${action} mt-auto`}
+                style={moodActionStyle(draft.mood)}
+              >
                 Siguiente
               </Link>
             </>

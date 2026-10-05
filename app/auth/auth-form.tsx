@@ -132,7 +132,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
         <div aria-live="polite" aria-atomic="true" role="status">
           {notice && <p className="auth-notice">{notice}</p>}
         </div>
-        <button type="submit" className="auth-primary">
+        <button type="submit" className="action action-primary w-full">
           {signup ? "Crear cuenta" : "Ingresar"}
         </button>
       </form>

@@ -18,7 +18,7 @@ export default function Cuenta() {
       </p>
       <button
         type="button"
-        className="auth-primary"
+        className="action action-primary w-full"
         disabled
         aria-describedby="account-status"
       >
