@@ -10,3 +10,6 @@ dist/
 build/
 .vercel/
 *.log
+
+# Herramientas locales de diseño, no assets de la app.
+.agents/

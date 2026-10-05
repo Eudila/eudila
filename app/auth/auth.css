@@ -1,0 +1,126 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+.auth-screen {
+  width: 100%;
+  max-width: 28rem;
+  margin: auto;
+  padding: 32px 24px;
+  color: var(--color-text);
+  caret-color: var(--color-action);
+}
+.auth-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.auth-availability {
+  margin-block: 24px;
+  font-size: 0.9375rem;
+  color: var(--color-muted);
+}
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.auth-field input {
+  width: 100%;
+  min-width: 0;
+  min-height: 50px;
+  padding: 12px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  color: var(--color-text);
+}
+.auth-field input[aria-invalid="true"] {
+  border-color: var(--color-text);
+  border-width: 2px;
+}
+.auth-password {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.auth-password input {
+  flex: 1;
+}
+.auth-password button {
+  flex-shrink: 0;
+  min-height: 44px;
+  padding: 6px 4px;
+  color: var(--color-action);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.auth-error {
+  font-size: 0.9375rem;
+}
+.auth-notice {
+  padding: 16px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-control);
+}
+.auth-form [role="status"]:empty {
+  display: none;
+}
+.auth-primary {
+  display: inline-flex;
+  width: 100%;
+  min-height: 50px;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  border-radius: var(--radius-pill);
+  background: var(--color-action);
+  color: var(--color-white);
+  font-weight: 600;
+  cursor: pointer;
+}
+.auth-primary:hover {
+  text-decoration: underline;
+}
+.auth-primary:active {
+  background: var(--color-graphite);
+}
+.auth-primary:disabled {
+  background: var(--color-line);
+  color: var(--color-text);
+  cursor: not-allowed;
+  text-decoration: none;
+}
+.auth-switch {
+  margin-top: 32px;
+  text-align: center;
+}
+.auth-switch a,
+.auth-back {
+  color: var(--color-action);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.auth-switch a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+}
+.auth-back {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 12px;
+}
+.auth-screen ::selection {
+  background: var(--color-action);
+  color: var(--color-white);
+}
+@media (max-width: 360px) {
+  .auth-screen {
+    padding-inline: 16px;
+  }
+}
