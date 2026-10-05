@@ -45,7 +45,7 @@ export default function RootLayout({
                   <Link
                     href="/ayuda"
                     prefetch={false}
-                    className="app-help inline-flex max-w-full items-center justify-center rounded-pill bg-action text-title font-semibold text-white hover:underline"
+                    className="app-help action action-primary text-title"
                   >
                     Ayuda ahora
                   </Link>

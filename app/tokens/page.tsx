@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import type { Metadata } from "next";
 import Link from "next/link";
+import { moodActionStyle } from "../actions";
 
 export const metadata: Metadata = { title: "Identidad visual · eudila" };
 
@@ -106,11 +107,7 @@ export default function Tokens() {
             <Swatch key={token} token={`--color-${token}`} label={label} />
           ))}
         </div>
-        <Link
-          href="/"
-          data-contrast
-          className="inline-flex min-h-action items-center justify-center rounded-pill bg-action px-6 py-3 font-semibold text-white"
-        >
+        <Link href="/" data-contrast className="action action-primary">
           Ver inicio
         </Link>
         <p className="text-muted">
@@ -249,7 +246,7 @@ export default function Tokens() {
           Radios y sombra
         </h2>
         <div className="grid gap-6 md:grid-cols-3">
-          {["control", "dialog", "pill"].map((token) => (
+          {["control", "field", "card", "dialog", "pill"].map((token) => (
             <div key={token} data-token={`--radius-${token}`}>
               <div
                 aria-hidden="true"
@@ -268,6 +265,63 @@ export default function Tokens() {
         >
           <code className="font-sans break-all">--shadow-shell</code>
         </p>
+      </section>
+      <section aria-labelledby="actions-title" className="space-y-6">
+        <h2 id="actions-title" className="text-title font-semibold">
+          Acciones y estados
+        </h2>
+        <p>
+          Principales en cápsula; controles y tarjetas conservan su propio
+          radio.
+        </p>
+        <div className="flex flex-wrap gap-3">
+          <Link href="/registro/tipo" className="action action-primary">
+            Registrar
+          </Link>
+          <Link href="/exportar" className="action action-secondary">
+            Exportar
+          </Link>
+          <Link href="/" className="action action-text">
+            Volver
+          </Link>
+          <button type="button" disabled className="action action-secondary">
+            Sin registros
+          </button>
+          <button
+            type="button"
+            disabled
+            aria-busy="true"
+            className="action action-primary"
+          >
+            Guardando…
+          </button>
+        </div>
+        {moods.map((label, index) => (
+          <div
+            key={label}
+            data-action-example={index + 1}
+            className="space-y-3"
+          >
+            <p>{label}</p>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href="/registro/animo"
+                className="action action-primary"
+                style={moodActionStyle(index + 1)}
+              >
+                Siguiente
+              </Link>
+              <button
+                type="button"
+                disabled
+                className="action action-primary"
+                style={moodActionStyle(index + 1)}
+              >
+                Siguiente
+              </button>
+            </div>
+          </div>
+        ))}
       </section>
     </div>
   );

@@ -79,8 +79,7 @@ export default function Emociones({
   const found = rows.filter((row) =>
     searchable(row.nombre).includes(searchable(query.trim())),
   );
-  const button =
-    "min-h-touch rounded-control border border-line px-4 py-3 text-left hover:underline aria-pressed:border-action aria-pressed:bg-action aria-pressed:text-white";
+  const button = "control-choice text-left";
 
   function select(row: Emotion) {
     choose(String(row.id));
@@ -101,7 +100,11 @@ export default function Emociones({
                   : "El catálogo de emociones todavía no está disponible. Tu borrador se conserva; podés volver y cambiar el ánimo."}
           </p>
           {(status === "error" || status === "empty") && (
-            <button type="button" className={button} onClick={retry}>
+            <button
+              type="button"
+              className="action action-secondary"
+              onClick={retry}
+            >
               Volver a intentar
             </button>
           )}
@@ -149,7 +152,7 @@ export default function Emociones({
           {selected && (
             <Link
               href="/registro/factores"
-              className="mt-auto inline-flex min-h-action items-center justify-center rounded-control bg-action px-6 py-3 font-semibold text-white hover:underline"
+              className="action action-primary mt-auto"
             >
               Siguiente
             </Link>
@@ -190,7 +193,7 @@ export default function Emociones({
           type="search"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          className="mt-2 min-h-touch w-full rounded-control border border-line bg-surface px-3 py-2"
+          className="mt-2 min-h-touch w-full rounded-field border border-line bg-surface px-3 py-2"
         />
         <p role="status" className="mt-3 text-muted">
           {found.length
