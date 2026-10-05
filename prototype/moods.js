@@ -31,7 +31,7 @@ export function shapePoints(mood, count = 252) {
   const unpleasant = mood.points === 14 || (mood.points === 9 && mood.depth > .2);
   const nodes = unpleasant
     ? Array.from({ length: mood.points * 2 }, (_, i) => polar(i % 2 ? (mood.points === 9 ? 65 : 75) : 96, i * Math.PI / mood.points - Math.PI / 2))
-    : [[0, -96], [46, -70], [86, -17], [80, 42], [25, 81], [-36, 79], [-80, 35], [-65, -33]];
+    : [[0, -84], [62, -79], [84, -36], [91, 18], [69, 68], [12, 98], [-48, 73], [-86, 28], [-77, -35], [-48, -79]];
   return Array.from({ length: count }, (_, index) => {
     const progress = index / count, angle = progress * Math.PI * 2 - Math.PI / 2;
     let point;

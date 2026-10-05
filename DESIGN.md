@@ -146,6 +146,8 @@ Ciclos CSS: respiración 4s entre 0.982 y 1.018; giro de capas alterno, período
 
 `.mood-range` conserva `input[type=range]` nativo, valores 1–7, ARIA y flechas/Home/End: pista de 6px con los siete tokens, thumb blanco de 30px con centro coloreado de 16px y halo de 9px, objetivo ≥44px. `touch-action: pan-y` permite desplazar verticalmente el lienzo y seleccionar horizontalmente. Estilos WebKit y Gecko separados. [Evidencia, mediciones por motor y alcance](docs/design/evidence/mood-motion-2026-10-05/README.md). Wordmark e inicio mantienen ANI-114/115.
 
+**Corrección de Algo agradable (05/10/2026):** la gota usa diez apoyos suaves y amplios, comparados con brandbook p.6/Motion alrededor de 7s. Evita el cuello estrecho que hacía leer triángulos al alternar capas. Conserva asimetría, 252 puntos y el núcleo centrado; radio máximo/mínimo 1.20 frente a 1.35 anterior. Los otros seis contornos se conservan exactamente; ritmo, fases, tintes y transiciones compartidas permanecen aprobados. [Evidencia de giro y cambios vecinos](docs/design/evidence/algo-agradable-2026-10-05/README.md).
+
 ### Próximas funcionalidades
 
 Diario, sueño, fotos y Logros (ANI-100–106) heredan esta identidad. Los relatos y fotos del usuario son contenido, no ilustraciones de marca. Medallas deben integrarse al sistema, sin importar los assets JBG de la referencia ni premiar emociones agradables. Cambiar identidad o reglas requiere decisión documentada, no reinterpretación por sesión.

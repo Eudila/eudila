@@ -1,7 +1,33 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import assert from "node:assert/strict";
 import { test } from "node:test";
+import { createHash } from "node:crypto";
 import * as geometry from "../../prototype/moods.js";
+
+test("Algo agradable conserva una gota amplia al girar alrededor del núcleo", () => {
+  const radii = geometry
+    .shapePoints(geometry.moods[4])
+    .map(([x, y]) => Math.hypot(x - 110, y - 110));
+  assert.ok(
+    Math.max(...radii) / Math.min(...radii) < 1.25,
+    "la gota se estrecha y las capas leen como triángulos al girar",
+  );
+});
+
+test("la corrección de Algo agradable conserva los otros seis contornos aprobados", () => {
+  const baseline = {
+    1: "b33ad2c587d1b299497245194d84005b9c18aad0a1e0b0c7b5109c8dbe9c1ba4",
+    2: "e58cfb2db9f60637628511e335aa9a28291f147adb821ba8e088bb41373c6be3",
+    3: "e174c4eff3e9c214744d61451795ed31186d5a95e152bd390b513d4c1f32c4d8",
+    4: "814be0d67b346d868a804beb5923dd10b10a0ed69688111728e379fa8d43c125",
+    6: "be391dd2b768e495bb03785789ca0865c3851d7065d760791bda47449aa62266",
+    7: "5b36c6af7e35c02bacbeb195bf3dc52ad305ed9b3393a7cabdd86662144178ec",
+  };
+  for (const [level, expected] of Object.entries(baseline)) {
+    const path = geometry.shapePath(geometry.moods[Number(level) - 1]);
+    assert.equal(createHash("sha256").update(path).digest("hex"), expected);
+  }
+});
 
 test("las familias tienen 9/14 puntas, 12 ondas, círculo, gota y 7/9 pétalos", () => {
   assert.equal(
