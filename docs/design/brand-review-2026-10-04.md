@@ -89,3 +89,20 @@ Cada cambio es tarea futura; este informe no autoriza alterar producto ni afirma
 - No sobrescribir baseline: guardar evidencia nueva con fecha/commit. No quitar un ID porque otro issue esté Done; la ruta real debe cumplir el criterio.
 - Cambios futuros de brandbook: registrar edición/hash, diferencias y decisión explícita; no mezclar fuentes silenciosamente.
 - Los nuevos módulos ANI-100–106 heredan DESIGN.md, sin adoptar la estética de las imágenes de referencia.
+
+## Seguimiento en Linear
+
+Las doce brechas se registraron en Backlog, sin responsable ni fecha, con prioridades del informe y criterios de cierre:
+
+- VIS-01: [ANI-107 · VIS-01 · Ambiente emocional de tres paradas en Next.js](https://linear.app/anima-org/issue/ANI-107/vis-01-ambiente-emocional-de-tres-paradas-en-nextjs)
+- VIS-02: [ANI-108 · VIS-02 · Orbe de cinco capas con iluminación y profundidad](https://linear.app/anima-org/issue/ANI-108/vis-02-orbe-de-cinco-capas-con-iluminacion-y-profundidad)
+- VIS-03: [ANI-109 · VIS-03 · Siluetas del orbe fieles a los siete estados de marca](https://linear.app/anima-org/issue/ANI-109/vis-03-siluetas-del-orbe-fieles-a-los-siete-estados-de-marca)
+- VIS-04: [ANI-110 · VIS-04 · Slider de ánimo con espectro, thumb y halo de marca](https://linear.app/anima-org/issue/ANI-110/vis-04-slider-de-animo-con-espectro-thumb-y-halo-de-marca)
+- VIS-05: [ANI-111 · VIS-05 · Botón principal de ánimo con acento e ink por estado](https://linear.app/anima-org/issue/ANI-111/vis-05-boton-principal-de-animo-con-acento-e-ink-por-estado)
+- VIS-06: [ANI-112 · VIS-06 · Movimiento coordinado del orbe, ambiente y partículas](https://linear.app/anima-org/issue/ANI-112/vis-06-movimiento-coordinado-del-orbe-ambiente-y-particulas)
+- VIS-07: [ANI-113 · VIS-07 · Composición de ánimo y navegación según la marca](https://linear.app/anima-org/issue/ANI-113/vis-07-composicion-de-animo-y-navegacion-segun-la-marca)
+- VIS-08: [ANI-114 · VIS-08 · Tipografía Figtree del estado y fidelidad del wordmark](https://linear.app/anima-org/issue/ANI-114/vis-08-tipografia-figtree-del-estado-y-fidelidad-del-wordmark)
+- VIS-09: [ANI-115 · VIS-09 · Integrar símbolo y entrada de marca en el inicio Next.js](https://linear.app/anima-org/issue/ANI-115/vis-09-integrar-simbolo-y-entrada-de-marca-en-el-inicio-nextjs)
+- VIS-10: [ANI-116 · VIS-10 · Unificar variantes de acciones y radios de componentes](https://linear.app/anima-org/issue/ANI-116/vis-10-unificar-variantes-de-acciones-y-radios-de-componentes)
+- VIS-11: [ANI-117 · VIS-11 · Preservar contraste AA en las adaptaciones del brandbook](https://linear.app/anima-org/issue/ANI-117/vis-11-preservar-contraste-aa-en-las-adaptaciones-del-brandbook)
+- VIS-12: [ANI-118 · VIS-12 · Unificar fuente visual entre prototipo y Next.js](https://linear.app/anima-org/issue/ANI-118/vis-12-unificar-fuente-visual-entre-prototipo-y-nextjs)
