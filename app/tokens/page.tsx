@@ -16,6 +16,8 @@ const colors = [
   ["muted", "Texto secundario"],
   ["line", "Borde"],
   ["white", "Blanco"],
+  ["mood-bottom", "Base del ambiente emocional"],
+  ["mood-secondary", "Texto secundario sobre ambiente"],
 ] as const;
 
 const moods = [
@@ -47,7 +49,7 @@ const typography = [
   [
     "wordmark",
     "Wordmark",
-    "font-display font-extrabold tracking-brand",
+    "font-display font-bold tracking-wordmark",
     "eudila",
   ],
 ] as const;
@@ -58,11 +60,12 @@ const typeDetails = [
   ["--font-weight-normal", "Regular"],
   ["--font-weight-semibold", "Semibold"],
   ["--font-weight-bold", "Bold"],
-  ["--font-weight-extrabold", "Wordmark"],
+  ["--font-weight-extrabold", "ExtraBold"],
   ["--leading-body", "Interlínea de cuerpo"],
   ["--leading-question", "Interlínea de pregunta"],
   ["--leading-wordmark", "Interlínea de wordmark"],
-  ["--tracking-brand", "Tracking de marca"],
+  ["--tracking-brand", "Tracking de preguntas y títulos"],
+  ["--tracking-wordmark", "Tracking del wordmark"],
   ["--tracking-label", "Tracking de rótulo"],
 ] as const;
 

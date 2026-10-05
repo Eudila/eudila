@@ -14,7 +14,10 @@ from playwright.sync_api import sync_playwright, expect
 
 project = Path(__file__).resolve().parents[2]
 css = (project / "app/globals.css").read_text()
-defined = set(re.findall(r"^\s*(--[\w-]+)\s*:", css, re.MULTILINE))
+# The gallery documents shared theme tokens, not scoped component variables.
+theme = re.search(r"@theme\s+static\s*\{(.*?)^\}", css, re.MULTILINE | re.DOTALL)
+assert theme is not None, "Missing shared @theme block"
+defined = set(re.findall(r"^\s*(--[\w-]+)\s*:", theme.group(1), re.MULTILINE))
 for component in (project / "app").rglob("*.tsx"):
     source = component.read_text()
     assert not re.search(r"#[\da-fA-F]{3,8}\b", source), component
@@ -177,18 +180,26 @@ try:
                 for percent in [100, 200]:
                     page.set_viewport_size({"width": width, "height": height})
                     page.evaluate(f"document.documentElement.style.fontSize = '{percent}%'")
-                    assert page.evaluate("document.documentElement.scrollWidth === innerWidth && document.documentElement.scrollHeight <= innerHeight"), (route, width, percent)
+                    # DESIGN.md: short emotional screens scroll the document so
+                    # enlarged text never leaves a main area only a few px tall.
+                    document_scroll = route == "/registro/animo" and height <= 600
+                    assert page.evaluate("document.documentElement.scrollWidth === innerWidth"), (route, width, percent)
+                    if not document_scroll:
+                        assert page.evaluate("document.documentElement.scrollHeight <= innerHeight"), (route, width, percent)
                     assert main.evaluate("e => e.scrollWidth <= e.clientWidth"), (route, width, percent)
                     assert main.bounding_box()["height"] > 0
                     for control in [help_link, *nav.get_by_role("link").all()]:
+                        if document_scroll:
+                            control.scroll_into_view_if_needed()
                         box = control.bounding_box()
                         assert box["height"] >= 44 and box["width"] >= 44, (route, box)
                         assert box["y"] >= 0 and box["y"] + box["height"] <= height, (route, width, percent, box)
                         assert control.evaluate("e => { const r = e.getBoundingClientRect(); return e.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)); }"), (route, width, percent, "control tapado")
-                    before = [help_link.bounding_box(), nav.bounding_box()]
-                    main.evaluate("e => e.scrollTop = e.scrollHeight")
-                    assert [help_link.bounding_box(), nav.bounding_box()] == before
-                    assert main.evaluate("e => e.scrollTop + e.clientHeight >= e.scrollHeight - 1")
+                    if not document_scroll:
+                        before = [help_link.bounding_box(), nav.bounding_box()]
+                        main.evaluate("e => e.scrollTop = e.scrollHeight")
+                        assert [help_link.bounding_box(), nav.bounding_box()] == before
+                        assert main.evaluate("e => e.scrollTop + e.clientHeight >= e.scrollHeight - 1")
             page.evaluate("document.documentElement.style.fontSize = '100%'")
             help_link.click()
             page.wait_for_url(base + "/ayuda")
@@ -261,8 +272,8 @@ try:
             expect(slider).to_have_value(str(value))
             expect(slider).to_have_attribute("aria-valuetext", f"{label}, {value} de 7")
             expect(page.get_by_role("status")).to_have_text(label)
-            shapes.append(page.locator("section svg path").first.get_attribute("d"))
-            accents.append(page.locator("section svg").evaluate("e => getComputedStyle(e).color"))
+            shapes.append(page.locator(".mood-orb [data-orb-shape]").first.get_attribute("d"))
+            accents.append(page.locator(".mood-orb").evaluate("e => getComputedStyle(e).color"))
             slider.press("ArrowRight")
         expect(slider).to_have_value("7")
         assert len(set(shapes)) == len(set(accents)) == 7
@@ -285,7 +296,11 @@ try:
         page.screenshot(path=str(Path(tempfile.gettempdir()) / "eudila-ani-63-animo.png"))
         page.get_by_role("link", name="Siguiente", exact=True).click()
         page.wait_for_url(base + "/registro/emocion")
-        expect(page.get_by_role("status")).to_contain_text("El catálogo de emociones todavía no está disponible")
+        if page.locator("[data-frontend-preview]").count():
+            expect(page.get_by_role("status")).to_have_text("Elegí una emoción para continuar.")
+            expect(page.get_by_role("button", name="Ver todas las emociones")).to_be_visible()
+        else:
+            expect(page.get_by_role("status")).to_contain_text("El catálogo de emociones todavía no está disponible")
         page.go_back()
         page.wait_for_url(base + "/registro/animo")
         expect(slider).to_have_value("6")

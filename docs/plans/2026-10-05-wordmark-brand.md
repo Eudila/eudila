@@ -25,7 +25,7 @@ Se consideran tres enfoques: token exclusivo para el texto existente (elegido po
 1. Inspeccionar baseline en producción: peso 800, tamaño 26.4px, tracking −0.924px y ancho 68.546875px a 100%. Revisar la referencia privada sin publicarla.
 2. Agregar `--tracking-wordmark: -0.045em` junto a los tokens tipográficos existentes. Mantener `--tracking-brand: -0.035em`.
 3. En el wordmark del header cambiar `font-extrabold tracking-brand` a `font-bold tracking-wordmark`; conservar `text-wordmark`, `leading-wordmark` y texto en minúsculas.
-4. Cambiar la muestra Wordmark de `/tokens` al mismo peso/tracking y agregar el nuevo token a los detalles. El peso 800 se etiqueta ExtraBold, no Wordmark.
+4. Cambiar la muestra Wordmark de `/tokens` al mismo peso/tracking y agregar el nuevo token a los detalles. El peso 800 se etiqueta ExtraBold, no Wordmark. La validación encontró dos colores compartidos omitidos en baseline: incorporar sus muestras; distinguir variables locales de tokens globales en la prueba existente. Alinear las expectativas antiguas de scroll, selector SVG y catálogo preview con el comportamiento aprobado/documentado.
 5. No agregar tests que reflejen solo clases CSS para este ajuste reversible. Ejecutar verificación visual y las regresiones existentes que acreditan comportamiento real.
 
 ## Task 2: Verificación visual y accesibilidad
@@ -46,6 +46,6 @@ Se consideran tres enfoques: token exclusivo para el texto existente (elegido po
 ## Ejecución
 
 - [x] Contexto, Linear, referencias y baseline revisados; seis pruebas de geometría/morph/AA pasan en el worktree limpio.
-- [ ] Corrección del header y galería.
-- [ ] Verificación, capturas y revisión.
-- [ ] Documentación, commit/push y cierre de ANI-114.
+- [x] Corrección del header y galería.
+- [x] Verificación, capturas y revisión.
+- [x] Documentación y evidencia listas para entrega; commit publicado y estado final registrados en ANI-114.

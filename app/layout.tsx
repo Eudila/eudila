@@ -40,7 +40,7 @@ export default function RootLayout({
                   >
                     Ir al contenido
                   </a>
-                  <p className="font-display text-wordmark leading-wordmark font-extrabold tracking-brand">
+                  <p className="font-display text-wordmark leading-wordmark font-bold tracking-wordmark">
                     eudila
                   </p>
                   <Link

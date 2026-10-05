@@ -1,0 +1,146 @@
+{
+  "baseline": {
+    "weight": 800,
+    "size_px": 26.4,
+    "tracking_px": -0.924,
+    "width_px": 68.546875
+  },
+  "engines": {
+    "chromium": {
+      "metrics": {
+        "font": "figtree, \"figtree Fallback\", -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif",
+        "size": 26.4,
+        "weight": 700,
+        "tracking": -1.188,
+        "width": 65.703125,
+        "height": 26.40625,
+        "transform": "none",
+        "style": "normal",
+        "text": "eudila",
+        "loadedFonts": [
+          {
+            "family": "figtree",
+            "weight": "300 900"
+          },
+          {
+            "family": "figtree Fallback",
+            "weight": "normal"
+          }
+        ]
+      },
+      "normalized_header_glyph_origins": [
+        0,
+        0.5089962121212122,
+        1.0321969696969697,
+        1.58203125,
+        1.7992424242424243,
+        2.000473484848485
+      ],
+      "comparison_glyph_origins_at_540_px": [
+        0,
+        0.5089988425925925,
+        1.0323784722222222,
+        1.5825810185185185,
+        1.7995659722222221,
+        2.0005787037037037
+      ],
+      "maximum_reference_origin_difference_em": 2.4027777777879678e-05,
+      "minimum_wordmark_contrast": 8.035596195996868,
+      "reflow_cases": 132,
+      "keyboard_skip_link": "Tab/Enter",
+      "mood_state_figtree_bold": "pass"
+    },
+    "webkit": {
+      "metrics": {
+        "font": "figtree, figtree Fallback, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif",
+        "size": 26.4,
+        "weight": 700,
+        "tracking": -1.188,
+        "width": 65.703125,
+        "height": 26.390625,
+        "transform": "none",
+        "style": "normal",
+        "text": "eudila",
+        "loadedFonts": [
+          {
+            "family": "figtree",
+            "weight": "300 900"
+          }
+        ]
+      },
+      "normalized_header_glyph_origins": [
+        0,
+        0.49242424242424243,
+        1.0227272727272727,
+        1.5530303030303032,
+        1.7803030303030305,
+        1.9696969696969697
+      ],
+      "comparison_glyph_origins_at_540_px": [
+        0,
+        0.5074074074074074,
+        1.0314814814814814,
+        1.5814814814814815,
+        1.798148148148148,
+        2
+      ],
+      "maximum_reference_origin_difference_em": 0.00159259259259259,
+      "minimum_wordmark_contrast": 8.035596195996868,
+      "reflow_cases": 132,
+      "keyboard_skip_link": "Alt+Tab/Enter",
+      "mood_state_figtree_bold": "pass"
+    },
+    "firefox": {
+      "metrics": {
+        "font": "\"figtree\", \"figtree Fallback\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif",
+        "size": 26.4063,
+        "weight": 700,
+        "tracking": -1.18828,
+        "width": 65.71665954589844,
+        "height": 26.399993896484375,
+        "transform": "none",
+        "style": "normal",
+        "text": "eudila",
+        "loadedFonts": [
+          {
+            "family": "figtree",
+            "weight": "300 900"
+          }
+        ]
+      },
+      "normalized_header_glyph_origins": [
+        0,
+        0.5093480324105303,
+        1.0325817171529614,
+        1.582324689718043,
+        1.7994441704311566,
+        2.0007849735506418
+      ],
+      "comparison_glyph_origins_at_540_px": [
+        0,
+        0.5090115017361111,
+        1.032005931712963,
+        1.5820059317129629,
+        1.7990125868055555,
+        2
+      ],
+      "maximum_reference_origin_difference_em": 0.0005940682870371194,
+      "minimum_wordmark_contrast": 8.035596195996868,
+      "reflow_cases": 132,
+      "keyboard_skip_link": "Tab/Enter",
+      "mood_state_figtree_bold": "pass"
+    }
+  },
+  "reference": {
+    "source": "Eudila Brandbook v1.0 p.3; private PDF",
+    "normalized_glyph_origins": [
+      0,
+      0.509,
+      1.0324,
+      1.5826,
+      1.79959,
+      2.00058
+    ],
+    "comparison": "PDF glyph origins / 54pt; clone of actual header at 540px with identical font/weight/tracking, to limit integer-pixel Range rounding in WebKit; both normalized by font size"
+  }
+}
