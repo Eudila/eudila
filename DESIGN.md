@@ -134,7 +134,17 @@ Header/tabs/banner no deben partir el ambiente en bandas claras por accidente. L
 
 Pregunta centrada y estado Figtree Bold; orbe actual cuadrado, sin distorsión, limitado por alto/ancho. Atrás/cerrar usan símbolos dentro de círculo blanco al 14%, visual 32px / objetivo 44px. La fila tiene columnas 44px / flexible / 44px y conserva los extremos con texto ampliado. En altura >600px se mantiene main desplazable; a <=600px el lienzo entero se desplaza en el documento para permitir leer acciones al 200%, con Ayuda, preview y tabs en el flujo. Es una adaptación explícita de accesibilidad: en esas alturas los accesos pueden necesitar desplazamiento, sin ocultar funciones ni reducir texto.
 
-Cambios instantáneos; no se modifica el estilo nativo/color-scheme del slider ni se agrega movimiento del renderer. Orbe, geometría, espectro y movimiento siguen en ANI-108/109/110/112/118; el wordmark de ANI-114 sigue pendiente. [Evidencia de composición y ambiente](docs/design/evidence/mood-composition-2026-10-05/README.md).
+Este primer grupo conservó cambios instantáneos y el slider nativo. El grupo siguiente incorpora orbe, geometría, espectro y movimiento descritos abajo. [Evidencia de composición y ambiente](docs/design/evidence/mood-composition-2026-10-05/README.md).
+
+### Orbe animado implementado · 05/10/2026
+
+`app/mood/orb.tsx` comparte el renderer entre ánimo e historial: cinco capas con gradientes radiales, borde de luz y núcleo blanco estable. La escena de ánimo agrega halo y partículas; la representación compacta es estática y sin filtro/partículas, con mínimo de 24px. `prototype/moods.js` comparte siete geometrías muestreadas en 252 puntos para interpolar sin cambiar topología: puntas 9/14, onda corta, círculo, gota asimétrica y pétalos redondeados 7/9. La migración completa del material del prototipo sigue en ANI-118.
+
+`app/mood/controller.ts` lee los tokens CSS reales y coordina silueta, tinte del orbe, ambiente, acento del CTA/slider y familias de partículas en un único RAF de 600ms con easing de marca. Si cambia el destino durante el movimiento, parte del cuadro visible. El borrador y la etiqueta se actualizan inmediatamente; la interacción no espera al renderer. La tinta se calcula sobre el acento redondeado que realmente se pinta: blanco/Grafito y, solo durante mezclas donde ambos fallan 4.5:1, negro transitorio. Los siete estados asentados conservan la tabla AA.
+
+Ciclos CSS: respiración 4s entre 0.982 y 1.018; giro de capas alterno, período 125.663706s; titileo 2.5–6s con fases independientes. Origen SVG explícito (110,110) mantiene todas las capas y núcleo centrados; no usar `center` de la caja expandida para alojar el halo. Neutral no muestra partículas; desagradables usan puntos y agradables destellos de cuatro puntas. Al ocultarse se pausan ciclos/RAF; desmontar cancela listeners/RAF. Reduced motion en vivo termina la transición inmediatamente y desactiva los ciclos.
+
+`.mood-range` conserva `input[type=range]` nativo, valores 1–7, ARIA y flechas/Home/End: pista de 6px con los siete tokens, thumb blanco de 30px con centro coloreado de 16px y halo de 9px, objetivo ≥44px. `touch-action: pan-y` permite desplazar verticalmente el lienzo y seleccionar horizontalmente. Estilos WebKit y Gecko separados. [Evidencia, mediciones por motor y alcance](docs/design/evidence/mood-motion-2026-10-05/README.md). Wordmark e inicio mantienen ANI-114/115.
 
 ### Próximas funcionalidades
 

@@ -61,6 +61,7 @@ with sync_playwright() as p:
     action = page.get_by_role('link', name='Siguiente', exact=True)
     for level, ambient in enumerate(ambients, 1):
         slider.fill(str(level))
+        expect(shell).to_have_attribute('data-mood-transition', 'idle')
         expect(slider).to_have_attribute('aria-valuetext', re.compile(f'{level} de 7'))
         gradient = shell.evaluate('e => getComputedStyle(e).backgroundImage')
         assert gradient.startswith('linear-gradient('), ('mood ambient absent', gradient)

@@ -3,7 +3,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { moods, shapePath } from "@/prototype/moods.js";
+import { moods } from "@/prototype/moods.js";
+import MoodOrb from "../mood/orb";
 import {
   averageMood,
   entriesForDay,
@@ -35,14 +36,10 @@ const recordTime = new Intl.DateTimeFormat("es-AR", {
 
 function MoodShape({ mood, small = false }: { mood: number; small?: boolean }) {
   return (
-    <svg
-      viewBox="0 0 220 220"
-      aria-hidden="true"
-      className={small ? "size-5 shrink-0" : "size-12 shrink-0"}
-      style={{ color: `var(--color-mood-${mood}-orb)` }}
-    >
-      <path d={shapePath(moods[mood - 1])} fill="currentColor" />
-    </svg>
+    <MoodOrb
+      level={mood}
+      className={small ? "size-6 shrink-0" : "size-12 shrink-0"}
+    />
   );
 }
 

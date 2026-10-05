@@ -85,6 +85,7 @@ with sync_playwright() as p:
     action = page.get_by_role('link', name='Siguiente', exact=True)
     for level, accent in enumerate(accents, 1):
         slider.fill(str(level))
+        expect(page.locator('.app-shell')).to_have_attribute('data-mood-transition', 'idle')
         page.mouse.move(1, 1)
         page.evaluate('document.activeElement?.blur()')
         style = appearance(action)

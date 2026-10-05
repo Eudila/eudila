@@ -10,7 +10,8 @@ import {
   nextSteps as steps,
   types,
 } from "@/prototype/flow-state.js";
-import { moods, shapePath } from "@/prototype/moods.js";
+import { moods } from "@/prototype/moods.js";
+import MoodOrb from "../mood/orb";
 import Emociones from "./emociones";
 import Factores from "./factores";
 import Confirmacion from "./confirmacion";
@@ -227,29 +228,11 @@ export default function Registro({ paso }: { paso: string }) {
           )}
           {paso === "animo" && (
             <>
-              <svg
-                viewBox="0 0 220 220"
-                aria-hidden="true"
+              <MoodOrb
+                level={draft.mood}
+                animated
                 className="mood-orb mx-auto h-auto max-w-full shrink-0"
-                style={{ color: `var(--color-mood-${draft.mood}-orb)` }}
-              >
-                {[1, 0.82, 0.63, 0.45, 0.29].map((scale, i) => (
-                  <path
-                    key={scale}
-                    d={shapePath(mood)}
-                    transform={`translate(110 110) scale(${scale}) translate(-110 -110)`}
-                    fill="currentColor"
-                    opacity={[0.18, 0.3, 0.48, 0.7, 0.9][i]}
-                  />
-                ))}
-                <circle
-                  cx="110"
-                  cy="110"
-                  r="17"
-                  fill="var(--color-white)"
-                  opacity=".94"
-                />
-              </svg>
+              />
               <p
                 role="status"
                 aria-live="polite"
@@ -273,7 +256,7 @@ export default function Registro({ paso }: { paso: string }) {
                   onChange={(event) =>
                     update({ ...draft, mood: Number(event.target.value) })
                   }
-                  className="min-h-touch w-full cursor-pointer accent-action"
+                  className="mood-range min-h-touch w-full cursor-pointer"
                 />
                 <div className="mood-secondary flex justify-between gap-6">
                   <span>Muy desagradable</span>

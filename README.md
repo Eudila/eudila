@@ -42,7 +42,16 @@ Para verificar ambiente/composición, contraste real de las paradas y del popove
 MOOD_BASE_URL=http://127.0.0.1:3118 uv run --with playwright python app/design-mood.test.py
 ```
 
-`MOOD_ARTIFACT_DIR` permite guardar capturas y mediciones. La geometría/iluminación/movimiento del orbe y el rediseño del slider mantienen sus tareas independientes.
+`MOOD_ARTIFACT_DIR` permite guardar capturas y mediciones.
+
+El orbe de ánimo tiene cinco capas iluminadas, geometrías propias de los siete estados y núcleo blanco. Forma/color/ambiente/acción cambian juntos en 600ms; respiración de 4s, giro alterno y partículas acompañan el estado. Neutral queda sin partículas. Los ciclos se pausan al ocultar la pestaña y se cancelan al salir; movimiento reducido conserva la escena fija y cambios instantáneos. El historial reutiliza el renderer estático. El slider mantiene range nativo, teclado y ARIA, con espectro, thumb blanco/punto del estado y halo de marca. [Plan](docs/plans/2026-10-05-mood-orb-motion.md) y [evidencia](docs/design/evidence/mood-motion-2026-10-05/README.md).
+
+```sh
+node --experimental-strip-types --test app/mood/geometry.test.mjs
+MOTION_BASE_URL=http://127.0.0.1:3118 MOTION_ENGINES=chromium,webkit,firefox uv run --with playwright python app/mood/motion.test.py
+```
+
+Para motores adicionales: `uv run --with playwright playwright install webkit firefox`. El test usa Chrome instalado en macOS o Chromium de Playwright. `MOTION_ARTIFACT_DIR` guarda capturas, grabaciones de la app y mediciones. WebKit automatizado no certifica un dispositivo iOS físico ni la app Safari.
 
 `/ayuda` diferencia peligro inmediato (911) de las líneas de orientación y apoyo (135 y los dos 0800). Contiene los teléfonos, coberturas y horarios del prototipo, contrastados nuevamente con las fuentes enlazadas el 04/10/2026. Se abre en un toque, sin sesión ni consulta a la base. El texto v2 y la revisión documental asistida por IA fueron aceptados explícitamente por Agustín para cerrar ANI-67; no hubo aprobación clínica profesional.
 

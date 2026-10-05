@@ -4,7 +4,7 @@ import type { CSSProperties } from "react";
 /** Only the mood action receives emotional colors; other actions stay neutral. */
 export function moodActionStyle(level: number): CSSProperties {
   return {
-    "--action-accent": `var(--color-mood-${level})`,
-    "--action-ink": `var(--color-mood-${level}-ink)`,
+    "--action-accent": `var(--mood-accent, var(--color-mood-${level}))`,
+    "--action-ink": `var(--mood-action-ink, var(--color-mood-${level}-ink))`,
   } as CSSProperties;
 }

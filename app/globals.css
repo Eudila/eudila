@@ -312,7 +312,7 @@ body {
 }
 
 .mood-screen {
-  gap: 16px;
+  gap: 12px;
   padding: 16px 24px 24px;
 }
 
@@ -323,8 +323,8 @@ body {
 }
 
 .mood-orb {
-  width: min(26dvh, 248px);
-  min-width: min(128px, 100%);
+  width: min(30dvh, 264px);
+  min-width: min(144px, 100%);
   margin-block: auto;
 }
 
@@ -386,11 +386,137 @@ body {
   }
 }
 
-/* Changes are instantaneous until the coordinated VIS-06 renderer is shipped. */
+/* Continuous cycles are confined to the state symbol, never other surfaces. */
+.orb-scene[data-animated] .orb-breath,
+.orb-scene[data-animated] .orb-turn {
+  transform-box: view-box;
+  /* Explicit SVG coordinates: expanded viewBox starts at -14, not at zero. */
+  transform-origin: 110px 110px;
+}
+
+.orb-scene[data-animated] .orb-breath {
+  animation: orb-breathe 4s ease-in-out infinite;
+}
+
+.orb-scene[data-animated] .orb-turn {
+  animation: orb-turn 125.663706s linear infinite;
+  animation-delay: var(--orb-phase);
+}
+
+.orb-scene[data-animated] .orb-turn:nth-of-type(even) {
+  animation-direction: reverse;
+}
+
+.orb-particles-dots {
+  opacity: var(--orb-dots-opacity, 0);
+}
+
+.orb-particles-sparks {
+  opacity: var(--orb-sparks-opacity, 0);
+}
+
+.orb-particle {
+  animation: orb-twinkle var(--particle-duration) ease-in-out infinite;
+  animation-delay: var(--particle-phase);
+}
+
+.app-shell[data-motion="paused"] :is(.orb-breath, .orb-turn, .orb-particle),
+.app-shell[data-mood="4"][data-mood-transition="idle"] .orb-particle {
+  animation-play-state: paused;
+}
+
+@keyframes orb-breathe {
+  0%,
+  50%,
+  100% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.018);
+  }
+  75% {
+    transform: scale(0.982);
+  }
+}
+
+@keyframes orb-turn {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes orb-twinkle {
+  0%,
+  100% {
+    opacity: 0.16;
+  }
+  45% {
+    opacity: 0.82;
+  }
+}
+
+.mood-range {
+  --mood-spectrum: linear-gradient(
+    90deg,
+    var(--color-mood-1),
+    var(--color-mood-2),
+    var(--color-mood-3),
+    var(--color-mood-4),
+    var(--color-mood-5),
+    var(--color-mood-6),
+    var(--color-mood-7)
+  );
+  appearance: none;
+  background: transparent;
+  border-radius: var(--radius-pill);
+  padding: 0;
+  margin: 0;
+  touch-action: pan-y;
+}
+
+.mood-range::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--mood-spectrum);
+}
+
+.mood-range::-moz-range-track {
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--mood-spectrum);
+}
+
+.mood-range::-moz-range-progress {
+  background: transparent;
+}
+
+.mood-range::-webkit-slider-thumb {
+  appearance: none;
+  box-sizing: border-box;
+  width: 30px;
+  height: 30px;
+  margin-top: -12px;
+  border: 7px solid var(--color-white);
+  border-radius: var(--radius-pill);
+  background: var(--mood-accent, var(--color-mood-4));
+  box-shadow: 0 0 0 9px rgb(255 255 255 / 0.16);
+}
+
+.mood-range::-moz-range-thumb {
+  box-sizing: border-box;
+  width: 30px;
+  height: 30px;
+  border: 7px solid var(--color-white);
+  border-radius: var(--radius-pill);
+  background: var(--mood-accent, var(--color-mood-4));
+  box-shadow: 0 0 0 9px rgb(255 255 255 / 0.16);
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .app-shell[data-mood],
-  .mood-screen,
-  .mood-navigation-symbol {
+  .orb-scene[data-animated] :is(.orb-breath, .orb-turn, .orb-particle) {
     animation: none;
     transition: none;
   }
