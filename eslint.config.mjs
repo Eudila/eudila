@@ -10,6 +10,7 @@ export default defineConfig([
   prettier,
   globalIgnores([
     ".next/**",
+    ".agents/**",
     "out/**",
     "build/**",
     "next-env.d.ts",

@@ -1,6 +1,6 @@
 # Avisos de terceros
 
-La app Next.js incluye las dependencias directas listadas abajo, con sus versiones resueltas en `package-lock.json`. Sus licencias y las de sus dependencias transitivas se conservan en los paquetes instalados en `node_modules/`; la AGPL del código de Eudila no las reemplaza. No se incorporan imágenes de terceros. El orbe del prototipo se dibuja con SVG generado por el propio proyecto. El archivo de marca usado como referencia es de uso interno y no forma parte de esta carpeta publicable.
+La app Next.js incluye las dependencias directas listadas abajo, con sus versiones resueltas en `package-lock.json`. Sus licencias y las de sus dependencias transitivas se conservan en los paquetes instalados en `node_modules/`; la AGPL del código de Eudila no las reemplaza. La app no usa imágenes de terceros. Las ocho capturas de `docs/referencias/` fueron aportadas por el usuario y se conservan únicamente como documentación de referencia; sus ilustraciones y marcas no se declaran bajo AGPL ni se incorporan a las pantallas del producto. El orbe del prototipo se dibuja con SVG generado por el propio proyecto. El archivo de marca usado como referencia es de uso interno y no forma parte de esta carpeta publicable.
 
 | Dependencias directas | Licencia |
 | --- | --- |

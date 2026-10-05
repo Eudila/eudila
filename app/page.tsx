@@ -16,6 +16,12 @@ export default function Home() {
       >
         Empezar registro
       </Link>
+      <Link
+        href="/ingresar"
+        className="inline-flex min-h-touch items-center justify-center text-action underline"
+      >
+        Ingresar o crear cuenta
+      </Link>
     </div>
   );
 }

@@ -8,3 +8,5 @@ LICENSE
 NOTICE.md
 package-lock.json
 next-env.d.ts
+
+.agents/
