@@ -17,6 +17,8 @@
   --color-muted: var(--color-fog);
   --color-line: #b5b5ba;
   --color-white: #ffffff;
+  --color-mood-bottom: #071416;
+  --color-mood-secondary: #e2e9e9;
 
   --color-mood-1: #892fc9;
   --color-mood-1-orb: #a845da;
@@ -255,4 +257,141 @@ body {
   border-color: var(--color-action);
   background: var(--color-action);
   color: var(--color-white);
+}
+
+/* One continuous mood canvas. The route/draft source lives in AppShell. */
+.app-shell[data-mood] {
+  color: var(--color-white);
+  background: linear-gradient(
+    180deg,
+    var(--mood-ambient) 0%,
+    color-mix(in srgb, var(--mood-ambient) 72%, var(--color-graphite)) 56%,
+    var(--color-mood-bottom) 100%
+  );
+}
+
+.app-shell[data-mood] .app-header .app-help {
+  border-color: var(--color-white);
+  background: transparent;
+  color: var(--color-white);
+}
+
+.app-shell[data-mood] .app-preview-toggle {
+  border-color: rgb(255 255 255 / 0.3);
+  background: transparent;
+  color: var(--color-mood-secondary);
+}
+
+.app-shell[data-mood] .app-navigation {
+  border-color: rgb(255 255 255 / 0.3);
+}
+
+.app-shell[data-mood] .app-tab {
+  color: var(--color-mood-secondary);
+}
+
+.app-shell[data-mood] .app-tab[aria-current="page"] {
+  color: var(--color-white);
+}
+
+.app-shell[data-mood] :focus-visible {
+  outline-color: var(--color-white);
+}
+
+/* Dialog/popover retain the neutral surface, including their focus contrast. */
+.app-shell[data-mood] :is(dialog, .preview-notice) {
+  color-scheme: light;
+}
+
+.app-shell[data-mood] :is(dialog, .preview-notice) :focus-visible {
+  outline-color: var(--color-graphite);
+}
+
+.app-shell[data-mood] .app-header a[href="#contenido"] {
+  color: var(--color-white);
+}
+
+.mood-screen {
+  gap: 16px;
+  padding: 16px 24px 24px;
+}
+
+.mood-question {
+  max-width: 18ch;
+  align-self: center;
+  text-align: center;
+}
+
+.mood-orb {
+  width: min(26dvh, 248px);
+  min-width: min(128px, 100%);
+  margin-block: auto;
+}
+
+.mood-secondary {
+  color: var(--color-mood-secondary);
+}
+
+.mood-navigation {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.mood-navigation-control {
+  display: grid;
+  width: 44px;
+  min-height: 44px;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: var(--radius-pill);
+  color: var(--color-white);
+  cursor: pointer;
+}
+
+.mood-navigation-symbol {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border-radius: var(--radius-pill);
+  background: rgb(255 255 255 / 0.14);
+}
+
+.mood-navigation-symbol svg {
+  width: 24px;
+  height: 24px;
+}
+
+.mood-navigation-control:hover .mood-navigation-symbol {
+  background: rgb(255 255 255 / 0.22);
+}
+
+.mood-navigation-control:active .mood-navigation-symbol {
+  background: rgb(255 255 255 / 0.3);
+}
+
+/* At short heights, scroll the entire canvas instead of clipping enlarged text
+   between fixed chrome. Help, preview and tabs stay in the document flow. */
+@media (max-height: 600px) {
+  .app-shell[data-mood] {
+    height: auto;
+    min-height: 100dvh;
+  }
+
+  .app-shell[data-mood] main {
+    overflow: visible;
+  }
+}
+
+/* Changes are instantaneous until the coordinated VIS-06 renderer is shipped. */
+@media (prefers-reduced-motion: reduce) {
+  .app-shell[data-mood],
+  .mood-screen,
+  .mood-navigation-symbol {
+    animation: none;
+    transition: none;
+  }
 }

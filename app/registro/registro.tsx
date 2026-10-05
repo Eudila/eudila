@@ -87,6 +87,27 @@ export default function Registro({ paso }: { paso: string }) {
   const mood = moods[draft.mood - 1];
   const action = "action action-primary";
   const textAction = "action action-text";
+  const emotional = paso === "animo";
+  const navigationAction = emotional ? "mood-navigation-control" : textAction;
+
+  function navigationIcon(direction: "back" | "close") {
+    return (
+      <span className="mood-navigation-symbol" aria-hidden="true">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path
+            d={direction === "back" ? "M14 5l-7 7 7 7" : "M6 6l12 12M18 6L6 18"}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </span>
+    );
+  }
 
   useEffect(() => {
     if (ready) title.current?.focus();
@@ -97,33 +118,49 @@ export default function Registro({ paso }: { paso: string }) {
   }
 
   return (
-    <section className="relative flex flex-1 flex-col gap-6 px-6 py-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+    <section
+      className={
+        emotional
+          ? "mood-screen relative flex flex-1 flex-col"
+          : "relative flex flex-1 flex-col gap-6 px-6 py-6"
+      }
+    >
+      <div
+        className={
+          emotional
+            ? "mood-navigation"
+            : "flex flex-wrap items-center justify-between gap-3"
+        }
+      >
         {index > 0 ? (
-          <Link href={`/registro/${steps[index - 1]}`} className={textAction}>
-            Volver
+          <Link
+            href={`/registro/${steps[index - 1]}`}
+            className={navigationAction}
+            aria-label={emotional ? "Volver" : undefined}
+          >
+            {emotional ? navigationIcon("back") : "Volver"}
           </Link>
         ) : (
           <button type="button" onClick={close} className={textAction}>
             Volver
           </button>
         )}
-        <p className="text-muted">
+        <p className={emotional ? "mood-secondary" : "text-muted"}>
           Registro · {index + 1} de {steps.length}
         </p>
         <button
           type="button"
           onClick={close}
-          className={textAction}
+          className={navigationAction}
           aria-label="Cerrar registro"
         >
-          Cerrar
+          {emotional ? navigationIcon("close") : "Cerrar"}
         </button>
       </div>
       <h1
         ref={title}
         tabIndex={-1}
-        className="font-display text-question leading-question font-bold tracking-brand text-balance"
+        className={`font-display text-question leading-question font-bold tracking-brand text-balance ${emotional ? "mood-question" : ""}`}
       >
         {paso === "tipo"
           ? "¿A qué momento corresponde este registro?"
@@ -140,7 +177,10 @@ export default function Registro({ paso }: { paso: string }) {
       ) : (
         <>
           {!persistent && (
-            <p role="status" className="text-muted">
+            <p
+              role="status"
+              className={emotional ? "mood-secondary" : "text-muted"}
+            >
               El borrador sigue en esta pantalla, pero no podemos conservarlo si
               recargás o cerrás la pestaña.
             </p>
@@ -190,7 +230,7 @@ export default function Registro({ paso }: { paso: string }) {
               <svg
                 viewBox="0 0 220 220"
                 aria-hidden="true"
-                className="mx-auto h-auto w-48 max-w-full shrink-0"
+                className="mood-orb mx-auto h-auto max-w-full shrink-0"
                 style={{ color: `var(--color-mood-${draft.mood}-orb)` }}
               >
                 {[1, 0.82, 0.63, 0.45, 0.29].map((scale, i) => (
@@ -214,7 +254,7 @@ export default function Registro({ paso }: { paso: string }) {
                 role="status"
                 aria-live="polite"
                 aria-atomic="true"
-                className="text-center text-state font-semibold"
+                className="mood-state font-display text-center text-state font-bold"
               >
                 {mood.label}
               </p>
@@ -235,12 +275,12 @@ export default function Registro({ paso }: { paso: string }) {
                   }
                   className="min-h-touch w-full cursor-pointer accent-action"
                 />
-                <div className="flex justify-between gap-6 text-muted">
+                <div className="mood-secondary flex justify-between gap-6">
                   <span>Muy desagradable</span>
                   <span className="text-right">Muy agradable</span>
                 </div>
               </div>
-              <p className="text-center text-muted">
+              <p className="mood-secondary text-center">
                 {draft.mood} de 7 · No hay una respuesta correcta.
               </p>
               <Link

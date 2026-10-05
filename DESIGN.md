@@ -130,6 +130,12 @@ En ánimo: atrás izquierda, cerrar derecha, pregunta, orbe, estado, escala/extr
 
 Header/tabs/banner no deben partir el ambiente en bandas claras por accidente. La vista previa se identifica honestamente con aviso compacto; su explicación puede vivir en un popover. No ocultar el aviso para embellecer capturas ni imponerlo cuando la configuración no es de preview. Historial, exportación y acceso usan el lienzo neutro y controles familiares.
 
+**Implementación ANI-107/113 (05/10/2026):** `app/shell.tsx` activa el ambiente exclusivamente en `/registro/animo` y lee el mismo borrador que el orbe/CTA. El fondo continuo usa ambiente a 0%, mezcla ambiente 72% / Grafito a 56% y `--color-mood-bottom` (#071416) a 100%; son traducciones técnicas conservadas del prototipo, no nuevos hex certificados del PDF. Cabecera, preview y tabs transparentes; texto blanco y `--color-mood-secondary` (#E2E9E9) para lectura secundaria. Ayuda tiene contorno blanco; popover/diálogo conservan Nube y tintas institucionales AA. La excepción de Ayuda se limita al header para no pintar blanco el cierre del popover.
+
+Pregunta centrada y estado Figtree Bold; orbe actual cuadrado, sin distorsión, limitado por alto/ancho. Atrás/cerrar usan símbolos dentro de círculo blanco al 14%, visual 32px / objetivo 44px. La fila tiene columnas 44px / flexible / 44px y conserva los extremos con texto ampliado. En altura >600px se mantiene main desplazable; a <=600px el lienzo entero se desplaza en el documento para permitir leer acciones al 200%, con Ayuda, preview y tabs en el flujo. Es una adaptación explícita de accesibilidad: en esas alturas los accesos pueden necesitar desplazamiento, sin ocultar funciones ni reducir texto.
+
+Cambios instantáneos; no se modifica el estilo nativo/color-scheme del slider ni se agrega movimiento del renderer. Orbe, geometría, espectro y movimiento siguen en ANI-108/109/110/112/118; el wordmark de ANI-114 sigue pendiente. [Evidencia de composición y ambiente](docs/design/evidence/mood-composition-2026-10-05/README.md).
+
 ### Próximas funcionalidades
 
 Diario, sueño, fotos y Logros (ANI-100–106) heredan esta identidad. Los relatos y fotos del usuario son contenido, no ilustraciones de marca. Medallas deben integrarse al sistema, sin importar los assets JBG de la referencia ni premiar emociones agradables. Cambiar identidad o reglas requiere decisión documentada, no reinterpretación por sesión.

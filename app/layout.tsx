@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import Link from "next/link";
 import Navigation from "./navigation";
+import AppShell from "./shell";
 import { RegistroProvider } from "./registro/registro";
 import { HistoryProvider } from "./historial/state";
 import { previewEnabled } from "./frontend-preview";
@@ -30,7 +31,7 @@ export default function RootLayout({
       <body>
         <HistoryProvider>
           <RegistroProvider>
-            <div className="app-shell mx-auto grid max-w-phone bg-surface">
+            <AppShell>
               <div>
                 <header className="app-header flex flex-wrap items-center justify-between">
                   <a
@@ -94,7 +95,7 @@ export default function RootLayout({
                 {children}
               </main>
               <Navigation />
-            </div>
+            </AppShell>
           </RegistroProvider>
         </HistoryProvider>
       </body>
