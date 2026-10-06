@@ -28,7 +28,7 @@
 .action-primary {
   min-height: max(50px, var(--spacing-action));
   background: var(--action-accent, var(--color-action));
-  color: var(--action-ink, var(--color-white));
+  color: var(--action-ink, var(--color-action-ink));
 }
 
 .action-secondary {
@@ -49,10 +49,10 @@
 }
 
 .action:focus-visible {
-  /* Light inner ring + dark outer ring work on both neutral and mood surfaces. */
-  outline: 3px solid var(--color-graphite);
+  /* Dark inner ring + light outer ring work on dark neutral and mood surfaces. */
+  outline: 3px solid var(--color-cloud);
   outline-offset: 3px;
-  box-shadow: 0 0 0 3px var(--color-cloud);
+  box-shadow: 0 0 0 3px var(--color-graphite);
 }
 
 .action-primary:active:not(:disabled),
@@ -63,7 +63,7 @@
 .action-primary:active:focus-visible,
 .action-secondary:active:focus-visible {
   box-shadow:
-    0 0 0 3px var(--color-cloud),
+    0 0 0 3px var(--color-graphite),
     inset 0 0 0 2px currentColor;
 }
 

@@ -7,7 +7,7 @@ colors:
   graphite: "#1D1D1F"
   fog: "#6E6E73"
   white: "#FFFFFF"
-  line: "#B5B5BA"
+  line: "color-mix(in srgb, cloud 40%, surface)"
   mood-1: "#892FC9"
   mood-2: "#5B4CE1"
   mood-3: "#209AE7"
@@ -60,11 +60,11 @@ Este archivo es la guía persistente de marca para la app `eudila/`. Leerlo ante
 
 Autoridad: brandbook Eudila v1.0 de septiembre de 2026 → accesibilidad documentada → videos de Eudila para composición/movimiento → sistema actual para integración. Las capturas IMG_2887–2895 orientan funciones, no reemplazan la estética de Eudila. El `PRODUCT.md` del workspace padre describe una recreación anterior de Anima/WhatsApp y no gobierna la identidad de esta app.
 
-Tema claro y neutro fuera de la experiencia de ánimo. La pantalla de ánimo usa ambiente oscuro del estado con texto legible, orbe central y acción inferior. El video de presentación es una pieza de marca: no copiar el teléfono dibujado, sus bordes, titulares publicitarios, tiempos del montaje ni barras del sistema dentro de la app.
+Tema oscuro y neutro fuera de la experiencia de ánimo, por pedido explícito del usuario del 05/10/2026. La pantalla de ánimo usa ambiente oscuro del estado con texto legible, orbe central y acción inferior. El video de presentación es una pieza de marca: no copiar el teléfono dibujado, sus bordes, titulares publicitarios, tiempos del montaje ni barras del sistema dentro de la app.
 
 ## Colors
 
-Nube para superficies claras, grafito para texto, niebla para texto secundario, turquesa institucional para identidad/acciones. El espectro aparece donde hay un estado emocional real; no pintar autenticación, formularios o navegación con colores emocionales arbitrarios.
+Grafito y base casi negra para el lienzo; Nube para texto, mezcla Nube 72% / Grafito para secundarios, turquesa institucional para identidad/acciones. Niebla conserva su significado en documentos claros, pero no se usa como texto sobre oscuro. El espectro aparece donde hay un estado emocional real; no pintar autenticación, formularios o navegación con colores emocionales arbitrarios.
 
 | Estado            | Acento  | Orbe    | Texto sobre el acento para controles normales |
 | ----------------- | ------- | ------- | --------------------------------------------- |
@@ -76,7 +76,7 @@ Nube para superficies claras, grafito para texto, niebla para texto secundario, 
 | Agradable         | #FE9613 | #F2B24A | Grafito                                       |
 | Muy agradable     | #FF4A4B | #E65175 | Grafito                                       |
 
-Azul, turquesa y coral usan grafito como adaptación AA: el blanco indicado en el PDF/video no llega a 4.5:1. Conservar los acentos, cambiar tinta antes de desaturar la marca. El turquesa institucional #0C8A86 con blanco da 4.20:1; para enlaces/textos y botones claros usar el token accesible `--color-action` existente (`color-mix(in srgb, primary 72%, graphite)`), no asumir que primary equivale a action.
+Azul, turquesa y coral usan grafito como adaptación AA: el blanco indicado en el PDF/video no llega a 4.5:1. Conservar los acentos, cambiar tinta antes de desaturar la marca. El turquesa institucional #0C8A86 con blanco da 4.20:1; para enlaces y botones sobre oscuro usar `--color-action` (`color-mix(in srgb, primary 64%, cloud)`), con tinta `--color-action-ink` Grafito en botones, no asumir que primary equivale a action.
 
 Ambiente: degradé vertical de tres paradas, tono del estado arriba, tono apagado al medio, casi negro abajo. Los hex de ambiente actuales (`#32134D`, `#26235B`, `#123F60`, `#0F5654`, `#285B25`, `#6C3B0B`, `#712127`) son traducción técnica existente, no códigos impresos certificados del brandbook. Compararlos con los videos antes de aprobar su fidelidad. La luz pertenece al orbe; no agregar degradados de texto, glassmorphism ni brillo a toda la UI.
 
@@ -118,11 +118,11 @@ Slider de ánimo: espectro completo de siete colores, pista visual de 6 px, thum
 
 Acción principal: cápsula de 50 px mínimos, relleno del acento actual en ánimo y tinta AA de la tabla. Fuera de ánimo, usar action accesible. Inputs/tarjetas/dialogs pueden conservar radio control de 14 px; no confundirlo con el radio de la acción principal. Unificar estados hover/focus/disabled/loading sin cambiar vocabulario entre rutas.
 
-**Implementación del grupo ANI-111/116/117 (04/10/2026):** `.action` define tamaño, alineación y tipografía compartidos; `.action-primary` usa cápsula ≥50 px y `.action-secondary` cápsula con contorno sobre Nube. `.action-text` reserva un objetivo ≥44 px para navegación/acciones de texto. `app/actions.ts` conecta acento/tinta de los siete estados con tokens existentes, exclusivamente en el CTA de `/registro/animo`. No introduce una paleta paralela.
+**Checkpoint histórico del grupo ANI-111/116/117 (04/10/2026; variantes oscuras actualizadas al final):** `.action` define tamaño, alineación y tipografía compartidos; `.action-primary` usa cápsula ≥50 px y `.action-secondary` cápsula con contorno sobre Nube. `.action-text` reserva un objetivo ≥44 px para navegación/acciones de texto. `app/actions.ts` conecta acento/tinta de los siete estados con tokens existentes, exclusivamente en el CTA de `/registro/animo`. No introduce una paleta paralela.
 
-Hover subraya sin cambiar el par de color; active marca un contorno interior. Foco de teclado: anillo interior Nube y exterior Grafito, sin sombra decorativa. Disabled: Niebla sobre Nube (4.91:1), borde discontinuo y sin reducir opacidad del texto. Loading usa etiqueta explícita, `aria-busy` y disabled nativo durante el guardado. `.action-label` reserva el espacio de guardar/reintentar/guardando en una sola celda; solo la etiqueta activa permanece visible y accesible, evitando saltos de altura al 200%. Estos estados no agregan animaciones; reduced motion conserva cambios instantáneos mientras VIS-06 siga abierta. El relleno horizontal de 20 px evita multiplicar el marco al ampliar el texto al 200%.
+Hover subraya sin cambiar el par de color; active marca un contorno interior. Foco de teclado en ese checkpoint: anillo interior Nube y exterior Grafito, sin sombra decorativa. Disabled en ese checkpoint: Niebla sobre Nube (4.91:1), borde discontinuo y sin reducir opacidad del texto. Loading usa etiqueta explícita, `aria-busy` y disabled nativo durante el guardado. `.action-label` reserva el espacio de guardar/reintentar/guardando en una sola celda; solo la etiqueta activa permanece visible y accesible, evitando saltos de altura al 200%. Estos estados no agregan animaciones; reduced motion conserva cambios instantáneos mientras VIS-06 siga abierta. El relleno horizontal de 20 px evita multiplicar el marco al ampliar el texto al 200%.
 
-`--radius-field` y `--radius-card` son alias semánticos de `--radius-control` (14 px), independientes de la cápsula. `.control-choice` identifica opciones de registro/emoción/factores y comparte la selección institucional AA. Excepciones deliberadas: Ayuda del header y el control de contraseña mantienen objetivo ≥44 px; tabs, celdas de calendario, tarjetas de llamada, enlaces dentro de prosa y acciones de texto existentes mantienen su forma/jerarquía con tinta institucional accesible. Auth e historial permanecen neutrales. Ejemplos de todas las variantes, disabled y loading en `/tokens`; evidencia y resultados en [acciones y contraste](docs/design/evidence/visual-actions-2026-10-04/README.md).
+`--radius-field` y `--radius-card` son alias semánticos de `--radius-control` (14 px), independientes de la cápsula. `.control-choice` identifica opciones de registro/emoción/factores y comparte la selección institucional AA. Excepciones deliberadas: Ayuda del header y el control de contraseña mantienen objetivo ≥44 px; tabs, celdas de calendario, tarjetas de llamada, enlaces dentro de prosa y acciones de texto existentes mantienen su forma/jerarquía con tinta institucional accesible. Auth e historial permanecen neutrales (oscuros desde el pedido actual). Ejemplos de todas las variantes, disabled y loading en `/tokens`; evidencia y resultados en [acciones y contraste](docs/design/evidence/visual-actions-2026-10-04/README.md).
 
 ### Composición y navegación
 
@@ -130,7 +130,7 @@ En ánimo: atrás izquierda, cerrar derecha, pregunta, orbe, estado, escala/extr
 
 Header/tabs/banner no deben partir el ambiente en bandas claras por accidente. La vista previa se identifica honestamente con aviso compacto; su explicación puede vivir en un popover. No ocultar el aviso para embellecer capturas ni imponerlo cuando la configuración no es de preview. Historial, exportación y acceso usan el lienzo neutro y controles familiares.
 
-**Implementación ANI-107/113 (05/10/2026):** `app/shell.tsx` activa el ambiente exclusivamente en `/registro/animo` y lee el mismo borrador que el orbe/CTA. El fondo continuo usa ambiente a 0%, mezcla ambiente 72% / Grafito a 56% y `--color-mood-bottom` (#071416) a 100%; son traducciones técnicas conservadas del prototipo, no nuevos hex certificados del PDF. Cabecera, preview y tabs transparentes; texto blanco y `--color-mood-secondary` (#E2E9E9) para lectura secundaria. Ayuda tiene contorno blanco; popover/diálogo conservan Nube y tintas institucionales AA. La excepción de Ayuda se limita al header para no pintar blanco el cierre del popover.
+**Implementación ANI-107/113 (05/10/2026):** Como checkpoint de la implementación original, `app/shell.tsx` activa el ambiente emocional exclusivamente en `/registro/animo` y lee el mismo borrador que el orbe/CTA. El fondo continuo usa ambiente a 0%, mezcla ambiente 72% / Grafito a 56% y `--color-mood-bottom` (#071416) a 100%; son traducciones técnicas conservadas del prototipo, no nuevos hex certificados del PDF. Cabecera, preview y tabs transparentes; texto blanco y `--color-mood-secondary` (#E2E9E9) para lectura secundaria. Ayuda tiene contorno blanco; popover/diálogo conservaban Nube en ese checkpoint; el pedido actual los adapta a superficies oscuras AA. La excepción de Ayuda se limita al header para no pintar blanco el cierre del popover.
 
 Pregunta centrada y estado Figtree Bold; orbe actual cuadrado, sin distorsión, limitado por alto/ancho. Atrás/cerrar usan símbolos dentro de círculo blanco al 14%, visual 32px / objetivo 44px. La fila tiene columnas 44px / flexible / 44px y conserva los extremos con texto ampliado. En altura >600px se mantiene main desplazable; a <=600px el lienzo entero se desplaza en el documento para permitir leer acciones al 200%, con Ayuda, preview y tabs en el flujo. Es una adaptación explícita de accesibilidad: en esas alturas los accesos pueden necesitar desplazamiento, sin ocultar funciones ni reducir texto.
 
@@ -173,10 +173,22 @@ Diario, sueño, fotos y Logros (ANI-100–106) heredan esta identidad. Los relat
 ## Do's and Don'ts
 
 - Leer `PRODUCT.md`, este archivo y brechas abiertas antes de trabajo visual; consultar `app/globals.css` y componentes existentes.
-- Mantener neutral fuera de ánimo y ambiente emocional dentro; cinco capas, núcleo y estado sincronizados.
+- Mantener neutral oscuro fuera de ánimo y ambiente emocional dentro; cinco capas, núcleo y estado sincronizados.
 - Conservar las adaptaciones AA; la fidelidad no justifica texto ilegible, objetivos pequeños o movimiento forzado.
 - No copiar ilustraciones, caras emoji, trofeos, teléfono renderizado o estética de las capturas funcionales como identidad.
 - No cambiar colores por paletas de Impeccable, categorías genéricas o gusto personal; la marca ya existe.
 - No capitalizar el wordmark, rotarlo, desaturar el símbolo ni llenar todo de espectro emocional.
 - No declarar cerrada una brecha sin captura actual, comparación con fuente y pruebas de teclado/reduced motion/reflujo.
 - Al adoptar una decisión visual, actualizar este documento y su implementación; registrar excepciones y evidencia en el informe de brechas.
+
+### Lienzo oscuro, iconos e icono de app · pedido del usuario 05/10/2026
+
+El usuario solicitó extender la estética oscura del selector y agregar iconos e icono de app. Esta decisión reemplaza el tema claro anterior; no reabre las brechas históricas cerradas. El brandbook admite lienzo neutro claro u oscuro (p. 2) y Grafito como fondo oscuro (p. 8). La mezcla institucional tenue no representa un ánimo seleccionado.
+
+`shared/visual/canvas.css` pinta el lienzo de tres paradas: 18% ambiente Neutral / Grafito arriba, 70% Grafito / base oscura al medio y base oscura abajo. Los controles usan la superficie 94% Grafito / Nube y bordes 40% Nube / superficie. El texto es Nube y el secundario 72% Nube / Grafito. Acción institucional 64% primary / Nube con tinta Grafito; no alterar los siete acentos ni las tintas del selector. Diálogos/popover y campos también son oscuros. Al imprimir, el informe recupera papel blanco, tinta Grafito/negra y Niebla secundaria. La navegación y Ayuda mantienen foco blanco visible, con anillo interior Grafito en cápsulas.
+
+`app/icons.tsx` reúne iconos lineales locales de 24 px, trazo 1.8, esquinas redondeadas y currentColor. Son decorativos junto a etiquetas conservadas: Registrar/Hoy/Calendario, Ayuda, teléfono, registro/avance/edición, historial/exportaciones y análisis. La contraseña usa ojo con nombre accesible explícito. No sustituir emociones por caras ni eliminar rótulos del tab bar. Las pantallas de alto <=600 px desplazan el documento completo para mantener accesible el texto al 200% con la barra ahora más alta.
+
+El icono de app deriva del renderer Neutral aprobado: cinco capas, núcleo y gradientes propios, sin partículas ni halo extra; diámetro exactamente 64% del cuadrado y centro (50%,50%), sobre ambiente turquesa. `scripts/brand-icon.mjs` obtiene colores del CSS canónico y genera SVG, PNG 180/192/512 y manifiesto; `npm run visual:icon` actualiza y `prebuild --check` impide assets viejos. Los archivos son cuadrados/opacos sin máscara baked-in; iOS/navegador aplica su máscara. Los bounds se derivan del contorno compartido (diámetro actual 176 unidades), no del viewBox expandido del orbe. El header muestra el asset con una máscara CSS de 10 px sobre caja 40 px, manteniendo diámetro 25.6 px y separación 14 px del wordmark. El orbe de inicio conserva la entrada aprobada de 600 ms. El skip link se revela de manera absoluta sobre el header para que foco/blur no desplace Ayuda entre pointerdown y pointerup.
+
+`app/icon.svg` y `app/apple-icon.png` usan las convenciones metadata de Next.js; `app/manifest.json` incluye iconos 192/512 y color base. Ayuda offline almacena su icono local junto con CSS/fuente; el prototipo adopta lienzo/tokens/icono para conservar identidad común. Ver [plan](docs/plans/2026-10-05-dark-icons.md) y [evidencia](docs/design/evidence/dark-icons-2026-10-06/README.md).

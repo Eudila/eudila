@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { moods } from "@/shared/visual/moods.js";
 import MoodOrb from "../mood/orb";
+import Icon from "../icons";
 import {
   averageMood,
   entriesForDay,
@@ -74,15 +75,19 @@ function HistoryActions() {
   return (
     <div className="flex flex-wrap gap-3">
       <Link href="/registro/tipo" className={action}>
+        <Icon name="register" />
         Registrar cómo me siento
       </Link>
       <Link href="/exportar" className={textAction}>
+        <Icon name="download" />
         Exportar historial
       </Link>
       <Link href="/evolucion" className={textAction}>
+        <Icon name="chart" />
         Ver evolución
       </Link>
       <Link href="/factores" className={textAction}>
+        <Icon name="factors" />
         Ver factores de vida
       </Link>
     </div>
@@ -296,6 +301,7 @@ export function CalendarView({
                   href={`/calendario?mes=${localDayKey(previous!).slice(0, 7)}`}
                   className={textAction}
                 >
+                  <Icon name="arrowLeft" />
                   Mes anterior
                 </Link>
               ) : (
@@ -307,6 +313,7 @@ export function CalendarView({
                   className={textAction}
                 >
                   Mes siguiente
+                  <Icon name="arrowRight" />
                 </Link>
               ) : (
                 <span className="px-2 text-muted">Mes actual</span>
@@ -423,6 +430,7 @@ export function DayView({ dayKey }: { dayKey: string }) {
                   href={`/calendario/${localDayKey(previous)}`}
                   className={textAction}
                 >
+                  <Icon name="arrowLeft" />
                   Día anterior
                 </Link>
               )}
@@ -432,6 +440,7 @@ export function DayView({ dayKey }: { dayKey: string }) {
                   className={textAction}
                 >
                   Día siguiente
+                  <Icon name="arrowRight" />
                 </Link>
               )}
             </nav>

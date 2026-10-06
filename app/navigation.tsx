@@ -2,13 +2,14 @@
 "use client";
 
 import Link from "next/link";
+import Icon, { type IconName } from "./icons";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
 const sections = [
-  ["/", "Registrar"],
-  ["/hoy", "Hoy"],
-  ["/calendario", "Calendario"],
+  ["/", "Registrar", "register"],
+  ["/hoy", "Hoy", "today"],
+  ["/calendario", "Calendario", "calendar"],
 ] as const;
 
 export default function Navigation() {
@@ -33,7 +34,7 @@ export default function Navigation() {
       aria-label="Secciones"
       className="app-navigation grid grid-cols-3 border-t border-line"
     >
-      {sections.map(([href, label]) => {
+      {sections.map(([href, label, icon]) => {
         const active =
           pathname === href ||
           (href === "/" && pathname.startsWith("/registro/"));
@@ -44,7 +45,8 @@ export default function Navigation() {
             aria-current={active ? "page" : undefined}
             className={`app-tab flex min-w-0 items-center justify-center rounded-control text-center text-title hover:underline ${active ? "font-semibold text-action underline" : "text-muted"}`}
           >
-            {label}
+            <Icon name={icon as IconName} />
+            <span>{label}</span>
           </Link>
         );
       })}

@@ -13,6 +13,8 @@ const colors = [
   ["graphite", "Grafito"],
   ["fog", "Niebla"],
   ["surface", "Superficie"],
+  ["canvas", "Base oscura"],
+  ["action-ink", "Tinta de acción"],
   ["text", "Texto"],
   ["muted", "Texto secundario"],
   ["line", "Borde"],
@@ -105,8 +107,8 @@ export default function Tokens() {
           Ver inicio
         </Link>
         <p className="text-muted">
-          El turquesa institucional se conserva. Las acciones usan una variante
-          más oscura para que su texto sea legible.
+          El turquesa institucional se conserva. Las acciones se aclaran sobre
+          el lienzo oscuro y usan tinta Grafito para asegurar contraste.
         </p>
       </section>
 

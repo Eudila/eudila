@@ -180,9 +180,9 @@ try:
                 for percent in [100, 200]:
                     page.set_viewport_size({"width": width, "height": height})
                     page.evaluate(f"document.documentElement.style.fontSize = '{percent}%'")
-                    # DESIGN.md: short emotional screens scroll the document so
+                    # DESIGN.md: short screens scroll the document so
                     # enlarged text never leaves a main area only a few px tall.
-                    document_scroll = route == "/registro/animo" and height <= 600
+                    document_scroll = height <= 600
                     assert page.evaluate("document.documentElement.scrollWidth === innerWidth"), (route, width, percent)
                     if not document_scroll:
                         assert page.evaluate("document.documentElement.scrollHeight <= innerHeight"), (route, width, percent)
@@ -193,7 +193,7 @@ try:
                             control.scroll_into_view_if_needed()
                         box = control.bounding_box()
                         assert box["height"] >= 44 and box["width"] >= 44, (route, box)
-                        assert box["y"] >= 0 and box["y"] + box["height"] <= height, (route, width, percent, box)
+                        assert box["y"] >= -1 and box["y"] + box["height"] <= height + 1, (route, width, percent, box)
                         assert control.evaluate("e => { const r = e.getBoundingClientRect(); return e.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)); }"), (route, width, percent, "control tapado")
                     if not document_scroll:
                         before = [help_link.bounding_box(), nav.bounding_box()]

@@ -47,6 +47,11 @@ try:
             page.get_by_role("button", name="Siguiente").click()
             assert not errors, errors
             expect(page.get_by_role("heading", name="¿Qué emoción describe mejor lo que sentís?")).to_be_visible()
+            page.get_by_role("button", name="Ver todas las emociones", exact=True).click()
+            search = page.get_by_role("searchbox")
+            palette = search.evaluate("e => {const s=getComputedStyle(e);return {ink:s.color,bg:s.backgroundColor}}")
+            assert palette['bg'] != 'rgb(255, 255, 255)', (engine, 'Campo de búsqueda sigue claro', palette)
+            page.get_by_role("button", name="Cerrar lista", exact=True).click()
             page.get_by_role("button", name="Calma", exact=True).click()
             action = page.get_by_role("button", name="Siguiente")
             assert action.bounding_box()["height"] >= 50

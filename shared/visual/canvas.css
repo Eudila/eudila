@@ -1,0 +1,12 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Neutral institutional canvas; only mood routes use the emotional spectrum. */
+.app-shell:not([data-mood]) {
+  color: var(--color-text);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-mood-4-ambient) 18%, var(--color-graphite))
+      0%,
+    color-mix(in srgb, var(--color-graphite) 70%, var(--color-canvas)) 56%,
+    var(--color-canvas) 100%
+  );
+}

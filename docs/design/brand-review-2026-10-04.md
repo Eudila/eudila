@@ -50,7 +50,7 @@ P1: diferencia central de identidad. P2: consistencia/composición. P3: detalles
 
 - Paleta principal/espectro/orbe, nombres sin juicio y cinco capas + núcleo ya tienen base en código.
 - Figtree local cargada para preguntas/wordmark; tipografía del sistema para UI/cuerpo.
-- Lienzo Nube/Grafito en auth, historial y formularios es la dirección correcta, no una brecha a volver oscura.
+- El lienzo Nube/Grafito en auth, historial y formularios fue correcto en el diagnóstico original. El pedido explícito del usuario del 05/10 cambia esa decisión a neutral oscuro.
 - Ayuda visible, objetivos táctiles de 44 px y estado del slider anunciado deben preservarse.
 - El aviso actual de preview es compacto y su explicación está en popover; no es necesario volver al banner largo que muestran capturas anteriores.
 - El prototipo tiene ambiente, range con espectro, respiración y giro, pero todavía usa pista 8 px, halo 8 px y otros valores aproximados. Es base útil, no certificado de fidelidad ni reemplazo de la app Next.js.
@@ -173,3 +173,8 @@ Implementación `092c668`: `/` Next.js incorpora símbolo Neutral compartido y g
 [Capturas, video y mediciones nuevas](evidence/brand-system-2026-10-05/README.md): Chromium/WebKit/Firefox, 12 reflows por motor a 320/390/520px, texto 100/200% y alto 844/470px; diez posiciones de paridad por motor, siete estados compactos reales, ciclos e identidad de nodos. Contraste inicial 6.3046:1, mínimo capturado de paridad 5.0755:1 y regresión de arrastre de 61 posiciones/motor 4.7165:1. Se conservan geometrías/movimiento aprobados y regresiones de tokens, 84 reflows de composición y flujo/guardado/exportación. Prototipo validado hasta emoción/factores, recarga/descarte y offline, con catálogo interceptado.
 
 La revisión independiente detectó regresiones de extracción del prototipo; se reprodujeron y corrigieron, agregando cobertura del recorrido completo. Segunda revisión sin hallazgos importantes. WebKit se registra como motor; la validación manual de Safari de ANI-110 no se reabre ni se atribuyen nuevas mediciones automatizadas a Safari.
+
+
+## Cambio de dirección autorizado · oscuro e iconos · 05/10/2026
+
+Pedido del usuario: mejorar estética actual, agregar iconos porque predominaba texto, fondo oscuro parecido al selector e incluir el icono del brandbook. Lienzo neutral oscuro compartido, superficies/campos/diálogos oscuros, tintas AA, iconos convencionales con rótulos, icono de app Neutral64% en header/favicon/Apple/manifiesto. El registro de ánimo conserva geometría, material, movimiento y slider continuo aprobados. La impresión sigue clara. Esta nueva decisión reemplaza los comentarios de tema claro conservados como historia arriba. [Plan](../plans/2026-10-05-dark-icons.md), [evidencia y validación](evidence/dark-icons-2026-10-06/README.md).

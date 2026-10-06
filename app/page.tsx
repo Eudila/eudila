@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import Link from "next/link";
+import Icon from "./icons";
 import BrandEntrance from "./brand/entrance";
 
 export default function Home() {
@@ -13,9 +14,11 @@ export default function Home() {
         Un momento para registrar lo que sentís, a tu manera.
       </p>
       <Link href="/registro/tipo" className="action action-primary">
+        <Icon name="register" />
         Empezar registro
       </Link>
       <Link href="/ingresar" className="action action-text">
+        <Icon name="user" />
         Ingresar o crear cuenta
       </Link>
     </div>

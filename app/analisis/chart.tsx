@@ -38,7 +38,7 @@ export function DailyChart({ series }: { series: Series }) {
         role="img"
         aria-labelledby={`${id}-title`}
         aria-describedby={`${id}-desc`}
-        className="w-full text-graphite"
+        className="w-full text-text"
       >
         <title id={`${id}-title`}>Promedios diarios de ánimo</title>
         <desc id={`${id}-desc`}>

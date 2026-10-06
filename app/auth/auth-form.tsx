@@ -2,6 +2,7 @@
 "use client";
 
 import Link from "next/link";
+import Icon from "../icons";
 import { useRef, useState, type FormEvent } from "react";
 import "./auth.css";
 
@@ -120,7 +121,8 @@ export default function AuthForm({ mode }: { mode: Mode }) {
               aria-controls="auth-password"
               onClick={() => setVisible((previous) => !previous)}
             >
-              {visible ? "Ocultar" : "Mostrar"}
+              <Icon name={visible ? "eyeOff" : "eye"} />
+              <span className="sr-only">{visible ? "Ocultar" : "Mostrar"}</span>
             </button>
           </div>
           {errors.password && (

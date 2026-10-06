@@ -2,6 +2,9 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import Link from "next/link";
+import Image from "next/image";
+import Icon from "./icons";
+import manifest from "./manifest.json";
 import Navigation from "./navigation";
 import AppShell from "./shell";
 import { RegistroProvider } from "./registro/registro";
@@ -21,7 +24,11 @@ export const metadata: Metadata = {
   description: "Un momento para registrar lo que sentís, a tu manera.",
 };
 
-export const viewport: Viewport = { viewportFit: "cover" };
+export const viewport: Viewport = {
+  viewportFit: "cover",
+  themeColor: manifest.theme_color,
+  colorScheme: "dark",
+};
 
 export default function RootLayout({
   children,
@@ -36,18 +43,28 @@ export default function RootLayout({
                 <header className="app-header flex flex-wrap items-center justify-between">
                   <a
                     href="#contenido"
-                    className="sr-only min-h-touch text-action underline focus:not-sr-only"
+                    className="app-skip-link sr-only min-h-touch text-action underline focus:not-sr-only"
                   >
                     Ir al contenido
                   </a>
-                  <p className="font-display text-wordmark leading-wordmark font-bold tracking-wordmark">
-                    eudila
-                  </p>
+                  <div className="app-brand">
+                    <Image
+                      src="/brand/icon.svg"
+                      width={40}
+                      height={40}
+                      alt=""
+                      unoptimized
+                    />
+                    <p className="font-display text-wordmark leading-wordmark font-bold tracking-wordmark">
+                      eudila
+                    </p>
+                  </div>
                   <Link
                     href="/ayuda"
                     prefetch={false}
                     className="app-help action action-primary text-title"
                   >
+                    <Icon name="help" />
                     Ayuda ahora
                   </Link>
                 </header>

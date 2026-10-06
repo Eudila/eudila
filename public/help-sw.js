@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-const CACHE = "eudila-help-v1";
+const CACHE = "eudila-help-v2";
 let preparing;
 
 function refreshHelp() {
@@ -29,13 +29,15 @@ async function prepareHelp() {
     .replace(/<link\b(?=[^>]*\bas="script")[^>]*>/gi, "");
   const assets = [
     ...new Set(
-      [...html.matchAll(/\bhref="([^"]+)"/g)]
+      [...html.matchAll(/\b(?:href|src)="([^"]+)"/g)]
         .map((match) => new URL(match[1], self.location.origin))
         .filter(
           (url) =>
-            url.origin === self.location.origin &&
-            url.pathname.startsWith("/_next/static/") &&
-            /\.(css|woff2?|ttf)$/.test(url.pathname),
+            (url.origin === self.location.origin &&
+              url.pathname.startsWith("/_next/static/") &&
+              /\.(css|woff2?|ttf)$/.test(url.pathname)) ||
+            (url.origin === self.location.origin &&
+              url.pathname === "/brand/icon.svg"),
         )
         .map((url) => url.href),
     ),
@@ -102,8 +104,9 @@ self.addEventListener("fetch", (event) => {
         }),
     );
   } else if (
-    url.pathname.startsWith("/_next/static/") &&
-    /\.(css|woff2?|ttf)$/.test(url.pathname)
+    (url.pathname.startsWith("/_next/static/") &&
+      /\.(css|woff2?|ttf)$/.test(url.pathname)) ||
+    url.pathname === "/brand/icon.svg"
   ) {
     event.respondWith(
       caches

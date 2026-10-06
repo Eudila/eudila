@@ -2,6 +2,7 @@
 "use client";
 
 import Link from "next/link";
+import Icon from "../icons";
 import { useDraft } from "./registro";
 import { useCatalog } from "./emociones";
 
@@ -106,6 +107,7 @@ export default function Factores() {
           href="/registro/confirmacion"
           className="action action-primary mt-auto"
         >
+          <Icon name="check" />
           Revisar registro
         </Link>
       )}

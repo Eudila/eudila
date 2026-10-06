@@ -3,6 +3,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Icon from "../icons";
 import { useHistory } from "../historial/state";
 import type { RecordEntry } from "../historial/records";
 import {
@@ -148,6 +149,7 @@ function ExportControls({ records }: { records: RecordEntry[] }) {
               className={actionClass}
               onClick={() => download("csv")}
             >
+              <Icon name="download" />
               Descargar CSV
             </button>
             <button
@@ -156,6 +158,7 @@ function ExportControls({ records }: { records: RecordEntry[] }) {
               className={actionClass}
               onClick={() => download("json")}
             >
+              <Icon name="download" />
               Descargar JSON
             </button>
           </div>
@@ -200,6 +203,7 @@ function ExportControls({ records }: { records: RecordEntry[] }) {
             className={actionClass}
             onClick={printReport}
           >
+            <Icon name="print" />
             Imprimir / guardar PDF
           </button>
           <p>

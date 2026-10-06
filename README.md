@@ -73,7 +73,7 @@ La comprobación inicia y detiene su servidor de producción en un puerto libre.
 
 `app/globals.css` define los tokens de Tailwind con `@theme static`: paleta de marca, siete estados de ánimo, tipografía, espaciado, anchos, radios y sombra. Los componentes usan utilidades como `bg-surface`, `text-muted`, `text-question`, `max-w-phone` y `rounded-control`, o variables CSS para las muestras. Los valores provisionales siguen el brandbook interno; se revisan juntos en <http://localhost:3000/tokens>.
 
-Cambiar `--color-primary` en ese archivo actualiza la muestra institucional y la variante `--color-action`, usada por enlaces y acciones. El color institucional se reserva para acentos; la variante de acción permite texto blanco legible. Cada estado tiene un token `-ink` con el color de texto adecuado para su acento. El prototipo independiente conserva su propia hoja de estilos.
+Cambiar `--color-primary` en ese archivo actualiza la muestra institucional y la variante `--color-action`, usada por enlaces y acciones. El color institucional se reserva para acentos; la variante de acción aclarada usa tinta Grafito legible sobre el lienzo oscuro. Cada estado tiene un token `-ink` con el color de texto adecuado para su acento. El prototipo independiente conserva su propia hoja de estilos.
 
 Para comprobar cobertura de tokens, contraste AA, propagación del color primario, navegación con mouse/teclado, historial del navegador, ayuda en todas las rutas, reflujo con texto al 200 % y los pasos de tipo/ánimo (selección, anuncios accesibles, recarga y descarte):
 
@@ -187,3 +187,11 @@ El inicio Next.js incluye símbolo Neutral y una entrada opcional de 600 ms, una
 `shared/visual/` define etiquetas/geometrías, árbol SVG, variantes animada/compacta, controlador, movimiento/teclado, entrada y CSS de acciones/range. Next.js y prototipo consumen esa misma definición sin compartir su layout o navegación. Cambiá tokens en `app/globals.css` y ejecutá `npm run visual:tokens`; no edites `shared/visual/tokens.css` generado. `npm run build` verifica que la exportación esté actualizada. Serví el prototipo desde raíz del repo para resolver `../shared/`.
 
 Contra producción de preview en 3130: `BRAND_BASE_URL=http://127.0.0.1:3130 uv run --with playwright python app/brand/brand.test.py`. Verifica entrada, sesión/salto/SSR, reflujo, material/geometría/paleta/acciones entre consumidores, ciclos, slider y compactos reales en Chromium/WebKit/Firefox. `uv run --with playwright python prototype/visual-flow.test.py` verifica recorrido, posición fraccionaria conservada al navegar, recarga entera y descarte con catálogo interceptado. [Plan](docs/plans/2026-10-05-brand-entry-shared-visuals.md) y [evidencia nueva](docs/design/evidence/brand-system-2026-10-05/README.md). Las doce brechas estéticas del informe de marca están resueltas en el alcance registrado.
+
+La app usa un lienzo oscuro institucional continuo, controles/diálogos oscuros y acciones con iconos lineales y rótulos visibles. El registro de ánimo conserva su ambiente emocional y movimiento. El icono de app sigue el Neutral al 64% del brandbook, en el header, favicon, Apple touch icon y manifiesto; el renderer aprobado y los tokens generan todos los assets con `npm run visual:icon`. No editar los assets generados: `prebuild` comprueba su vigencia. Ayuda offline incluye el icono; las exportaciones impresas siguen en papel blanco.
+
+```sh
+DARK_BASE_URL=http://127.0.0.1:3132 uv run --with playwright --with pillow python app/brand/dark.test.py
+```
+
+Capturas y mediciones: [oscuro e iconos](docs/design/evidence/dark-icons-2026-10-06/README.md).

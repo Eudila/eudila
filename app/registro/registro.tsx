@@ -12,6 +12,7 @@ import {
 } from "@/prototype/flow-state.js";
 import { moods } from "@/shared/visual/moods.js";
 import MoodOrb from "../mood/orb";
+import Icon from "../icons";
 import { keyboardPosition } from "../../shared/visual/motion.js";
 import Emociones from "./emociones";
 import Factores from "./factores";
@@ -184,10 +185,18 @@ export default function Registro({ paso }: { paso: string }) {
             className={navigationAction}
             aria-label={emotional ? "Volver" : undefined}
           >
-            {emotional ? navigationIcon("back") : "Volver"}
+            {emotional ? (
+              navigationIcon("back")
+            ) : (
+              <>
+                <Icon name="arrowLeft" />
+                Volver
+              </>
+            )}
           </Link>
         ) : (
           <button type="button" onClick={close} className={textAction}>
+            <Icon name="arrowLeft" />
             Volver
           </button>
         )}
@@ -200,7 +209,14 @@ export default function Registro({ paso }: { paso: string }) {
           className={navigationAction}
           aria-label="Cerrar registro"
         >
-          {emotional ? navigationIcon("close") : "Cerrar"}
+          {emotional ? (
+            navigationIcon("close")
+          ) : (
+            <>
+              <Icon name="close" />
+              Cerrar
+            </>
+          )}
         </button>
       </div>
       <h1
@@ -255,6 +271,17 @@ export default function Registro({ paso }: { paso: string }) {
                     {type === "libre"
                       ? "Registro libre"
                       : type[0].toUpperCase() + type.slice(1)}
+                    <Icon
+                      name={
+                        type === "mañana"
+                          ? "sunrise"
+                          : type === "tarde"
+                            ? "sun"
+                            : type === "noche"
+                              ? "moon"
+                              : "today"
+                      }
+                    />
                   </label>
                 ))}
               </fieldset>
@@ -267,7 +294,7 @@ export default function Registro({ paso }: { paso: string }) {
                 className={`${action} mt-auto`}
                 onClick={() => router.push("/registro/animo")}
               >
-                Siguiente
+                Siguiente <Icon name="arrowRight" />
               </button>
             </>
           )}
@@ -329,7 +356,7 @@ export default function Registro({ paso }: { paso: string }) {
                 className={`${action} mt-auto`}
                 style={moodActionStyle(draft.mood)}
               >
-                Siguiente
+                Siguiente <Icon name="arrowRight" />
               </Link>
             </>
           )}
@@ -341,6 +368,7 @@ export default function Registro({ paso }: { paso: string }) {
                 choose={(emotionId) => update({ ...draft, emotionId })}
               />
               <Link href="/registro/animo" className={`${textAction} mt-auto`}>
+                <Icon name="edit" />
                 Cambiar ánimo
               </Link>
             </>
@@ -380,6 +408,7 @@ export default function Registro({ paso }: { paso: string }) {
               router.replace("/");
             }}
           >
+            <Icon name="close" />
             Descartar registro
           </button>
         </div>

@@ -68,8 +68,9 @@ color_pair = """e=>{
 try:
     with sync_playwright() as p:
         for engine in os.environ.get("BRAND_ENGINES", "chromium,webkit,firefox").split(","):
-            chrome = Path("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
+            chrome = Path(os.environ.get("CHROME_BIN", "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"))
             browser = getattr(p, engine).launch(**({"executable_path": str(chrome)} if engine == "chromium" and chrome.exists() else {}))
+            print(f"Checking brand {engine}", flush=True)
             findings = {"entry": {}, "parity": [], "reflow": []}
             errors = []
 

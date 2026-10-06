@@ -3,6 +3,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Icon from "../icons";
 import { loadCatalogRows } from "@/prototype/catalog.js";
 import {
   previewEnabled,
@@ -133,13 +134,14 @@ export default function Emociones({
           <button
             ref={origin}
             type="button"
-            className="min-h-touch text-left text-action underline"
+            className="action action-text justify-start text-left"
             onClick={() => {
               setQuery("");
               dialog.current?.showModal();
               search.current?.focus();
             }}
           >
+            <Icon name="search" />
             Ver todas las emociones
           </button>
           <p role="status" aria-atomic="true">
@@ -154,7 +156,7 @@ export default function Emociones({
               href="/registro/factores"
               className="action action-primary mt-auto"
             >
-              Siguiente
+              Siguiente <Icon name="arrowRight" />
             </Link>
           )}
         </>
@@ -178,14 +180,18 @@ export default function Emociones({
           </h2>
           <button
             type="button"
-            className="min-h-touch text-action underline"
+            className="action action-text"
             onClick={() => dialog.current?.close()}
           >
+            <Icon name="close" />
             Cerrar lista
           </button>
         </div>
         <label htmlFor="emotion-search" className="mt-6 block">
-          Buscar emoción
+          <span className="icon-label">
+            <Icon name="search" />
+            Buscar emoción
+          </span>
         </label>
         <input
           ref={search}

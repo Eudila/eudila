@@ -76,7 +76,7 @@ try:
         page.goto(base + "/registro/tipo", wait_until="networkidle")
         page.wait_for_function("navigator.serviceWorker.controller !== null", timeout=10000)
         # La primera visita es al registro: Ayuda ya debe estar preparada.
-        page.wait_for_function("caches.open('eudila-help-v1').then(c => c.match('/ayuda')).then(Boolean)")
+        page.wait_for_function("caches.open('eudila-help-v2').then(c => c.match('/ayuda')).then(Boolean)")
         assert page.evaluate("caches.keys().then(xs => xs.includes('other-app') && !xs.includes('eudila-help-v0'))")
         page.get_by_role("radio", name="Tarde", exact=True).check()
         page.get_by_role("button", name="Siguiente", exact=True).click()
@@ -90,6 +90,7 @@ try:
         phones = ["tel:911", "tel:135", "tel:08003451435", "tel:08009990091"]
         assert page.locator('a[href^="tel:"]').evaluate_all("xs => xs.map(x => x.getAttribute('href'))") == phones
         assert page.evaluate("sessionStorage.getItem('eudila-draft-v1')") == draft
+        assert page.locator(".app-brand img").evaluate("e=>e.complete && e.naturalWidth > 0"), "Icono perdido offline"
         assert page.locator("script").count() == 0, "La copia offline no debe necesitar hidratación"
         page.reload(wait_until="load")
         expect(page.get_by_role("link", name="Llamar al 911")).to_be_visible()
@@ -113,15 +114,15 @@ try:
         assert another.goto(base + "/ayuda?origen=registro", wait_until="load").status == 200
         expect(another.get_by_role("link", name="Llamar al 0800 345 1435")).to_be_visible()
         another.close()
-        keys = page.evaluate("caches.open('eudila-help-v1').then(c => c.keys()).then(xs => xs.map(x => new URL(x.url).pathname))")
+        keys = page.evaluate("caches.open('eudila-help-v2').then(c => c.keys()).then(xs => xs.map(x => new URL(x.url).pathname))")
         assert "/ayuda" in keys
         assert any(x.endswith(".css") for x in keys), keys
-        assert all(x == "/ayuda" or (x.startswith("/_next/static/") and x.endswith((".css", ".woff2", ".woff", ".ttf"))) for x in keys), keys
+        assert all(x in ["/ayuda", "/brand/icon.svg"] or (x.startswith("/_next/static/") and x.endswith((".css", ".woff2", ".woff", ".ttf"))) for x in keys), keys
         context.set_offline(False)
         # Una apertura posterior renueva HTML y recursos, sin acumular builds.
-        page.evaluate("async () => { const c = await caches.open('eudila-help-v1'); await c.put('/ayuda', new Response('Viejo')); await c.put('/_next/static/old.css', new Response('viejo')); navigator.serviceWorker.controller.postMessage('refresh-help'); }")
-        page.wait_for_function("caches.open('eudila-help-v1').then(c => c.match('/ayuda')).then(r => r.text()).then(t => t.includes('tel:135'))")
-        page.wait_for_function("caches.open('eudila-help-v1').then(c => c.match('/_next/static/old.css')).then(r => !r)")
+        page.evaluate("async () => { const c = await caches.open('eudila-help-v2'); await c.put('/ayuda', new Response('Viejo')); await c.put('/_next/static/old.css', new Response('viejo')); navigator.serviceWorker.controller.postMessage('refresh-help'); }")
+        page.wait_for_function("caches.open('eudila-help-v2').then(c => c.match('/ayuda')).then(r => r.text()).then(t => t.includes('tel:135'))")
+        page.wait_for_function("caches.open('eudila-help-v2').then(c => c.match('/_next/static/old.css')).then(r => !r)")
         routes = ["/", "/hoy", "/calendario", "/tokens", "/registro/tipo", "/registro/animo", "/registro/emocion", "/no-existe"]
         for route in routes:
             page.goto(base + route, wait_until="networkidle")

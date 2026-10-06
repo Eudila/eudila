@@ -4,16 +4,30 @@
   --color-primary: #0c8a86;
   --color-action: color-mix(
     in srgb,
-    var(--color-primary) 72%,
-    var(--color-graphite)
+    var(--color-primary) 64%,
+    var(--color-cloud)
   );
   --color-cloud: #fbfbfd;
   --color-graphite: #1d1d1f;
   --color-fog: #6e6e73;
-  --color-surface: var(--color-cloud);
-  --color-text: var(--color-graphite);
-  --color-muted: var(--color-fog);
-  --color-line: #b5b5ba;
+  --color-action-ink: var(--color-graphite);
+  --color-canvas: var(--color-mood-bottom);
+  --color-surface: color-mix(
+    in srgb,
+    var(--color-graphite) 94%,
+    var(--color-cloud)
+  );
+  --color-text: var(--color-cloud);
+  --color-muted: color-mix(
+    in srgb,
+    var(--color-cloud) 72%,
+    var(--color-graphite)
+  );
+  --color-line: color-mix(
+    in srgb,
+    var(--color-cloud) 40%,
+    var(--color-surface)
+  );
   --color-white: #ffffff;
   --color-mood-bottom: #071416;
   --color-mood-secondary: #e2e9e9;

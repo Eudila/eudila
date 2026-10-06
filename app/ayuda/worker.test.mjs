@@ -62,9 +62,12 @@ function worker() {
     Response,
     caches: { open: async () => cache },
     fetch: async () =>
-      new Response(`<link href="/_next/static/${++fetches}.css">`, {
-        headers: { "content-type": "text/html" },
-      }),
+      new Response(
+        `<link href="/_next/static/${++fetches}.css"><img src="/brand/icon.svg" alt="">`,
+        {
+          headers: { "content-type": "text/html" },
+        },
+      ),
   });
   vm.runInContext(source, context);
   return () =>
@@ -88,6 +91,10 @@ assert.equal(fetches, 2);
 const html = entries.get(`${origin}/ayuda`);
 const asset = new URL(html.match(/href="([^"]+)"/)[1], origin).href;
 assert(entries.has(asset), `El HTML referencia un recurso borrado: ${asset}`);
+assert(
+  entries.has(`${origin}/brand/icon.svg`),
+  "El icono debe estar disponible en Ayuda offline",
+);
 console.log(
   "ANI-67: dos workers concurrentes conservan los recursos de su copia HTML.",
 );

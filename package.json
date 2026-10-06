@@ -16,7 +16,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "visual:tokens": "node scripts/visual-tokens.mjs",
-    "prebuild": "node scripts/visual-tokens.mjs --check"
+    "prebuild": "node scripts/visual-tokens.mjs --check && node scripts/brand-icon.mjs --check",
+    "visual:icon": "node scripts/brand-icon.mjs"
   },
   "dependencies": {
     "next": "16.3.8",
@@ -33,6 +34,7 @@
     "eslint-config-prettier": "10.1.8",
     "postcss": "^8.5.6",
     "prettier": "3.9.9",
+    "sharp": "^0.35.5",
     "tailwindcss": "4.3.3",
     "typescript": "5.9.3"
   }

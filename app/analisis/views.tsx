@@ -2,6 +2,7 @@
 "use client";
 
 import Link from "next/link";
+import Icon from "../icons";
 import { useRouter } from "next/navigation";
 import { moods } from "../../shared/visual/moods.js";
 import { previewFactors } from "../frontend-preview";
@@ -40,6 +41,7 @@ function AnalysisNavigation({
         className={linkClass}
         aria-current={current === "evolucion" ? "page" : undefined}
       >
+        <Icon name="chart" />
         Evolución
       </Link>
       <Link
@@ -47,6 +49,7 @@ function AnalysisNavigation({
         className={linkClass}
         aria-current={current === "factores" ? "page" : undefined}
       >
+        <Icon name="factors" />
         Factores de vida
       </Link>
     </nav>

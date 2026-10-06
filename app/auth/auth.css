@@ -34,7 +34,7 @@
   padding: 12px;
   border: 1px solid var(--color-line);
   border-radius: var(--radius-field);
-  background: var(--color-white);
+  background: var(--color-surface);
   color: var(--color-text);
 }
 .auth-field input[aria-invalid="true"] {
@@ -50,6 +50,9 @@
   flex: 1;
 }
 .auth-password button {
+  display: grid;
+  place-items: center;
+  width: 44px;
   flex-shrink: 0;
   min-height: 44px;
   padding: 6px 4px;
@@ -92,7 +95,7 @@
 }
 .auth-screen ::selection {
   background: var(--color-action);
-  color: var(--color-white);
+  color: var(--color-action-ink);
 }
 @media (max-width: 360px) {
   .auth-screen {

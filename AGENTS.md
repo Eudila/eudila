@@ -4,7 +4,7 @@ Antes de cualquier cambio de frontend, leer [PRODUCT.md](PRODUCT.md), [DESIGN.md
 
 Usar tokens de `app/globals.css`. Las capturas de `docs/referencias/` definen funcionalidades; el brandbook y los videos revisados definen estética. No marcar una brecha como resuelta solo por agregar tokens o reutilizar código de `prototype/`: comprobar la ruta Next.js real. Registrar cambios de decisión y evidencia en los documentos de marca para futuras sesiones.
 
-Estado/geometría, árbol SVG, variantes de material, movimiento, entrada, acciones y range viven en `shared/visual/`; Next.js y el prototipo son consumidores. No crear otra paleta o renderer. `shared/visual/tokens.css` es generado desde `app/globals.css`: al cambiar tokens, ejecutar `npm run visual:tokens`; `prebuild` y la prueba de paridad verifican que esté actualizado. El prototipo debe servirse desde raíz del repo para cargar los módulos compartidos.
+Estado/geometría, árbol SVG, variantes de material, movimiento, entrada, acciones y range viven en `shared/visual/`; Next.js y el prototipo son consumidores. No crear otra paleta o renderer. El lienzo actual es oscuro por pedido del usuario: usar superficie/texto/muted/action/action-ink semánticos; no reintroducir Nube como fondo de campos ni Grafito como texto sobre oscuro. El informe impreso mantiene fondo blanco. Iconos UI en `app/icons.tsx`; icono de app generado desde el Neutral compartido con `npm run visual:icon`, validado en prebuild. `shared/visual/tokens.css` es generado desde `app/globals.css`: al cambiar tokens, ejecutar `npm run visual:tokens`; `prebuild` y la prueba de paridad verifican que esté actualizado. El prototipo debe servirse desde raíz del repo para cargar los módulos compartidos.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

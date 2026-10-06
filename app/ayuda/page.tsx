@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import type { Metadata } from "next";
+import Icon from "../icons";
 
 export const metadata: Metadata = { title: "Ayuda ahora · eudila" };
 
@@ -20,7 +21,10 @@ export default function Help() {
           href="tel:911"
           className="flex min-h-touch flex-col rounded-control border border-line px-4 py-3 text-action hover:underline"
         >
-          <span className="font-semibold">Llamar al 911</span>
+          <span className="icon-label font-semibold">
+            <Icon name="phone" />
+            Llamar al 911
+          </span>
           <span className="text-muted">Emergencias · Desde todo el país</span>
         </a>
       </section>
@@ -39,7 +43,10 @@ export default function Help() {
           href="tel:135"
           className="flex min-h-touch flex-col rounded-control border border-line px-4 py-3 text-action hover:underline"
         >
-          <span className="font-semibold">Llamar al 135</span>
+          <span className="icon-label font-semibold">
+            <Icon name="phone" />
+            Llamar al 135
+          </span>
           <span className="text-muted">
             Capital Federal y Gran Buenos Aires
           </span>
@@ -48,7 +55,10 @@ export default function Help() {
           href="tel:08003451435"
           className="flex min-h-touch flex-col rounded-control border border-line px-4 py-3 text-action hover:underline"
         >
-          <span className="font-semibold">Llamar al 0800 345 1435</span>
+          <span className="icon-label font-semibold">
+            <Icon name="phone" />
+            Llamar al 0800 345 1435
+          </span>
           <span className="text-muted">Desde todo el país</span>
         </a>
       </section>
@@ -61,7 +71,10 @@ export default function Help() {
           href="tel:08009990091"
           className="flex min-h-touch flex-col rounded-control border border-line px-4 py-3 text-action hover:underline"
         >
-          <span className="font-semibold">Llamar al 0800 999 0091</span>
+          <span className="icon-label font-semibold">
+            <Icon name="phone" />
+            Llamar al 0800 999 0091
+          </span>
           <span className="text-muted">Desde todo el país</span>
         </a>
       </section>

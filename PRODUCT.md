@@ -23,7 +23,7 @@ Serena, cálida y precisa. «Un espejo tranquilo para cada estado de ánimo». V
 ## Design Principles
 
 - Orbe como símbolo y respuesta al ánimo; espectro de siete estados de desagradable a agradable.
-- Lienzo neutro fuera de la experiencia de ánimo; ambiente del estado dentro de ella.
+- Lienzo neutro oscuro fuera de la experiencia de ánimo, por pedido del usuario del 05/10/2026; ambiente del estado dentro de ella.
 - Una pregunta principal y camino corto; contenido opcional no debe bloquear el registro.
 - Datos y vista previa identificados sin confundirlos con persistencia de cuenta.
 

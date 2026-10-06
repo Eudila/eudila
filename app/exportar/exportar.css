@@ -55,6 +55,12 @@
     font-size: 11pt;
   }
   .app-shell {
+    --color-surface: var(--color-white);
+    --color-text: var(--color-graphite);
+    --color-muted: var(--color-fog);
+    --color-action: var(--color-graphite);
+    background: white !important;
+    color: black !important;
     display: block !important;
     height: auto !important;
     max-width: none !important;

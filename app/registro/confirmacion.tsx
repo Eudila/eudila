@@ -3,6 +3,7 @@
 
 import { useRef, useState } from "react";
 import Link from "next/link";
+import Icon from "../icons";
 import { useRouter } from "next/navigation";
 import { useDraft } from "./registro";
 import { useCatalog } from "./emociones";
@@ -102,8 +103,9 @@ export default function Confirmacion() {
             <dd>
               <Link
                 href={`/registro/${step}`}
-                className="inline-flex min-h-touch items-center text-action underline"
+                className="inline-flex min-h-touch items-center gap-2 text-action underline"
               >
+                <Icon name="edit" />
                 Cambiar {label.toLocaleLowerCase("es-AR")}
               </Link>
             </dd>

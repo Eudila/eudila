@@ -17,7 +17,7 @@ results = {}
 with sync_playwright() as p:
     for engine in engines:
         browser_type = getattr(p, engine)
-        chrome = Path('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
+        chrome = Path(os.environ.get('CHROME_BIN', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'))
         browser = browser_type.launch(**({'executable_path': str(chrome)} if engine == 'chromium' and chrome.exists() else {}))
         context = browser.new_context(viewport={'width': 390, 'height': 844}, reduced_motion='no-preference',
                                       **({'record_video_dir': str(artifacts / engine), 'record_video_size': {'width': 390, 'height': 844}} if artifacts else {}))
