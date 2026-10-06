@@ -22,3 +22,11 @@ The build log is retained in the task workspace at `task-7/evidence/ani108-build
 ## Source limitation
 
 The missing authority for ANI-109 is `Eudila-Brandbook.pdf`, v1.0, September 2026, 13 pages, SHA-256 `3fdfb738099abcf643a4c2d4252a7c76f99050f0379510aa7ff516c1746feece`. Local and connected-source searches did not recover the original. `prototype/moods.js` remains unchanged, including the known silhouette limitations in the brand review. No visual fidelity or ticket acceptance is claimed.
+
+## ANI-118 history integration
+
+Today, calendar, day detail and their legends now consume the same fixed renderer. The private one-path `MoodShape` implementation was removed. Small symbols use `size-6` instead of `size-5`; summaries retain `size-12`. Their labels, ordinal values and accessible calendar names remain present.
+
+`node --test app/historial/mood-renderer.test.mjs app/components/mood-orb.test.mjs app/historial/records.test.mjs prototype/flow-state.test.mjs` passes all nine checks. The three history checks render the actual views with a synthetic seven-state fixture and inspect their compact orbs and labels. This is isolated SSR evidence; it does not verify browser hydration or remote persistence.
+
+Lint, format, diff checks and the final production Webpack build pass. The final build covers both ANI-108 and ANI-118, with its log at `task-7/evidence/ani118-build-webpack.log`. See [the history integration plan](../../../plans/2026-10-06-ani-118-shared-renderer.md). Browser measurements and visual acceptance remain pending, and neither ticket was marked Done.
