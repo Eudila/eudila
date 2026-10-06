@@ -3,7 +3,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { moods, shapePath } from "@/prototype/moods.js";
+import { moods } from "@/prototype/moods.js";
+import { MoodOrb } from "@/app/components/mood-orb";
 import {
   averageMood,
   entriesForDay,
@@ -34,19 +35,6 @@ const recordTime = new Intl.DateTimeFormat("es-AR", {
   minute: "2-digit",
   hourCycle: "h23",
 });
-
-function MoodShape({ mood, small = false }: { mood: number; small?: boolean }) {
-  return (
-    <svg
-      viewBox="0 0 220 220"
-      aria-hidden="true"
-      className={small ? "size-5 shrink-0" : "size-12 shrink-0"}
-      style={{ color: `var(--color-mood-${mood}-orb)` }}
-    >
-      <path d={shapePath(moods[mood - 1])} fill="currentColor" />
-    </svg>
-  );
-}
 
 export function HistoryGate({ children }: { children: React.ReactNode }) {
   const { ready, problem, preview, retry } = useHistory();
@@ -99,7 +87,7 @@ function DaySummary({ entries }: { entries: RecordEntry[] }) {
   if (average === null) return null;
   return (
     <div className="flex items-center gap-3 rounded-control border border-line p-4">
-      <MoodShape mood={average} />
+      <MoodOrb mood={average} variant="compact" />
       <div className="min-w-0">
         <h2 className="font-semibold">Resumen del día</h2>
         <p>
@@ -135,7 +123,11 @@ function RecordList({ entries }: { entries: RecordEntry[] }) {
             </div>
             <p className="mt-3 font-semibold">{entry.emotion.nombre}</p>
             <div className="mt-1 flex items-center gap-2">
-              <MoodShape mood={entry.mood} small />
+              <MoodOrb
+                mood={entry.mood}
+                variant="compact"
+                className="size-6 shrink-0"
+              />
               <p>
                 {moods[entry.mood - 1].label} · {entry.mood} de 7
               </p>
@@ -181,7 +173,11 @@ function MoodLegend() {
       <ol className="space-y-2">
         {moods.map((mood, index) => (
           <li key={mood.label} className="flex items-center gap-2">
-            <MoodShape mood={index + 1} small />
+            <MoodOrb
+              mood={index + 1}
+              variant="compact"
+              className="size-6 shrink-0"
+            />
             <span>
               {index + 1} · {mood.label}
             </span>
@@ -343,7 +339,11 @@ export function CalendarView({
                     <span className="text-sm font-semibold">{index + 1}</span>
                     {average ? (
                       <span className="flex flex-col items-center">
-                        <MoodShape mood={average} small />
+                        <MoodOrb
+                          mood={average}
+                          variant="compact"
+                          className="size-6 shrink-0"
+                        />
                         <span className="text-xs">{average}</span>
                       </span>
                     ) : (
