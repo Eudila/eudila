@@ -80,7 +80,7 @@ export default function Emociones({
     searchable(row.nombre).includes(searchable(query.trim())),
   );
   const button =
-    "min-h-touch rounded-control border border-line px-4 py-3 text-left hover:underline aria-pressed:border-action aria-pressed:bg-action aria-pressed:text-white";
+    "min-h-touch rounded-control border border-line px-4 py-2 text-left hover:underline aria-pressed:border-action aria-pressed:bg-action aria-pressed:text-white";
 
   function select(row: Emotion) {
     choose(String(row.id));
@@ -111,7 +111,7 @@ export default function Emociones({
           <div
             role="group"
             aria-label="Emociones sugeridas"
-            className="flex flex-wrap gap-3"
+            className="flex flex-wrap gap-2"
           >
             {rows
               .filter((row) => row.sugerida)
@@ -149,7 +149,7 @@ export default function Emociones({
           {selected && (
             <Link
               href="/registro/factores"
-              className="mt-auto inline-flex min-h-action items-center justify-center rounded-control bg-action px-6 py-3 font-semibold text-white hover:underline"
+              className="mt-auto inline-flex min-h-action items-center justify-center rounded-pill bg-action px-6 py-3 font-semibold text-white hover:underline"
             >
               Siguiente
             </Link>
@@ -170,7 +170,10 @@ export default function Emociones({
         style={{ width: "calc(100% - var(--spacing) * 12)" }}
       >
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <h2 id="emotion-title" className="text-question font-bold">
+          <h2
+            id="emotion-title"
+            className="font-display text-question font-bold"
+          >
             Todas las emociones
           </h2>
           <button
