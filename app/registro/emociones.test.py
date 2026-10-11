@@ -66,12 +66,21 @@ with tempfile.TemporaryFile() as log:
             assert set(quick.get_by_role("button").all_text_contents()) == {row["nombre"] for row in rows if row["sugerida"]}
             quick.get_by_role("button", name="Alegría", exact=True).click()
             expect(quick.get_by_role("button", name="Alegría", exact=True)).to_have_attribute("aria-pressed", "true")
+            primary = page.get_by_role("link", name="Siguiente", exact=True)
+            assert primary.evaluate("e => e.getBoundingClientRect().height >= 50 && parseFloat(getComputedStyle(e).borderRadius) >= e.getBoundingClientRect().height / 2"), "La acción principal debe ser una cápsula de al menos 50px"
+            for width, height in [(320, 568), (390, 844), (520, 900)]:
+                page.set_viewport_size({"width": width, "height": height})
+                page.locator("main").evaluate("e => e.scrollTop = 0")
+                bounds = quick.get_by_role("button").evaluate_all("items => items.map(e => {const r = e.getBoundingClientRect(), main = e.closest('main').getBoundingClientRect(); return {top: r.top, bottom: r.bottom, mainTop: main.top, mainBottom: main.bottom};})")
+                assert all(item["top"] >= item["mainTop"] and item["bottom"] <= item["mainBottom"] and item["bottom"] - item["top"] >= 44 for item in bounds), f"Sugerencias visibles y táctiles a {width}px: {bounds}"
+            page.set_viewport_size({"width": 390, "height": 844})
             opener = page.get_by_role("button", name="Ver todas las emociones")
             opener.focus()
             page.keyboard.press("Enter")
             dialog = page.get_by_role("dialog", name="Todas las emociones")
             search = page.get_by_role("searchbox", name="Buscar emoción")
             expect(search).to_be_focused()
+            assert dialog.get_by_role("heading").evaluate("e => getComputedStyle(e).fontFamily.toLowerCase().includes('figtree') && getComputedStyle(e).fontWeight === '700'"), "El título debe usar Figtree Bold"
             expect(dialog.locator('button[aria-pressed]')).to_have_count(21)
             for _ in range(12):
                 page.keyboard.press("Tab")

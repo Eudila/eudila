@@ -98,7 +98,9 @@ export default function Registro({ paso }: { paso: string }) {
   }
 
   return (
-    <section className="relative flex flex-1 flex-col gap-6 px-6 py-6">
+    <section
+      className={`relative flex flex-1 flex-col px-6 ${paso === "emocion" ? "gap-4 py-4" : "gap-6 py-6"}`}
+    >
       <div className="flex flex-wrap items-center justify-between gap-3">
         {index > 0 ? (
           <Link href={`/registro/${steps[index - 1]}`} className={textAction}>

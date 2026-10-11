@@ -106,3 +106,11 @@ Las doce brechas se registraron en Backlog, sin responsable ni fecha, con priori
 - VIS-10: [ANI-116 · VIS-10 · Unificar variantes de acciones y radios de componentes](https://linear.app/anima-org/issue/ANI-116/vis-10-unificar-variantes-de-acciones-y-radios-de-componentes)
 - VIS-11: [ANI-117 · VIS-11 · Preservar contraste AA en las adaptaciones del brandbook](https://linear.app/anima-org/issue/ANI-117/vis-11-preservar-contraste-aa-en-las-adaptaciones-del-brandbook)
 - VIS-12: [ANI-118 · VIS-12 · Unificar fuente visual entre prototipo y Next.js](https://linear.app/anima-org/issue/ANI-118/vis-12-unificar-fuente-visual-entre-prototipo-y-nextjs)
+
+## Verificación acotada del selector · ANI-64 · 11/10/2026
+
+Sobre main `bd7339e`, el selector conserva Nube/Grafito y el action institucional adaptado a AA; no adopta ilustraciones ni categorías del mock. Se corrigió «Siguiente» a cápsula con `rounded-pill`, conservando ≥50 px, y el título de lista a Figtree Bold con `font-display`, según brandbook pp.9–10 y DESIGN.md. Los chips mantienen ≥44 px; se ajustan espacios del paso emoción para mostrar las seis sugerencias completas a 320 × 568 sin desplazar. El resto de pasos conserva su espaciado.
+
+La prueba falló antes de las correcciones por radio de 14 px y por la última sugerencia fuera del main. Después pasan cápsula, tipografía, visibilidad/tamaño táctil en 320/390/520 px, teclado/foco, búsqueda y reflujo con texto al 200%. La prueba separada contra Supabase local real obtiene las 21 opciones del endpoint; no usa respuestas interceptadas. [Plan y resultados](../plans/2026-10-11-ani-64-cierre.md) · [Capturas y procedencia](evidence/ani-64-2026-10-11/README.md).
+
+Esta evidencia corresponde exclusivamente al selector en la ruta Next.js. Las brechas globales VIS-01–12 conservan sus estados: el ajuste de esta cápsula no certifica la unificación de todas las acciones, el orbe ni el wordmark. No se verificó el destino Supabase Cloud ni persistencia de cuenta.
