@@ -10,11 +10,13 @@ import {
   nextSteps as steps,
   types,
 } from "@/prototype/flow-state.js";
-import { moods, shapePath } from "@/prototype/moods.js";
+import { moods } from "@/prototype/moods.js";
+import MoodOrb from "../mood/orb";
 import Emociones from "./emociones";
 import Factores from "./factores";
 import Confirmacion from "./confirmacion";
 import type { Draft } from "../historial/records";
+import { moodActionStyle } from "../actions";
 export type { Draft } from "../historial/records";
 
 const draftKey = "eudila-draft-v1";
@@ -22,6 +24,8 @@ const DraftContext = createContext<{
   draft: Draft;
   ready: boolean;
   persistent: boolean;
+  moodInput: { position: number; animate: boolean };
+  changeMood: (position: number, animate?: boolean) => void;
   update: (draft: Draft) => void;
   discard: () => void;
 } | null>(null);
@@ -30,6 +34,7 @@ export function RegistroProvider({ children }: { children: React.ReactNode }) {
   const [draft, setDraft] = useState<Draft>(newDraft);
   const [ready, setReady] = useState(false);
   const [persistent, setPersistent] = useState(true);
+  const [moodInput, setMoodInput] = useState({ position: 4, animate: false });
 
   useEffect(() => {
     let restored = null;
@@ -40,11 +45,13 @@ export function RegistroProvider({ children }: { children: React.ReactNode }) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setPersistent(false);
     }
-    setDraft(restored ?? newDraft());
+    const initial = restored ?? newDraft();
+    setDraft(initial);
+    setMoodInput({ position: initial.mood, animate: false });
     setReady(true);
   }, []);
 
-  function update(next: Draft) {
+  function persist(next: Draft) {
     setDraft(next);
     try {
       sessionStorage.setItem(draftKey, JSON.stringify(next));
@@ -53,8 +60,23 @@ export function RegistroProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  function update(next: Draft) {
+    persist(next);
+    if (next.mood !== draft.mood)
+      setMoodInput({ position: next.mood, animate: false });
+  }
+
+  function changeMood(value: number, animate = false) {
+    if (!Number.isFinite(value)) return;
+    const position = Math.max(1, Math.min(7, value));
+    setMoodInput({ position, animate });
+    const mood = Math.round(position);
+    if (mood !== draft.mood) persist({ ...draft, mood });
+  }
+
   function discard() {
     setDraft(newDraft());
+    setMoodInput({ position: 4, animate: false });
     try {
       sessionStorage.removeItem(draftKey);
     } catch {
@@ -63,7 +85,17 @@ export function RegistroProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <DraftContext value={{ draft, ready, persistent, update, discard }}>
+    <DraftContext
+      value={{
+        draft,
+        ready,
+        persistent,
+        moodInput,
+        changeMood,
+        update,
+        discard,
+      }}
+    >
       {children}
     </DraftContext>
   );
@@ -77,17 +109,50 @@ export function useDraft() {
 
 export default function Registro({ paso }: { paso: string }) {
   const state = useDraft();
-  const { draft, ready, persistent, update, discard } = state;
+  const { draft, ready, persistent, moodInput, changeMood, update, discard } =
+    state;
+  const scrubbing = useRef(false);
   const router = useRouter();
   const pathname = usePathname();
   const title = useRef<HTMLHeadingElement>(null);
   const dialog = useRef<HTMLDialogElement>(null);
   const index = steps.indexOf(paso);
   const mood = moods[draft.mood - 1];
-  const action =
-    "inline-flex min-h-action items-center justify-center rounded-control bg-action px-6 py-3 font-semibold text-white hover:underline disabled:cursor-not-allowed disabled:opacity-50";
-  const textAction =
-    "inline-flex min-h-touch items-center justify-center rounded-control px-3 py-2 text-action underline";
+  const action = "action action-primary";
+  const textAction = "action action-text";
+  const emotional = paso === "animo";
+  const navigationAction = emotional ? "mood-navigation-control" : textAction;
+
+  useEffect(() => {
+    const finish = () => {
+      scrubbing.current = false;
+    };
+    window.addEventListener("pointerup", finish);
+    window.addEventListener("pointercancel", finish);
+    return () => {
+      window.removeEventListener("pointerup", finish);
+      window.removeEventListener("pointercancel", finish);
+    };
+  }, []);
+
+  function navigationIcon(direction: "back" | "close") {
+    return (
+      <span className="mood-navigation-symbol" aria-hidden="true">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path
+            d={direction === "back" ? "M14 5l-7 7 7 7" : "M6 6l12 12M18 6L6 18"}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </span>
+    );
+  }
 
   useEffect(() => {
     if (ready) title.current?.focus();
@@ -99,34 +164,55 @@ export default function Registro({ paso }: { paso: string }) {
 
   return (
     <section
-      className={`relative flex flex-1 flex-col px-6 ${paso === "emocion" ? "gap-4 py-4" : "gap-6 py-6"}`}
+      className={
+        emotional
+          ? "mood-screen relative flex flex-1 flex-col"
+          : `relative flex flex-1 flex-col px-6 ${paso === "emocion" ? "gap-4 py-4 [@media(max-height:600px)]:gap-2" : "gap-6 py-6"}`
+      }
     >
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div
+        className={
+          emotional
+            ? "mood-navigation"
+            : paso === "emocion"
+              ? "grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2"
+              : "flex flex-wrap items-center justify-between gap-3"
+        }
+      >
         {index > 0 ? (
-          <Link href={`/registro/${steps[index - 1]}`} className={textAction}>
-            Volver
+          <Link
+            href={`/registro/${steps[index - 1]}`}
+            className={navigationAction}
+            aria-label={emotional ? "Volver" : undefined}
+          >
+            {emotional ? navigationIcon("back") : "Volver"}
           </Link>
         ) : (
           <button type="button" onClick={close} className={textAction}>
             Volver
           </button>
         )}
-        <p className="text-muted">
-          Registro · {index + 1} de {steps.length}
+        <p
+          className={`text-center ${emotional ? "mood-secondary" : "text-muted"}`}
+        >
+          Registro ·{" "}
+          <span className="whitespace-nowrap">
+            {index + 1} de {steps.length}
+          </span>
         </p>
         <button
           type="button"
           onClick={close}
-          className={textAction}
+          className={navigationAction}
           aria-label="Cerrar registro"
         >
-          Cerrar
+          {emotional ? navigationIcon("close") : "Cerrar"}
         </button>
       </div>
       <h1
         ref={title}
         tabIndex={-1}
-        className="font-display text-question leading-question font-bold tracking-brand text-balance"
+        className={`font-display text-question leading-question font-bold tracking-brand text-balance ${emotional ? "mood-question" : ""}`}
       >
         {paso === "tipo"
           ? "¿A qué momento corresponde este registro?"
@@ -143,7 +229,10 @@ export default function Registro({ paso }: { paso: string }) {
       ) : (
         <>
           {!persistent && (
-            <p role="status" className="text-muted">
+            <p
+              role="status"
+              className={emotional ? "mood-secondary" : "text-muted"}
+            >
               El borrador sigue en esta pantalla, pero no podemos conservarlo si
               recargás o cerrás la pestaña.
             </p>
@@ -159,7 +248,7 @@ export default function Registro({ paso }: { paso: string }) {
                 {types.map((type) => (
                   <label
                     key={type}
-                    className="flex min-h-action cursor-pointer items-center gap-3 rounded-control border border-line px-4 py-3 has-checked:border-action has-checked:bg-action has-checked:text-white"
+                    className="control-choice flex items-center gap-3"
                   >
                     <input
                       type="radio"
@@ -190,34 +279,16 @@ export default function Registro({ paso }: { paso: string }) {
           )}
           {paso === "animo" && (
             <>
-              <svg
-                viewBox="0 0 220 220"
-                aria-hidden="true"
-                className="mx-auto h-auto w-48 max-w-full shrink-0"
-                style={{ color: `var(--color-mood-${draft.mood}-orb)` }}
-              >
-                {[1, 0.82, 0.63, 0.45, 0.29].map((scale, i) => (
-                  <path
-                    key={scale}
-                    d={shapePath(mood)}
-                    transform={`translate(110 110) scale(${scale}) translate(-110 -110)`}
-                    fill="currentColor"
-                    opacity={[0.18, 0.3, 0.48, 0.7, 0.9][i]}
-                  />
-                ))}
-                <circle
-                  cx="110"
-                  cy="110"
-                  r="17"
-                  fill="var(--color-white)"
-                  opacity=".94"
-                />
-              </svg>
+              <MoodOrb
+                level={draft.mood}
+                animated
+                className="mood-orb mx-auto h-auto max-w-full shrink-0"
+              />
               <p
                 role="status"
                 aria-live="polite"
                 aria-atomic="true"
-                className="text-center text-state font-semibold"
+                className="mood-state font-display text-center text-state font-bold"
               >
                 {mood.label}
               </p>
@@ -230,23 +301,52 @@ export default function Registro({ paso }: { paso: string }) {
                   type="range"
                   min="1"
                   max="7"
-                  step="1"
-                  value={draft.mood}
+                  step="any"
+                  value={moodInput.position}
                   aria-valuetext={`${mood.label}, ${draft.mood} de 7`}
+                  onPointerDown={() => {
+                    scrubbing.current = true;
+                  }}
                   onChange={(event) =>
-                    update({ ...draft, mood: Number(event.target.value) })
+                    changeMood(Number(event.target.value), !scrubbing.current)
                   }
-                  className="min-h-touch w-full cursor-pointer accent-action"
+                  onKeyDown={(event) => {
+                    const position =
+                      Math.abs(
+                        moodInput.position - Math.round(moodInput.position),
+                      ) < 1e-6
+                        ? Math.round(moodInput.position)
+                        : moodInput.position;
+                    const choices: Record<string, number> = {
+                      ArrowLeft: Math.ceil(position) - 1,
+                      ArrowDown: Math.ceil(position) - 1,
+                      ArrowRight: Math.floor(position) + 1,
+                      ArrowUp: Math.floor(position) + 1,
+                      PageDown: Math.ceil(position) - 1,
+                      PageUp: Math.floor(position) + 1,
+                      Home: 1,
+                      End: 7,
+                    };
+                    if (choices[event.key] === undefined) return;
+                    event.preventDefault();
+                    scrubbing.current = false;
+                    changeMood(choices[event.key], true);
+                  }}
+                  className="mood-range min-h-touch w-full cursor-pointer"
                 />
-                <div className="flex justify-between gap-6 text-muted">
+                <div className="mood-secondary flex justify-between gap-6">
                   <span>Muy desagradable</span>
                   <span className="text-right">Muy agradable</span>
                 </div>
               </div>
-              <p className="text-center text-muted">
+              <p className="mood-secondary text-center">
                 {draft.mood} de 7 · No hay una respuesta correcta.
               </p>
-              <Link href="/registro/emocion" className={`${action} mt-auto`}>
+              <Link
+                href="/registro/emocion"
+                className={`${action} mt-auto`}
+                style={moodActionStyle(draft.mood)}
+              >
                 Siguiente
               </Link>
             </>

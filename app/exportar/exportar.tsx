@@ -17,8 +17,7 @@ import {
 import Report from "./report";
 import "./exportar.css";
 
-const actionClass =
-  "inline-flex min-h-touch items-center justify-center rounded-control border border-action px-4 py-3 font-semibold text-action disabled:cursor-not-allowed disabled:border-line disabled:text-muted";
+const actionClass = "action action-secondary";
 
 export default function Exportar() {
   const { records, ready, preview, problem, retry } = useHistory();
@@ -112,7 +111,7 @@ function ExportControls({ records }: { records: RecordEntry[] }) {
   return (
     <>
       <div className="export-controls space-y-6">
-        <p className="rounded-control border border-line p-4">
+        <p className="rounded-card border border-line p-4">
           Vista previa: solo incluye los registros y ejemplos de esta pestaña.
           Los archivos se preparan en tu navegador.
         </p>
@@ -171,7 +170,7 @@ function ExportControls({ records }: { records: RecordEntry[] }) {
           <select
             id="report-period"
             value={choice}
-            className="min-h-touch w-full rounded-control border border-line bg-surface px-3 py-3"
+            className="min-h-touch w-full rounded-field border border-line bg-surface px-3 py-3"
             onChange={(event) => {
               setChoice(event.target.value as PeriodChoice);
               setGeneratedAt(new Date());

@@ -2,7 +2,9 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import Link from "next/link";
+import Image from "next/image";
 import Navigation from "./navigation";
+import AppShell from "./shell";
 import { RegistroProvider } from "./registro/registro";
 import { HistoryProvider } from "./historial/state";
 import { previewEnabled } from "./frontend-preview";
@@ -30,7 +32,7 @@ export default function RootLayout({
       <body>
         <HistoryProvider>
           <RegistroProvider>
-            <div className="app-shell mx-auto grid max-w-phone bg-surface">
+            <AppShell>
               <div>
                 <header className="app-header flex flex-wrap items-center justify-between">
                   <a
@@ -39,13 +41,21 @@ export default function RootLayout({
                   >
                     Ir al contenido
                   </a>
-                  <p className="font-display text-wordmark leading-wordmark font-extrabold tracking-brand">
-                    eudila
+                  <p className="app-brand inline-flex items-center gap-3 font-display text-wordmark leading-wordmark font-bold tracking-wordmark">
+                    <Image
+                      src="/brand/logo.svg"
+                      width={32}
+                      height={32}
+                      alt=""
+                      unoptimized
+                      className="size-8 shrink-0"
+                    />
+                    <span>eudila</span>
                   </p>
                   <Link
                     href="/ayuda"
                     prefetch={false}
-                    className="app-help inline-flex max-w-full items-center justify-center rounded-pill bg-action text-title font-semibold text-white hover:underline"
+                    className="app-help action action-primary text-title"
                   >
                     Ayuda ahora
                   </Link>
@@ -94,7 +104,7 @@ export default function RootLayout({
                 {children}
               </main>
               <Navigation />
-            </div>
+            </AppShell>
           </RegistroProvider>
         </HistoryProvider>
       </body>

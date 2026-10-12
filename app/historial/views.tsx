@@ -3,7 +3,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { moods, shapePath } from "@/prototype/moods.js";
+import { moods } from "@/prototype/moods.js";
+import MoodOrb from "../mood/orb";
 import {
   averageMood,
   entriesForDay,
@@ -13,10 +14,8 @@ import {
 } from "./records";
 import { useHistory } from "./state";
 
-const action =
-  "inline-flex min-h-action max-w-full items-center justify-center rounded-control bg-action px-5 py-3 text-center font-semibold text-white hover:underline";
-const textAction =
-  "inline-flex min-h-touch max-w-full items-center justify-center rounded-control px-2 py-2 text-center text-action underline";
+const action = "action action-primary";
+const textAction = "action action-text";
 const title =
   "font-display text-question leading-question font-bold tracking-brand text-balance";
 const fullDate = new Intl.DateTimeFormat("es-AR", {
@@ -37,14 +36,10 @@ const recordTime = new Intl.DateTimeFormat("es-AR", {
 
 function MoodShape({ mood, small = false }: { mood: number; small?: boolean }) {
   return (
-    <svg
-      viewBox="0 0 220 220"
-      aria-hidden="true"
-      className={small ? "size-5 shrink-0" : "size-12 shrink-0"}
-      style={{ color: `var(--color-mood-${mood}-orb)` }}
-    >
-      <path d={shapePath(moods[mood - 1])} fill="currentColor" />
-    </svg>
+    <MoodOrb
+      level={mood}
+      className={small ? "size-6 shrink-0" : "size-12 shrink-0"}
+    />
   );
 }
 
@@ -98,7 +93,7 @@ function DaySummary({ entries }: { entries: RecordEntry[] }) {
   const average = averageMood(entries);
   if (average === null) return null;
   return (
-    <div className="flex items-center gap-3 rounded-control border border-line p-4">
+    <div className="flex items-center gap-3 rounded-card border border-line p-4">
       <MoodShape mood={average} />
       <div className="min-w-0">
         <h2 className="font-semibold">Resumen del día</h2>
@@ -122,7 +117,7 @@ function RecordList({ entries }: { entries: RecordEntry[] }) {
       </h2>
       <ol className="space-y-3">
         {entries.map((entry) => (
-          <li key={entry.id} className="rounded-control border border-line p-4">
+          <li key={entry.id} className="rounded-card border border-line p-4">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <time dateTime={entry.recordedAt} className="font-semibold">
                 {recordTime.format(new Date(entry.recordedAt))}

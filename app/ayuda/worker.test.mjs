@@ -88,6 +88,10 @@ assert.equal(fetches, 2);
 const html = entries.get(`${origin}/ayuda`);
 const asset = new URL(html.match(/href="([^"]+)"/)[1], origin).href;
 assert(entries.has(asset), `El HTML referencia un recurso borrado: ${asset}`);
+assert(
+  entries.has(`${origin}/brand/logo.svg`),
+  "El logo debe conservarse offline",
+);
 console.log(
   "ANI-67: dos workers concurrentes conservan los recursos de su copia HTML.",
 );

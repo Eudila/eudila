@@ -30,7 +30,7 @@ export default function Factores() {
           {rows.map((row) => (
             <label
               key={row.id}
-              className="flex min-h-touch cursor-pointer items-center gap-3 rounded-control border border-line px-4 py-3 has-checked:border-action has-checked:bg-action has-checked:text-white"
+              className="control-choice flex items-center gap-3"
             >
               <input
                 type="checkbox"
@@ -104,7 +104,7 @@ export default function Factores() {
       {canContinue && (
         <Link
           href="/registro/confirmacion"
-          className="mt-auto inline-flex min-h-action items-center justify-center rounded-control bg-action px-6 py-3 font-semibold text-white hover:underline"
+          className="action action-primary mt-auto"
         >
           Revisar registro
         </Link>
