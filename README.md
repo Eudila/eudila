@@ -28,6 +28,8 @@ npm run start
 
 `npm run start` sirve el build en <http://localhost:3000>; detené primero el servidor de desarrollo para liberar ese puerto. `npm run format` aplica la configuración compartida de Prettier al scaffold. ESLint y Prettier conservan el prototipo independiente; Prettier también deja los documentos de referencia sin modificar.
 
+El workflow `CI` ejecuta instalación, lint, tipos, formato, las seis suites Node y build de vista previa en Node 24 para cada pull request y cada push a `main`. No utiliza credenciales Cloud ni publica la app. El [plan de publicación](docs/plans/2026-10-11-ani-53-release.md) conserva los pendientes de integración, preview y despliegue.
+
 ### Navegación y ayuda
 
 El layout raíz mantiene la cabecera con **Ayuda ahora** y una barra inferior de tres secciones: **Registrar** (`/`), **Hoy** (`/hoy`) y **Calendario** (`/calendario`). Hoy muestra los registros del día, Calendario permite recorrer meses y abrir cada día. Desde ambas secciones se accede a `/exportar`. Las fechas siguen la zona horaria del navegador. Registrar también se reconoce como sección activa en las rutas `/registro/*`.
