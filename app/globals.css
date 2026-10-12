@@ -17,6 +17,8 @@
   --color-muted: var(--color-fog);
   --color-line: #b5b5ba;
   --color-white: #ffffff;
+  --color-mood-bottom: #071416;
+  --color-mood-secondary: #e2e9e9;
 
   --color-mood-1: #892fc9;
   --color-mood-1-orb: #a845da;
@@ -59,11 +61,12 @@
   --text-title: 1.0625rem;
   --text-question: 1.75rem;
   --text-state: 2.125rem;
-  --text-wordmark: 1.65rem;
+  --text-wordmark: 2.5rem;
   --leading-body: 1.5;
   --leading-question: 1.16;
   --leading-wordmark: 1;
   --tracking-brand: -0.035em;
+  --tracking-wordmark: -0.045em;
   --tracking-label: 0.04em;
 
   --spacing: 0.25rem;
@@ -74,6 +77,8 @@
   --container-question: 12ch;
   --container-copy: 32ch;
   --radius-control: 0.875rem;
+  --radius-card: var(--radius-control);
+  --radius-field: var(--radius-control);
   --radius-dialog: var(--radius-control);
   --radius-pill: calc(infinity * 1px);
   --shadow-shell: 0 6px 8px rgb(0 0 0 / 0.08);
@@ -136,4 +141,388 @@ body {
 :focus-visible {
   outline: calc(var(--spacing) * 0.75) solid var(--color-primary);
   outline-offset: calc(var(--spacing) * 0.75);
+}
+
+/* Shared action vocabulary. Navigation and input/card radii stay separate. */
+.action {
+  display: inline-flex;
+  min-width: 0;
+  max-width: 100%;
+  min-height: max(44px, var(--spacing-touch));
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-body);
+  text-align: center;
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.action-primary,
+.action-secondary {
+  border: 2px solid transparent;
+  border-radius: var(--radius-pill);
+  /* Grow the text, not the horizontal frame, at 200% text zoom. */
+  padding: 0.75rem 20px;
+}
+
+.action-primary {
+  min-height: max(50px, var(--spacing-action));
+  background: var(--action-accent, var(--color-action));
+  color: var(--action-ink, var(--color-white));
+}
+
+.action-secondary {
+  border-color: var(--color-action);
+  background: var(--color-surface);
+  color: var(--color-action);
+}
+
+.action-text {
+  border-radius: var(--radius-control);
+  color: var(--color-action);
+  font-weight: var(--font-weight-normal);
+  text-decoration: underline;
+}
+
+.action:hover:not(:disabled) {
+  text-decoration: underline;
+}
+
+.action:focus-visible {
+  /* Light inner ring + dark outer ring work on both neutral and mood surfaces. */
+  outline: 3px solid var(--color-graphite);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px var(--color-cloud);
+}
+
+.action-primary:active:not(:disabled),
+.action-secondary:active:not(:disabled) {
+  box-shadow: inset 0 0 0 2px currentColor;
+}
+
+.action-primary:active:focus-visible,
+.action-secondary:active:focus-visible {
+  box-shadow:
+    0 0 0 3px var(--color-cloud),
+    inset 0 0 0 2px currentColor;
+}
+
+.action:disabled {
+  border-color: var(--color-line);
+  border-style: dashed;
+  background: var(--color-surface);
+  color: var(--color-muted);
+  cursor: not-allowed;
+  text-decoration: none;
+  opacity: 1;
+}
+
+.action[aria-busy="true"] {
+  cursor: progress;
+}
+
+.action-label {
+  display: grid;
+  min-width: 0;
+}
+
+.action-label > span {
+  /* Reserve idle, retry and busy labels without exposing hidden text to readers. */
+  grid-area: 1 / 1;
+}
+
+.app-help.action {
+  /* Compact utility, always available in one tap; not the screen's main CTA. */
+  min-height: 44px;
+  padding: 6px 12px;
+}
+
+.control-choice {
+  min-height: max(44px, var(--spacing-touch));
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-field);
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+}
+
+.control-choice:hover {
+  text-decoration: underline;
+}
+
+.emotion-choice {
+  padding-block: calc(var(--spacing) * 2);
+}
+
+.control-choice[aria-pressed="true"],
+.control-choice:has(input:checked) {
+  border-color: var(--color-action);
+  background: var(--color-action);
+  color: var(--color-white);
+}
+
+/* One continuous mood canvas. The route/draft source lives in AppShell. */
+.app-shell[data-mood] {
+  color: var(--color-white);
+  background: linear-gradient(
+    180deg,
+    var(--mood-ambient) 0%,
+    color-mix(in srgb, var(--mood-ambient) 72%, var(--color-graphite)) 56%,
+    var(--color-mood-bottom) 100%
+  );
+}
+
+.app-shell[data-mood] .app-header .app-help {
+  border-color: var(--color-white);
+  background: transparent;
+  color: var(--color-white);
+}
+
+.app-shell[data-mood] .app-preview-toggle {
+  border-color: rgb(255 255 255 / 0.3);
+  background: transparent;
+  color: var(--color-mood-secondary);
+}
+
+.app-shell[data-mood] .app-navigation {
+  border-color: rgb(255 255 255 / 0.3);
+}
+
+.app-shell[data-mood] .app-tab {
+  color: var(--color-mood-secondary);
+}
+
+.app-shell[data-mood] .app-tab[aria-current="page"] {
+  color: var(--color-white);
+}
+
+.app-shell[data-mood] :focus-visible {
+  outline-color: var(--color-white);
+}
+
+/* Dialog/popover retain the neutral surface, including their focus contrast. */
+.app-shell[data-mood] :is(dialog, .preview-notice) {
+  color-scheme: light;
+}
+
+.app-shell[data-mood] :is(dialog, .preview-notice) :focus-visible {
+  outline-color: var(--color-graphite);
+}
+
+.app-shell[data-mood] .app-header a[href="#contenido"] {
+  color: var(--color-white);
+}
+
+.mood-screen {
+  gap: 12px;
+  padding: 16px 24px 24px;
+}
+
+.mood-question {
+  max-width: 18ch;
+  align-self: center;
+  text-align: center;
+}
+
+.mood-orb {
+  width: min(30dvh, 264px);
+  min-width: min(144px, 100%);
+  margin-block: auto;
+}
+
+.mood-secondary {
+  color: var(--color-mood-secondary);
+}
+
+.mood-navigation {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.mood-navigation-control {
+  display: grid;
+  width: 44px;
+  min-height: 44px;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: var(--radius-pill);
+  color: var(--color-white);
+  cursor: pointer;
+}
+
+.mood-navigation-symbol {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border-radius: var(--radius-pill);
+  background: rgb(255 255 255 / 0.14);
+}
+
+.mood-navigation-symbol svg {
+  width: 24px;
+  height: 24px;
+}
+
+.mood-navigation-control:hover .mood-navigation-symbol {
+  background: rgb(255 255 255 / 0.22);
+}
+
+.mood-navigation-control:active .mood-navigation-symbol {
+  background: rgb(255 255 255 / 0.3);
+}
+
+/* At short heights, scroll the entire canvas instead of clipping enlarged text
+   between fixed chrome. Help, preview and tabs stay in the document flow. */
+@media (max-height: 600px) {
+  .app-shell[data-mood] {
+    height: auto;
+    min-height: 100dvh;
+  }
+
+  .app-shell[data-mood] main {
+    overflow: visible;
+  }
+}
+
+/* Continuous cycles are confined to the state symbol, never other surfaces. */
+.orb-scene[data-animated] .orb-breath,
+.orb-scene[data-animated] .orb-turn {
+  transform-box: view-box;
+  /* Explicit SVG coordinates: expanded viewBox starts at -14, not at zero. */
+  transform-origin: 110px 110px;
+}
+
+.orb-scene[data-animated] .orb-breath {
+  animation: orb-breathe 4s ease-in-out infinite;
+}
+
+.orb-scene[data-animated] .orb-turn {
+  animation: orb-turn 125.663706s linear infinite;
+  animation-delay: var(--orb-phase);
+}
+
+.orb-scene[data-animated] .orb-turn:nth-of-type(even) {
+  animation-direction: reverse;
+}
+
+.orb-particles-dots {
+  opacity: var(--orb-dots-opacity, 0);
+}
+
+.orb-particles-sparks {
+  opacity: var(--orb-sparks-opacity, 0);
+}
+
+.orb-particle {
+  animation: orb-twinkle var(--particle-duration) ease-in-out infinite;
+  animation-delay: var(--particle-phase);
+}
+
+.app-shell[data-motion="paused"] :is(.orb-breath, .orb-turn, .orb-particle),
+.app-shell[data-mood-position="4"][data-mood-transition="idle"] .orb-particle {
+  animation-play-state: paused;
+}
+
+@keyframes orb-breathe {
+  0%,
+  50%,
+  100% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.018);
+  }
+  75% {
+    transform: scale(0.982);
+  }
+}
+
+@keyframes orb-turn {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes orb-twinkle {
+  0%,
+  100% {
+    opacity: 0.16;
+  }
+  45% {
+    opacity: 0.82;
+  }
+}
+
+.mood-range {
+  --mood-spectrum: linear-gradient(
+    90deg,
+    var(--color-mood-1),
+    var(--color-mood-2),
+    var(--color-mood-3),
+    var(--color-mood-4),
+    var(--color-mood-5),
+    var(--color-mood-6),
+    var(--color-mood-7)
+  );
+  appearance: none;
+  background: transparent;
+  border-radius: var(--radius-pill);
+  padding: 0;
+  margin: 0;
+  touch-action: pan-y;
+}
+
+.mood-range::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--mood-spectrum);
+}
+
+.mood-range::-moz-range-track {
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--mood-spectrum);
+}
+
+.mood-range::-moz-range-progress {
+  background: transparent;
+}
+
+.mood-range::-webkit-slider-thumb {
+  appearance: none;
+  box-sizing: border-box;
+  width: 30px;
+  height: 30px;
+  margin-top: -12px;
+  border: 7px solid var(--color-white);
+  border-radius: var(--radius-pill);
+  background: var(--mood-accent, var(--color-mood-4));
+  box-shadow: 0 0 0 9px rgb(255 255 255 / 0.16);
+}
+
+.mood-range::-moz-range-thumb {
+  box-sizing: border-box;
+  width: 30px;
+  height: 30px;
+  border: 7px solid var(--color-white);
+  border-radius: var(--radius-pill);
+  background: var(--mood-accent, var(--color-mood-4));
+  box-shadow: 0 0 0 9px rgb(255 255 255 / 0.16);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orb-scene[data-animated] :is(.orb-breath, .orb-turn, .orb-particle) {
+    animation: none;
+    transition: none;
+  }
 }

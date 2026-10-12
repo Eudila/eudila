@@ -10,16 +10,10 @@ export default function Home() {
       <p className="max-w-copy text-body leading-body text-muted">
         Un momento para registrar lo que sentís, a tu manera.
       </p>
-      <Link
-        href="/registro/tipo"
-        className="inline-flex min-h-action items-center justify-center rounded-control bg-action px-6 py-3 font-semibold text-white hover:underline"
-      >
+      <Link href="/registro/tipo" className="action action-primary">
         Empezar registro
       </Link>
-      <Link
-        href="/ingresar"
-        className="inline-flex min-h-touch items-center justify-center text-action underline"
-      >
+      <Link href="/ingresar" className="action action-text">
         Ingresar o crear cuenta
       </Link>
     </div>

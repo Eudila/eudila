@@ -1,0 +1,43 @@
+{
+  "chromium": {
+    "frames": 57,
+    "minimum_transition_contrast": 4.5,
+    "transition_ms": 610.9,
+    "maximum_progress_difference": 0.006,
+    "breath_scale_bounds": [
+      1.018,
+      0.982
+    ],
+    "visibility_handler": "synthetic hidden/visibilitychange",
+    "keyboard_and_pointer": "pass",
+    "reflow_at_200_percent": 42,
+    "touch": "tap in browser touch context"
+  },
+  "webkit": {
+    "frames": 57,
+    "minimum_transition_contrast": 4.57,
+    "transition_ms": 604,
+    "maximum_progress_difference": 0.0079,
+    "breath_scale_bounds": [
+      1.018,
+      0.982
+    ],
+    "visibility_handler": "synthetic hidden/visibilitychange",
+    "keyboard_and_pointer": "pass",
+    "reflow_at_200_percent": 42,
+    "touch": "tap in browser touch context"
+  },
+  "firefox": {
+    "frames": 58,
+    "minimum_transition_contrast": 4.55,
+    "transition_ms": 603,
+    "maximum_progress_difference": 0.0085,
+    "breath_scale_bounds": [
+      1.0180000066757202,
+      0.9819999933242798
+    ],
+    "visibility_handler": "synthetic hidden/visibilitychange",
+    "keyboard_and_pointer": "pass",
+    "reflow_at_200_percent": 42
+  }
+}

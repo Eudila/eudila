@@ -78,7 +78,7 @@ export default function Confirmacion() {
       <p className="text-muted">
         Podés cambiar cada elección antes de guardar.
       </p>
-      <dl className="divide-y divide-line rounded-control border border-line px-4">
+      <dl className="divide-y divide-line rounded-card border border-line px-4">
         {[
           ["Momento", draft.type ?? "Falta elegir", "tipo"],
           [
@@ -157,13 +157,29 @@ export default function Confirmacion() {
             type="button"
             onClick={save}
             disabled={!complete || !history.ready || saving}
-            className="mt-auto inline-flex min-h-action items-center justify-center rounded-control bg-action px-6 py-3 font-semibold text-white hover:underline disabled:cursor-not-allowed disabled:opacity-50"
+            aria-busy={saving}
+            className="action action-primary mt-auto"
           >
-            {saving
-              ? "Guardando…"
-              : error
-                ? "Reintentar guardado"
-                : "Guardar en vista previa"}
+            <span className="action-label">
+              <span
+                className={saving || error ? "invisible" : undefined}
+                aria-hidden={saving || !!error}
+              >
+                Guardar en vista previa
+              </span>
+              <span
+                className={saving || !error ? "invisible" : undefined}
+                aria-hidden={saving || !error}
+              >
+                Reintentar guardado
+              </span>
+              <span
+                className={saving ? undefined : "invisible"}
+                aria-hidden={!saving}
+              >
+                Guardando…
+              </span>
+            </span>
           </button>
         </>
       )}

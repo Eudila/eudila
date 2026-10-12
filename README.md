@@ -34,6 +34,26 @@ El layout raíz mantiene la cabecera con **Ayuda ahora** y una barra inferior de
 
 El contenido central se desplaza dentro de un shell de ancho teléfono, centrado en desktop. Cabecera y barra reservan su propio espacio, incluyen safe areas y siguen visibles con texto ampliado. Hay enlace de salto al contenido, foco visible y estado activo mediante `aria-current`. Las futuras páginas heredan el layout; deben aportar contenido dentro del `main` compartido.
 
+En `/registro/animo`, el shell usa el ambiente del estado, con tres paradas continuas y controles de navegación de marca; Ayuda, progreso, vista previa y tabs permanecen disponibles. En alturas de hasta 600px, esa pantalla desplaza el lienzo completo para evitar recortar controles al ampliar texto: la cabecera y las tabs quedan dentro del flujo y pueden necesitar desplazamiento. Las otras rutas mantienen su presentación neutra. El [plan de ANI-107/113](docs/plans/2026-10-05-mood-ambient-composition.md) y la [evidencia visual](docs/design/evidence/mood-composition-2026-10-05/README.md) registran decisiones y alcance.
+
+Para verificar ambiente/composición, contraste real de las paradas y del popover, borrador, navegación, teclado, 84 casos de reflujo y movimiento reducido, contra un build de preview servido en el puerto 3118:
+
+```sh
+MOOD_BASE_URL=http://127.0.0.1:3118 uv run --with playwright python app/design-mood.test.py
+```
+
+`MOOD_ARTIFACT_DIR` permite guardar capturas y mediciones.
+
+El orbe de ánimo tiene cinco capas iluminadas, geometrías propias de los siete estados y núcleo blanco. Las selecciones por teclado cambian forma/color/ambiente/acción en 600ms; el arrastre sigue cada posición directamente. El slider nativo usa `step=any`: permite posiciones intermedias y conserva el lugar al soltar, con espectro, thumb blanco/punto del estado y halo. Se guarda la categoría más cercana (1–7); la posición visual fraccionaria se mantiene al navegar, y la recarga restaura la categoría guardada. “Algo agradable” agrega ondulación orgánica por capa; respiración de 4s, giro alterno y partículas acompañan el estado. Neutral exacto queda sin partículas. Los ciclos se pausan al ocultar la pestaña y se cancelan al salir; movimiento reducido conserva la escena fija y arrastre directo. El historial reutiliza el renderer estático. [Plan y comparación de la transición completa](docs/plans/2026-10-05-mood-continuous.md) y [evidencia actual](docs/design/evidence/mood-continuous-2026-10-05/README.md).
+
+```sh
+node --experimental-strip-types --test app/mood/geometry.test.mjs
+MOTION_BASE_URL=http://127.0.0.1:3118 MOTION_ENGINES=chromium,webkit,firefox uv run --with playwright python app/mood/motion.test.py
+MOTION_BASE_URL=http://127.0.0.1:3118 MOTION_ENGINES=chromium,webkit,firefox uv run --with playwright python app/mood/continuous.test.py
+```
+
+Para motores adicionales: `uv run --with playwright playwright install webkit firefox`. El test usa Chrome instalado en macOS o Chromium de Playwright. `MOTION_ARTIFACT_DIR` guarda capturas, grabaciones de la app y mediciones. WebKit automatizado no certifica un dispositivo iOS físico ni la app Safari.
+
 `/ayuda` diferencia peligro inmediato (911) de las líneas de orientación y apoyo (135 y los dos 0800). Contiene los teléfonos, coberturas y horarios del prototipo, contrastados nuevamente con las fuentes enlazadas el 04/10/2026. Se abre en un toque, sin sesión ni consulta a la base. El texto v2 y la revisión documental asistida por IA fueron aceptados explícitamente por Agustín para cerrar ANI-67; no hubo aprobación clínica profesional.
 
 En producción, al abrir cualquier página de la app se prepara una copia local de Ayuda, sus estilos y la fuente. Una vez preparada, permite consultar los teléfonos sin internet, incluso sin haber visitado antes `/ayuda`, tras recargar o en otra pestaña. Las llamadas requieren señal telefónica. La preparación inicial necesita conexión, HTTPS (o localhost) y un navegador que permita Service Worker, Cache Storage y Web Locks; puede perderse si el navegador borra el almacenamiento. Sin esas capacidades, Ayuda sigue disponible online. El servidor de desarrollo no instala esta copia.

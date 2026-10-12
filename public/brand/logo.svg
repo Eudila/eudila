@@ -1,0 +1,30 @@
+<!-- SPDX-License-Identifier: AGPL-3.0-only -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" color="#5fd3d0">
+  <defs>
+    <radialGradient id="material" cx="48%" cy="46%" r="60%">
+      <stop offset="0%" stop-color="#fff" stop-opacity=".76" />
+      <stop offset="34%" stop-color="#fff" stop-opacity=".28" />
+      <stop offset="72%" stop-color="currentColor" stop-opacity=".62" />
+      <stop offset="100%" stop-color="currentColor" stop-opacity=".38" />
+    </radialGradient>
+    <radialGradient id="edge" cx="38%" cy="24%" r="85%">
+      <stop offset="0%" stop-color="#fff" stop-opacity=".76" />
+      <stop offset="100%" stop-color="currentColor" stop-opacity=".3" />
+    </radialGradient>
+    <radialGradient id="core">
+      <stop offset="0%" stop-color="#fff" />
+      <stop offset="22%" stop-color="#fff" stop-opacity=".96" />
+      <stop offset="62%" stop-color="#fff" stop-opacity=".28" />
+      <stop offset="100%" stop-color="#fff" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <g fill="url(#material)" stroke="url(#edge)" stroke-width=".8">
+    <circle cx="128" cy="128" r="96" fill-opacity=".6" />
+    <circle cx="128" cy="128" r="80.64" fill-opacity=".665" />
+    <circle cx="128" cy="128" r="65.28" fill-opacity=".73" />
+    <circle cx="128" cy="128" r="49.92" fill-opacity=".795" />
+    <circle cx="128" cy="128" r="34.56" fill-opacity=".86" />
+  </g>
+  <circle cx="128" cy="128" r="58" fill="url(#core)" />
+  <circle cx="128" cy="128" r="13" fill="#fff" />
+</svg>

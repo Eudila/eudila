@@ -1,0 +1,22 @@
+{
+  "chromium": {
+    "positions": 61,
+    "minimum_contrast": 4.716495814604192,
+    "retained_position": 5.25,
+    "integer_draft": 5,
+    "touch_position": 5.25
+  },
+  "webkit": {
+    "positions": 61,
+    "minimum_contrast": 4.716495814604192,
+    "retained_position": 5.25,
+    "integer_draft": 5,
+    "touch_position": 5.25
+  },
+  "firefox": {
+    "positions": 61,
+    "minimum_contrast": 4.716495814604192,
+    "retained_position": 5.25,
+    "integer_draft": 5
+  }
+}

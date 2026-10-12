@@ -1,0 +1,366 @@
+{
+  "moods": [
+    {
+      "level": 1,
+      "accent": "#892fc9",
+      "default": 6.34,
+      "hover": 6.34,
+      "focus": 6.34,
+      "active": 6.34,
+      "disabled": 4.91
+    },
+    {
+      "level": 2,
+      "accent": "#5b4ce1",
+      "default": 5.89,
+      "hover": 5.89,
+      "focus": 5.89,
+      "active": 5.89,
+      "disabled": 4.91
+    },
+    {
+      "level": 3,
+      "accent": "#209ae7",
+      "default": 5.48,
+      "hover": 5.48,
+      "focus": 5.48,
+      "active": 5.48,
+      "disabled": 4.91
+    },
+    {
+      "level": 4,
+      "accent": "#2ec0bc",
+      "default": 7.52,
+      "hover": 7.52,
+      "focus": 7.52,
+      "active": 7.52,
+      "disabled": 4.91
+    },
+    {
+      "level": 5,
+      "accent": "#77cb47",
+      "default": 8.35,
+      "hover": 8.35,
+      "focus": 8.35,
+      "active": 8.35,
+      "disabled": 4.91
+    },
+    {
+      "level": 6,
+      "accent": "#fe9613",
+      "default": 7.68,
+      "hover": 7.68,
+      "focus": 7.68,
+      "active": 7.68,
+      "disabled": 4.91
+    },
+    {
+      "level": 7,
+      "accent": "#ff4a4b",
+      "default": 5.08,
+      "hover": 5.08,
+      "focus": 5.08,
+      "active": 5.08,
+      "disabled": 4.91
+    }
+  ],
+  "reflow": [
+    {
+      "route": "/",
+      "width": 320,
+      "textPercent": 100
+    },
+    {
+      "route": "/",
+      "width": 320,
+      "textPercent": 200
+    },
+    {
+      "route": "/",
+      "width": 390,
+      "textPercent": 100
+    },
+    {
+      "route": "/",
+      "width": 390,
+      "textPercent": 200
+    },
+    {
+      "route": "/",
+      "width": 520,
+      "textPercent": 100
+    },
+    {
+      "route": "/",
+      "width": 520,
+      "textPercent": 200
+    },
+    {
+      "route": "/registro/tipo",
+      "width": 320,
+      "textPercent": 100
+    },
+    {
+      "route": "/registro/tipo",
+      "width": 320,
+      "textPercent": 200
+    },
+    {
+      "route": "/registro/tipo",
+      "width": 390,
+      "textPercent": 100
+    },
+    {
+      "route": "/registro/tipo",
+      "width": 390,
+      "textPercent": 200
+    },
+    {
+      "route": "/registro/tipo",
+      "width": 520,
+      "textPercent": 100
+    },
+    {
+      "route": "/registro/tipo",
+      "width": 520,
+      "textPercent": 200
+    },
+    {
+      "route": "/registro/animo",
+      "width": 320,
+      "textPercent": 100
+    },
+    {
+      "route": "/registro/animo",
+      "width": 320,
+      "textPercent": 200
+    },
+    {
+      "route": "/registro/animo",
+      "width": 390,
+      "textPercent": 100
+    },
+    {
+      "route": "/registro/animo",
+      "width": 390,
+      "textPercent": 200
+    },
+    {
+      "route": "/registro/animo",
+      "width": 520,
+      "textPercent": 100
+    },
+    {
+      "route": "/registro/animo",
+      "width": 520,
+      "textPercent": 200
+    },
+    {
+      "route": "/registro/confirmacion",
+      "width": 320,
+      "textPercent": 100
+    },
+    {
+      "route": "/registro/confirmacion",
+      "width": 320,
+      "textPercent": 200
+    },
+    {
+      "route": "/registro/confirmacion",
+      "width": 390,
+      "textPercent": 100
+    },
+    {
+      "route": "/registro/confirmacion",
+      "width": 390,
+      "textPercent": 200
+    },
+    {
+      "route": "/registro/confirmacion",
+      "width": 520,
+      "textPercent": 100
+    },
+    {
+      "route": "/registro/confirmacion",
+      "width": 520,
+      "textPercent": 200
+    },
+    {
+      "route": "/ingresar",
+      "width": 320,
+      "textPercent": 100
+    },
+    {
+      "route": "/ingresar",
+      "width": 320,
+      "textPercent": 200
+    },
+    {
+      "route": "/ingresar",
+      "width": 390,
+      "textPercent": 100
+    },
+    {
+      "route": "/ingresar",
+      "width": 390,
+      "textPercent": 200
+    },
+    {
+      "route": "/ingresar",
+      "width": 520,
+      "textPercent": 100
+    },
+    {
+      "route": "/ingresar",
+      "width": 520,
+      "textPercent": 200
+    },
+    {
+      "route": "/crear-cuenta",
+      "width": 320,
+      "textPercent": 100
+    },
+    {
+      "route": "/crear-cuenta",
+      "width": 320,
+      "textPercent": 200
+    },
+    {
+      "route": "/crear-cuenta",
+      "width": 390,
+      "textPercent": 100
+    },
+    {
+      "route": "/crear-cuenta",
+      "width": 390,
+      "textPercent": 200
+    },
+    {
+      "route": "/crear-cuenta",
+      "width": 520,
+      "textPercent": 100
+    },
+    {
+      "route": "/crear-cuenta",
+      "width": 520,
+      "textPercent": 200
+    },
+    {
+      "route": "/cuenta",
+      "width": 320,
+      "textPercent": 100
+    },
+    {
+      "route": "/cuenta",
+      "width": 320,
+      "textPercent": 200
+    },
+    {
+      "route": "/cuenta",
+      "width": 390,
+      "textPercent": 100
+    },
+    {
+      "route": "/cuenta",
+      "width": 390,
+      "textPercent": 200
+    },
+    {
+      "route": "/cuenta",
+      "width": 520,
+      "textPercent": 100
+    },
+    {
+      "route": "/cuenta",
+      "width": 520,
+      "textPercent": 200
+    },
+    {
+      "route": "/hoy",
+      "width": 320,
+      "textPercent": 100
+    },
+    {
+      "route": "/hoy",
+      "width": 320,
+      "textPercent": 200
+    },
+    {
+      "route": "/hoy",
+      "width": 390,
+      "textPercent": 100
+    },
+    {
+      "route": "/hoy",
+      "width": 390,
+      "textPercent": 200
+    },
+    {
+      "route": "/hoy",
+      "width": 520,
+      "textPercent": 100
+    },
+    {
+      "route": "/hoy",
+      "width": 520,
+      "textPercent": 200
+    },
+    {
+      "route": "/exportar",
+      "width": 320,
+      "textPercent": 100
+    },
+    {
+      "route": "/exportar",
+      "width": 320,
+      "textPercent": 200
+    },
+    {
+      "route": "/exportar",
+      "width": 390,
+      "textPercent": 100
+    },
+    {
+      "route": "/exportar",
+      "width": 390,
+      "textPercent": 200
+    },
+    {
+      "route": "/exportar",
+      "width": 520,
+      "textPercent": 100
+    },
+    {
+      "route": "/exportar",
+      "width": 520,
+      "textPercent": 200
+    }
+  ],
+  "routes": [
+    {
+      "route": "/",
+      "contrast": 6.3
+    },
+    {
+      "route": "/ingresar",
+      "contrast": 6.3
+    },
+    {
+      "route": "/crear-cuenta",
+      "contrast": 6.3
+    },
+    {
+      "route": "/hoy",
+      "contrast": 6.3
+    }
+  ],
+  "saving": {
+    "width": 390,
+    "textPercent": 200,
+    "beforeHeight": 154,
+    "busyHeight": 154,
+    "retryWidth": 470,
+    "retryBeforeHeight": 154,
+    "retryBusyHeight": 154
+  }
+}

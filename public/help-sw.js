@@ -28,6 +28,7 @@ async function prepareHelp() {
     .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "")
     .replace(/<link\b(?=[^>]*\bas="script")[^>]*>/gi, "");
   const assets = [
+    new URL("/brand/logo.svg", self.location.origin).href,
     ...new Set(
       [...html.matchAll(/\bhref="([^"]+)"/g)]
         .map((match) => new URL(match[1], self.location.origin))
@@ -102,8 +103,9 @@ self.addEventListener("fetch", (event) => {
         }),
     );
   } else if (
-    url.pathname.startsWith("/_next/static/") &&
-    /\.(css|woff2?|ttf)$/.test(url.pathname)
+    url.pathname === "/brand/logo.svg" ||
+    (url.pathname.startsWith("/_next/static/") &&
+      /\.(css|woff2?|ttf)$/.test(url.pathname))
   ) {
     event.respondWith(
       caches

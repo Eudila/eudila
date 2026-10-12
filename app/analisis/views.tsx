@@ -68,7 +68,7 @@ function RangeSelector({ range, path }: { range: Range; path: string }) {
             scroll: false,
           })
         }
-        className="min-h-touch w-full max-w-full rounded-control border border-line bg-surface px-3 py-2 text-text"
+        className="min-h-touch w-full max-w-full rounded-field border border-line bg-surface px-3 py-2 text-text"
       >
         <option value="7">Últimos 7 días</option>
         <option value="30">Últimos 30 días</option>
@@ -106,7 +106,7 @@ function Counts({ series }: { series: Series }) {
 
 function EmptyRange({ factor = false }: { factor?: boolean }) {
   return (
-    <div className="space-y-3 rounded-control border border-line p-4">
+    <div className="space-y-3 rounded-card border border-line p-4">
       <h2 className="font-semibold">Sin registros en este rango</h2>
       <p className="text-muted">
         {factor
@@ -148,7 +148,7 @@ function OriginalRecords({ records }: { records: RecordEntry[] }) {
         {records.map((record) => (
           <li
             key={record.id}
-            className="space-y-2 rounded-control border border-line p-4"
+            className="space-y-2 rounded-card border border-line p-4"
           >
             <Link
               href={`/calendario/${localDayKey(record.recordedAt)}`}
@@ -248,7 +248,7 @@ function FactorsContent({ range }: { range: Range }) {
           {groups.map((group) => (
             <li
               key={group.id}
-              className="space-y-3 rounded-control border border-line p-4"
+              className="space-y-3 rounded-card border border-line p-4"
             >
               <h2 className="font-semibold">
                 <Link
@@ -322,7 +322,7 @@ function FactorContent({ range, id }: { range: Range; id: string }) {
             <>
               <section
                 aria-labelledby="factor-distribution-title"
-                className="space-y-3 rounded-control border border-line p-4"
+                className="space-y-3 rounded-card border border-line p-4"
               >
                 <h2 id="factor-distribution-title" className="font-semibold">
                   Cantidad por ánimo
