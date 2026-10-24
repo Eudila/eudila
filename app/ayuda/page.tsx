@@ -18,7 +18,7 @@ export default function Help() {
           mood={4}
           moment="asomar"
           once="local:eudila-ayuda-vista"
-          className="size-16 shrink-0"
+          className="help-mascota size-16 shrink-0"
           fallback={<MoodOrb level={4} />}
         />
       </div>

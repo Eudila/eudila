@@ -652,6 +652,12 @@ dialog::backdrop {
   visibility: hidden;
 }
 
+/* Ayuda peeks up from below: fade the canvas floor so it emerges instead of
+   being cut by a hard edge. The resting orb ends above the faded 15%. */
+.help-mascota > canvas {
+  mask-image: linear-gradient(to top, transparent, #000 15%);
+}
+
 .mood-range {
   --mood-spectrum: linear-gradient(
     90deg,
