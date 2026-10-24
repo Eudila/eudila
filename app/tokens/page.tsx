@@ -7,7 +7,8 @@ export const metadata: Metadata = { title: "Identidad visual · eudila" };
 
 const colors = [
   ["primary", "Turquesa institucional"],
-  ["action", "Acción con contraste"],
+  ["action", "Acción coral · texto y contorno"],
+  ["action-fill", "Acción coral · relleno"],
   ["cloud", "Nube"],
   ["graphite", "Grafito"],
   ["fog", "Niebla"],
@@ -196,7 +197,7 @@ export default function Tokens() {
             <div key={units} className="flex flex-wrap items-center gap-4">
               <div
                 aria-hidden="true"
-                className="h-2 bg-action"
+                className="h-2 bg-action-fill"
                 style={{ width: `calc(var(--spacing) * ${units})` }}
               />
               <span>
@@ -210,7 +211,7 @@ export default function Tokens() {
             <div key={token} data-token={`--spacing-${token}`}>
               <div
                 aria-hidden="true"
-                className="rounded-control bg-action"
+                className="rounded-control bg-action-fill"
                 style={{
                   width: `var(--spacing-${token})`,
                   height: `var(--spacing-${token})`,
@@ -235,7 +236,7 @@ export default function Tokens() {
             </code>
             <div
               aria-hidden="true"
-              className="mt-2 h-2 max-w-full bg-action"
+              className="mt-2 h-2 max-w-full bg-action-fill"
               style={{ width: `var(--container-${token})` }}
             />
           </div>

@@ -24,7 +24,11 @@
   --color-muted: #dad5ea;
   --color-line: rgb(214 208 230 / 0.3);
   --color-line-strong: rgb(214 208 230 / 0.48);
-  --color-action: #8ee2df;
+  /* Default action color is the logo's coral (24/10/2026). Fills use the
+     icon coral with Graphite ink (4.65:1); text and outlines use a light coral
+     (orb + 65% white) that keeps AA at the brightest Aurora glow on a card. */
+  --color-action: #f6c2cf;
+  --color-action-fill: var(--color-mood-7-orb);
   --color-on-action: var(--color-graphite);
 
   --color-mood-1: #892fc9;
@@ -177,6 +181,7 @@ body {
    tint of the chosen orb: >= 5.4:1 on every ambient, card and floor. */
 .app-shell[data-tint] {
   --color-action: color-mix(in srgb, var(--mood-orb) 45%, var(--color-white));
+  --color-action-fill: var(--action-accent, var(--mood-orb));
 }
 
 /* The slider screen keeps the approved single three-stop ambient. */
@@ -317,7 +322,7 @@ body {
 
 .action-primary {
   min-height: max(50px, var(--spacing-action));
-  background: var(--action-accent, var(--color-action));
+  background: var(--action-accent, var(--color-action-fill));
   color: var(--action-ink, var(--color-on-action));
 }
 
@@ -426,8 +431,8 @@ body {
 /* Inside the registro the selection wears the chosen mood's accent and AA ink. */
 .control-choice[aria-pressed="true"],
 .control-choice:has(input:checked) {
-  border-color: var(--action-accent, var(--color-action));
-  background: var(--action-accent, var(--color-action));
+  border-color: var(--action-accent, var(--color-action-fill));
+  background: var(--action-accent, var(--color-action-fill));
   color: var(--action-ink, var(--color-on-action));
 }
 
@@ -766,6 +771,8 @@ dialog::backdrop {
     --color-muted: #444444;
     --color-line: #b5b5ba;
     --color-action: #000000;
+    --color-action-fill: #000000;
+    --color-on-action: #ffffff;
     color-scheme: light;
   }
 

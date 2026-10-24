@@ -386,7 +386,7 @@ export function CalendarView({
                   </>
                 );
                 // Only days with records or today carry a frame; empty days stay quiet.
-                const cellClass = `flex min-h-20 min-w-0 flex-col items-center justify-start gap-1 rounded-control border py-2 ${isToday ? "border-action bg-primary/10" : average ? "border-line" : "border-transparent"}`;
+                const cellClass = `flex min-h-20 min-w-0 flex-col items-center justify-start gap-1 rounded-control border py-2 ${isToday ? "border-action bg-action-fill/10" : average ? "border-line" : "border-transparent"}`;
                 return day > today ? (
                   <span
                     key={day}
@@ -399,7 +399,7 @@ export function CalendarView({
                   <Link
                     key={day}
                     href={`/calendario/${day}`}
-                    className={`${cellClass} hover:bg-primary/10`}
+                    className={`${cellClass} hover:bg-action-fill/10`}
                     aria-current={isToday ? "date" : undefined}
                     aria-label={`${fullDate.format(parseDayKey(day)!)}${isToday ? ", hoy" : ""}, ${average ? `${entries.length} ${entries.length === 1 ? "registro" : "registros"}, promedio ${average} de 7, ${moods[average - 1].label}` : "sin registros"}`}
                   >

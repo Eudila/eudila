@@ -33,7 +33,7 @@ function AnalysisNavigation({
   current: "evolucion" | "factores";
 }) {
   const tab = (active: boolean) =>
-    `flex min-h-touch flex-1 items-center justify-center gap-2 rounded-pill px-3 py-2 ${active ? "bg-action font-semibold text-on-action" : "text-muted hover:underline"}`;
+    `flex min-h-touch flex-1 items-center justify-center gap-2 rounded-pill px-3 py-2 ${active ? "bg-action-fill font-semibold text-on-action" : "text-muted hover:underline"}`;
   return (
     <nav
       aria-label="Explorar registros"

@@ -33,7 +33,7 @@ export default function Help() {
           href="tel:911"
           className="surface-card flex min-h-touch items-center gap-4 px-4 py-3 text-action hover:underline"
         >
-          <span className="grid size-10 shrink-0 place-items-center rounded-pill bg-action text-on-action">
+          <span className="grid size-10 shrink-0 place-items-center rounded-pill bg-action-fill text-on-action">
             <Icon name="phone" />
           </span>
           <span className="flex min-w-0 flex-col">
@@ -57,7 +57,7 @@ export default function Help() {
           href="tel:135"
           className="surface-card flex min-h-touch items-center gap-4 px-4 py-3 text-action hover:underline"
         >
-          <span className="grid size-10 shrink-0 place-items-center rounded-pill bg-action text-on-action">
+          <span className="grid size-10 shrink-0 place-items-center rounded-pill bg-action-fill text-on-action">
             <Icon name="phone" />
           </span>
           <span className="flex min-w-0 flex-col">
@@ -71,7 +71,7 @@ export default function Help() {
           href="tel:08003451435"
           className="surface-card flex min-h-touch items-center gap-4 px-4 py-3 text-action hover:underline"
         >
-          <span className="grid size-10 shrink-0 place-items-center rounded-pill bg-action text-on-action">
+          <span className="grid size-10 shrink-0 place-items-center rounded-pill bg-action-fill text-on-action">
             <Icon name="phone" />
           </span>
           <span className="flex min-w-0 flex-col">
@@ -89,7 +89,7 @@ export default function Help() {
           href="tel:08009990091"
           className="surface-card flex min-h-touch items-center gap-4 px-4 py-3 text-action hover:underline"
         >
-          <span className="grid size-10 shrink-0 place-items-center rounded-pill bg-action text-on-action">
+          <span className="grid size-10 shrink-0 place-items-center rounded-pill bg-action-fill text-on-action">
             <Icon name="phone" />
           </span>
           <span className="flex min-w-0 flex-col">
