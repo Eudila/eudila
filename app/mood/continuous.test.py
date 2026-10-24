@@ -32,7 +32,7 @@ with sync_playwright() as p:
                 const root=document.querySelector('.app-shell'),a=document.querySelector('.mood-screen > .action-primary');
                 const c=document.createElement('canvas').getContext('2d');
                 function rgb(color){c.clearRect(0,0,1,1);c.fillStyle=color;c.fillRect(0,0,1,1);return [...c.getImageData(0,0,1,1).data].slice(0,3);}
-                return {value:Number(e.value),position:Number(root.dataset.moodPosition),accent:rgb(getComputedStyle(a).backgroundColor),ink:rgb(getComputedStyle(a).color),path:document.querySelector('.orb-layer').getAttribute('d')};
+                return {value:Number(e.value),position:Number(root.dataset.moodPosition),accent:rgb(getComputedStyle(a).backgroundColor),ink:rgb(getComputedStyle(a).color)};
             }''')
             assert abs(sample['value']-position)<.035,(engine,position,sample['value'])
             assert abs(sample['position']-sample['value'])<1e-6
@@ -40,13 +40,10 @@ with sync_playwright() as p:
         assert len({s['value'] for s in samples})>50
         assert sum(abs(s['value']-round(s['value']))>.01 for s in samples)>45
         assert len({tuple(s['accent']) for s in samples})>50
-        assert len({s['path'] for s in samples})>50
         def lum(rgb):
             return sum((c/255/12.92 if c/255<=.04045 else ((c/255+.055)/1.055)**2.4)*w for c,w in zip(rgb,[.2126,.7152,.0722]))
         contrasts=[(max(lum(s['accent']),lum(s['ink']))+.05)/(min(lum(s['accent']),lum(s['ink']))+.05) for s in samples]
         assert min(contrasts)>=4.5,min(contrasts)
-        move(4.25)
-        assert all(s=='running' for s in page.locator('.orb-particle').evaluate_all('es=>es.map(e=>getComputedStyle(e).animationPlayState)')), 'los destellos se congelan en posiciones intermedias cercanas a Neutral'
         # Reverse through the entire pleasant/organic/neutral transition.
         for i in range(31):
             position=7-i/10;move(position)
@@ -62,22 +59,24 @@ with sync_playwright() as p:
         expected=[round(119+(254-119)*(held-5)),round(203+(150-203)*(held-5)),round(71+(19-71)*(held-5))]
         actual=slider.evaluate("e=>getComputedStyle(document.querySelector('.mood-screen > .action-primary')).backgroundColor")
         assert all(str(n) in actual for n in expected),(actual,expected)
-        before=page.locator('.orb-layer').first.get_attribute('d')
+        snap=lambda:page.locator('.mood-orb canvas').evaluate('c=>c.toDataURL()')
+        before=snap()
         page.wait_for_timeout(250)
-        assert page.locator('.orb-layer').first.get_attribute('d')!=before,'falta deformación orgánica durante permanencia'
+        assert snap()!=before,'la mascota se detiene durante la permanencia'
         page.evaluate("Object.defineProperty(document,'hidden',{configurable:true,get:()=>true});document.dispatchEvent(new Event('visibilitychange'))")
         expect(shell).to_have_attribute('data-motion','paused')
-        frozen=page.locator('.orb-layer').first.get_attribute('d')
+        page.wait_for_timeout(100)
+        frozen=snap()
         page.wait_for_timeout(150)
-        assert page.locator('.orb-layer').first.get_attribute('d')==frozen
+        assert snap()==frozen
         page.evaluate("delete document.hidden;document.dispatchEvent(new Event('visibilitychange'))")
         expect(shell).to_have_attribute('data-motion','running')
-        # Live reduced motion stops contour deformation; dragging remains direct.
+        # Live reduced motion leaves the mascot still; dragging remains direct.
         page.emulate_media(reduced_motion='reduce')
         expect(shell).to_have_attribute('data-motion','reduced')
-        frozen=page.locator('.orb-layer').first.get_attribute('d')
+        frozen=snap()
         page.wait_for_timeout(150)
-        assert page.locator('.orb-layer').first.get_attribute('d')==frozen
+        assert snap()==frozen
         slider.focus();page.keyboard.press('ArrowLeft');expect(slider).to_have_value('5')
         page.keyboard.press('ArrowRight');expect(slider).to_have_value('6')
         page.keyboard.press('Home');expect(slider).to_have_value('1')
@@ -110,4 +109,4 @@ with sync_playwright() as p:
             touch.close()
         browser.close()
 if artifacts:(artifacts/'measurements.json').write_text(json.dumps(results,indent=2)+'\n')
-print('PASS: arrastre continuo, morph/color sin retraso, Algo agradable orgánico, sin snap, reduced motion, teclado/persistencia:',json.dumps(results))
+print('PASS: arrastre continuo, color sin retraso, mascota viva, sin snap, reduced motion, teclado/persistencia:',json.dumps(results))

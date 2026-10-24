@@ -1,6 +1,6 @@
 # Mascota eudila · branding vigente desde el 23/10/2026
 
-**Estado:** decisión de marca aprobada por el usuario el 23/10/2026 («hacé que esta sea el nuevo branding de eudila»). Reemplaza al logo Neutral estático y a la regla anterior que descartaba cualquier cara. **La app Next.js todavía no la implementa:** ver brechas VIS-13 a VIS-17 en [la revisión de marca](../brand-review-2026-10-04.md). No marcar esas brechas como resueltas sin comprobar la ruta Next.js real.
+**Estado:** decisión de marca aprobada por el usuario el 23/10/2026 («hacé que esta sea el nuevo branding de eudila»). Reemplaza al logo Neutral estático y a la regla anterior que descartaba cualquier cara. **Implementada en la app Next.js desde el 24/10/2026** (VIS-13 a VIS-17 resueltas en [la revisión de marca](../brand-review-2026-10-04.md)): motor canvas `app/mood/critter.ts` y componente `app/mood/mascota.tsx`; `app/mood/orb.tsx` queda como «Orbe vivo» estático y fallback sin JS. Si cambia un valor, cambiarlo acá primero y después en el motor.
 
 Fuentes, en orden de autoridad:
 
@@ -24,8 +24,9 @@ La mascota **es el orbe**, no un personaje aparte: cinco capas translúcidas, n�
 - **Detalle:** destellos blancos de cuatro puntas alrededor (los de los estados agradables, a 2,4× de tamaño para que se lean en el logo). Las cinco capas de pétalos con giros alternos.
 - **Lockup en header:** símbolo animado en una caja de 72 px (orbe visible ≈ 49 px) + wordmark `eudila` Figtree 700, `2.25rem`, tracking −0.045em, en minúsculas. El símbolo queda a la izquierda.
 - **Movimiento del logo:** respira, gira las capas, titilan los destellos, parpadea, da saltitos ocasionales (temperamento Muy agradable) y mira a los costados por su cuenta. Al tocarlo salta y se sacude. Con movimiento reducido queda quieto.
+- **Mascota por defecto (24/10/2026):** donde la mascota representa a eudila y no un ánimo (inicio, bienvenida, Ayuda y estados vacíos), es la Muy agradable coral, igual que el logo (`brandMood` en `app/mood/critter.ts`). Neutral ya no la identifica: es uno de los siete estados. Guardado usa el ánimo registrado y el slider el ánimo elegido. En Descanso no salta ni se balancea.
 - **Estático** (favicon, documentos, impresión, sin JS): `public/brand/logo-mascota.svg`. Se lee de 24 px en adelante ([tamaños](capturas/logo-svg-tamanos.png)).
-- `public/brand/logo.svg` (Neutral sin cara) queda como versión histórica hasta que se cierre VIS-13.
+- `public/brand/logo.svg` (Neutral sin cara) es la versión histórica; desde el 24/10 la app usa la mascota (VIS-13 cerrada).
 
 ## Reglas que no se negocian
 
@@ -34,7 +35,7 @@ La mascota **es el orbe**, no un personaje aparte: cinco capas translúcidas, n�
 3. **Neutral tiene tres capas.** Las dos capas interiores (escalas .52 y .36) no se dibujan en Neutral. Su opacidad es `clamp(|ánimo − 4| × 1,5)`: aparecen gradualmente al alejarse de Neutral (completas a ±0,67), para no saltar durante el arrastre. Vale para el orbe y la mascota.
 4. **Sin juicio.** Guardado celebra igual en los siete estados: celebra que registraste, no cómo te sentís. En lo desagradable la mascota se vuelve más lenta y pesada, nunca castigada. La tiritona máxima es 1,1 px a radio 110.
 5. **Movimiento reducido:** mascota quieta (sin respiración, giro, titileo, parpadeo ni mirada), cambios instantáneos, momentos omitidos.
-6. **Dónde vive:** logo, pantalla de ánimo, splash, estados vacíos y Ayuda. No en historial, tarjetas, inputs ni listas (la regla de movimiento de DESIGN.md sigue vigente).
+6. **Dónde vive:** viva (con movimiento) en el logo, la pantalla de ánimo, el splash, los estados vacíos y Ayuda. En historial, tarjetas, fichas y listas aparece **quieta con su carita** (24/10/2026, pedido del usuario: «que el eudila con los ojos aparezca de forma consistente en todas las pantallas»). Usa los mismos ojos por estado, sin parpadeo, mirada ni respiración, y en tamaños compactos la cara va agrandada ×1,75 como en el logo (`MoodOrb compact`). La regla de movimiento de DESIGN.md sigue vigente.
 
 ## Construcción
 
@@ -94,15 +95,16 @@ El aplastamiento siempre apoya en el piso (la base de la mascota no se mueve al 
 
 ## Direcciones exploradas
 
-La referencia conserva cuatro direcciones. **Vigente:** mascota con carita («Mirada») como identidad, con el orbe sin cara («Orbe vivo») disponible para representaciones compactas.
+La referencia conserva cuatro direcciones. **Vigente:** mascota con carita («Mirada») en todas las representaciones; desde el 24/10/2026 también las compactas llevan cara (quieta).
 
-- **Orbe vivo:** sin cara. Para tamaños chicos (calendario, historial) donde los ojos no se leen.
+- **Orbe vivo:** sin cara. Ya no se usa en la app (24/10/2026); las representaciones compactas llevan la carita quieta.
 - **Mirada:** con carita. Logo, ánimo, Ayuda, onboarding, TechWeek.
 - **Chispa:** el núcleo viaja con una estela del espectro y florece en un estado. Candidata para el splash (VIS-09).
 - **Tu eudila:** avatar con los últimos cinco registros, una capa por ánimo. Requiere persistencia real y es **privado por defecto**, porque revela ánimo.
 
 ## Implementar en la app
 
-- Portar la mascota a `app/mood/orb.tsx` (SVG) o a un componente canvas compartido. No duplicar geometría: usar `prototype/moods.js`.
+- Hecho el 24/10/2026 con un componente canvas compartido (`app/mood/mascota.tsx` sobre `app/mood/critter.ts`), un solo `requestAnimationFrame` para todas las mascotas y la geometría de `prototype/moods.js`.
+- Ubicaciones: logo del header, `/registro/animo` (temperamentos y Escucha), Saludo en `/` y `/bienvenida` (una vez por sesión), Guardado en `/hoy` tras guardar, Descanso en los vacíos de Hoy y Calendario (de noche), Ayuda en el primer uso de `/ayuda`.
 - Mantener las reglas de arriba y las pruebas existentes de movimiento reducido, pausa al ocultar y AA.
 - Al cerrar cada brecha, agregar evidencia en `docs/design/evidence/` y actualizar este documento si cambia algún valor.

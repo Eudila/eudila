@@ -11,6 +11,16 @@ import type { RecordEntry } from "../historial/records";
 import { moods } from "../../prototype/moods.js";
 import MoodOrb from "../mood/orb";
 
+// Hoy reads this once, on the client navigation after saving, for Guardado.
+let justSaved: number | null = null;
+const markSaved = (mood: number) => {
+  justSaved = mood;
+};
+export const savedMood = () => justSaved;
+export const clearSaved = () => {
+  justSaved = null;
+};
+
 export default function Confirmacion() {
   const { draft, discard } = useDraft();
   const history = useHistory();
@@ -60,6 +70,7 @@ export default function Confirmacion() {
         requestAnimationFrame(() => resolve()),
       );
       history.saveRecord(pending.current.entry);
+      markSaved(draft.mood);
       discard();
       router.replace("/hoy");
     } catch (problem) {
@@ -107,7 +118,11 @@ export default function Confirmacion() {
               <dt className="text-muted">{label}</dt>
               <dd className="flex items-center gap-2 font-semibold">
                 {step === "animo" && (
-                  <MoodOrb level={draft.mood} className="size-6 shrink-0" />
+                  <MoodOrb
+                    level={draft.mood}
+                    compact
+                    className="size-6 shrink-0"
+                  />
                 )}
                 <span className="min-w-0">{value}</span>
               </dd>

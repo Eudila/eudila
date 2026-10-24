@@ -24,7 +24,11 @@
   --color-muted: #dad5ea;
   --color-line: rgb(214 208 230 / 0.3);
   --color-line-strong: rgb(214 208 230 / 0.48);
-  --color-action: #8ee2df;
+  /* Default action color is the logo's coral (24/10/2026). Fills use the
+     icon coral with Graphite ink (4.65:1); text and outlines use a light coral
+     (orb + 65% white) that keeps AA at the brightest Aurora glow on a card. */
+  --color-action: #f6c2cf;
+  --color-action-fill: var(--color-mood-7-orb);
   --color-on-action: var(--color-graphite);
 
   --color-mood-1: #892fc9;
@@ -68,7 +72,7 @@
   --text-title: 1.0625rem;
   --text-question: 1.75rem;
   --text-state: 2.125rem;
-  --text-wordmark: 2.5rem;
+  --text-wordmark: 2.25rem;
   --leading-body: 1.5;
   --leading-question: 1.16;
   --leading-wordmark: 1;
@@ -126,9 +130,11 @@ body {
 
 /* One continuous canvas. Off-mood, "Aurora": the orb's violet, celeste and
    amber light the base from its edges. The registro steps dim the glows and
-   take the draft's ambient and floor; the controller animates the slider. */
+   take the draft's ambient and floor; the controller animates the slider.
+   React owns --mood-base and the controller owns --mood-live, so neither
+   can erase the other's value when the slider unmounts. */
 .app-shell {
-  --mood-ambient: var(--color-canvas);
+  --mood-ambient: var(--mood-live, var(--mood-base, var(--color-canvas)));
   --mood-floor: var(--color-canvas-floor);
   height: 100dvh;
   grid-template-rows: auto minmax(0, 1fr) auto;
@@ -171,6 +177,13 @@ body {
     );
 }
 
+/* From the slider to the review, links and secondary actions take a light
+   tint of the chosen orb: >= 5.4:1 on every ambient, card and floor. */
+.app-shell[data-tint] {
+  --color-action: color-mix(in srgb, var(--mood-orb) 45%, var(--color-white));
+  --color-action-fill: var(--action-accent, var(--mood-orb));
+}
+
 /* The slider screen keeps the approved single three-stop ambient. */
 .app-shell[data-mood] {
   background: linear-gradient(
@@ -193,6 +206,33 @@ body {
   /* El texto puede crecer sin multiplicar también el espacio del marco. */
   gap: 8px;
   padding: max(12px, env(safe-area-inset-top)) 12px 12px;
+}
+
+/* Logo lockup (mascota README): 72px box, the orb fills ~49px of it.
+   rem keeps symbol and wordmark growing together at 200% text. */
+.app-brand {
+  gap: 0.375rem;
+}
+
+.app-logo {
+  flex: none;
+  width: 4.5rem;
+  height: 4.5rem;
+  margin: -0.625rem -0.5625rem -0.625rem -0.75rem;
+}
+
+/* The static SVG frames the orb larger than the canvas; match the canvas radius. */
+.app-logo img {
+  padding: 9.2%;
+}
+
+/* Short screens keep six emotion suggestions visible at 320 x 568. */
+@media (max-height: 600px) {
+  .app-logo {
+    width: 3rem;
+    height: 3rem;
+    margin: -0.4375rem -0.375rem -0.4375rem -0.5rem;
+  }
 }
 
 .app-navigation {
@@ -282,7 +322,7 @@ body {
 
 .action-primary {
   min-height: max(50px, var(--spacing-action));
-  background: var(--action-accent, var(--color-action));
+  background: var(--action-accent, var(--color-action-fill));
   color: var(--action-ink, var(--color-on-action));
 }
 
@@ -388,11 +428,12 @@ body {
   padding-block: calc(var(--spacing) * 2);
 }
 
+/* Inside the registro the selection wears the chosen mood's accent and AA ink. */
 .control-choice[aria-pressed="true"],
 .control-choice:has(input:checked) {
-  border-color: var(--color-action);
-  background: var(--color-action);
-  color: var(--color-on-action);
+  border-color: var(--action-accent, var(--color-action-fill));
+  background: var(--action-accent, var(--color-action-fill));
+  color: var(--action-ink, var(--color-on-action));
 }
 
 /* Cards: a faint lift over the ambient, never nested. */
@@ -518,6 +559,8 @@ dialog::backdrop {
 .mood-screen {
   gap: 12px;
   padding: 16px 24px 24px;
+  /* The mascot canvas overhangs its box; never let it add horizontal scroll. */
+  overflow-x: clip;
 }
 
 .mood-question {
@@ -529,6 +572,7 @@ dialog::backdrop {
 .mood-orb {
   width: min(30dvh, 264px);
   min-width: min(144px, 100%);
+  aspect-ratio: 1;
   margin-block: auto;
 }
 
@@ -591,76 +635,41 @@ dialog::backdrop {
   }
 }
 
-/* Continuous cycles are confined to the state symbol, never other surfaces. */
-.orb-scene[data-animated] .orb-breath,
-.orb-scene[data-animated] .orb-turn {
-  transform-box: view-box;
-  /* Explicit SVG coordinates: expanded viewBox starts at -14, not at zero. */
-  transform-origin: 110px 110px;
+/* Mascot canvas sits over its static fallback, which hides after the first frame. */
+.mascota {
+  position: relative;
+  display: inline-block;
 }
 
-.orb-scene[data-animated] .orb-breath {
-  animation: orb-breathe 4s ease-in-out infinite;
+/* The canvas overhangs its box by 15% for hops, rings and sparks; with size .34
+   the orb then matches the static SVG fallback (radius .44 of the box). */
+.mascota > canvas {
+  position: absolute;
+  inset: -15%;
+  width: 130%;
+  height: 130%;
+  touch-action: manipulation;
 }
 
-.orb-scene[data-animated] .orb-turn {
-  animation: orb-turn 125.663706s linear infinite;
-  animation-delay: var(--orb-phase);
+.mascota.app-logo > canvas {
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
-.orb-scene[data-animated] .orb-turn:nth-of-type(even) {
-  animation-direction: reverse;
+.mascota > :not(canvas) {
+  width: 100%;
+  height: 100%;
 }
 
-.orb-particles-dots {
-  opacity: var(--orb-dots-opacity, 0);
+.mascota[data-live] > :not(canvas) {
+  visibility: hidden;
 }
 
-.orb-particles-sparks {
-  opacity: var(--orb-sparks-opacity, 0);
-}
-
-.orb-particle {
-  animation: orb-twinkle var(--particle-duration) ease-in-out infinite;
-  animation-delay: var(--particle-phase);
-}
-
-.app-shell[data-motion="paused"] :is(.orb-breath, .orb-turn, .orb-particle),
-.app-shell[data-mood-position="4"][data-mood-transition="idle"] .orb-particle {
-  animation-play-state: paused;
-}
-
-@keyframes orb-breathe {
-  0%,
-  50%,
-  100% {
-    transform: scale(1);
-  }
-  25% {
-    transform: scale(1.018);
-  }
-  75% {
-    transform: scale(0.982);
-  }
-}
-
-@keyframes orb-turn {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes orb-twinkle {
-  0%,
-  100% {
-    opacity: 0.16;
-  }
-  45% {
-    opacity: 0.82;
-  }
+/* Ayuda peeks up from below: fade the canvas floor so it emerges instead of
+   being cut by a hard edge. The resting orb ends above the faded 15%. */
+.help-mascota > canvas {
+  mask-image: linear-gradient(to top, transparent, #000 15%);
 }
 
 .mood-range {
@@ -721,11 +730,6 @@ dialog::backdrop {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .orb-scene[data-animated] :is(.orb-breath, .orb-turn, .orb-particle) {
-    animation: none;
-    transition: none;
-  }
-
   /* Keep the fade, drop the travel; state changes become instant. */
   .route-enter,
   .stagger > * {
@@ -767,6 +771,8 @@ dialog::backdrop {
     --color-muted: #444444;
     --color-line: #b5b5ba;
     --color-action: #000000;
+    --color-action-fill: #000000;
+    --color-on-action: #ffffff;
     color-scheme: light;
   }
 

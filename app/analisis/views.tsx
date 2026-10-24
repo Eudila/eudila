@@ -33,7 +33,7 @@ function AnalysisNavigation({
   current: "evolucion" | "factores";
 }) {
   const tab = (active: boolean) =>
-    `flex min-h-touch flex-1 items-center justify-center gap-2 rounded-pill px-3 py-2 ${active ? "bg-action font-semibold text-on-action" : "text-muted hover:underline"}`;
+    `flex min-h-touch flex-1 items-center justify-center gap-2 rounded-pill px-3 py-2 ${active ? "bg-action-fill font-semibold text-on-action" : "text-muted hover:underline"}`;
   return (
     <nav
       aria-label="Explorar registros"
@@ -134,7 +134,7 @@ function Distribution({ values }: { values: number[] }) {
           className="flex items-start justify-between gap-3"
         >
           <dt className="flex min-w-0 items-center gap-2">
-            <MoodOrb level={index + 1} className="size-5" />
+            <MoodOrb level={index + 1} compact className="size-5" />
             {index + 1} · {mood.label}
           </dt>
           <dd className="shrink-0 font-semibold">{values[index]}</dd>

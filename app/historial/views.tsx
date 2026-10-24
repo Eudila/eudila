@@ -2,9 +2,12 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { moods } from "@/prototype/moods.js";
 import MoodOrb from "../mood/orb";
+import Mascota from "../mood/mascota";
+import { brandMood } from "../mood/critter";
+import { clearSaved, savedMood } from "../registro/confirmacion";
 import { Disclosure, Icon } from "../ui";
 import {
   averageMood,
@@ -39,6 +42,7 @@ function MoodShape({ mood, small = false }: { mood: number; small?: boolean }) {
   return (
     <MoodOrb
       level={mood}
+      compact
       className={small ? "size-6 shrink-0" : "size-12 shrink-0"}
     />
   );
@@ -204,13 +208,28 @@ function MoodLegend({ calendar = false }: { calendar?: boolean }) {
 export function TodayView() {
   const { records, ready, loadExamples } = useHistory();
   const [exampleProblem, setExampleProblem] = useState<string | null>(null);
+  // Guardado plays once, right after the confirmation step saved a record.
+  const [saved] = useState(savedMood);
   const dayKey = ready ? localDayKey(new Date()) : null;
   const entries = dayKey ? entriesForDay(records, dayKey) : [];
+  useEffect(clearSaved, []);
   return (
     <section className="space-y-6 px-6 py-6">
       <h1 className={title}>Hoy</h1>
       {dayKey && (
         <p className="text-muted">{fullDate.format(parseDayKey(dayKey)!)}</p>
+      )}
+      {saved && (
+        <p role="status" className="flex items-center gap-3 font-semibold">
+          {/* Same celebration in all seven states: it marks the record, not the mood. */}
+          <Mascota
+            mood={saved}
+            moment="guardar"
+            className="size-14 shrink-0"
+            fallback={<MoodOrb level={saved} />}
+          />
+          Guardamos tu registro.
+        </p>
       )}
       <HistoryGate>
         {entries.length ? (
@@ -219,33 +238,41 @@ export function TodayView() {
             <RecordList entries={entries} />
           </>
         ) : (
-          <div className="space-y-2">
-            <h2 className="font-semibold">Un espacio para tu día</h2>
-            <p className="text-muted">
-              Todavía no hay registros de hoy. Cuando quieras, podés dedicar un
-              momento a registrar cómo te sentís.
-            </p>
-            {!records.length && (
-              <>
-                <button
-                  type="button"
-                  className={textAction}
-                  onClick={() => {
-                    try {
-                      loadExamples();
-                      setExampleProblem(null);
-                    } catch {
-                      setExampleProblem(
-                        "No pudimos cargar los ejemplos en esta pestaña. Podés volver a intentar.",
-                      );
-                    }
-                  }}
-                >
-                  Cargar ejemplos ficticios
-                </button>
-                {exampleProblem && <p role="alert">{exampleProblem}</p>}
-              </>
-            )}
+          <div className="flex items-start gap-4">
+            <Mascota
+              mood={brandMood}
+              rest="night"
+              className="size-16 shrink-0"
+              fallback={<MoodOrb level={brandMood} />}
+            />
+            <div className="min-w-0 space-y-2">
+              <h2 className="font-semibold">Un espacio para tu día</h2>
+              <p className="text-muted">
+                Todavía no hay registros de hoy. Cuando quieras, podés dedicar
+                un momento a registrar cómo te sentís.
+              </p>
+              {!records.length && (
+                <>
+                  <button
+                    type="button"
+                    className={textAction}
+                    onClick={() => {
+                      try {
+                        loadExamples();
+                        setExampleProblem(null);
+                      } catch {
+                        setExampleProblem(
+                          "No pudimos cargar los ejemplos en esta pestaña. Podés volver a intentar.",
+                        );
+                      }
+                    }}
+                  >
+                    Cargar ejemplos ficticios
+                  </button>
+                  {exampleProblem && <p role="alert">{exampleProblem}</p>}
+                </>
+              )}
+            </div>
           </div>
         )}
         <HistoryActions calendar />
@@ -360,7 +387,7 @@ export function CalendarView({
                   </>
                 );
                 // Only days with records or today carry a frame; empty days stay quiet.
-                const cellClass = `flex min-h-20 min-w-0 flex-col items-center justify-start gap-1 rounded-control border py-2 ${isToday ? "border-action bg-primary/10" : average ? "border-line" : "border-transparent"}`;
+                const cellClass = `flex min-h-20 min-w-0 flex-col items-center justify-start gap-1 rounded-control border py-2 ${isToday ? "border-action bg-action-fill/10" : average ? "border-line" : "border-transparent"}`;
                 return day > today ? (
                   <span
                     key={day}
@@ -373,7 +400,7 @@ export function CalendarView({
                   <Link
                     key={day}
                     href={`/calendario/${day}`}
-                    className={`${cellClass} hover:bg-primary/10`}
+                    className={`${cellClass} hover:bg-action-fill/10`}
                     aria-current={isToday ? "date" : undefined}
                     aria-label={`${fullDate.format(parseDayKey(day)!)}${isToday ? ", hoy" : ""}, ${average ? `${entries.length} ${entries.length === 1 ? "registro" : "registros"}, promedio ${average} de 7, ${moods[average - 1].label}` : "sin registros"}`}
                   >
@@ -383,10 +410,18 @@ export function CalendarView({
               })}
             </div>
             {!records.length && (
-              <p className="text-muted">
-                Tu calendario está vacío. Los registros que guardes aparecerán
-                acá.
-              </p>
+              <div className="flex items-center gap-4">
+                <Mascota
+                  mood={brandMood}
+                  rest="night"
+                  className="size-12 shrink-0"
+                  fallback={<MoodOrb level={brandMood} />}
+                />
+                <p className="text-muted">
+                  Tu calendario está vacío. Los registros que guardes aparecerán
+                  acá.
+                </p>
+              </div>
             )}
             <MoodLegend calendar />
             <HistoryActions />

@@ -92,13 +92,6 @@ test("morph continuo y tinta AA en todas las mezclas, incluso entre extremos", a
           accent,
           ink,
         ]);
-        const points = motion.mixPoints(
-          geometry.shapePoints(a),
-          geometry.shapePoints(b),
-          t,
-        );
-        assert.equal(points.length, 252);
-        assert.ok(points.flat().every(Number.isFinite));
       }
     }
   }
@@ -126,26 +119,4 @@ test("posiciones continuas mezclan vecinos sin cuantizar la escena", async () =>
     upper: 1,
     fraction: 0,
   });
-});
-
-test("el contorno orgánico fluye sin desplazar el núcleo ni plegarse", async () => {
-  const motion = await import("./motion.ts");
-  assert.equal(typeof motion.organicPoints, "function");
-  const base = geometry.shapePoints(geometry.moods[4]);
-  assert.deepEqual(motion.organicPoints(base, 0), base);
-  assert.notDeepEqual(motion.organicPoints(base, 1), base);
-  for (let phase = 0; phase < 15; phase += 0.1) {
-    const points = motion.organicPoints(base, phase);
-    for (let i = 0; i < points.length; i++) {
-      const [x, y] = points[i].map((v) => v - 110);
-      const [nx, ny] = points[(i + 1) % points.length].map((v) => v - 110);
-      assert.ok(Math.hypot(x, y) < 110, "contorno dentro del halo");
-      assert.ok(x * ny - y * nx > 0, "contorno sin pliegues");
-      assert.ok(
-        Math.hypot(points[i][0] - base[i][0], points[i][1] - base[i][1]) <=
-          8.01,
-        "ondulación contenida",
-      );
-    }
-  }
 });

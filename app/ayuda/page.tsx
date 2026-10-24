@@ -1,15 +1,28 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import type { Metadata } from "next";
 import { Icon } from "../ui";
+import MoodOrb from "../mood/orb";
+import Mascota from "../mood/mascota";
+import { brandMood } from "../mood/critter";
 
 export const metadata: Metadata = { title: "Ayuda ahora · eudila" };
 
 export default function Help() {
   return (
     <div className="space-y-8 px-6 py-8">
-      <h1 className="font-display text-question leading-question font-bold tracking-brand text-balance">
-        Ayuda ahora
-      </h1>
+      <div className="flex items-center justify-between gap-4">
+        <h1 className="font-display text-question leading-question font-bold tracking-brand text-balance">
+          Ayuda ahora
+        </h1>
+        {/* Peeks in on first use only; the numbers below never wait for it. */}
+        <Mascota
+          mood={brandMood}
+          moment="asomar"
+          once="local:eudila-ayuda-vista"
+          className="help-mascota size-16 shrink-0"
+          fallback={<MoodOrb level={brandMood} />}
+        />
+      </div>
       <section aria-labelledby="emergency-title" className="space-y-4">
         <h2 id="emergency-title" className="text-title font-semibold">
           Peligro inmediato
@@ -21,7 +34,7 @@ export default function Help() {
           href="tel:911"
           className="surface-card flex min-h-touch items-center gap-4 px-4 py-3 text-action hover:underline"
         >
-          <span className="grid size-10 shrink-0 place-items-center rounded-pill bg-action text-on-action">
+          <span className="grid size-10 shrink-0 place-items-center rounded-pill bg-action-fill text-on-action">
             <Icon name="phone" />
           </span>
           <span className="flex min-w-0 flex-col">
@@ -45,7 +58,7 @@ export default function Help() {
           href="tel:135"
           className="surface-card flex min-h-touch items-center gap-4 px-4 py-3 text-action hover:underline"
         >
-          <span className="grid size-10 shrink-0 place-items-center rounded-pill bg-action text-on-action">
+          <span className="grid size-10 shrink-0 place-items-center rounded-pill bg-action-fill text-on-action">
             <Icon name="phone" />
           </span>
           <span className="flex min-w-0 flex-col">
@@ -59,7 +72,7 @@ export default function Help() {
           href="tel:08003451435"
           className="surface-card flex min-h-touch items-center gap-4 px-4 py-3 text-action hover:underline"
         >
-          <span className="grid size-10 shrink-0 place-items-center rounded-pill bg-action text-on-action">
+          <span className="grid size-10 shrink-0 place-items-center rounded-pill bg-action-fill text-on-action">
             <Icon name="phone" />
           </span>
           <span className="flex min-w-0 flex-col">
@@ -77,7 +90,7 @@ export default function Help() {
           href="tel:08009990091"
           className="surface-card flex min-h-touch items-center gap-4 px-4 py-3 text-action hover:underline"
         >
-          <span className="grid size-10 shrink-0 place-items-center rounded-pill bg-action text-on-action">
+          <span className="grid size-10 shrink-0 place-items-center rounded-pill bg-action-fill text-on-action">
             <Icon name="phone" />
           </span>
           <span className="flex min-w-0 flex-col">

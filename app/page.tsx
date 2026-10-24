@@ -5,6 +5,8 @@ import { redirect } from "next/navigation";
 import { authConfigured } from "./auth/config";
 import { previewEnabled } from "./frontend-preview";
 import MoodOrb from "./mood/orb";
+import Mascota from "./mood/mascota";
+import { brandMood } from "./mood/critter";
 
 export default async function Home() {
   const user = await currentUser();
@@ -20,8 +22,14 @@ export default async function Home() {
   }
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-6 px-6 py-8 text-center">
-      {/* Static Neutral symbol: the brand entrance without a splash delay. */}
-      <MoodOrb level={4} className="size-36 max-w-full shrink-0" />
+      {/* Saludo once per session instead of a splash: no delay before the task. */}
+      <Mascota
+        mood={brandMood}
+        moment="hola"
+        once="session:eudila-saludo"
+        className="size-36 max-w-full shrink-0"
+        fallback={<MoodOrb level={brandMood} />}
+      />
       <h1 className="font-display max-w-question text-question leading-question font-bold tracking-brand text-balance">
         ¿Cómo te sentís ahora?
       </h1>

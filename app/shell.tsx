@@ -55,10 +55,12 @@ export default function AppShell({ children }: { children: ReactNode }) {
       className="app-shell mx-auto grid max-w-phone"
       data-mood={emotional ? draft.mood : undefined}
       data-mood-position={emotional ? moodInput.position : undefined}
+      data-tint={tinted ? draft.mood : undefined}
       style={
         tinted
           ? ({
-              "--mood-ambient": `var(--color-mood-${draft.mood}-ambient)`,
+              "--mood-base": `var(--color-mood-${draft.mood}-ambient)`,
+              "--mood-orb": `var(--color-mood-${draft.mood}-orb)`,
               "--mood-floor": "var(--color-mood-bottom)",
               "--glow": 0,
               // The slider's own CTA carries this; later steps inherit it.

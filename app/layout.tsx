@@ -6,6 +6,8 @@ import Image from "next/image";
 import Navigation from "./navigation";
 import { Icon } from "./ui";
 import AppShell from "./shell";
+import Mascota from "./mood/mascota";
+import { brandMood } from "./mood/critter";
 import SessionScope from "./auth/session-scope";
 import { previewEnabled } from "./frontend-preview";
 import "./globals.css";
@@ -40,14 +42,20 @@ export default function RootLayout({
                 >
                   Ir al contenido
                 </a>
-                <p className="app-brand inline-flex items-center gap-3 font-display text-wordmark leading-wordmark font-bold tracking-wordmark">
-                  <Image
-                    src="/brand/logo.svg"
-                    width={32}
-                    height={32}
-                    alt=""
-                    unoptimized
-                    className="size-8 shrink-0"
+                <p className="app-brand inline-flex items-center font-display text-wordmark leading-wordmark font-bold tracking-wordmark">
+                  <Mascota
+                    mood={brandMood}
+                    logo
+                    className="app-logo"
+                    fallback={
+                      <Image
+                        src="/brand/logo-mascota.svg"
+                        width={72}
+                        height={72}
+                        alt=""
+                        unoptimized
+                      />
+                    }
                   />
                   <span>eudila</span>
                 </p>

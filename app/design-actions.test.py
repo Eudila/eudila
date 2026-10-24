@@ -56,11 +56,11 @@ def legible(element):
     return round(ratio, 2)
 
 
-def action_rgb(page):
+def action_fill_rgb(page):
     return page.evaluate('''() => {
         const c = document.createElement('canvas'); c.width = c.height = 1;
         const ctx = c.getContext('2d');
-        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--color-action');
+        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--color-action-fill');
         ctx.fillRect(0, 0, 1, 1);
         return [...ctx.getImageData(0, 0, 1, 1).data].slice(0, 3);
     }''')
@@ -131,7 +131,7 @@ with sync_playwright() as p:
         style = appearance(action)
         assert style['height'] >= 50
         assert float(style['radius'].rstrip('px')) >= style['height'] / 2, (route, style)
-        assert style['bg'] == action_rgb(page), ('institutional action changed', route, style)
+        assert style['bg'] == action_fill_rgb(page), ('institutional action changed', route, style)
         results['routes'].append({'route': route, 'contrast': legible(action)})
         capture(page, 'route-' + (route.strip('/') or 'home'))
     assert appearance(page.get_by_role('link', name='Ayuda ahora', exact=True))['height'] >= 44

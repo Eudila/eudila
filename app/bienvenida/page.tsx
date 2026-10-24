@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import Link from "next/link";
 import MoodOrb from "../mood/orb";
+import Mascota from "../mood/mascota";
+import { brandMood } from "../mood/critter";
 import { previewEnabled } from "../frontend-preview";
 import "../auth/auth.css";
 
@@ -10,7 +12,13 @@ export default function Bienvenida() {
       className="auth-screen auth-welcome"
       aria-labelledby="welcome-title"
     >
-      <MoodOrb level={4} className="auth-orb" />
+      <Mascota
+        mood={brandMood}
+        moment="hola"
+        once="session:eudila-saludo"
+        className="auth-orb"
+        fallback={<MoodOrb level={brandMood} />}
+      />
       <div className="auth-intro">
         <h1
           id="welcome-title"
