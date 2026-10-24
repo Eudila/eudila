@@ -60,7 +60,17 @@ Este archivo es la guía persistente de marca para la app `eudila/`. Leerlo ante
 
 Autoridad: brandbook Eudila v1.0 de septiembre de 2026 → accesibilidad documentada → videos de Eudila para composición/movimiento → sistema actual para integración. Las capturas IMG_2887–2895 orientan funciones, no reemplazan la estética de Eudila. El `PRODUCT.md` del workspace padre describe una recreación anterior de Anima/WhatsApp y no gobierna la identidad de esta app.
 
-Tema claro y neutro fuera de la experiencia de ánimo. La pantalla de ánimo usa ambiente oscuro del estado con texto legible, orbe central y acción inferior. El video de presentación es una pieza de marca: no copiar el teléfono dibujado, sus bordes, titulares publicitarios, tiempos del montaje ni barras del sistema dentro de la app.
+**Decisión del 18/10/2026 · tema oscuro «Aurora»:** el usuario pidió que toda la app use el tema oscuro de la pantalla de ánimo y autorizó cambiar el brandbook. Se descartaron el turquesa Neutral (repetía el logo y leía como un estado) y el Grafito («muy triste»). El lienzo es «Aurora»: base violeta profunda (`--color-canvas` #1A1626 → mezcla con Grafito → `--color-canvas-floor` #100D18) iluminada desde los bordes por tres tonos del orbe, como si su luz tiñera la pantalla. Las luces son radiales y estáticas: violeta `--color-mood-1-orb` al 32% arriba a la izquierda, celeste `--color-mood-3-orb` al 26% arriba a la derecha y ámbar `--color-mood-6-orb` al 22% abajo. Desde el slider hasta la revisión (`/registro/animo`, `emocion`, `factores`, `confirmacion`), las luces se apagan (`--glow: 0`), el ambiente y el piso #071416 toman el estado elegido y el CTA principal su acento/tinta AA. Al salir del registro vuelven en 600 ms con la curva de marca (`@property --mood-ambient`, `--mood-floor`, `--glow`). El slider conserva su degradé aprobado de tres paradas sin luces, manejado por el controlador cuadro a cuadro. Este bloque reemplaza el «tema claro fuera de ánimo» anterior; las secciones históricas de abajo conservan su contexto.
+
+**Decisión del 23/10/2026 · mascota eudila y logo «Muy agradable»:** el usuario aprobó como nuevo branding la mascota explorada en [docs/design/mascota/README.md](docs/design/mascota/README.md) (referencia viva `docs/design/mascota/eudila-viva.html`, publicada en https://eudila.agustinpedernera.com). La mascota es el propio orbe: cinco capas, núcleo blanco y las siete siluetas, con una carita mínima dentro del núcleo (ojos que cambian con el estado, sin cachetes). El logo principal pasa a ser la mascota Muy agradable (flor de nueve pétalos, `#E65175`) con ojos felices y destellos, más grande y animada en el header; versión estática en `public/brand/logo-mascota.svg`. Neutral pasa a tener tres capas. La mascota nunca sigue al puntero, ni directa ni indirectamente, y cada una se mueve con reloj propio. Esta decisión reemplaza al lockup Neutral del 11/10 y a la prohibición general de caras. La app todavía no la implementa (brechas VIS-13 a VIS-17).
+
+Tokens semánticos oscuros en `app/globals.css`: texto #F4F1FA, secundario #DAD5EA, acción #8EE2DF (turquesa de marca aclarado) con tinta Grafito (`--color-on-action`), superficie opaca #18151F para campos/diálogos, `--color-raised` (lavanda #D6D0E6 al 6%) para tarjetas, líneas lavanda al 30%/48%. Los neutrales se tiñen hacia el violeta de la base; los grises verdosos del primer tema oscuro eran un resto del lienzo turquesa. El turquesa queda solo para acciones y enlaces. Contraste medido en el peor caso: en los siete ambientes, texto ≥6.3:1, secundario ≥4.7:1 y acción ≥4.8:1, también sobre tarjeta. En Aurora, con las dos luces superiores superpuestas en su pico y sobre tarjeta, texto 6.4:1, secundario 5.0:1 y acción 4.8:1. Foco: anillo exterior blanco, interior #071416. Header, aviso y tabs siguen transparentes, sin bandas. La impresión del informe restaura la paleta clara.
+
+Texto e íconos: explicaciones secundarias en `Disclosure` (`app/ui.tsx`, `<details>` con chevron y apertura animada); íconos de línea de 24 px de `Icon` (`currentColor`, decorativos). Las líneas de Ayuda no se ocultan.
+
+Movimiento de interfaz (complementa el de marca): entrada de pantalla 220 ms (opacidad + 8 px) vía `template.tsx`; listas escalonadas de hasta 160 ms; selección/hover/press de 150 ms; chevron y desplegables de 200–250 ms; tab activa eleva su ícono. Con movimiento reducido queda solo el fundido y los cambios de estado son instantáneos. El CTA del slider no transiciona color, porque el controlador lo recolorea por cuadro con tinta AA.
+
+Antes (histórico): tema claro y neutro fuera de la experiencia de ánimo. La pantalla de ánimo usa ambiente oscuro del estado con texto legible, orbe central y acción inferior. El video de presentación es una pieza de marca: no copiar el teléfono dibujado, sus bordes, titulares publicitarios, tiempos del montaje ni barras del sistema dentro de la app.
 
 ## Colors
 
@@ -88,7 +98,7 @@ Figtree Bold para wordmark, preguntas y nombres de estados. Sistema/SF Pro o Rob
 
 Wordmark siempre `eudila`, minúsculas, sin inclinación ni deformación. El PDF especifica Bold y tracking −45; el header usa Figtree 700 y el token específico `--tracking-wordmark` (−0.045em). No cambiar todo el display para corregir solo el wordmark ni simular un logo alterando el espaciado al azar.
 
-**Cabecera y navegación · 11/10/2026:** el lockup superior izquierdo combina el símbolo Neutral estático de cinco capas y núcleo blanco (`public/brand/logo.svg`) con `eudila`. El SVG conserva los colores intrínsecos de marca (#5FD3D0 y blanco); no usa la máscara/fondo del icono de app. Caja de 32 px con símbolo de 24 px y wordmark de 40 px: en Figtree la altura de x medida es 20 px, por lo que se cumple la relación 1.2:1. Padding y separación mantienen al menos medio diámetro de respeto. Al 200% crecen juntos y el header permite reflujo.
+**Cabecera y navegación · 11/10/2026** _(el símbolo Neutral de este lockup queda reemplazado por la mascota Muy agradable desde el 23/10/2026; ver Mascota eudila)_: el lockup superior izquierdo combina el símbolo Neutral estático de cinco capas y núcleo blanco (`public/brand/logo.svg`) con `eudila`. El SVG conserva los colores intrínsecos de marca (#5FD3D0 y blanco); no usa la máscara/fondo del icono de app. Caja de 32 px con símbolo de 24 px y wordmark de 40 px: en Figtree la altura de x medida es 20 px, por lo que se cumple la relación 1.2:1. Padding y separación mantienen al menos medio diámetro de respeto. Al 200% crecen juntos y el header permite reflujo.
 
 Las pestañas conservan Registrar/Hoy/Calendario, destinos y estado activo; agregan lápiz/reloj/calendario sobre las palabras. SVG de línea con `currentColor`, decorativos y sin foco propio. Se conserva objetivo ≥44 px, ayuda global y reduced motion. La sección emoción compacta espacios en alto ≤600 px y organiza atrás/progreso/cerrar para conservar seis sugerencias visibles a 320 × 568 con la barra nueva. El logo se incorpora también a la copia offline de Ayuda. [Capturas y verificación local](docs/design/evidence/logo-navigation-2026-10-11/README.md).
 
@@ -104,9 +114,9 @@ El orbe sí tiene profundidad propia: cinco capas translúcidas, bordes de luz s
 
 ### Orbe
 
-Cinco capas más núcleo blanco estable; no usar una sola silueta como logo. Neutral circular sin partículas; estados desagradables con formas angulosas y puntos finos; agradables con formas orgánicas y destellos de cuatro puntas. Siluetas: estrella de nueve puntas, estrella suave de catorce, onda corta, círculo, gota orgánica, flor de siete y flor de nueve pétalos.
+Cinco capas más núcleo blanco estable; no usar una sola silueta como logo. Neutral circular de tres capas, sin las dos interiores (decisión 23/10/2026), y sin partículas; estados desagradables con formas angulosas y puntos finos; agradables con formas orgánicas y destellos de cuatro puntas. Siluetas: estrella de nueve puntas, estrella suave de catorce, onda corta, círculo, gota orgánica, flor de siete y flor de nueve pétalos.
 
-Escala/posición: protagonista en ánimo, sin recortar ni estirar; adaptar al alto disponible. Si se reduce en calendario/historial, conservar su significado y no presentarlo como lockup de marca. Símbolo mínimo 24 px, lockup mínimo 88 px, área de respeto de medio diámetro, relación orbe:texto 1.2:1 en altura de x (brandbook pp. 3–4). Icono de app: orbe Neutral al 64% sobre ambiente turquesa, sin texto.
+Escala/posición: protagonista en ánimo, sin recortar ni estirar; adaptar al alto disponible. Si se reduce en calendario/historial, conservar su significado y no presentarlo como lockup de marca. Símbolo mínimo 24 px, lockup mínimo 88 px, área de respeto de medio diámetro, relación orbe:texto 1.2:1 en altura de x (brandbook pp. 3–4). Icono de app: orbe Neutral al 64% sobre ambiente turquesa, sin texto (pendiente de revisar con la mascota: VIS-17).
 
 ### Movimiento de marca
 
@@ -130,7 +140,13 @@ Hover subraya sin cambiar el par de color; active marca un contorno interior. Fo
 
 ### Composición y navegación
 
+**Onboarding y acceso · 19/10/2026:** `/bienvenida` presenta el orbe Neutral estático, una invitación breve y dos acciones: crear cuenta e ingresar. Se mantienen Nube/Grafito, Figtree en preguntas y cápsulas institucionales AA. Acceso, confirmación, recuperación y cuenta reutilizan `app/auth/auth.css`; no llevan ambiente emocional. El botón Google anuncia su indisponibilidad cuando el proveedor no está configurado.
+
+`/empezar` usa dos pasos: nombre/apodo opcional (se puede omitir) y explicación del registro. No agrega cuestionarios sensibles ni felicitaciones. La finalización se guarda en un perfil privado; al volver a ingresar no se repite. Cuenta y onboarding explican que los registros emocionales todavía no se sincronizan. Ayuda permanece en un toque; las tabs se omiten durante acceso/onboarding. Los formularios conservan etiquetas, foco de error, avisos accesibles, carga y reflujo. [Evidencia sobre rutas Next.js reales](docs/design/evidence/auth-onboarding-2026-10-19/README.md). Esta entrega no cierra las brechas visuales históricas del inicio o del prototipo.
+
 En ánimo: atrás izquierda, cerrar derecha, pregunta, orbe, estado, escala/extremos y acción inferior. Círculos visuales de navegación de 32 px con blanco al 14% sobre ambiente, dentro de objetivo táctil mínimo de 44 px. Una pregunta principal por pantalla; el orbe tiene espacio para respirar. Ayuda sigue en un toque, accesible; integrar su presentación sin eliminarla para imitar el video.
+
+**18/10/2026:** el mismo control circular atrás/cerrar se usa en todos los pasos del registro; fuera de ánimo, el círculo es Grafito al 7% sobre Nube. Factores usa chips como emociones. Detalle en la revisión de marca.
 
 Header/tabs/banner no deben partir el ambiente en bandas claras por accidente. La vista previa se identifica honestamente con aviso compacto; su explicación puede vivir en un popover. No ocultar el aviso para embellecer capturas ni imponerlo cuando la configuración no es de preview. Historial, exportación y acceso usan el lienzo neutro y controles familiares.
 
@@ -158,6 +174,19 @@ Solo Algo agradable agrega ondulación radial suave de cada capa y del halo exte
 
 **Cierre de ANI-110 / VIS-04 (05/10/2026):** el usuario confirmó la prueba manual en Safari y solicitó dar por completa esa comprobación. Complementa las pruebas automatizadas existentes en Chromium/WebKit/Firefox; se registra con su procedencia y sin atribuir mediciones automatizadas a Safari. [Registro de validación manual](docs/design/evidence/safari-manual-2026-10-05/README.md). La automatización de Safari deja de bloquear este issue. Permanecen abiertas ANI-114/115/118.
 
+### Mascota eudila · 23/10/2026
+
+Especificación completa, parámetros y momentos en [docs/design/mascota/README.md](docs/design/mascota/README.md). Resumen obligatorio:
+
+- La mascota es el orbe (cinco capas, núcleo, siete siluetas, colores de la tabla). La personalidad viene del movimiento y de los ojos dentro del núcleo. Sin boca, cachetes, cuerpo, accesorios ni ilustraciones.
+- Logo principal: mascota Muy agradable con ojos felices `^ ^` y destellos. Header: símbolo animado en caja de 72 px + wordmark Figtree 700 `2.25rem`, −0.045em. Estático: `public/brand/logo-mascota.svg`.
+- Neutral tiene tres capas: las interiores (.52 y .36) se desvanecen con `clamp(|ánimo − 4| × 1,5)`.
+- Nunca sigue al puntero (mirada, hover, pulgar del slider). Solo reacciona al toque. Mirada autónoma con sacadas de 1,1–3,3 s.
+- Cada mascota tiene reloj propio: fases aleatorias de balanceo, saltitos, tiritona, destellos, respiración, giro, parpadeo y mirada.
+- Temperamentos por estado: más lenta y hundida en lo desagradable, se mece y salta en lo agradable. Guardado igual en los siete estados.
+- Momentos: Saludo, Escucha, Guardado, Descanso, Ayuda y Toque. Movimiento reducido: quieta e instantánea.
+- Vive en logo, ánimo, splash, vacíos y Ayuda; no en historial, tarjetas, inputs ni listas. En tamaños chicos usar el orbe sin cara.
+
 ### Próximas funcionalidades
 
 Diario, sueño, fotos y Logros (ANI-100–106) heredan esta identidad. Los relatos y fotos del usuario son contenido, no ilustraciones de marca. Medallas deben integrarse al sistema, sin importar los assets JBG de la referencia ni premiar emociones agradables. Cambiar identidad o reglas requiere decisión documentada, no reinterpretación por sesión.
@@ -167,7 +196,8 @@ Diario, sueño, fotos y Logros (ANI-100–106) heredan esta identidad. Los relat
 - Leer `PRODUCT.md`, este archivo y brechas abiertas antes de trabajo visual; consultar `app/globals.css` y componentes existentes.
 - Mantener neutral fuera de ánimo y ambiente emocional dentro; cinco capas, núcleo y estado sincronizados.
 - Conservar las adaptaciones AA; la fidelidad no justifica texto ilegible, objetivos pequeños o movimiento forzado.
-- No copiar ilustraciones, caras emoji, trofeos, teléfono renderizado o estética de las capturas funcionales como identidad.
+- No copiar ilustraciones, caras emoji ajenas, trofeos, teléfono renderizado o estética de las capturas funcionales como identidad. La única cara de la marca es la de la mascota (ojos dentro del núcleo), según [docs/design/mascota/README.md](docs/design/mascota/README.md).
+- La mascota no sigue al puntero ni se sincroniza con otras mascotas; no agregarle cachetes, boca ni cuerpo.
 - No cambiar colores por paletas de Impeccable, categorías genéricas o gusto personal; la marca ya existe.
 - No capitalizar el wordmark, rotarlo, desaturar el símbolo ni llenar todo de espectro emocional.
 - No declarar cerrada una brecha sin captura actual, comparación con fuente y pruebas de teclado/reduced motion/reflujo.

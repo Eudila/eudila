@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import type { Metadata } from "next";
+import { Icon } from "../ui";
 
 export const metadata: Metadata = { title: "Ayuda ahora · eudila" };
 
@@ -18,10 +19,15 @@ export default function Help() {
         </p>
         <a
           href="tel:911"
-          className="flex min-h-touch flex-col rounded-control border border-line px-4 py-3 text-action hover:underline"
+          className="surface-card flex min-h-touch items-center gap-4 px-4 py-3 text-action hover:underline"
         >
-          <span className="font-semibold">Llamar al 911</span>
-          <span className="text-muted">Emergencias · Desde todo el país</span>
+          <span className="grid size-10 shrink-0 place-items-center rounded-pill bg-action text-on-action">
+            <Icon name="phone" />
+          </span>
+          <span className="flex min-w-0 flex-col">
+            <span className="font-semibold">Llamar al 911</span>
+            <span className="text-muted">Emergencias · Desde todo el país</span>
+          </span>
         </a>
       </section>
       <p className="text-muted">
@@ -37,19 +43,29 @@ export default function Help() {
         </p>
         <a
           href="tel:135"
-          className="flex min-h-touch flex-col rounded-control border border-line px-4 py-3 text-action hover:underline"
+          className="surface-card flex min-h-touch items-center gap-4 px-4 py-3 text-action hover:underline"
         >
-          <span className="font-semibold">Llamar al 135</span>
-          <span className="text-muted">
-            Capital Federal y Gran Buenos Aires
+          <span className="grid size-10 shrink-0 place-items-center rounded-pill bg-action text-on-action">
+            <Icon name="phone" />
+          </span>
+          <span className="flex min-w-0 flex-col">
+            <span className="font-semibold">Llamar al 135</span>
+            <span className="text-muted">
+              Capital Federal y Gran Buenos Aires
+            </span>
           </span>
         </a>
         <a
           href="tel:08003451435"
-          className="flex min-h-touch flex-col rounded-control border border-line px-4 py-3 text-action hover:underline"
+          className="surface-card flex min-h-touch items-center gap-4 px-4 py-3 text-action hover:underline"
         >
-          <span className="font-semibold">Llamar al 0800 345 1435</span>
-          <span className="text-muted">Desde todo el país</span>
+          <span className="grid size-10 shrink-0 place-items-center rounded-pill bg-action text-on-action">
+            <Icon name="phone" />
+          </span>
+          <span className="flex min-w-0 flex-col">
+            <span className="font-semibold">Llamar al 0800 345 1435</span>
+            <span className="text-muted">Desde todo el país</span>
+          </span>
         </a>
       </section>
       <section aria-labelledby="national-title" className="space-y-4">
@@ -59,10 +75,15 @@ export default function Help() {
         <p className="text-muted">Atención nacional, las 24 horas.</p>
         <a
           href="tel:08009990091"
-          className="flex min-h-touch flex-col rounded-control border border-line px-4 py-3 text-action hover:underline"
+          className="surface-card flex min-h-touch items-center gap-4 px-4 py-3 text-action hover:underline"
         >
-          <span className="font-semibold">Llamar al 0800 999 0091</span>
-          <span className="text-muted">Desde todo el país</span>
+          <span className="grid size-10 shrink-0 place-items-center rounded-pill bg-action text-on-action">
+            <Icon name="phone" />
+          </span>
+          <span className="flex min-w-0 flex-col">
+            <span className="font-semibold">Llamar al 0800 999 0091</span>
+            <span className="text-muted">Desde todo el país</span>
+          </span>
         </a>
       </section>
       <p className="text-muted">

@@ -158,8 +158,8 @@ with sync_playwright() as p:
     capture(page, 'disabled-secondary')
     page.goto(base + '/ingresar')
     assert page.get_by_label('Email', exact=True).evaluate('e => parseFloat(getComputedStyle(e).borderRadius)') == 14
-    page.goto(base + '/cuenta')
-    account_action = page.get_by_role('button', name='Cerrar sesión', exact=True)
+    # El logout ya es real y requiere sesión; Google sin configurar cubre disabled.
+    account_action = page.get_by_role('button', name='Continuar con Google', exact=True)
     expect(account_action).to_be_disabled()
     legible(account_action)
     assert appearance(account_action)['height'] >= 50

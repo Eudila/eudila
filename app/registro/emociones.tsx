@@ -3,6 +3,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { Icon } from "../ui";
 import { loadCatalogRows } from "@/prototype/catalog.js";
 import {
   previewEnabled,
@@ -114,7 +115,7 @@ export default function Emociones({
           <div
             role="group"
             aria-label="Emociones sugeridas"
-            className="flex flex-wrap gap-2"
+            className="stagger flex flex-wrap gap-2"
           >
             {rows
               .filter((row) => row.sugerida)
@@ -133,16 +134,17 @@ export default function Emociones({
           <button
             ref={origin}
             type="button"
-            className="min-h-touch text-left text-action underline"
+            className="action action-text -mx-3 self-start"
             onClick={() => {
               setQuery("");
               dialog.current?.showModal();
               search.current?.focus();
             }}
           >
+            <Icon name="plus" />
             Ver todas las emociones
           </button>
-          <p role="status" aria-atomic="true">
+          <p role="status" aria-atomic="true" className="sr-only">
             {selected
               ? `Elegiste: ${selected.nombre}`
               : selectedId

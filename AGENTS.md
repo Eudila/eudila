@@ -1,8 +1,10 @@
 # Identidad visual persistente de eudila
 
-Antes de cualquier cambio de frontend, leer [PRODUCT.md](PRODUCT.md), [DESIGN.md](DESIGN.md) y [brechas de marca](docs/design/brand-review-2026-10-04.md). Estas fuentes describen esta app; el PRODUCT.md del workspace padre corresponde a una recreación anterior y no reemplaza su identidad.
+Antes de cualquier cambio de frontend, leer [PRODUCT.md](PRODUCT.md), [DESIGN.md](DESIGN.md), [brechas de marca](docs/design/brand-review-2026-10-04.md) y [mascota eudila](docs/design/mascota/README.md). Estas fuentes describen esta app; el PRODUCT.md del workspace padre corresponde a una recreación anterior y no reemplaza su identidad.
 
 Usar tokens de `app/globals.css`. Las capturas de `docs/referencias/` definen funcionalidades; el brandbook y los videos revisados definen estética. No marcar una brecha como resuelta solo por agregar tokens o reutilizar código de `prototype/`: comprobar la ruta Next.js real. Registrar cambios de decisión y evidencia en los documentos de marca para futuras sesiones.
+
+Branding vigente desde el 23/10/2026: la mascota eudila (el orbe con carita) y el logo Muy agradable. Su código de referencia es `docs/design/mascota/eudila-viva.html` y el logo estático `public/brand/logo-mascota.svg`. Reglas fijas: la mascota nunca sigue al puntero, cada mascota se mueve con reloj propio, Neutral tiene tres capas, sin cachetes ni boca, y movimiento reducido la deja quieta.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

@@ -14,22 +14,24 @@ Personas que registran su estado de ánimo desde el celular y consultan su histo
 
 ## Product Purpose
 
-Registrar ánimo, emoción y factores con poca fricción; consultar días, evolución y exportaciones descriptivas. Frontend Next.js con vista previa explícita; autenticación y persistencia reales siguen pendientes. Diario, sueño, fotos y logros están en backlog ANI-100–106.
+Registrar ánimo, emoción y factores con poca fricción; consultar días, evolución y exportaciones descriptivas. Frontend Next.js con vista previa explícita y onboarding/autenticación Supabase: email, confirmación, recuperación, sesión y perfil privado. Google usa el mismo proveedor y requiere credenciales OAuth configuradas. La persistencia de registros emocionales en una cuenta sigue pendiente; iniciar sesión no implica sincronizarlos. Diario, sueño, fotos y logros están en backlog ANI-100–106.
 
 ## Brand Personality
 
-Serena, cálida y precisa. «Un espejo tranquilo para cada estado de ánimo». Voseo rioplatense, sin juicio, sin promesas clínicas. La identidad de Eudila está definida en DESIGN.md y procede del brandbook v1.0 y los videos de marca revisados.
+Serena, cálida y precisa. «Un espejo tranquilo para cada estado de ánimo». Voseo rioplatense, sin juicio, sin promesas clínicas. La identidad de Eudila está definida en DESIGN.md y procede del brandbook v1.0 y los videos de marca revisados. Desde el 23/10/2026 la marca tiene mascota: el propio orbe con una carita mínima, y el logo principal es la mascota Muy agradable ([docs/design/mascota/README.md](docs/design/mascota/README.md)).
 
 ## Design Principles
 
 - Orbe como símbolo y respuesta al ánimo; espectro de siete estados de desagradable a agradable.
-- Lienzo neutro fuera de la experiencia de ánimo; ambiente del estado dentro de ella.
+- La mascota eudila acompaña sin juzgar: cambia de ritmo según el estado, celebra igual cualquier registro, se mueve por su cuenta y nunca sigue al puntero.
+- Lienzo oscuro «Aurora» en toda la app: base violeta profunda con luces del orbe; el ambiente del estado elegido acompaña el registro desde el slider hasta la revisión.
+- Poco texto a la vista: explicaciones secundarias en desplegables, íconos de línea y transiciones cortas que comunican estado.
 - Una pregunta principal y camino corto; contenido opcional no debe bloquear el registro.
 - Datos y vista previa identificados sin confundirlos con persistencia de cuenta.
 
 ## Anti-references
 
-No importar la estética ni las ilustraciones de las capturas IMG_2887–2895. No convertir la app en un clon de Anima/WhatsApp ni en una landing o dashboard. No agregar gamificación o contenido de los videos promocionales fuera de su alcance documentado.
+No importar la estética ni las ilustraciones de las capturas IMG_2887–2895. No convertir la app en un clon de Anima/WhatsApp ni en una landing o dashboard. No agregar gamificación o contenido de los videos promocionales fuera de su alcance documentado. La mascota no premia estados agradables; «Tu eudila» (avatar con registros) es privado por defecto.
 
 ## Accessibility & Inclusion
 
