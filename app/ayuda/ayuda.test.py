@@ -117,8 +117,8 @@ try:
         keys = page.evaluate("caches.open('eudila-help-v1').then(c => c.keys()).then(xs => xs.map(x => new URL(x.url).pathname))")
         assert "/ayuda" in keys
         assert any(x.endswith(".css") for x in keys), keys
-        assert "/brand/logo.svg" in keys, keys
-        assert all(x in ["/ayuda", "/brand/logo.svg"] or (x.startswith("/_next/static/") and x.endswith((".css", ".woff2", ".woff", ".ttf"))) for x in keys), keys
+        assert "/brand/logo-mascota.svg" in keys, keys
+        assert all(x in ["/ayuda", "/brand/logo-mascota.svg"] or (x.startswith("/_next/static/") and x.endswith((".css", ".woff2", ".woff", ".ttf"))) for x in keys), keys
         context.set_offline(False)
         # Una apertura posterior renueva HTML y recursos, sin acumular builds.
         page.evaluate("async () => { const c = await caches.open('eudila-help-v1'); await c.put('/ayuda', new Response('Viejo')); await c.put('/_next/static/old.css', new Response('viejo')); navigator.serviceWorker.controller.postMessage('refresh-help'); }")

@@ -25,7 +25,7 @@ La mascota **es el orbe**, no un personaje aparte: cinco capas translúcidas, n�
 - **Lockup en header:** símbolo animado en una caja de 72 px (orbe visible ≈ 49 px) + wordmark `eudila` Figtree 700, `2.25rem`, tracking −0.045em, en minúsculas. El símbolo queda a la izquierda.
 - **Movimiento del logo:** respira, gira las capas, titilan los destellos, parpadea, da saltitos ocasionales (temperamento Muy agradable) y mira a los costados por su cuenta. Al tocarlo salta y se sacude. Con movimiento reducido queda quieto.
 - **Estático** (favicon, documentos, impresión, sin JS): `public/brand/logo-mascota.svg`. Se lee de 24 px en adelante ([tamaños](capturas/logo-svg-tamanos.png)).
-- `public/brand/logo.svg` (Neutral sin cara) queda como versión histórica hasta que se cierre VIS-13.
+- `public/brand/logo.svg` (Neutral sin cara) es la versión histórica; desde el 24/10 la app usa la mascota (VIS-13 cerrada).
 
 ## Reglas que no se negocian
 
