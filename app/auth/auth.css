@@ -21,6 +21,7 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  margin-top: 24px;
 }
 .auth-field {
   display: flex;
@@ -61,9 +62,58 @@
   font-size: 0.9375rem;
 }
 .auth-notice {
+  margin-top: 24px;
+  overflow-wrap: anywhere;
   padding: 16px;
   border: 1px solid var(--color-line);
   border-radius: var(--radius-card);
+}
+.auth-intro p {
+  overflow-wrap: anywhere;
+}
+.auth-social {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--color-muted);
+}
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: var(--color-line);
+}
+.auth-welcome {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.auth-welcome .auth-form {
+  margin-top: 0;
+  gap: 12px;
+}
+.auth-orb {
+  width: 8rem;
+  height: 8rem;
+  align-self: center;
+}
+.onboarding-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  list-style: decimal;
+  padding-left: 24px;
+}
+.onboarding-steps p {
+  margin-top: 4px;
+  color: var(--color-muted);
 }
 .auth-form [role="status"]:empty {
   display: none;

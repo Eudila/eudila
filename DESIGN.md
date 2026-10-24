@@ -130,6 +130,10 @@ Hover subraya sin cambiar el par de color; active marca un contorno interior. Fo
 
 ### Composición y navegación
 
+**Onboarding y acceso · 19/10/2026:** `/bienvenida` presenta el orbe Neutral estático, una invitación breve y dos acciones: crear cuenta e ingresar. Se mantienen Nube/Grafito, Figtree en preguntas y cápsulas institucionales AA. Acceso, confirmación, recuperación y cuenta reutilizan `app/auth/auth.css`; no llevan ambiente emocional. El botón Google anuncia su indisponibilidad cuando el proveedor no está configurado.
+
+`/empezar` usa dos pasos: nombre/apodo opcional (se puede omitir) y explicación del registro. No agrega cuestionarios sensibles ni felicitaciones. La finalización se guarda en un perfil privado; al volver a ingresar no se repite. Cuenta y onboarding explican que los registros emocionales todavía no se sincronizan. Ayuda permanece en un toque; las tabs se omiten durante acceso/onboarding. Los formularios conservan etiquetas, foco de error, avisos accesibles, carga y reflujo. [Evidencia sobre rutas Next.js reales](docs/design/evidence/auth-onboarding-2026-10-19/README.md). Esta entrega no cierra las brechas visuales históricas del inicio o del prototipo.
+
 En ánimo: atrás izquierda, cerrar derecha, pregunta, orbe, estado, escala/extremos y acción inferior. Círculos visuales de navegación de 32 px con blanco al 14% sobre ambiente, dentro de objetivo táctil mínimo de 44 px. Una pregunta principal por pantalla; el orbe tiene espacio para respirar. Ayuda sigue en un toque, accesible; integrar su presentación sin eliminarla para imitar el video.
 
 Header/tabs/banner no deben partir el ambiente en bandas claras por accidente. La vista previa se identifica honestamente con aviso compacto; su explicación puede vivir en un popover. No ocultar el aviso para embellecer capturas ni imponerlo cuando la configuración no es de preview. Historial, exportación y acceso usan el lienzo neutro y controles familiares.

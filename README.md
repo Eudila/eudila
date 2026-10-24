@@ -4,6 +4,45 @@ Repositorio nuevo para la app de registro emocional. El historial empieza acá y
 
 ## App Next.js
 
+### Autenticación real en local
+
+Con Node.js y Docker abiertos:
+
+```sh
+npm ci
+npm run supabase:start
+npm run dev
+```
+
+Abrí <http://127.0.0.1:3000>. Sin sesión, el inicio presenta la bienvenida. Podés crear cuenta por email, confirmarlo desde el buzón local <http://127.0.0.1:54324>, completar un nombre opcional y entrar. También funcionan reenvío, recuperación/cambio de contraseña, sesión al recargar y cierre de sesión. Supabase Studio queda en <http://127.0.0.1:54323>.
+
+`supabase:start` crea una instancia Docker del proyecto `eudila-ladyfish`, aplica migraciones y catálogos y actualiza en `.env.local` únicamente URL/clave pública de Auth y catálogo y `NEXT_PUBLIC_FRONTEND_PREVIEW=false`. Conserva las demás variables; no conecta proyectos Cloud. La primera ejecución descarga imágenes. Los correos se capturan en Mailpit y no salen a destinatarios externos. `npm run supabase:stop` detiene esta instancia y conserva sus datos. Evitá `supabase db reset` si querés conservar cuentas locales.
+
+Las cuentas y preferencias se guardan en PostgreSQL con RLS por usuario. **Los registros emocionales siguen sin persistencia de cuenta**: la interfaz lo informa. El modo preview conserva su historial temporal independiente. Al cambiar de identidad se limpia el borrador/preview para que otra persona no lo herede en el mismo navegador.
+
+Para ejecutar la prueba real con la app encendida:
+
+```sh
+npm run test:auth
+```
+
+Requiere `uv` y Chrome o Chromium instalado mediante `uv run --with playwright playwright install chromium`. `CHROME_BIN` permite elegir navegador. Crea y elimina cuentas sintéticas exclusivamente en localhost; verifica confirmación en otro navegador, recuperación, sesión, RLS, catálogos y reflujo. `AUTH_BASE_URL` permite apuntar a `http://127.0.0.1:3119` con un build servido en ese puerto. [Evidencia y límites](docs/design/evidence/auth-onboarding-2026-10-19/README.md).
+
+### Habilitar Google
+
+La integración usa Supabase Auth con PKCE y `/auth/callback`; no requiere Clerk. Para probar el proveedor real hace falta un cliente OAuth web propio de Google:
+
+1. Configurar en Google el origen de la app y el redirect autorizado `http://127.0.0.1:54321/auth/v1/callback` (en Cloud, usar el callback indicado por Supabase).
+2. Guardar `SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID` y `SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET` en `.env` **de la raíz**, ignorado por Git. Nunca usar un prefijo `NEXT_PUBLIC_` para el secret.
+3. Cambiar `enabled = true` en `[auth.external.google]` de `supabase/config.toml`, detener Supabase y ejecutar `npm run supabase:start` para aplicar esa configuración.
+4. Agregar `NEXT_PUBLIC_GOOGLE_AUTH_ENABLED=true` en `.env.local` y reiniciar Next.js (o reconstruir el build). En Google, habilitar los usuarios de prueba si la aplicación OAuth está en modo testing.
+
+Sin esas credenciales el botón queda deshabilitado con explicación; email funciona. El login completo con Google no se presenta como verificado. [Configuración oficial de Google](https://supabase.com/docs/guides/auth/social-login/auth-google) y [variables locales del CLI](https://supabase.com/docs/guides/local-development/managing-config).
+
+Para llevar email a Cloud, aplicar las migraciones, configurar URL de sitio y redirects permitidos, confirmación obligatoria, mínimo de contraseña de 8 caracteres, SMTP y las plantillas `supabase/templates/` (con `TokenHash` y `RedirectTo` hacia `/auth/callback`). Configurar las variables públicas antes del build. La clave `service_role` no se utiliza en la app; solo el test local la lee para crear/eliminar sus propias cuentas sintéticas.
+
+### Vista previa sin base
+
 Requisitos: Git y **Node.js 22 (22.13 o superior) o Node.js 24+**, con npm. No hace falta levantar una base de datos. `.env.example` habilita explícitamente la vista previa del frontend; copiá ese archivo para recorrer todas las pantallas.
 
 ```sh

@@ -5,8 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Navigation from "./navigation";
 import AppShell from "./shell";
-import { RegistroProvider } from "./registro/registro";
-import { HistoryProvider } from "./historial/state";
+import SessionScope from "./auth/session-scope";
 import { previewEnabled } from "./frontend-preview";
 import "./globals.css";
 
@@ -30,83 +29,81 @@ export default function RootLayout({
   return (
     <html lang="es" className={figtree.variable}>
       <body>
-        <HistoryProvider>
-          <RegistroProvider>
-            <AppShell>
-              <div>
-                <header className="app-header flex flex-wrap items-center justify-between">
-                  <a
-                    href="#contenido"
-                    className="sr-only min-h-touch text-action underline focus:not-sr-only"
+        <SessionScope>
+          <AppShell>
+            <div>
+              <header className="app-header flex flex-wrap items-center justify-between">
+                <a
+                  href="#contenido"
+                  className="sr-only min-h-touch text-action underline focus:not-sr-only"
+                >
+                  Ir al contenido
+                </a>
+                <p className="app-brand inline-flex items-center gap-3 font-display text-wordmark leading-wordmark font-bold tracking-wordmark">
+                  <Image
+                    src="/brand/logo.svg"
+                    width={32}
+                    height={32}
+                    alt=""
+                    unoptimized
+                    className="size-8 shrink-0"
+                  />
+                  <span>eudila</span>
+                </p>
+                <Link
+                  href="/ayuda"
+                  prefetch={false}
+                  className="app-help action action-primary text-title"
+                >
+                  Ayuda ahora
+                </Link>
+              </header>
+              {previewEnabled && (
+                <div data-frontend-preview>
+                  <button
+                    type="button"
+                    popoverTarget="preview-notice"
+                    className="app-preview-toggle block w-full border-y border-line bg-action/5 text-left text-muted underline"
                   >
-                    Ir al contenido
-                  </a>
-                  <p className="app-brand inline-flex items-center gap-3 font-display text-wordmark leading-wordmark font-bold tracking-wordmark">
-                    <Image
-                      src="/brand/logo.svg"
-                      width={32}
-                      height={32}
-                      alt=""
-                      unoptimized
-                      className="size-8 shrink-0"
-                    />
-                    <span>eudila</span>
-                  </p>
-                  <Link
-                    href="/ayuda"
-                    prefetch={false}
-                    className="app-help action action-primary text-title"
+                    <strong>Vista previa</strong> · En esta pestaña
+                  </button>
+                  <div
+                    id="preview-notice"
+                    popover="auto"
+                    className="preview-notice rounded-control border border-line bg-surface text-text"
+                    role="note"
+                    aria-labelledby="preview-notice-title"
                   >
-                    Ayuda ahora
-                  </Link>
-                </header>
-                {previewEnabled && (
-                  <div data-frontend-preview>
+                    <h2 id="preview-notice-title" className="font-semibold">
+                      Sobre la vista previa
+                    </h2>
+                    <p className="my-3">
+                      Los registros se conservan solo en esta pestaña. Al
+                      cerrarla, se pierden. Los ejemplos se cargan cuando vos
+                      los elegís.
+                    </p>
                     <button
                       type="button"
                       popoverTarget="preview-notice"
-                      className="app-preview-toggle block w-full border-y border-line bg-action/5 text-left text-muted underline"
+                      popoverTargetAction="hide"
+                      className="app-help text-action underline"
                     >
-                      <strong>Vista previa</strong> · En esta pestaña
+                      Cerrar aviso de vista previa
                     </button>
-                    <div
-                      id="preview-notice"
-                      popover="auto"
-                      className="preview-notice rounded-control border border-line bg-surface text-text"
-                      role="note"
-                      aria-labelledby="preview-notice-title"
-                    >
-                      <h2 id="preview-notice-title" className="font-semibold">
-                        Sobre la vista previa
-                      </h2>
-                      <p className="my-3">
-                        Los registros se conservan solo en esta pestaña. Al
-                        cerrarla, se pierden. Los ejemplos se cargan cuando vos
-                        los elegís.
-                      </p>
-                      <button
-                        type="button"
-                        popoverTarget="preview-notice"
-                        popoverTargetAction="hide"
-                        className="app-help text-action underline"
-                      >
-                        Cerrar aviso de vista previa
-                      </button>
-                    </div>
                   </div>
-                )}
-              </div>
-              <main
-                id="contenido"
-                tabIndex={-1}
-                className="flex min-h-0 flex-col overflow-y-auto"
-              >
-                {children}
-              </main>
-              <Navigation />
-            </AppShell>
-          </RegistroProvider>
-        </HistoryProvider>
+                </div>
+              )}
+            </div>
+            <main
+              id="contenido"
+              tabIndex={-1}
+              className="flex min-h-0 flex-col overflow-y-auto"
+            >
+              {children}
+            </main>
+            <Navigation />
+          </AppShell>
+        </SessionScope>
       </body>
     </html>
   );

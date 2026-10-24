@@ -14,7 +14,7 @@ Personas que registran su estado de ánimo desde el celular y consultan su histo
 
 ## Product Purpose
 
-Registrar ánimo, emoción y factores con poca fricción; consultar días, evolución y exportaciones descriptivas. Frontend Next.js con vista previa explícita; autenticación y persistencia reales siguen pendientes. Diario, sueño, fotos y logros están en backlog ANI-100–106.
+Registrar ánimo, emoción y factores con poca fricción; consultar días, evolución y exportaciones descriptivas. Frontend Next.js con vista previa explícita y onboarding/autenticación Supabase: email, confirmación, recuperación, sesión y perfil privado. Google usa el mismo proveedor y requiere credenciales OAuth configuradas. La persistencia de registros emocionales en una cuenta sigue pendiente; iniciar sesión no implica sincronizarlos. Diario, sueño, fotos y logros están en backlog ANI-100–106.
 
 ## Brand Personality
 

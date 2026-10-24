@@ -35,7 +35,18 @@ export default function Navigation() {
         // Si el navegador impide la copia local, Ayuda sigue disponible online.
       });
   }, []);
-  if (["/ingresar", "/crear-cuenta", "/cuenta"].includes(pathname)) return null;
+  if (
+    [
+      "/ingresar",
+      "/crear-cuenta",
+      "/cuenta",
+      "/bienvenida",
+      "/empezar",
+      "/recuperar",
+      "/actualizar-clave",
+    ].includes(pathname)
+  )
+    return null;
   return (
     <nav
       aria-label="Secciones"

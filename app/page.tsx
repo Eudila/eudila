@@ -1,7 +1,22 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import Link from "next/link";
+import { currentUser, serverAuth } from "./auth/server";
+import { redirect } from "next/navigation";
+import { authConfigured } from "./auth/config";
+import { previewEnabled } from "./frontend-preview";
 
-export default function Home() {
+export default async function Home() {
+  const user = await currentUser();
+  if (authConfigured && !previewEnabled) {
+    if (!user) redirect("/bienvenida");
+    const client = await serverAuth();
+    const { data } = await client
+      .from("profiles")
+      .select("onboarding_completed_at")
+      .eq("id", user.id)
+      .maybeSingle();
+    if (!data?.onboarding_completed_at) redirect("/empezar");
+  }
   return (
     <div className="flex flex-1 flex-col justify-center gap-6 px-6 py-8">
       <h1 className="font-display max-w-question text-question leading-question font-bold tracking-brand text-balance">
@@ -13,8 +28,11 @@ export default function Home() {
       <Link href="/registro/tipo" className="action action-primary">
         Empezar registro
       </Link>
-      <Link href="/ingresar" className="action action-text">
-        Ingresar o crear cuenta
+      <Link
+        href={user ? "/cuenta" : "/ingresar"}
+        className="action action-text"
+      >
+        {user ? "Mi cuenta" : "Ingresar o crear cuenta"}
       </Link>
     </div>
   );
