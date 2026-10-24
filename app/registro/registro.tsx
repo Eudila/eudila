@@ -17,6 +17,14 @@ import Factores from "./factores";
 import Confirmacion from "./confirmacion";
 import type { Draft } from "../historial/records";
 import { moodActionStyle } from "../actions";
+import { Icon, type IconName } from "../ui";
+
+const typeIcons: Record<string, IconName> = {
+  mañana: "sunrise",
+  tarde: "sun",
+  noche: "moon",
+  libre: "sparkle",
+};
 export type { Draft } from "../historial/records";
 
 const draftKey = "eudila-draft-v1";
@@ -121,7 +129,6 @@ export default function Registro({ paso }: { paso: string }) {
   const action = "action action-primary";
   const textAction = "action action-text";
   const emotional = paso === "animo";
-  const navigationAction = emotional ? "mood-navigation-control" : textAction;
 
   useEffect(() => {
     const finish = () => {
@@ -170,26 +177,23 @@ export default function Registro({ paso }: { paso: string }) {
           : `relative flex flex-1 flex-col px-6 ${paso === "emocion" ? "gap-4 py-4 [@media(max-height:600px)]:gap-2" : "gap-6 py-6"}`
       }
     >
-      <div
-        className={
-          emotional
-            ? "mood-navigation"
-            : paso === "emocion"
-              ? "grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2"
-              : "flex flex-wrap items-center justify-between gap-3"
-        }
-      >
+      <div className="mood-navigation">
         {index > 0 ? (
           <Link
             href={`/registro/${steps[index - 1]}`}
-            className={navigationAction}
-            aria-label={emotional ? "Volver" : undefined}
+            className="mood-navigation-control"
+            aria-label="Volver"
           >
-            {emotional ? navigationIcon("back") : "Volver"}
+            {navigationIcon("back")}
           </Link>
         ) : (
-          <button type="button" onClick={close} className={textAction}>
-            Volver
+          <button
+            type="button"
+            onClick={close}
+            className="mood-navigation-control"
+            aria-label="Volver"
+          >
+            {navigationIcon("back")}
           </button>
         )}
         <p
@@ -203,10 +207,10 @@ export default function Registro({ paso }: { paso: string }) {
         <button
           type="button"
           onClick={close}
-          className={navigationAction}
+          className="mood-navigation-control"
           aria-label="Cerrar registro"
         >
-          {emotional ? navigationIcon("close") : "Cerrar"}
+          {navigationIcon("close")}
         </button>
       </div>
       <h1
@@ -240,10 +244,9 @@ export default function Registro({ paso }: { paso: string }) {
           {paso === "tipo" && (
             <>
               <p className="text-muted">
-                Elegí el momento que querés registrar. Puede ser distinto de la
-                hora actual.
+                Puede ser distinto de la hora actual.
               </p>
-              <fieldset className="flex flex-col gap-3">
+              <fieldset className="stagger flex flex-col gap-3">
                 <legend className="sr-only">Momento del registro</legend>
                 {types.map((type) => (
                   <label
@@ -256,17 +259,17 @@ export default function Registro({ paso }: { paso: string }) {
                       value={type}
                       checked={draft.type === type}
                       onChange={() => update({ ...draft, type })}
-                      className="size-5 shrink-0 accent-action"
+                      className="size-5 shrink-0 accent-graphite"
                     />
-                    {type === "libre"
-                      ? "Registro libre"
-                      : type[0].toUpperCase() + type.slice(1)}
+                    <Icon name={typeIcons[type]} />
+                    <span className="flex-1">
+                      {type === "libre"
+                        ? "Registro libre"
+                        : type[0].toUpperCase() + type.slice(1)}
+                    </span>
                   </label>
                 ))}
               </fieldset>
-              <p className="text-muted">
-                Registro libre sirve para cualquier momento.
-              </p>
               <button
                 type="button"
                 disabled={!draft.type}
@@ -353,12 +356,21 @@ export default function Registro({ paso }: { paso: string }) {
           )}
           {paso === "emocion" && (
             <>
-              <p>Ánimo: {mood.label}</p>
+              <p className="inline-flex items-center gap-2 self-start rounded-pill border border-line bg-raised py-0.5 pr-3 pl-0.5">
+                <MoodOrb level={draft.mood} className="size-6" />
+                <span>
+                  <span className="sr-only">Ánimo: </span>
+                  {mood.label}
+                </span>
+              </p>
               <Emociones
                 selectedId={draft.emotionId}
                 choose={(emotionId) => update({ ...draft, emotionId })}
               />
-              <Link href="/registro/animo" className={`${textAction} mt-auto`}>
+              <Link
+                href="/registro/animo"
+                className={`${textAction} ${draft.emotionId ? "" : "mt-auto"}`}
+              >
                 Cambiar ánimo
               </Link>
             </>

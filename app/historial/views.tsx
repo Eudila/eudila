@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { moods } from "@/prototype/moods.js";
 import MoodOrb from "../mood/orb";
+import { Disclosure, Icon } from "../ui";
 import {
   averageMood,
   entriesForDay,
@@ -70,21 +71,36 @@ export function HistoryGate({ children }: { children: React.ReactNode }) {
   return children;
 }
 
-function HistoryActions() {
+const shortcuts = [
+  ["/calendario", "Otros días", "Ver otros días", "calendar"],
+  ["/evolucion", "Evolución", "Ver evolución", "chart"],
+  ["/factores", "Factores", "Ver factores de vida", "tag"],
+  ["/exportar", "Exportar", "Exportar historial", "download"],
+] as const;
+
+function HistoryActions({ calendar = false }: { calendar?: boolean }) {
   return (
-    <div className="flex flex-wrap gap-3">
+    <div className="flex flex-col gap-3">
       <Link href="/registro/tipo" className={action}>
+        <Icon name="plus" />
         Registrar cómo me siento
       </Link>
-      <Link href="/exportar" className={textAction}>
-        Exportar historial
-      </Link>
-      <Link href="/evolucion" className={textAction}>
-        Ver evolución
-      </Link>
-      <Link href="/factores" className={textAction}>
-        Ver factores de vida
-      </Link>
+      <ul className="stagger grid grid-cols-[repeat(auto-fit,minmax(5.5rem,1fr))] gap-2">
+        {shortcuts
+          .filter(([href]) => calendar || href !== "/calendario")
+          .map(([href, label, name, icon]) => (
+            <li key={href}>
+              <Link
+                href={href}
+                aria-label={name}
+                className="shortcut surface-card flex min-h-touch flex-col items-center gap-1 px-2 py-3 text-center"
+              >
+                <Icon name={icon} className="size-6 text-action" />
+                <span>{label}</span>
+              </Link>
+            </li>
+          ))}
+      </ul>
     </div>
   );
 }
@@ -93,7 +109,7 @@ function DaySummary({ entries }: { entries: RecordEntry[] }) {
   const average = averageMood(entries);
   if (average === null) return null;
   return (
-    <div className="flex items-center gap-3 rounded-card border border-line p-4">
+    <div className="flex items-center gap-3 surface-card p-4">
       <MoodShape mood={average} />
       <div className="min-w-0">
         <h2 className="font-semibold">Resumen del día</h2>
@@ -101,8 +117,8 @@ function DaySummary({ entries }: { entries: RecordEntry[] }) {
           {moods[average - 1].label} · {average} de 7
         </p>
         <p className="text-muted">
-          Promedio redondeado de {entries.length}{" "}
-          {entries.length === 1 ? "registro" : "registros"}.
+          Promedio de {entries.length}{" "}
+          {entries.length === 1 ? "registro" : "registros"}
         </p>
       </div>
     </div>
@@ -115,9 +131,9 @@ function RecordList({ entries }: { entries: RecordEntry[] }) {
       <h2 id="records-title" className="font-semibold">
         Registros del día
       </h2>
-      <ol className="space-y-3">
+      <ol className="stagger space-y-3">
         {entries.map((entry) => (
-          <li key={entry.id} className="rounded-card border border-line p-4">
+          <li key={entry.id} className="surface-card p-4">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <time dateTime={entry.recordedAt} className="font-semibold">
                 {recordTime.format(new Date(entry.recordedAt))}
@@ -137,12 +153,12 @@ function RecordList({ entries }: { entries: RecordEntry[] }) {
             </div>
             {entry.factors.length ? (
               <div className="mt-3">
-                <p className="text-muted">Factores elegidos</p>
-                <ul className="mt-1 flex flex-wrap gap-2">
+                <p className="sr-only">Factores elegidos</p>
+                <ul className="flex flex-wrap gap-2">
                   {entry.factors.map((factor) => (
                     <li
                       key={factor.id}
-                      className="rounded-control border border-line px-2 py-1"
+                      className="inline-flex items-center gap-1 rounded-pill border border-line px-3 py-1 text-muted"
                     >
                       {factor.nombre}
                     </li>
@@ -150,7 +166,7 @@ function RecordList({ entries }: { entries: RecordEntry[] }) {
                 </ul>
               </div>
             ) : (
-              <p className="mt-3 text-muted">Sin factores elegidos.</p>
+              <p className="mt-3 text-muted">Sin factores</p>
             )}
             {entry.source === "example" && (
               <p className="mt-3 text-muted">Ejemplo ficticio</p>
@@ -162,18 +178,16 @@ function RecordList({ entries }: { entries: RecordEntry[] }) {
   );
 }
 
-function MoodLegend() {
+function MoodLegend({ calendar = false }: { calendar?: boolean }) {
   return (
-    <details className="rounded-control border border-line p-3">
-      <summary className="min-h-touch cursor-pointer py-2 font-semibold text-action">
-        Escala de ánimo · 1 a 7
-      </summary>
-      <p className="py-3 text-muted">
-        Cada día muestra el promedio redondeado de los ánimos registrados. El
-        número, la forma y la etiqueta acompañan al color. La escala describe lo
-        que elegiste; no es una evaluación ni un diagnóstico.
+    <Disclosure summary="Escala de ánimo · 1 a 7">
+      <p>
+        {calendar &&
+          "El punto indica un día sin registros; tocá una fecha para ver el detalle. "}
+        Cada día muestra el promedio redondeado. La escala describe lo que
+        elegiste; no es una evaluación ni un diagnóstico.
       </p>
-      <ol className="space-y-2">
+      <ol className="space-y-2 text-text">
         {moods.map((mood, index) => (
           <li key={mood.label} className="flex items-center gap-2">
             <MoodShape mood={index + 1} small />
@@ -183,7 +197,7 @@ function MoodLegend() {
           </li>
         ))}
       </ol>
-    </details>
+    </Disclosure>
   );
 }
 
@@ -234,10 +248,7 @@ export function TodayView() {
             )}
           </div>
         )}
-        <HistoryActions />
-        <Link href="/calendario" className={textAction}>
-          Ver otros días
-        </Link>
+        <HistoryActions calendar />
       </HistoryGate>
     </section>
   );
@@ -276,14 +287,14 @@ export function CalendarView({
   ];
   const shortWeekdays = ["Lu", "Ma", "Mi", "Ju", "Vi", "Sá", "Do"];
   return (
-    <section className="space-y-6 px-4 py-6">
+    <section className="space-y-6 px-6 py-6">
       <h1 className={title}>Calendario</h1>
       <HistoryGate>
         {first && today && (
           <>
             <nav
               aria-label="Mes del calendario"
-              className="flex flex-wrap items-center justify-between gap-2"
+              className="-mx-3 flex flex-wrap items-center justify-between gap-2"
             >
               <h2
                 id="month-title"
@@ -314,7 +325,7 @@ export function CalendarView({
             </nav>
             <div
               aria-labelledby="month-title"
-              className="-mx-2 grid grid-cols-7 gap-1"
+              className="-mx-4 grid grid-cols-7 gap-1"
             >
               {weekdays.map((day, index) => (
                 <span
@@ -348,7 +359,8 @@ export function CalendarView({
                     )}
                   </>
                 );
-                const cellClass = `flex min-h-20 min-w-0 flex-col items-center justify-start gap-1 rounded-control border py-2 ${isToday ? "border-action bg-primary/10" : "border-line"}`;
+                // Only days with records or today carry a frame; empty days stay quiet.
+                const cellClass = `flex min-h-20 min-w-0 flex-col items-center justify-start gap-1 rounded-control border py-2 ${isToday ? "border-action bg-primary/10" : average ? "border-line" : "border-transparent"}`;
                 return day > today ? (
                   <span
                     key={day}
@@ -370,17 +382,13 @@ export function CalendarView({
                 );
               })}
             </div>
-            <p className="text-muted">
-              El punto indica un día sin registros. Tocá una fecha para ver el
-              detalle.
-            </p>
             {!records.length && (
               <p className="text-muted">
                 Tu calendario está vacío. Los registros que guardes aparecerán
                 acá.
               </p>
             )}
-            <MoodLegend />
+            <MoodLegend calendar />
             <HistoryActions />
           </>
         )}

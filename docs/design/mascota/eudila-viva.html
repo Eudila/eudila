@@ -1,0 +1,731 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: AGPL-3.0-only -->
+<!-- Referencia viva de la mascota eudila. Especificación: docs/design/mascota/README.md. Publicada en https://eudila.agustinpedernera.com -->
+<html lang="es">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Ideas animadas para convertir el orbe de eudila en mascota y avatar.">
+<style>[hidden]{display:none!important}img{max-width:100%}</style>
+<title>Eudila viva</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@500;600;700;800&display=swap">
+<style>
+/* Layout: lienzo Aurora de eudila; un escenario vivo arriba, cuatro ideas en grilla, temperamentos a lo ancho y la ficha de movimiento al final. */
+:root{
+  color-scheme:dark;
+  --canvas:#1a1626; --floor:#100d18; --surface:#18151f; --raised:rgb(214 208 230 / .06);
+  --text:#f4f1fa; --muted:#dad5ea; --line:rgb(214 208 230 / .3); --line-strong:rgb(214 208 230 / .48);
+  --action:#8ee2df; --on-action:#1d1d1f; --amber:#f2b24a; --mood-bottom:#071416;
+  --spectrum:linear-gradient(90deg,#892fc9,#5b4ce1,#209ae7,#2ec0bc,#77cb47,#fe9613,#ff4a4b);
+  --font-display:"Figtree",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --font-body:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --ease-brand:cubic-bezier(.32,.72,0,1);
+  --radius:14px;
+  --acc:rgb(46 192 188);
+}
+html{background:var(--floor)}
+body{
+  margin:0;color:var(--text);font:400 1.0625rem/1.5 var(--font-body);
+  background-color:var(--canvas);
+  background:
+    radial-gradient(60rem 40rem at 0% 0%,rgb(168 69 218 / .32),transparent 62%),
+    radial-gradient(50rem 36rem at 100% 0%,rgb(59 186 223 / .26),transparent 62%),
+    radial-gradient(70rem 40rem at 50% 104%,rgb(242 178 74 / .16),transparent 62%),
+    linear-gradient(var(--canvas),var(--floor));
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+.page{max-width:68rem;margin:0 auto;padding-block:28px 72px;display:grid;grid-template-columns:minmax(0,1fr);gap:64px}
+h1,h2,h3{font-family:var(--font-display);text-wrap:balance;margin:0}
+p{margin:0}
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.lockup{display:flex;align-items:center;gap:6px;font:700 2.25rem/1 var(--font-display);letter-spacing:-.045em}
+.lockup canvas{width:72px;height:72px;flex:none;margin:-10px -9px -10px -12px;cursor:pointer}
+.tag{font-size:.8125rem;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:4px 12px}
+.intro{display:grid;gap:18px;margin-top:-24px}
+.eyebrow{font:600 .75rem/1.2 var(--font-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.intro h1{font-weight:800;font-size:clamp(2.4rem,4.2vw + 1.2rem,4.5rem);line-height:1;letter-spacing:-.04em;max-width:13ch}
+.lead{color:var(--muted);max-width:60ch}
+
+/* Escenario */
+.hero{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:20px}
+@media (max-width:860px){.hero{grid-template-columns:minmax(0,1fr)}}
+.stage{position:relative;border-radius:28px;overflow:hidden;height:clamp(380px,48vw,560px);background:#0f5654;box-shadow:inset 0 0 0 1px rgb(255 255 255 / .07)}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;cursor:pointer;touch-action:manipulation}
+.stage-q,.stage-state{position:absolute;left:0;right:0;text-align:center;pointer-events:none;padding-inline:16px}
+.stage-q{top:22px;font:700 1.25rem/1.2 var(--font-display);letter-spacing:-.02em;color:rgb(255 255 255 / .92)}
+.stage-state{bottom:24px;font:700 2.125rem/1 var(--font-display);letter-spacing:-.035em;transition:opacity .15s}
+.panel{border:1px solid var(--line);background:var(--raised);border-radius:var(--radius);padding:22px;display:grid;gap:22px;align-content:start}
+.panel h2{font-size:1.375rem;letter-spacing:-.02em}
+.field{display:grid;gap:8px}
+.label{font-weight:600;font-size:.9375rem}
+.seg{border:0;margin:0;padding:0;display:grid;gap:8px}
+.seg legend{padding:0;font-weight:600;font-size:.9375rem;margin-bottom:8px}
+.seg-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:rgb(0 0 0 / .22);border-radius:999px;padding:4px}
+.seg-row label{position:relative;display:flex;align-items:center;justify-content:center;min-height:40px;border-radius:999px;cursor:pointer;font-weight:600;font-size:.9375rem;color:var(--muted);transition:background .15s,color .15s}
+.seg-row input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.seg-row label:has(input:checked){background:var(--text);color:var(--on-action)}
+.seg-row label:has(input:focus-visible){outline:2px solid var(--action);outline-offset:2px}
+.range{-webkit-appearance:none;appearance:none;width:100%;height:44px;margin:0;background:transparent;touch-action:pan-y;cursor:pointer}
+.range::-webkit-slider-runnable-track{height:6px;border-radius:999px;background:var(--spectrum)}
+.range::-moz-range-track{height:6px;border-radius:999px;background:var(--spectrum)}
+.range::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;margin-top:-12px;border-radius:50%;border:0;background:radial-gradient(circle,var(--acc) 0 7.5px,#fff 8.5px);box-shadow:0 0 0 9px color-mix(in srgb,var(--acc) 32%,transparent)}
+.range::-moz-range-thumb{width:30px;height:30px;border-radius:50%;border:0;background:radial-gradient(circle,var(--acc) 0 7.5px,#fff 8.5px);box-shadow:0 0 0 9px color-mix(in srgb,var(--acc) 32%,transparent)}
+.range:focus-visible{outline:none}
+.range:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(--mood-bottom),0 0 0 6px #fff}
+.range:focus-visible::-moz-range-thumb{box-shadow:0 0 0 3px var(--mood-bottom),0 0 0 6px #fff}
+.ends{display:flex;justify-content:space-between;gap:12px;font:600 .6875rem/1.2 var(--font-body);letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.moments{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+@media (max-width:420px){.moments{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.btn{min-height:44px;border-radius:999px;border:1px solid var(--line-strong);background:transparent;color:var(--text);font:600 .9375rem/1 var(--font-body);cursor:pointer;padding-inline:10px;transition:background .15s,border-color .15s,color .15s,transform .15s var(--ease-brand)}
+.btn:hover{background:var(--raised);border-color:var(--text)}
+.btn:active{transform:scale(.96)}
+.btn:focus-visible{outline:2px solid var(--action);outline-offset:2px}
+.btn[aria-pressed="true"],.btn.is-on{background:var(--action);border-color:var(--action);color:var(--on-action)}
+.readout{border-top:1px solid var(--line);padding-top:18px;display:grid;gap:10px;min-height:9.5rem}
+.readout h3{font-size:1.125rem;letter-spacing:-.01em}
+.readout dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0;font-size:.875rem}
+.readout dt{color:var(--muted)}
+.readout dd{margin:0;font-variant-numeric:tabular-nums}
+.readout p{color:var(--muted);font-size:.9375rem}
+.rm-note{font-size:.875rem;color:var(--amber)}
+
+/* Ideas */
+.section-head{display:grid;gap:10px;margin-bottom:22px}
+.section-head h2{font-size:clamp(1.75rem,2vw + 1rem,2.5rem);letter-spacing:-.03em;line-height:1.05}
+.section-head p{color:var(--muted);max-width:62ch}
+.concepts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+@media (max-width:760px){.concepts{grid-template-columns:minmax(0,1fr)}}
+.card{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--raised);display:grid;grid-template-rows:auto 1fr}
+.card-art{position:relative;height:280px}
+.card-art canvas{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
+.card-art .cap{position:absolute;left:14px;bottom:12px;font:600 .75rem/1.2 var(--font-body);letter-spacing:.06em;text-transform:uppercase;color:rgb(255 255 255 / .8);pointer-events:none}
+.art-vivo{background:linear-gradient(#0f5654,color-mix(in srgb,#0f5654 72%,#1d1d1f) 56%,#071416)}
+.art-mirada{background:linear-gradient(#26235b,#100d18)}
+.art-chispa{background:radial-gradient(circle at 50% 50%,#231d33,#0c0a12)}
+.art-tuya{background:linear-gradient(#1f1a2e,#100d18)}
+.card-body{padding:18px 20px 22px;display:grid;gap:12px;align-content:start}
+.card-body h3{font-size:1.5rem;letter-spacing:-.025em}
+.card-body p{color:var(--muted);font-size:.975rem}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+.chip{font:600 .75rem/1 var(--font-body);border-radius:999px;padding:7px 11px;border:1px solid var(--line);color:var(--muted)}
+.chip.fit-high{border-color:var(--action);color:var(--action)}
+.chip.fit-decide{border-color:var(--amber);color:var(--amber)}
+.hint{font-size:.8125rem;color:var(--muted);opacity:.85}
+.avatars-legend{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));position:absolute;left:0;right:0;bottom:10px;text-align:center;font:600 .6875rem/1.25 var(--font-body);letter-spacing:.04em;text-transform:uppercase;color:rgb(255 255 255 / .75);pointer-events:none;padding-inline:6px}
+
+/* Temperamentos */
+.strip-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(90deg,#32134d,#26235b,#123f60,#0f5654,#285b25,#6c3b0b,#712127)}
+.strip{min-width:620px;position:relative}
+.strip-hint{display:none;font-size:.8125rem;color:var(--muted);margin-top:10px}
+@media (max-width:660px){.strip-hint{display:block}.strip-scroll{scroll-snap-type:x proximity}}
+.strip-art{position:relative;height:210px;background:linear-gradient(transparent,rgb(7 20 22 / .75))}
+.strip-art canvas{position:absolute;inset:0;width:100%;height:100%}
+.strip-names{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;padding:12px 6px 16px;background:rgb(7 20 22 / .75);font:700 .875rem/1.2 var(--font-display);gap:4px}
+.strip-names small{display:block;font:400 .75rem/1.3 var(--font-body);color:var(--muted);margin-top:4px}
+
+/* Ficha y encaje */
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius)}
+table{border-collapse:collapse;width:100%;min-width:600px;font-size:.9375rem}
+th,td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font:600 .6875rem/1.2 var(--font-body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:rgb(0 0 0 / .18)}
+td{font-variant-numeric:tabular-nums}
+td:first-child{font-weight:600}
+@media (max-width:600px){table{min-width:0}thead{display:none}tr{display:grid;gap:6px;padding:14px 16px;border-bottom:1px solid var(--line)}tr:last-child{border-bottom:0}td{display:grid;grid-template-columns:5.5rem minmax(0,1fr);gap:12px;align-items:baseline;padding:0;border:0}td:first-child{display:block;font-size:1rem;margin-bottom:2px}td .origin{justify-self:start}td:not(:first-child)::before{content:attr(data-label);font:600 .6875rem/1.6 var(--font-body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}}
+.origin{font:600 .75rem/1 var(--font-body);border-radius:999px;padding:5px 9px;border:1px solid var(--line);white-space:nowrap}
+.origin.brand{border-color:var(--action);color:var(--action)}
+.origin.prop{border-color:var(--amber);color:var(--amber)}
+.fit{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+@media (max-width:760px){.fit{grid-template-columns:minmax(0,1fr)}}
+.fit-col{border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;display:grid;gap:12px;align-content:start}
+.fit-col h3{font-size:1.25rem}
+.fit-col ul{margin:0;padding-left:1.1em;display:grid;gap:8px;color:var(--muted)}
+.fit-col strong{color:var(--text)}
+.reco{border-radius:var(--radius);padding:22px;background:color-mix(in srgb,var(--action) 12%,transparent);border:1px solid color-mix(in srgb,var(--action) 45%,transparent);display:grid;gap:8px}
+.reco h3{font-size:1.25rem}
+.reco p{color:var(--muted)}
+footer{color:var(--muted);font-size:.875rem;border-top:1px solid var(--line);padding-top:20px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="page">
+  <header class="top">
+    <div class="lockup">
+      <canvas id="logo" aria-hidden="true"></canvas>
+      eudila
+    </div>
+    <span class="tag">Exploración de mascota · 23/10/2026</span>
+  </header>
+
+  <section class="intro">
+    <p class="eyebrow">Mascota y avatar</p>
+    <h1>El orbe, con carácter</h1>
+    <p class="lead">Ideas para que eudila sea mascota sin dejar de ser el orbe: cinco capas, núcleo blanco y las siete siluetas reales de la app. Todo se mueve con los parámetros del brandbook (600&nbsp;ms con la curva de marca, respiración de 4&nbsp;s, giro de capas a 0,05&nbsp;rad/s). Lo nuevo está marcado como propuesta.</p>
+  </section>
+
+  <section class="hero" aria-label="Escenario interactivo">
+    <div class="stage" id="stage">
+      <canvas id="hero" role="img" aria-label="eudila animada; reacciona al ánimo elegido y a los momentos"></canvas>
+      <p class="stage-q">¿Cómo te sentís?</p>
+      <p class="stage-state" id="stateName" aria-live="polite">Neutral</p>
+    </div>
+    <div class="panel" id="panel">
+      <h2>Probala</h2>
+      <fieldset class="seg">
+        <legend>Rostro</legend>
+        <div class="seg-row">
+          <label><input type="radio" name="face" id="face-eyes" value="eyes" checked>Con mirada</label>
+          <label><input type="radio" name="face" id="face-none" value="none">Sin cara</label>
+        </div>
+      </fieldset>
+      <div class="field">
+        <label class="label" for="mood">Ánimo</label>
+        <input class="range" type="range" id="mood" min="1" max="7" step="0.01" value="4" aria-valuetext="Neutral">
+        <div class="ends"><span>Muy desagradable</span><span>Muy agradable</span></div>
+      </div>
+      <div class="field">
+        <span class="label" id="mom-label">Momentos</span>
+        <div class="moments" role="group" aria-labelledby="mom-label">
+          <button class="btn" type="button" data-m="hola">Saludo</button>
+          <button class="btn" type="button" data-m="escucha">Escucha</button>
+          <button class="btn" type="button" data-m="guardar">Guardado</button>
+          <button class="btn" type="button" data-m="descanso" aria-pressed="false">Descanso</button>
+          <button class="btn" type="button" data-m="asomar">Ayuda</button>
+          <button class="btn" type="button" data-m="toque">Toque</button>
+        </div>
+      </div>
+      <div class="readout" id="readout" aria-live="polite">
+        <h3 id="ro-name">Reposo</h3>
+        <dl><dt>Duración</dt><dd id="ro-dur">Continuo</dd><dt>Curva</dt><dd id="ro-curve">Respiración 4 s · giro 0,05 rad/s</dd></dl>
+        <p id="ro-what">Respira, gira sus capas y mira a los costados por su cuenta. Tocala para que reaccione.</p>
+      </div>
+      <p class="rm-note" id="rmNote" hidden>Tu sistema pide menos movimiento: la mascota queda quieta y los cambios son instantáneos, como en la app.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <p class="eyebrow">Cuatro direcciones</p>
+      <h2>De símbolo a compañía</h2>
+      <p>Van de la más fiel a la marca a la más expresiva. Todas son interactivas: tocalas.</p>
+    </div>
+    <div class="concepts">
+      <article class="card">
+        <div class="card-art art-vivo"><canvas id="c-vivo" aria-label="Orbe sin cara que mira con su núcleo"></canvas><span class="cap">Tocalo para que salte</span></div>
+        <div class="card-body">
+          <h3>Orbe vivo</h3>
+          <p>El orbe ya es la mascota. Sin cara: el núcleo mira a los costados y las capas internas se desplazan más que las externas, así parece una esfera que gira.</p>
+          <div class="meta"><span class="chip fit-high">Encaje alto</span><span class="chip">Registro · splash · vacíos</span></div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-art art-mirada"><canvas id="c-mirada" aria-label="Orbe con dos ojos que cambian según el estado"></canvas><span class="cap" id="mirada-cap">Neutral</span></div>
+        <div class="card-body">
+          <h3>Mirada</h3>
+          <p>Dos ojos dentro del núcleo blanco. Cambian con el estado: párpado caído en lo desagradable, arcos en lo agradable. Parpadea y mira a su alrededor sola.</p>
+          <div class="meta"><span class="chip fit-decide">Pide decisión</span><span class="chip">Ayuda · onboarding · TechWeek</span></div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-art art-chispa"><canvas id="c-chispa" aria-label="El núcleo viaja con una estela del espectro y florece en un estado"></canvas><span class="cap" id="chispa-cap">Florece en Neutral</span></div>
+        <div class="card-body">
+          <h3>Chispa</h3>
+          <p>El núcleo viaja solo con una estela de los siete colores y florece en un estado distinto en cada vuelta. Sirve como splash breve o como transición entre secciones.</p>
+          <div class="meta"><span class="chip fit-high">Encaje alto</span><span class="chip">Splash · carga · transiciones</span></div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-art art-tuya"><canvas id="c-tuya" aria-label="Tres avatares de ejemplo armados con registros de una semana"></canvas>
+          <div class="avatars-legend"><span>Ejemplo · semana estable</span><span>Ejemplo · semana que repunta</span><span>Ejemplo · semana movida</span></div>
+        </div>
+        <div class="card-body">
+          <h3>Tu eudila</h3>
+          <p>Un avatar que se arma con tus últimos cinco registros: cada capa toma la forma y el color de un ánimo, la exterior es el más reciente. Nadie tiene dos iguales.</p>
+          <div class="meta"><span class="chip fit-high">Encaje alto · privado</span><span class="chip">Perfil · resumen semanal</span></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <p class="eyebrow">Una mascota, siete estados</p>
+      <h2>Siete temperamentos</h2>
+      <p>Cambia el ritmo, nunca el juicio. En lo desagradable respira más lento, se hunde un poco y tirita apenas; en lo agradable se balancea y da saltitos. Tocá cada una para que salte.</p>
+    </div>
+    <div class="strip-scroll">
+      <div class="strip">
+        <div class="strip-art"><canvas id="c-siete" aria-label="Siete versiones de la mascota, una por estado"></canvas></div>
+        <div class="strip-names">
+          <span>Muy desagradable<small>5,6 s · tirita</small></span>
+          <span>Desagradable<small>5 s · se hunde</small></span>
+          <span>Algo desagradable<small>4,5 s · onda</small></span>
+          <span>Neutral<small>4 s · quieta</small></span>
+          <span>Algo agradable<small>4 s · ondula</small></span>
+          <span>Agradable<small>3,6 s · se mece</small></span>
+          <span>Muy agradable<small>3,2 s · salta</small></span>
+        </div>
+      </div>
+    </div>
+    <p class="strip-hint">Deslizá para ver los siete estados.</p>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <p class="eyebrow">Ficha de movimiento</p>
+      <h2>Qué viene del brandbook y qué es nuevo</h2>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Movimiento</th><th>Tiempo</th><th>Curva</th><th>Origen</th></tr></thead>
+        <tbody>
+          <tr><td>Cambio de ánimo</td><td>600 ms</td><td>cubic-bezier(.32,.72,0,1)</td><td><span class="origin brand">Brandbook</span></td></tr>
+          <tr><td>Respiración</td><td>4 s, ±1,8 %</td><td>Seno</td><td><span class="origin brand">Brandbook</span></td></tr>
+          <tr><td>Giro de capas</td><td>0,05 rad/s, alterno</td><td>Lineal</td><td><span class="origin brand">Brandbook</span></td></tr>
+          <tr><td>Titileo de partículas</td><td>2,5–6 s, fases independientes</td><td>Seno</td><td><span class="origin brand">Brandbook</span></td></tr>
+          <tr><td>Mirada</td><td>Mira a otro lado cada 1,1–3,3 s</td><td>Exponencial, 11/s</td><td><span class="origin prop">Propuesta</span></td></tr>
+          <tr><td>Parpadeo</td><td>160 ms cada 2,4–6,2 s</td><td>Seno</td><td><span class="origin prop">Propuesta</span></td></tr>
+          <tr><td>Saludo</td><td>2,3 s</td><td>Capas de adentro hacia afuera, 70 ms entre capas, rebote; luego salto</td><td><span class="origin prop">Propuesta</span></td></tr>
+          <tr><td>Salto</td><td>1 s</td><td>Anticipación 140 ms, aire 320 ms, aterrizaje con resorte</td><td><span class="origin prop">Propuesta</span></td></tr>
+          <tr><td>Guardado</td><td>2,1 s</td><td>Ease-in al núcleo, destello, reapertura con rebote</td><td><span class="origin prop">Propuesta</span></td></tr>
+          <tr><td>Toque</td><td>1,2 s</td><td>Resorte de 3,1 Hz amortiguado</td><td><span class="origin prop">Propuesta</span></td></tr>
+          <tr><td>Temperamento</td><td>Respiración 3,2–5,6 s según estado</td><td>Interpolado con el slider</td><td><span class="origin prop">Propuesta</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <p class="eyebrow">Encaje con la marca</p>
+      <h2>Qué conserva y qué hay que decidir</h2>
+    </div>
+    <div class="fit">
+      <div class="fit-col">
+        <h3>Conserva</h3>
+        <ul>
+          <li><strong>Cinco capas y núcleo blanco</strong> en todas las versiones, con el material y el borde de luz de <code>orb.tsx</code>.</li>
+          <li><strong>Las siete siluetas reales</strong> de <code>moods.js</code>, interpoladas punto a punto como en el slider.</li>
+          <li><strong>Colores de la tabla de estados</strong> y ambiente de tres paradas detrás del escenario.</li>
+          <li><strong>Movimiento reducido:</strong> orbe quieto y cambios instantáneos.</li>
+        </ul>
+      </div>
+      <div class="fit-col">
+        <h3>Pide una decisión</h3>
+        <ul>
+          <li><strong>Ojos.</strong> DESIGN.md descarta caras tipo emoji. «Mirada» necesita una decisión documentada antes de entrar a la app.</li>
+          <li><strong>Guardado igual para todos.</strong> Celebra que registraste, no cómo te sentís; la marca no felicita estados agradables.</li>
+          <li><strong>Temperamentos sin castigo.</strong> La tiritona de lo desagradable es de 1 px; nunca debe leerse como reproche.</li>
+          <li><strong>«Tu eudila» revela ánimo.</strong> Si se comparte, comparte datos; tiene que quedar privado por defecto.</li>
+          <li><strong>Dónde vive.</strong> La marca pide no animar historial, inputs ni tarjetas: la mascota va en ánimo, splash, vacíos y Ayuda.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="reco">
+    <h3>Mi recomendación</h3>
+    <p>«Orbe vivo» como mascota por defecto, con tres momentos: Saludo en el splash, Escucha mientras arrastrás el slider y Guardado en la confirmación. «Mirada» como capa opcional solo para Ayuda y piezas de TechWeek. «Tu eudila» queda para cuando exista persistencia real de registros.</p>
+  </section>
+
+  <footer>Exploración visual, sin cambios en la app. Si se adopta una dirección, registrarla en DESIGN.md y en la revisión de marca con evidencia de la ruta real.</footer>
+</div>
+
+<script>
+(() => {
+const TAU = Math.PI * 2, PI = Math.PI;
+const RM = matchMedia('(prefers-reduced-motion: reduce)');
+const DPR = Math.min(2, window.devicePixelRatio || 1);
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const lerp2 = (a, b, t) => [lerp(a[0], b[0], t), lerp(a[1], b[1], t)];
+const approach = (v, t, s) => v < t ? Math.min(t, v + s) : Math.max(t, v - s);
+const bezier = (x1, y1, x2, y2) => {
+  const f = (a, b, u) => 3 * (1 - u) * (1 - u) * u * a + 3 * (1 - u) * u * u * b + u * u * u;
+  return t => { if (t <= 0) return 0; if (t >= 1) return 1; let lo = 0, hi = 1, u = t;
+    for (let i = 0; i < 22; i++) { u = (lo + hi) / 2; if (f(x1, x2, u) < t) lo = u; else hi = u; } return f(y1, y2, u); };
+};
+const brand = bezier(.32, .72, 0, 1);
+const backOut = (t, s = 1.70158) => { t = clamp(t) - 1; return t * t * ((s + 1) * t + s) + 1; };
+const inCubic = t => t * t * t;
+const outCubic = t => 1 - (1 - t) ** 3;
+const damp = (t, f, d) => Math.exp(-d * t) * Math.sin(TAU * f * t);
+const hump = (t, a, b) => (t <= a || t >= b) ? 0 : Math.min(1, 1.8 * Math.sin(PI * (t - a) / (b - a)));
+
+/* Estados: misma tabla que prototype/moods.js */
+const MOODS = [
+  { label: "Muy desagradable", a: "#892FC9", o: "#A845DA", amb: "#32134D", points: 9, depth: .27 },
+  { label: "Desagradable", a: "#5B4CE1", o: "#8A68D8", amb: "#26235B", points: 14, depth: .17 },
+  { label: "Algo desagradable", a: "#209AE7", o: "#3BBADF", amb: "#123F60", points: 12, depth: .08 },
+  { label: "Neutral", a: "#2EC0BC", o: "#5FD3D0", amb: "#0F5654", points: 0, depth: 0 },
+  { label: "Algo agradable", a: "#77CB47", o: "#B6D57A", amb: "#285B25", points: 1, depth: .14 },
+  { label: "Agradable", a: "#FE9613", o: "#F2B24A", amb: "#6C3B0B", points: 7, depth: .13 },
+  { label: "Muy agradable", a: "#FF4A4B", o: "#E65175", amb: "#712127", points: 9, depth: .19 }
+];
+const hx = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+MOODS.forEach(m => { m.orbC = hx(m.o); m.ambC = hx(m.amb); m.accC = hx(m.a); });
+const at = (key, m) => { m = clamp(m, 1, 7); const i = Math.min(5, Math.floor(m - 1)), f = m - 1 - i, A = MOODS[i][key], B = MOODS[i + 1][key]; return [0, 1, 2].map(j => A[j] + (B[j] - A[j]) * f); };
+const rgba = (c, a) => `rgba(${c[0] | 0},${c[1] | 0},${c[2] | 0},${a})`;
+const mix = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
+const labelOf = m => MOODS[clamp(Math.round(m), 1, 7) - 1].label;
+
+/* Geometría: port directo de shapePoints() */
+const N = 180;
+const polar = (r, a) => [r * Math.cos(a), r * Math.sin(a)];
+const cubic = (a, b, c, d, t) => { const u = 1 - t; return a.map((v, i) => u ** 3 * v + 3 * u * u * t * b[i] + 3 * u * t * t * c[i] + t ** 3 * d[i]); };
+function closedCurve(nodes, p, tension) {
+  const pos = p * nodes.length, i = Math.floor(pos), n = nodes.length;
+  const a = nodes[i % n], b = nodes[(i + 1) % n], prev = nodes[(i + n - 1) % n], next = nodes[(i + 2) % n];
+  const c1 = a.map((v, k) => v + (b[k] - prev[k]) * tension / 6), c2 = b.map((v, k) => v - (next[k] - a[k]) * tension / 6);
+  return cubic(a, c1, c2, b, pos - i);
+}
+function shapePoints(mood) {
+  const unpleasant = mood.points === 14 || (mood.points === 9 && mood.depth > .2);
+  const nodes = unpleasant
+    ? Array.from({ length: mood.points * 2 }, (_, i) => polar(i % 2 ? (mood.points === 9 ? 65 : 75) : 96, i * PI / mood.points - PI / 2))
+    : [[0, -84], [62, -79], [84, -36], [91, 18], [69, 68], [12, 98], [-48, 73], [-86, 28], [-77, -35], [-48, -79]];
+  const out = new Float32Array(N * 2);
+  for (let k = 0; k < N; k++) {
+    const p = k / N, ang = p * TAU - PI / 2; let pt;
+    if (unpleasant) pt = closedCurve(nodes, p, mood.points === 9 ? 0 : .6);
+    else if (mood.points === 0) pt = polar(88, ang);
+    else if (mood.points === 12) pt = polar(86 + 3.5 * Math.cos(12 * (ang + PI / 2)), ang);
+    else if (mood.points === 1) pt = closedCurve(nodes, p, 1);
+    else { const sec = TAU / mood.points, pos = p * mood.points, st = Math.floor(pos) * sec - PI / 2;
+      pt = cubic(polar(72, st), polar(111, st + sec * .22), polar(111, st + sec * .78), polar(72, st + sec), pos % 1); }
+    out[2 * k] = pt[0]; out[2 * k + 1] = pt[1];
+  }
+  return out;
+}
+const SHAPES = MOODS.map(shapePoints);
+function shapeAt(m, out, t, layer) {
+  m = clamp(m, 1, 7); const i = Math.min(5, Math.floor(m - 1)), f = m - 1 - i, A = SHAPES[i], B = SHAPES[i + 1];
+  for (let k = 0; k < N * 2; k++) out[k] = A[k] + (B[k] - A[k]) * f;
+  const org = Math.max(0, 1 - Math.abs(m - 5)); // ondulación solo en Algo agradable
+  if (org > .001) for (let k = 0; k < N; k++) {
+    const th = k / N * TAU - PI / 2, d = org * 8 * Math.sin(3 * th + t * TAU / 8 + layer * .7);
+    out[2 * k] += Math.cos(th) * d; out[2 * k + 1] += Math.sin(th) * d;
+  }
+  return out;
+}
+const trace = (ctx, p) => { ctx.beginPath(); ctx.moveTo(p[0], p[1]); for (let k = 2; k < p.length; k += 2) ctx.lineTo(p[k], p[k + 1]); ctx.closePath(); };
+const spark = (ctx, x, y, s) => { ctx.beginPath(); ctx.moveTo(x, y - s); ctx.quadraticCurveTo(x, y, x + s, y); ctx.quadraticCurveTo(x, y, x, y + s); ctx.quadraticCurveTo(x, y, x - s, y); ctx.quadraticCurveTo(x, y, x, y - s); ctx.closePath(); };
+function matG(ctx, c) { const g = ctx.createRadialGradient(-4.4, -8.8, 0, -4.4, -8.8, 132);
+  g.addColorStop(0, 'rgba(255,255,255,.76)'); g.addColorStop(.34, 'rgba(255,255,255,.28)'); g.addColorStop(.72, rgba(c, .62)); g.addColorStop(1, rgba(c, .38)); return g; }
+function edgeG(ctx, c) { const g = ctx.createRadialGradient(-26.4, -57.2, 0, -26.4, -57.2, 187);
+  g.addColorStop(0, 'rgba(255,255,255,.76)'); g.addColorStop(1, rgba(c, .3)); return g; }
+
+const LS = [1, .84, .68, .52, .36], ONES = [1, 1, 1, 1, 1], SCR = new Float32Array(N * 2);
+const PART = Array.from({ length: 24 }, (_, i) => { const a = i * 2.399963, r = 98 + (i % 5) * 4;
+  return { x: Math.cos(a) * r, y: Math.sin(a) * r, s: .65 + (i % 4) * .3, d: 2.5 + ((i * 7) % 15) * .25, ph: -((i * 1.618) % 6) }; });
+
+function drawEyes(ctx, cx, cy, e, ink, A) {
+  const W = 4.8, H = 9.4, S = 7.6;
+  ctx.lineCap = 'round'; ctx.lineWidth = 2.6; ctx.strokeStyle = ink;
+  for (const side of [-1, 1]) {
+    const ex = cx + side * S + e.gx * 3, ey = cy - 1 + e.gy * 2.4;
+    const wink = side < 0 ? e.winkL : e.winkR;
+    const open = Math.max(.08, e.open * (1 - wink));
+    const closed = clamp(e.closed), happy = clamp(e.happy) * (1 - closed), plain = (1 - closed) * (1 - happy);
+    if (plain > .01) {
+      ctx.globalAlpha = A * plain; ctx.fillStyle = ink;
+      ctx.beginPath(); ctx.ellipse(ex, ey, W / 2, H / 2 * open, 0, 0, TAU); ctx.fill();
+      if (e.sad > .01 && open > .3) { // párpado: más bajo del lado externo
+        const yo = ey - H / 2 - 1 + e.sad * H * .55, yi = ey - H / 2 - 1 + e.sad * H * .08;
+        const xo = ex + side * (W / 2 + 1.2), xi = ex - side * (W / 2 + 1.2);
+        ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.moveTo(xo, ey - H); ctx.lineTo(xi, ey - H); ctx.lineTo(xi, yi); ctx.lineTo(xo, yo); ctx.closePath(); ctx.fill();
+      }
+    }
+    if (happy > .01) { ctx.globalAlpha = A * happy; ctx.beginPath(); ctx.moveTo(ex - W * .8, ey + H * .18); ctx.quadraticCurveTo(ex, ey - H * .55, ex + W * .8, ey + H * .18); ctx.stroke(); }
+    if (closed > .01) { ctx.globalAlpha = A * closed; ctx.beginPath(); ctx.moveTo(ex - W * .8, ey); ctx.quadraticCurveTo(ex, ey + H * .42, ex + W * .8, ey); ctx.stroke(); }
+  }
+}
+
+function drawOrb(ctx, o) {
+  const K = o.R / 110, A = o.alpha ?? 1, m = o.m, t = o.t || 0, dim = o.dim ?? 1;
+  const lms = o.layerMoods, col = at('orbC', lms ? lms[0] : m);
+  const unfold = o.unfold || ONES, g = o.gaze || [0, 0];
+  ctx.save(); ctx.translate(o.x, o.y); if (o.rot) ctx.rotate(o.rot); ctx.scale(K * (o.sx ?? 1), K * (o.sy ?? 1));
+  if (o.rings && o.ringA > .01) { ctx.lineWidth = 1.4 / K; ctx.strokeStyle = rgba(col, 1);
+    for (const p of o.rings) { ctx.globalAlpha = A * o.ringA * .55 * (1 - p); ctx.beginPath(); ctx.arc(0, 0, 104 + 64 * outCubic(p), 0, TAU); ctx.stroke(); } }
+  const u0 = unfold[0];
+  if (u0 > .02 && o.glowOn !== false) {
+    shapeAt(lms ? lms[0] : m, SCR, t, 0); ctx.save(); ctx.scale(u0, u0); trace(ctx, SCR);
+    ctx.shadowColor = rgba(col, .75); ctx.shadowBlur = 20 * K * DPR; ctx.globalAlpha = A * .5 * dim; ctx.fillStyle = rgba(col, .45); ctx.fill(); ctx.restore();
+  }
+  const mat = lms ? null : matG(ctx, col), edge = lms ? null : edgeG(ctx, col);
+  for (let i = 0; i < 5; i++) {
+    const u = unfold[i]; if (u < .02) continue;
+    // Neutral: sin los dos círculos interiores; vuelven al alejarse de Neutral
+    const keep = lms || i < 3 ? 1 : clamp(Math.abs(m - 4) * 1.5); if (keep < .01) continue;
+    const lm = lms ? lms[i] : m; shapeAt(lm, SCR, t, i);
+    const s = LS[i] * u, par = (1 - LS[i]) * 14, dir = i % 2 ? -1 : 1, lc = lms ? at('orbC', lm) : col;
+    ctx.save(); ctx.translate(g[0] * par, g[1] * par); ctx.rotate(dir * ((o.spin || 0) + i * .55)); ctx.scale(s, s); trace(ctx, SCR);
+    ctx.globalAlpha = A * (.6 + i * .065) * dim * keep; ctx.fillStyle = mat || matG(ctx, lc); ctx.fill();
+    ctx.globalAlpha = A * dim * keep; ctx.lineWidth = .8 / s; ctx.strokeStyle = edge || edgeG(ctx, lc); ctx.stroke(); ctx.restore();
+  }
+  const pw = (o.particles ?? 1) * Math.min(1, u0);
+  if (pw > .01 && !lms) {
+    const dw = clamp(4 - m) * pw, sw = clamp(m - 4) * pw;
+    for (const p of PART) { const a = .5 + .5 * Math.sin(TAU * (t - p.ph) / p.d);
+      if (dw > .01) { ctx.globalAlpha = A * dw * a; ctx.fillStyle = rgba(col, 1); ctx.beginPath(); ctx.arc(p.x, p.y, p.s * 1.7 * (o.pScale || 1), 0, TAU); ctx.fill(); }
+      if (sw > .01) { ctx.globalAlpha = A * sw * a; ctx.fillStyle = '#fff'; spark(ctx, p.x, p.y, p.s * 3.4 * (o.pScale || 1)); ctx.fill(); } }
+  }
+  if (o.burst > 0 && o.burst < .9) { const p = o.burst / .9;
+    for (let j = 0; j < 14; j++) { const an = j * TAU / 14 + .2, r = 30 + 150 * outCubic(p);
+      ctx.globalAlpha = A * (1 - p); ctx.fillStyle = j % 2 ? '#fff' : rgba(col, 1); spark(ctx, Math.cos(an) * r, Math.sin(an) * r, (1 - p) * 6 + 2); ctx.fill(); } }
+  const cx = g[0] * 16, cy = g[1] * 16, gl = o.glow ?? 1, core = o.core ?? 1;
+  if (gl > .01) { const r = 53 * gl, cg = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+    cg.addColorStop(0, 'rgba(255,255,255,1)'); cg.addColorStop(.22, 'rgba(255,255,255,.96)'); cg.addColorStop(.62, 'rgba(255,255,255,.28)'); cg.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.globalAlpha = A * Math.min(1, .3 + .7 * dim); ctx.fillStyle = cg; ctx.beginPath(); ctx.arc(cx, cy, r, 0, TAU); ctx.fill(); }
+  if (core > .01) {
+    ctx.globalAlpha = A; ctx.fillStyle = '#fff';
+    if (o.eyes) {
+      const fs = o.faceScale || 1; ctx.save(); ctx.translate(cx, cy); ctx.scale(fs, fs);
+      ctx.beginPath(); ctx.arc(0, 0, 22 * core, 0, TAU); ctx.fill();
+      if (core > .6) {
+        if (o.cheeks) { ctx.globalAlpha = A * .55; ctx.fillStyle = rgba(at('accC', m), 1); for (const s of [-1, 1]) { ctx.beginPath(); ctx.ellipse(s * 13 + o.eyes.gx * 3, 7 + o.eyes.gy * 2.4, 4.4, 2.6, 0, 0, TAU); ctx.fill(); } }
+        drawEyes(ctx, 0, 0, o.eyes, rgba(mix(at('ambC', m), [0, 0, 0], .35), 1), A);
+      }
+      ctx.restore();
+    } else { ctx.beginPath(); ctx.arc(cx, cy, 12 * core, 0, TAU); ctx.fill(); }
+  }
+  ctx.restore();
+}
+
+/* Temperamento por estado (1–7), interpolado */
+const TEMPER = {
+  bp: [5.6, 5.0, 4.5, 4, 4, 3.6, 3.2], ba: [.012, .014, .016, .018, .02, .024, .028],
+  sh: [1.1, .6, .15, 0, 0, 0, 0], sw: [0, 0, 0, 0, 1.2, 2.4, 3.6],
+  sink: [.06, .035, .012, 0, -.005, -.012, -.02], hop: [0, 0, 0, 0, 0, .035, .07]
+};
+const tem = (k, m) => { const a = TEMPER[k]; m = clamp(m, 1, 7); const i = Math.min(5, Math.floor(m - 1)); return lerp(a[i], a[i + 1], m - 1 - i); };
+
+function hop(t, a = .22) {
+  const k = a / .22;
+  if (t < 0 || t > 1.05) return { sx: 1, sy: 1, dy: 0 };
+  if (t < .14) { const e = Math.sin(t / .14 * PI / 2); return { sx: 1 + .07 * k * e, sy: 1 - .1 * k * e, dy: 0 }; }
+  if (t < .46) { const p = (t - .14) / .32, v = Math.abs(Math.cos(PI * p)); return { sx: 1 - .05 * k * v, sy: 1 + .08 * k * v, dy: -a * Math.sin(PI * p) }; }
+  const q = t - .46, w = Math.exp(-7 * q) * Math.cos(TAU * 3 * q); return { sx: 1 + .08 * k * w, sy: 1 - .1 * k * w, dy: 0 };
+}
+
+const MOMENTS = {
+  hop: t => t > 1.1 ? null : hop(t),
+  hola(t) {
+    if (t > 2.3) return null;
+    const unfold = [0, 1, 2, 3, 4].map(i => Math.max(0, backOut(clamp((t - .2 - (4 - i) * .07) / .5), 1.9)));
+    const core = Math.max(0, backOut(clamp(t / .28), 2.2)), h = hop(t - 1.0);
+    return { unfold, core, glow: core, sx: h.sx, sy: h.sy, dy: h.dy, particles: clamp((t - .6) / .4), burst: t - .62,
+      winkR: (t > 1.75 && t < 2.05) ? Math.sin(PI * (t - 1.75) / .3) : 0 };
+  },
+  guardar(t) {
+    if (t > 2.1) return null;
+    let s = 1; if (t < .18) s = 1 + .06 * outCubic(t / .18); else if (t < .6) s = 1.06 - .06 * ((t - .18) / .42);
+    const unfold = [0, 1, 2, 3, 4].map(i => {
+      if (t < .18) return 1;
+      if (t < .8) return Math.max(.04, 1 - inCubic(clamp(((t - .18) / .42 - i * .08) / .68)));
+      return Math.max(.04, backOut(clamp((t - .8 - (4 - i) * .07) / .55), 1.7));
+    });
+    const flash = Math.sin(PI * clamp((t - .55) / .7));
+    return { sx: s, sy: s, unfold, spin: 1.4 * Math.sin(PI * clamp((t - .18) / 1.75)), core: 1 + .7 * flash, glow: 1 + 1.6 * flash,
+      burst: t - .62, happy: hump(t, .55, 1.85), particles: t < .18 ? 1 : t < .9 ? 0 : clamp((t - .9) / .6) };
+  },
+  asomar(t, c) {
+    if (t > 3.0) return null;
+    const B = c.H - c.y, hid = B + c.R * 1.45, peek = B + c.R * .15;
+    if (t < .55) return { dyPx: lerp(hid, peek, brand(t / .55)), gaze: [0, -.6] };
+    if (t < 1.85) return { dyPx: peek, gaze: t < 1.1 ? [-.85, -.35] : t < 1.6 ? [.85, -.35] : [0, -.85] };
+    const tt = t - 1.85, h = hop(tt);
+    let dyPx = 0; if (tt < .14) dyPx = peek; else if (tt < .46) { const p = (tt - .14) / .32; dyPx = lerp(peek, 0, outCubic(p)) - c.R * .22 * Math.sin(PI * p); }
+    return { dyPx, sx: h.sx, sy: h.sy, gaze: tt < .5 ? [0, -.3] : null };
+  }
+};
+
+const now = () => performance.now() / 1000;
+
+class Critter {
+  constructor(o) {
+    Object.assign(this, { m: 4, mt: 4, eyes: true, mRate: 7, gaze: [0, 0], sac: [0, 0], sacAt: 0, blinkT: -9, blinkAt: 1 + Math.random() * 3,
+      mom: null, t0: 0, rest: 0, restT: 0, listen: 0, listenUntil: -9, listenDir: [0, 1], wobT: -9,
+      spinA: Math.random() * 6, breathPh: Math.random() * 6, extra: {} }, o);
+    this.ph = Math.random() * 20; this.sacAt = Math.random() * 2.5;
+  }
+  play(name, t) { if (RM.matches) return; this.mom = name; this.t0 = t; }
+  render(ctx, x, y, R, H, t, dt, cX, cY) {
+    const rm = RM.matches, ta = rm ? 0 : t + this.ph, K = R / 110;
+    this.m = (rm || !this.mRate) ? this.mt : this.m + (this.mt - this.m) * (1 - Math.exp(-dt * this.mRate));
+    this.rest = rm ? this.restT : approach(this.rest, this.restT, dt * 1.4);
+    const lOn = t < this.listenUntil;
+    this.listen = rm ? 0 : approach(this.listen, lOn ? 1 : 0, dt * (lOn ? 5 : 2.5));
+    const m = this.m;
+    let mo = null; if (this.mom) { mo = MOMENTS[this.mom](t - this.t0, { H, R, y }); if (!mo) this.mom = null; }
+    mo = mo || {};
+    let gt;
+    { if (t > this.sacAt) { this.sac = Math.random() < .3 ? [0, 0] : [(Math.random() * 2 - 1) * .6, (Math.random() * 2 - 1) * .4]; this.sacAt = t + 1.1 + Math.random() * 2.2; } gt = this.sac; }
+    gt = lerp2(gt, this.listenDir, this.listen); gt = lerp2(gt, [0, 0], this.rest); if (mo.gaze) gt = mo.gaze; if (rm) gt = [0, 0];
+    const gr = rm ? 1 : 1 - Math.exp(-dt * 11);
+    this.gaze = [this.gaze[0] + (gt[0] - this.gaze[0]) * gr, this.gaze[1] + (gt[1] - this.gaze[1]) * gr];
+    if (!rm) { this.breathPh += dt * TAU / (tem('bp', m) * (1 + this.rest)); this.spinA += dt * .05 * (1 - .6 * this.rest); }
+    const b = 1 + (rm ? 0 : tem('ba', m) * (1 + .6 * this.rest)) * Math.sin(this.breathPh);
+    let sx = b, sy = b, dx = 0, dy = 0, rot = 0;
+    if (!rm) {
+      rot += tem('sw', m) * PI / 180 * Math.sin(ta * TAU / 3.4);
+      const hp = tem('hop', m); if (hp > .002 && !this.mom) { const h = hop(ta % 3.2 - 2.0, hp); sx *= h.sx; sy *= h.sy; dy += h.dy * R; }
+      const sh = tem('sh', m); if (sh > 0) { dx += sh * K * Math.sin(ta * 43) * Math.sin(ta * 19.3); dy += sh * K * .5 * Math.sin(ta * 37); }
+    }
+    dy += tem('sink', m) * R + .05 * this.rest * R;
+    sx *= 1 + .025 * this.listen; sy *= 1 - .04 * this.listen; dy += .03 * R * this.listen; rot += this.listenDir[0] * .09 * this.listen;
+    const wt = t - this.wobT; if (!rm && wt >= 0 && wt < 1.3) { const w = .11 * damp(wt, 3.1, 4.2); sx *= 1 + w; sy *= 1 - w; }
+    if (mo.sx) sx *= mo.sx; if (mo.sy) sy *= mo.sy; if (mo.dy) dy += mo.dy * R; if (mo.dyPx) dy += mo.dyPx;
+    dy += (b - sy) / b * R * .85; // el aplastamiento apoya en el piso
+    let open = 1;
+    if (this.eyes && !rm) { if (t > this.blinkAt) { this.blinkT = t; this.blinkAt = t + 2.4 + Math.random() * 3.8; } const bt = t - this.blinkT; if (bt < .16) open = 1 - Math.sin(PI * bt / .16) * .95; }
+    const eyes = this.eyes ? { open, gx: this.gaze[0], gy: this.gaze[1], winkL: mo.winkL || 0, winkR: mo.winkR || 0,
+      happy: Math.max(clamp((m - 5.5) / .5), mo.happy || 0), closed: Math.max(this.rest, mo.closed || 0), sad: clamp((3.6 - m) / 2.2) * .9 } : null;
+    const rings = this.listen > .01 ? [0, .5, 1].map(o => ((ta + o) % 1.5) / 1.5) : null;
+    drawOrb(ctx, { x: x + dx, y: y + dy, R, m, t: ta, gaze: this.gaze, sx, sy, rot, unfold: mo.unfold, core: mo.core ?? 1, glow: mo.glow ?? 1, eyes,
+      particles: (1 - .85 * this.rest) * (mo.particles ?? 1), dim: 1 - .3 * this.rest, rings, ringA: this.listen, burst: mo.burst, spin: this.spinA + (mo.spin || 0), ...this.extra });
+  }
+}
+
+/* Escenario principal */
+const hero = new Critter({ eyes: true });
+const stage = document.getElementById('stage'), panel = document.getElementById('panel');
+const slider = document.getElementById('mood'), stateName = document.getElementById('stateName');
+const ro = { name: document.getElementById('ro-name'), dur: document.getElementById('ro-dur'), curve: document.getElementById('ro-curve'), what: document.getElementById('ro-what') };
+const INFO = {
+  hola: ['Saludo', '2,3 s', 'Despliegue con rebote + salto', 'Splash e inicio. Las capas se abren desde el núcleo, de adentro hacia afuera, salta una vez y guiña.'],
+  escucha: ['Escucha', 'Mientras arrastrás', '600 ms de marca', 'Se inclina hacia el selector y emite ondas suaves. También pasa sola cuando movés el slider.'],
+  guardar: ['Guardado', '2,1 s', 'Ease-in, destello, rebote', 'Confirmación. Las capas entran al núcleo, destella y vuelven a abrirse. Igual en los siete estados: celebra el registro, no el ánimo.'],
+  descanso: ['Descanso', 'Hasta apagarlo', 'Respiración a 8 s', 'Historial vacío o de noche. Cierra los ojos, se hunde un poco y apaga las partículas.'],
+  asomar: ['Ayuda', '3 s', 'Curva de marca + salto', 'Primer uso de Ayuda. Asoma desde abajo, mira a los costados y sube de un salto.'],
+  toque: ['Toque', '1,2 s', 'Resorte de 3,1 Hz', 'Tocala en cualquier momento: se sacude como gelatina y vuelve a su forma.']
+};
+const show = k => { const i = INFO[k]; ro.name.textContent = i[0]; ro.dur.textContent = i[1]; ro.curve.textContent = i[2]; ro.what.textContent = i[3]; };
+let lastLabel = '';
+function setMood(v) {
+  hero.mt = v; slider.value = v;
+  const l = labelOf(v); slider.setAttribute('aria-valuetext', l);
+  if (l !== lastLabel) { stateName.textContent = l; lastLabel = l; }
+}
+function listenNow(sec) { hero.listenUntil = now() + sec; } // mira hacia abajo, sin seguir al pulgar
+slider.addEventListener('input', () => { setMood(+slider.value); listenNow(.9); });
+slider.addEventListener('keydown', e => {
+  const v = Math.round(+slider.value), map = { ArrowRight: v + 1, ArrowUp: v + 1, PageUp: v + 1, ArrowLeft: v - 1, ArrowDown: v - 1, PageDown: v - 1, Home: 1, End: 7 };
+  if (e.key in map) { e.preventDefault(); setMood(clamp(map[e.key], 1, 7)); listenNow(.9); }
+});
+document.querySelectorAll('input[name="face"]').forEach(r => r.addEventListener('change', () => {
+  const on = document.getElementById('face-eyes').checked; hero.eyes = on; SEVEN.forEach(c => c.eyes = on);
+}));
+const restBtn = document.querySelector('[data-m="descanso"]');
+document.querySelectorAll('[data-m]').forEach(b => b.addEventListener('click', () => {
+  const k = b.dataset.m, t = now(); show(k);
+  if (k === 'descanso') { const on = hero.restT ? 0 : 1; hero.restT = on; b.setAttribute('aria-pressed', on ? 'true' : 'false'); if (!on) { hero.wobT = t; hero.play('hop', t); } return; }
+  if (hero.restT) { hero.restT = 0; restBtn.setAttribute('aria-pressed', 'false'); }
+  if (k === 'escucha') listenNow(2.6);
+  else if (k === 'toque') hero.wobT = t;
+  else hero.play(k, t);
+}));
+document.getElementById('hero').addEventListener('pointerdown', () => { hero.wobT = now(); show('toque'); });
+
+/* Escenas */
+const vivo = new Critter({ eyes: false });
+const mirada = new Critter({ eyes: true, mRate: 5 });
+const SEQ = [4, 6, 7, 5, 3, 2, 1, 4];
+const miradaCap = document.getElementById('mirada-cap'), chispaCap = document.getElementById('chispa-cap');
+let seqI = 0, seqAt = 0;
+const SEVEN = MOODS.map((_, i) => new Critter({ m: i + 1, mt: i + 1, mRate: 0, eyes: true }));
+const AV = [[4, 4, 5, 4, 3], [6, 5, 4, 3, 2], [2, 6, 3, 7, 4]];
+const BLOOM = [4, 6, 2, 5, 7, 3, 1];
+
+const logo = new Critter({ m: 7, mt: 7, mRate: 0, eyes: true, extra: { faceScale: 1.75, pScale: 2.4 } });
+const scenes = [
+  { id: 'logo', draw(ctx, w, h, t, dt, r) { const R = w * .34; logo.render(ctx, w / 2, h / 2, R, h, t, dt, r.left + w / 2, r.top + h / 2); } },
+  { id: 'hero', draw(ctx, w, h, t, dt, r) {
+      const R = Math.min(w, h) * .25, y = h * .5; hero.render(ctx, w / 2, y, R, h, t, dt, r.left + w / 2, r.top + y);
+      const amb = at('ambC', hero.m), mid = mix(amb, [29, 29, 31], .28);
+      const bg = `linear-gradient(${rgba(amb, 1)} 0%, ${rgba(mid, 1)} 56%, #071416 100%)`;
+      if (bg !== this.bg) { stage.style.background = bg; this.bg = bg; panel.style.setProperty('--acc', rgba(at('accC', hero.m), 1)); }
+  } },
+  { id: 'c-vivo', draw(ctx, w, h, t, dt, r) { const R = Math.min(w, h) * .3, y = h * .48; vivo.render(ctx, w / 2, y, R, h, t, dt, r.left + w / 2, r.top + y); } },
+  { id: 'c-mirada', draw(ctx, w, h, t, dt, r) {
+      if (!RM.matches && t > seqAt) { seqI = (seqI + 1) % SEQ.length; mirada.mt = SEQ[seqI]; seqAt = t + 2.4; miradaCap.textContent = labelOf(SEQ[seqI]); }
+      const R = Math.min(w, h) * .3, y = h * .48; mirada.render(ctx, w / 2, y, R, h, t, dt, r.left + w / 2, r.top + y);
+  } },
+  { id: 'c-chispa', draw(ctx, w, h, t) {
+      const L = 6.4, T = RM.matches ? 4.2 : t, tau = T % L, k = Math.floor(T / L), m = BLOOM[k % 7];
+      if (this.k !== k) { this.k = k; chispaCap.textContent = 'Florece en ' + MOODS[m - 1].label; }
+      const cx = w / 2, cy = h * .5, R = Math.min(w, h) * .27;
+      const liss = u => [cx + w * .34 * Math.sin(TAU * u + .3), cy + h * .26 * Math.sin(TAU * 2 * u)];
+      const pos = s => { s = ((s % L) + L) % L;
+        if (s < 2.6) { const a = liss(s / 2.6), b = brand(clamp((s - 1.8) / .8)); return [lerp(a[0], cx, b), lerp(a[1], cy, b)]; }
+        if (s < 6.0) return [cx, cy];
+        const a = liss(0), e = inCubic((s - 6.0) / .4); return [lerp(cx, a[0], e), lerp(cy, a[1], e)]; };
+      const trailA = tau < 2.7 || tau > 5.95 ? 1 : tau < 3.0 ? 1 - (tau - 2.7) / .3 : 0;
+      const orbOn = tau > 2.5 && tau < 6.0;
+      if (trailA > 0) {
+        ctx.globalCompositeOperation = 'lighter';
+        for (let j = 26; j >= 1; j--) { const p = pos(tau - j * .03), f = 1 - j / 27;
+          ctx.globalAlpha = trailA * f * .7; ctx.fillStyle = rgba(at('orbC', 1 + 6 * f), 1); ctx.beginPath(); ctx.arc(p[0], p[1], R * .07 * f + 1, 0, TAU); ctx.fill(); }
+        ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1;
+      }
+      if (orbOn) {
+        const unfold = [0, 1, 2, 3, 4].map(i => Math.min(Math.max(0, backOut(clamp((tau - 2.55 - (4 - i) * .08) / .55), 1.8)), 1 - inCubic(clamp((tau - 5.35 - i * .06) / .42))));
+        const b = 1 + .018 * Math.sin(TAU * T / 4);
+        drawOrb(ctx, { x: cx, y: cy, R, m, t: T, sx: b, sy: b, unfold, spin: T * .05, particles: clamp((tau - 3.1) / .4) * (1 - clamp((tau - 5.15) / .2)) });
+      } else {
+        const p = pos(tau), r = R * .45, g = ctx.createRadialGradient(p[0], p[1], 0, p[0], p[1], r);
+        g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(.22, 'rgba(255,255,255,.9)'); g.addColorStop(.6, 'rgba(255,255,255,.18)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p[0], p[1], r, 0, TAU); ctx.fill();
+        ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(p[0], p[1], R * .11, 0, TAU); ctx.fill();
+      }
+  } },
+  { id: 'c-tuya', draw(ctx, w, h, t) {
+      const T = RM.matches ? 0 : t;
+      AV.forEach((lm, i) => { const R = Math.min(w / 3 * .42, h * .3), b = 1 + .018 * Math.sin(TAU * T / 4 + i * 2);
+        drawOrb(ctx, { x: w * (i + .5) / 3, y: h * .44, R, m: lm[0], t: T, layerMoods: lm, sx: b, sy: b, spin: T * .05 + i, particles: 0 }); });
+  } },
+  { id: 'c-siete', draw(ctx, w, h, t, dt, r) {
+      const R = Math.min(w / 7 * .36, h * .27);
+      SEVEN.forEach((c, i) => { const x = w * (i + .5) / 7, y = h * .56; c.render(ctx, x, y, R, h, t, dt, r.left + x, r.top + y); });
+  } }
+];
+document.getElementById('logo').addEventListener('pointerdown', () => { const t = now(); logo.play('hop', t); logo.wobT = t + 1.0; });
+document.getElementById('c-vivo').addEventListener('pointerdown', () => { const t = now(); vivo.play('hop', t); vivo.wobT = t + 1.0; });
+document.getElementById('c-mirada').addEventListener('pointerdown', () => { mirada.wobT = now(); });
+document.getElementById('c-siete').addEventListener('pointerdown', e => { const r = e.currentTarget.getBoundingClientRect(); const i = clamp(Math.floor((e.clientX - r.left) / r.width * 7), 0, 6); SEVEN[i].play('hop', now()); });
+
+const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => { const s = scenes.find(s => s.canvas === e.target); if (s) s.visible = e.isIntersecting; }), { rootMargin: '120px' }) : null;
+scenes.forEach(s => { s.canvas = document.getElementById(s.id); s.ctx = s.canvas.getContext('2d'); s.visible = true; io && io.observe(s.canvas); });
+
+const rmNote = document.getElementById('rmNote');
+const syncRM = () => { rmNote.hidden = !RM.matches; };
+syncRM(); RM.addEventListener ? RM.addEventListener('change', syncRM) : RM.addListener(syncRM);
+
+// Rótulos para la tabla apilada en celular
+document.querySelectorAll('tbody tr').forEach(tr => [...tr.cells].forEach((td, i) => td.dataset.label = document.querySelectorAll('thead th')[i].textContent));
+
+// Saludo inicial
+hero.play('hola', now()); show('hola');
+setMood(4);
+
+let last = now();
+function loop() {
+  const t = now(), dt = Math.min(.05, t - last); last = t;
+  for (const s of scenes) {
+    if (!s.visible) continue;
+    const c = s.canvas, r = c.getBoundingClientRect(), w = r.width, h = r.height; if (w < 2 || h < 2) continue;
+    const W = Math.round(w * DPR), H = Math.round(h * DPR); if (c.width !== W || c.height !== H) { c.width = W; c.height = H; }
+    const ctx = s.ctx; ctx.setTransform(DPR, 0, 0, DPR, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; ctx.clearRect(0, 0, w, h);
+    s.draw(ctx, w, h, t, dt, r);
+  }
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+})();
+</script>
+
+</html>

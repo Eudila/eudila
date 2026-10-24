@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import Link from "next/link";
 import { useId } from "react";
-import { moods } from "../../prototype/moods.js";
 import { formatDay } from "../exportar/export";
 import { parseDayKey } from "../historial/records";
 import { type analysis } from "./data";
+import { Disclosure } from "../ui";
 
 export type Series = ReturnType<typeof analysis>;
 export function formatAverage(value: number) {
@@ -38,7 +38,7 @@ export function DailyChart({ series }: { series: Series }) {
         role="img"
         aria-labelledby={`${id}-title`}
         aria-describedby={`${id}-desc`}
-        className="w-full text-graphite"
+        className="w-full text-text"
       >
         <title id={`${id}-title`}>Promedios diarios de ánimo</title>
         <desc id={`${id}-desc`}>
@@ -88,10 +88,10 @@ export function DailyChart({ series }: { series: Series }) {
             data-day={point.day}
             cx={x(point.day)}
             cy={y(point.average!)}
-            r="4"
-            fill="var(--color-surface)"
+            r="5"
+            fill={`var(--color-mood-${Math.round(point.average!)})`}
             stroke="currentColor"
-            strokeWidth="2"
+            strokeWidth="1.5"
           >
             <title>
               {formatDay(point.day)}: {formatAverage(point.average!)} de 7,{" "}
@@ -118,34 +118,21 @@ export function DailyChart({ series }: { series: Series }) {
           {shortDate(series.period.end)}
         </text>
       </svg>
-      <p className="text-muted">
-        Los puntos muestran promedios diarios. Un espacio sin punto indica un
-        día sin registros; no equivale a un ánimo cero.
-      </p>
-      <p className="text-muted">
-        {series.lineEnabled
-          ? "Las líneas unen únicamente días consecutivos con registros. Los espacios sin datos quedan abiertos."
-          : "Mostramos puntos separados: las líneas se habilitan a partir de 14 registros en al menos 7 días distintos dentro del rango."}
-      </p>
-      <details className="rounded-control border border-line p-3">
-        <summary className="min-h-touch cursor-pointer py-2 font-semibold text-action">
-          Cómo se muestra el gráfico
-        </summary>
-        <p className="pt-3 text-muted">
-          El promedio diario se muestra con un decimal. Los registros originales
-          están disponibles debajo. Las líneas se habilitan con 14 registros en
-          al menos 7 días distintos dentro del rango y unen solamente días
-          consecutivos con datos. Los datos describen tus elecciones; no
-          permiten concluir causas ni patrones.
+      <Disclosure summary="Cómo se muestra el gráfico">
+        <p>
+          Cada punto es el promedio de un día, con un decimal. Un espacio sin
+          punto indica un día sin registros; no equivale a un ánimo cero.
         </p>
-        <ol className="mt-3 space-y-2">
-          {moods.map((mood, index) => (
-            <li key={mood.label}>
-              {index + 1} · {mood.label}
-            </li>
-          ))}
-        </ol>
-      </details>
+        <p>
+          {series.lineEnabled
+            ? "Las líneas unen únicamente días consecutivos con registros. Los espacios sin datos quedan abiertos."
+            : "Mostramos puntos separados: las líneas se habilitan a partir de 14 registros en al menos 7 días distintos dentro del rango."}
+        </p>
+        <p>
+          Los datos describen tus elecciones; no permiten concluir causas ni
+          patrones.
+        </p>
+      </Disclosure>
       <table className="w-full table-fixed border-collapse text-left">
         <caption className="pb-3 text-left font-semibold">
           Datos por día

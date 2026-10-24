@@ -9,6 +9,7 @@ import { useCatalog } from "./emociones";
 import { useHistory } from "../historial/state";
 import type { RecordEntry } from "../historial/records";
 import { moods } from "../../prototype/moods.js";
+import MoodOrb from "../mood/orb";
 
 export default function Confirmacion() {
   const { draft, discard } = useDraft();
@@ -75,12 +76,17 @@ export default function Confirmacion() {
 
   return (
     <>
-      <p className="text-muted">
-        Podés cambiar cada elección antes de guardar.
-      </p>
-      <dl className="divide-y divide-line rounded-card border border-line px-4">
+      <dl className="stagger divide-y divide-line surface-card px-4">
         {[
-          ["Momento", draft.type ?? "Falta elegir", "tipo"],
+          [
+            "Momento",
+            !draft.type
+              ? "Falta elegir"
+              : draft.type === "libre"
+                ? "Registro libre"
+                : draft.type[0].toUpperCase() + draft.type.slice(1),
+            "tipo",
+          ],
           [
             "Ánimo",
             `${moods[draft.mood - 1].label} · ${draft.mood} de 7`,
@@ -96,15 +102,28 @@ export default function Confirmacion() {
             "factores",
           ],
         ].map(([label, value, step]) => (
-          <div key={step} className="py-3">
-            <dt className="font-semibold">{label}</dt>
-            <dd>{value}</dd>
-            <dd>
+          <div key={step} className="flex items-center gap-3 py-2">
+            <div className="min-w-0 flex-1 py-1">
+              <dt className="text-muted">{label}</dt>
+              <dd className="flex items-center gap-2 font-semibold">
+                {step === "animo" && (
+                  <MoodOrb level={draft.mood} className="size-6 shrink-0" />
+                )}
+                <span className="min-w-0">{value}</span>
+              </dd>
+            </div>
+            <dd className="shrink-0">
               <Link
                 href={`/registro/${step}`}
-                className="inline-flex min-h-touch items-center text-action underline"
+                className="action action-text -mr-3"
+                // .action breaks anywhere for reflow; one short word must not split.
+                style={{ overflowWrap: "normal" }}
               >
-                Cambiar {label.toLocaleLowerCase("es-AR")}
+                Cambiar
+                <span className="sr-only">
+                  {" "}
+                  {label.toLocaleLowerCase("es-AR")}
+                </span>
               </Link>
             </dd>
           </div>
@@ -150,9 +169,6 @@ export default function Confirmacion() {
       {error && <p role="alert">{error}</p>}
       {history.preview && (
         <>
-          <p className="text-muted">
-            Este registro quedará en la vista previa, solo en esta pestaña.
-          </p>
           <button
             type="button"
             onClick={save}

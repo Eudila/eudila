@@ -17,6 +17,8 @@ import {
   type Range,
 } from "./data";
 import { DailyChart, type Series } from "./chart";
+import MoodOrb from "../mood/orb";
+import { Disclosure, Icon } from "../ui";
 
 const title =
   "font-display text-question leading-question font-bold tracking-brand text-balance";
@@ -30,23 +32,27 @@ function AnalysisNavigation({
   range: Range;
   current: "evolucion" | "factores";
 }) {
+  const tab = (active: boolean) =>
+    `flex min-h-touch flex-1 items-center justify-center gap-2 rounded-pill px-3 py-2 ${active ? "bg-action font-semibold text-on-action" : "text-muted hover:underline"}`;
   return (
     <nav
       aria-label="Explorar registros"
-      className="flex flex-wrap gap-x-5 gap-y-2"
+      className="flex gap-1 rounded-pill border border-line bg-raised p-1"
     >
       <Link
         href={`/evolucion?rango=${range}`}
-        className={linkClass}
+        className={tab(current === "evolucion")}
         aria-current={current === "evolucion" ? "page" : undefined}
       >
+        <Icon name="chart" />
         Evolución
       </Link>
       <Link
         href={`/factores?rango=${range}`}
-        className={linkClass}
+        className={tab(current === "factores")}
         aria-current={current === "factores" ? "page" : undefined}
       >
+        <Icon name="tag" />
         Factores de vida
       </Link>
     </nav>
@@ -84,8 +90,7 @@ function Counts({ series }: { series: Series }) {
   return (
     <div className="space-y-2">
       <p className="text-muted">
-        Del {formatDay(series.period.start)} al {formatDay(series.period.end)},
-        inclusive. Fechas y horas locales de este dispositivo.
+        Del {formatDay(series.period.start)} al {formatDay(series.period.end)}
       </p>
       <p className="font-semibold">
         {total} {total === 1 ? "registro" : "registros"} en {days}{" "}
@@ -106,7 +111,7 @@ function Counts({ series }: { series: Series }) {
 
 function EmptyRange({ factor = false }: { factor?: boolean }) {
   return (
-    <div className="space-y-3 rounded-card border border-line p-4">
+    <div className="space-y-3 surface-card p-4">
       <h2 className="font-semibold">Sin registros en este rango</h2>
       <p className="text-muted">
         {factor
@@ -128,7 +133,8 @@ function Distribution({ values }: { values: number[] }) {
           key={mood.label}
           className="flex items-start justify-between gap-3"
         >
-          <dt className="min-w-0">
+          <dt className="flex min-w-0 items-center gap-2">
+            <MoodOrb level={index + 1} className="size-5" />
             {index + 1} · {mood.label}
           </dt>
           <dd className="shrink-0 font-semibold">{values[index]}</dd>
@@ -144,12 +150,9 @@ function OriginalRecords({ records }: { records: RecordEntry[] }) {
       <h2 id="original-records-title" className="font-semibold">
         Registros del período
       </h2>
-      <ol className="space-y-3">
+      <ol className="stagger space-y-3">
         {records.map((record) => (
-          <li
-            key={record.id}
-            className="space-y-2 rounded-card border border-line p-4"
-          >
+          <li key={record.id} className="space-y-2 surface-card p-4">
             <Link
               href={`/calendario/${localDayKey(record.recordedAt)}`}
               className={linkClass}
@@ -208,13 +211,16 @@ function EvolutionContent({ range }: { range: Range }) {
 
 export function EvolutionView({ range }: { range: Range }) {
   return (
-    <section className="space-y-6 px-4 py-6">
+    <section className="space-y-6 px-6 py-6">
       <h1 className={title}>Evolución</h1>
-      <p className="text-muted">
-        Tus registros, reunidos por fecha. Podés consultar los promedios diarios
-        y cada selección original.
-      </p>
       <AnalysisNavigation range={range} current="evolucion" />
+      <Disclosure summary="Sobre estos datos">
+        <p>
+          Tus registros, reunidos por fecha: promedios diarios y cada selección
+          original. Las fechas incluyen ambos extremos y usan la hora local de
+          este dispositivo.
+        </p>
+      </Disclosure>
       <HistoryGate>
         <EvolutionContent range={range} />
       </HistoryGate>
@@ -231,11 +237,6 @@ function FactorsContent({ range }: { range: Range }) {
     <>
       <RangeSelector range={range} path="/factores" />
       <Counts series={series} />
-      <p className="text-muted">
-        Un registro puede incluir varios factores y aparecer en más de un grupo.
-        El orden refleja la cantidad de registros, no la importancia ni el
-        efecto de un factor.
-      </p>
       <p>
         {withoutFactors}{" "}
         {withoutFactors === 1
@@ -244,12 +245,9 @@ function FactorsContent({ range }: { range: Range }) {
         .
       </p>
       {groups.length ? (
-        <ul className="space-y-4">
+        <ul className="stagger space-y-4">
           {groups.map((group) => (
-            <li
-              key={group.id}
-              className="space-y-3 rounded-card border border-line p-4"
-            >
+            <li key={group.id} className="space-y-3 surface-card p-4">
               <h2 className="font-semibold">
                 <Link
                   href={`/factores/${group.id}?rango=${range}`}
@@ -284,13 +282,17 @@ function FactorsContent({ range }: { range: Range }) {
 
 export function FactorsView({ range }: { range: Range }) {
   return (
-    <section className="space-y-6 px-4 py-6">
+    <section className="space-y-6 px-6 py-6">
       <h1 className={title}>Factores de vida</h1>
-      <p className="text-muted">
-        Consultá los factores que elegiste junto a tus registros. Los conteos
-        describen esas selecciones.
-      </p>
       <AnalysisNavigation range={range} current="factores" />
+      <Disclosure summary="Sobre estos datos">
+        <p>
+          Los conteos describen los factores que elegiste junto a tus registros.
+          Un registro puede incluir varios factores y aparecer en más de un
+          grupo. El orden refleja la cantidad de registros, no la importancia ni
+          el efecto de un factor.
+        </p>
+      </Disclosure>
       <HistoryGate>
         <FactorsContent range={range} />
       </HistoryGate>
@@ -314,15 +316,17 @@ function FactorContent({ range, id }: { range: Range; id: string }) {
       {name ? (
         <>
           <Counts series={series} />
-          <p className="text-muted">
-            Estos registros incluyen el factor seleccionado. Su presencia no
-            indica que haya causado el ánimo registrado.
-          </p>
+          <Disclosure summary="Sobre estos datos">
+            <p>
+              Estos registros incluyen el factor seleccionado. Su presencia no
+              indica que haya causado el ánimo registrado.
+            </p>
+          </Disclosure>
           {series.chronology.length ? (
             <>
               <section
                 aria-labelledby="factor-distribution-title"
-                className="space-y-3 rounded-card border border-line p-4"
+                className="space-y-3 surface-card p-4"
               >
                 <h2 id="factor-distribution-title" className="font-semibold">
                   Cantidad por ánimo
@@ -356,7 +360,7 @@ export function FactorView({ range, id }: { range: Range; id: string }) {
         "Factor no disponible")
       : "Detalle del factor";
   return (
-    <section className="space-y-6 px-4 py-6">
+    <section className="space-y-6 px-6 py-6">
       <Link href={`/factores?rango=${range}`} className={linkClass}>
         Volver a factores
       </Link>

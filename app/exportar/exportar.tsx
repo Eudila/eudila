@@ -15,6 +15,7 @@ import {
   type PeriodChoice,
 } from "./export";
 import Report from "./report";
+import { Disclosure, Icon } from "../ui";
 import "./exportar.css";
 
 const actionClass = "action action-secondary";
@@ -27,7 +28,6 @@ export default function Exportar() {
         <h1 className="font-display text-question leading-question font-bold tracking-brand">
           Exportar
         </h1>
-        <p>Revisá tus registros y elegí cómo conservarlos.</p>
       </div>
       {!ready ? (
         <p role="status">Preparando los registros de esta pestaña…</p>
@@ -111,10 +111,21 @@ function ExportControls({ records }: { records: RecordEntry[] }) {
   return (
     <>
       <div className="export-controls space-y-6">
-        <p className="rounded-card border border-line p-4">
-          Vista previa: solo incluye los registros y ejemplos de esta pestaña.
-          Los archivos se preparan en tu navegador.
-        </p>
+        <Disclosure summary="Privacidad y alcance">
+          <p>
+            Vista previa: solo incluye los registros y ejemplos de esta pestaña.
+            Los archivos se preparan en tu navegador.
+          </p>
+          <p>
+            Los archivos y el informe contienen información personal. Guardalos
+            en un lugar seguro y elegí con quién compartirlos.
+          </p>
+          <p>
+            CSV y JSON incluyen todos los registros; el período del informe no
+            modifica esas descargas. Para el PDF, elegí «Guardar como PDF» en la
+            ventana de impresión.
+          </p>
+        </Disclosure>
         {!records.length && (
           <div className="space-y-3">
             <p>
@@ -133,13 +144,11 @@ function ExportControls({ records }: { records: RecordEntry[] }) {
           <h2 id="export-data-title" className="font-semibold">
             Descargar todos los registros
           </h2>
-          <p>
-            CSV y JSON incluyen los {records.length} registros de esta pestaña.
-            El período del informe no modifica estas descargas.
-          </p>
-          <p>
-            Los archivos contienen información personal. Guardalos en un lugar
-            seguro y elegí con quién compartirlos.
+          <p className="text-muted">
+            {records.length === 1
+              ? "1 registro"
+              : `${records.length} registros`}{" "}
+            en esta pestaña
           </p>
           <div className="flex flex-wrap gap-3">
             <button
@@ -148,6 +157,7 @@ function ExportControls({ records }: { records: RecordEntry[] }) {
               className={actionClass}
               onClick={() => download("csv")}
             >
+              <Icon name="download" />
               Descargar CSV
             </button>
             <button
@@ -156,6 +166,7 @@ function ExportControls({ records }: { records: RecordEntry[] }) {
               className={actionClass}
               onClick={() => download("json")}
             >
+              <Icon name="download" />
               Descargar JSON
             </button>
           </div>
@@ -181,12 +192,13 @@ function ExportControls({ records }: { records: RecordEntry[] }) {
             <option value="90">Últimos 90 días, incluido hoy</option>
             <option value="all">Todo el historial de esta pestaña</option>
           </select>
-          <p>
-            {formatDay(period.start)} al {formatDay(period.end)}. Ambas fechas
-            incluidas.
+          <p className="text-muted">
+            {formatDay(period.start)} al {formatDay(period.end)}
           </p>
           <p role="status">
-            {summary.chronology.length} registros en el período.
+            {summary.chronology.length}{" "}
+            {summary.chronology.length === 1 ? "registro" : "registros"} en el
+            período.
           </p>
           {!summary.chronology.length && records.length > 0 && (
             <p>
@@ -200,16 +212,9 @@ function ExportControls({ records }: { records: RecordEntry[] }) {
             className={actionClass}
             onClick={printReport}
           >
+            <Icon name="printer" />
             Imprimir / guardar PDF
           </button>
-          <p>
-            En la ventana de impresión, elegí «Guardar como PDF» para conservar
-            el informe.
-          </p>
-          <p>
-            El informe contiene información personal. Guardalo en un lugar
-            seguro y elegí con quién compartirlo.
-          </p>
         </section>
         {problem && <p role="alert">{problem}</p>}
       </div>

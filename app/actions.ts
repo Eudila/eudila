@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import type { CSSProperties } from "react";
 
-/** Only the mood action receives emotional colors; other actions stay neutral. */
+/** Mood CTAs: the slider step and the registro steps tinted by its ambient. */
 export function moodActionStyle(level: number): CSSProperties {
   return {
     "--action-accent": `var(--mood-accent, var(--color-mood-${level}))`,
