@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import Link from "next/link";
 import Image from "next/image";
 import Navigation from "./navigation";
+import { Icon } from "./ui";
 import AppShell from "./shell";
 import { RegistroProvider } from "./registro/registro";
 import { HistoryProvider } from "./historial/state";
@@ -57,6 +58,7 @@ export default function RootLayout({
                     prefetch={false}
                     className="app-help action action-primary text-title"
                   >
+                    <Icon name="phone" className="size-4" />
                     Ayuda ahora
                   </Link>
                 </header>
@@ -65,9 +67,12 @@ export default function RootLayout({
                     <button
                       type="button"
                       popoverTarget="preview-notice"
-                      className="app-preview-toggle block w-full border-y border-line bg-action/5 text-left text-muted underline"
+                      className="app-preview-toggle flex w-full items-center gap-2 border-y border-line text-left text-muted"
                     >
-                      <strong>Vista previa</strong> · En esta pestaña
+                      <Icon name="info" className="size-4" />
+                      <span>
+                        <strong>Vista previa</strong> · En esta pestaña
+                      </span>
                     </button>
                     <div
                       id="preview-notice"

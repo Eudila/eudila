@@ -19,23 +19,21 @@ export default function Factores() {
 
   return (
     <>
-      <p className="text-muted">
-        Podés elegir varios factores o continuar sin elegir ninguno.
-      </p>
+      <p className="text-muted">Opcional · podés elegir varios.</p>
       {status === "ready" && (
-        <fieldset className="flex flex-col gap-3">
+        <fieldset className="stagger flex flex-wrap gap-2">
           <legend className="sr-only">
             Factores de vida, selección opcional
           </legend>
           {rows.map((row) => (
             <label
               key={row.id}
-              className="control-choice flex items-center gap-3"
+              className="control-choice emotion-choice inline-flex max-w-full items-center gap-2"
             >
               <input
                 type="checkbox"
                 checked={draft.factors.includes(row.id)}
-                className="size-5 shrink-0 accent-action"
+                className="size-4 shrink-0 accent-graphite"
                 onChange={(event) =>
                   update({
                     ...draft,

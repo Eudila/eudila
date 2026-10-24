@@ -1,6 +1,6 @@
 # Brechas estéticas de eudila · revisión del 04/10/2026
 
-**Estado:** diagnóstico original conservado como baseline; VIS-05/10/11 verificadas en acciones y contraste (04/10), VIS-01/07 verificadas en ambiente y composición (05/10). VIS-02/03/06 verificadas en material, geometría y movimiento (05/10). VIS-04 resuelta con pruebas automatizadas en Chromium/WebKit/Firefox y prueba manual en Safari confirmada por el usuario (05/10). VIS-08/09/12 siguen abiertas; VIS-08 y VIS-12 tienen avance parcial. Baseline: `main` en `414ceca4b31220c2be760ed0cd58daa9cfaa3e5a` (PR #9). Próximas sesiones deben consultar este informe junto con `DESIGN.md`, actualizar estados y conservar evidencia; no repetir la definición de marca desde cero.
+**Estado:** desde el 23/10/2026 el branding vigente incluye la mascota eudila y el logo Muy agradable ([especificación](mascota/README.md)); sus brechas de implementación son VIS-13 a VIS-17. Diagnóstico original conservado como baseline; VIS-05/10/11 verificadas en acciones y contraste (04/10), VIS-01/07 verificadas en ambiente y composición (05/10). VIS-02/03/06 verificadas en material, geometría y movimiento (05/10). VIS-04 resuelta con pruebas automatizadas en Chromium/WebKit/Firefox y prueba manual en Safari confirmada por el usuario (05/10). VIS-08/09/12 siguen abiertas; VIS-08 y VIS-12 tienen avance parcial. Baseline: `main` en `414ceca4b31220c2be760ed0cd58daa9cfaa3e5a` (PR #9). Próximas sesiones deben consultar este informe junto con `DESIGN.md`, actualizar estados y conservar evidencia; no repetir la definición de marca desde cero.
 
 ## Fuentes y autoridad
 
@@ -45,6 +45,11 @@ P1: diferencia central de identidad. P2: consistencia/composición. P3: detalles
 | VIS-10 | P2 · resuelta (acciones 04/10) | **Vocabulary de acciones inconsistente.** Inicio/registro principales usan radio 14 px; auth cápsula; otras acciones de historial con radio control. | Separar variantes acción principal/secundaria/control/tarjeta en componentes/tokens compartidos y registrar excepciones. Aplicar cápsula a principales sin redondear todo el producto. |
 | VIS-11 | P2 · adaptación AA verificada (acciones 04/10) | **Conflicto referencia/AA.** Blanco sobre azul, turquesa y coral no alcanza 4.5:1; primary institucional tampoco lo logra con blanco. El código actual ya adapta algunos inks y oscurece action, lo cual es correcto. | Conservar la adaptación de DESIGN.md al introducir botones emocionales; no «corregir» la tinta a blanco por fidelidad. Esta brecha es de especificación de referencia, no un error a revertir del código. |
 | VIS-12 | P3 · abierta | **El sistema vive repartido entre prototipo y Next.js.** Colores en `moods.js` y globals, estilos de orbe en prototype, renderer distinto en historial y registro. | Fuente técnica compartida para estado/renderer/variants, tests de paridad y documentación de las representaciones compactas. Reutilizar no significa arrastrar todo el CSS del prototipo. |
+| VIS-13 | P1 · abierta (23/10) | **Logo de la app sigue siendo el Neutral sin cara.** `app/layout.tsx` usa `public/brand/logo.svg` en una caja de 32 px con símbolo de 24 px; `public/help-sw.js` y los tests de Ayuda guardan ese archivo para uso offline. | Header con la mascota Muy agradable animada según [mascota](mascota/README.md): caja de 72 px, wordmark Figtree 700 `2.25rem`, ojos felices, destellos y reloj propio. Sin JS o con movimiento reducido, `public/brand/logo-mascota.svg`. Actualizar copia offline de Ayuda y sus tests. Reflujo a 320 px y texto al 200%. |
+| VIS-14 | P1 · abierta (23/10) | **Neutral con cinco capas.** `app/mood/orb.tsx` dibuja las cinco capas en todos los estados. | Neutral con tres capas: las de escala .52 y .36 con opacidad `clamp(\|ánimo − 4\| × 1,5)`, también durante el arrastre continuo y en la versión compacta de historial. |
+| VIS-15 | P2 · abierta (23/10) | **La mascota con carita no existe en la app.** El orbe de ánimo no tiene ojos, parpadeo, mirada autónoma ni temperamentos. | Ojos, expresiones, parpadeo, mirada autónoma y temperamentos según la especificación. Prueba de que el puntero no altera la mascota (solo el toque) y de que dos mascotas no van sincronizadas. Movimiento reducido quieto. |
+| VIS-16 | P2 · abierta (23/10) | **Momentos de la mascota ausentes.** No hay Saludo, Escucha, Guardado, Descanso, Ayuda ni Toque. | Saludo en splash/inicio (junto con VIS-09), Escucha en el slider, Guardado en la confirmación (igual en los siete estados), Descanso en vacíos, Ayuda en el primer uso. Tiempos de la tabla de momentos; ninguno bloquea la interacción. |
+| VIS-17 | P3 · pendiente de decisión (23/10) | **Icono de app y favicon.** No hay manifest ni favicon propios; DESIGN.md describe un icono Neutral al 64% sobre turquesa. | Confirmar con el usuario si el icono adopta la mascota Muy agradable. Hasta entonces no inventar uno. |
 
 ## Adaptaciones ya correctas
 
@@ -174,3 +179,58 @@ Pedido del usuario sobre localhost: incorporar el logo arriba a la izquierda y u
 El usuario detectó que `/registro/animo` mostraba la versión anterior. El servidor estaba sobre main `5f4374b`, que entonces no incluía los seis commits de `feat/mood-orb-motion` hasta `8e522ae`. Se incorporó esa entrega a la misma copia local, conservando ANI-64, logo e iconos. El usuario autorizó integrar y publicar esta versión combinada en main. La entrega de `feat/logo-navigation-local` reúne ambos trabajos y conserva su evidencia; el PR identifica el resultado final. La vista local en `http://127.0.0.1:3000` sirve el mismo contenido integrado.
 
 Los módulos de orbe/controlador/movimiento/shell/geometría se conservaron idénticos a la rama aprobada. Los conflictos de registro y selector se resolvieron preservando su estado, validación, almacenamiento y navegación, así como la compactación del selector y las acciones compartidas. Se comprobó la ruta real con ambiente, cinco capas, slider `step=any`, logo e iconos. Chrome: 61 posiciones, 5.25 retenido al soltar, contraste mínimo 4.716:1, giro/respiración, retargeting, partículas, pausa/reduced motion, teclado, navegación y recarga correctos. Pasan también lint, tipos, formato, siete pruebas Node de geometría/worker y el recorrido completo de frontend en localhost. Revisión independiente sin bloqueantes; las comprobaciones Cloud y publicación conservan su alcance separado.
+
+## Auditoría Impeccable y pulido de producto · 18/10/2026
+
+Recorrido completo en `next dev` con vista previa (`.env.local` copiado de `.env.example`; sin él, `/registro/emocion` bloquea el registro de forma deliberada). Cambios dentro de la marca, sin colores nuevos:
+
+- Scroll: `<main>` es el contenedor desplazable y Next no lo reiniciaba; cada paso abría con el scroll del anterior. `app/shell.tsx` lo vuelve a cero en cada ruta.
+- Foco programático en `h1`/`main` (`tabindex=-1`) sin anillo; los controles conservan el suyo.
+- Atrás/cerrar usan en todos los pasos el mismo control circular de 32/44 px: tinte Grafito 7% sobre Nube, blanco 14% sobre ambiente. Reemplaza los enlaces de texto «Volver/Cerrar» fuera de ánimo; nombres accesibles sin cambios.
+- Factores: chips con wrap (vocabulario de emociones), con checkbox nativo visible. CTA visible sin desplazar a 390 × 844.
+- Emoción: «Siguiente» queda abajo y «Cambiar ánimo» debajo, en lugar de dos `mt-auto` compitiendo.
+- Revisión: filas etiqueta/valor con «Cambiar» a la derecha (nombre accesible completo con `sr-only`), momento con mayúscula y orbe compacto del ánimo.
+- Hoy/Calendario/Día: CTA a ancho completo y enlaces secundarios en una lista alineada al borde. «Ver otros días» se agrupa con ellos.
+- Calendario: los días pasados sin registros pierden el marco; solo hoy y los días con datos lo tienen. Gutter de 24 px como en el resto de las rutas (análisis también pasa de 16 a 24 px); la grilla conserva su ancho.
+- Evolución: los puntos se rellenan con el acento del estado redondeado y borde Grafito; número, tabla y etiqueta siguen acompañando al color.
+- Exportar: singular correcto («1 registro», «el único registro»).
+- VIS-09, avance parcial: orbe Neutral estático de 144 px en `/` y composición centrada. El splash no se integra; la brecha sigue abierta.
+
+Verificación: lint, tipos, formato, `node --test` (30/30), `frontend.test.py`, `design-actions.test.py` y `design-mood.test.py` contra el build en 3118, y `emociones.test.py`. Reflujo sin desborde horizontal en diez rutas a 320 px, con texto al 100% y al 200%. `app/analisis/browser.test.py` falla con la misma aserción en `3fb9335` sin estos cambios (`main` de 86 px a 320 × 568 con texto al 200%): es preexistente y queda pendiente.
+
+## Decisión: tema oscuro, menos texto y movimiento de interfaz · 18/10/2026
+
+El usuario pidió tema oscuro como en el slider de emociones, menos texto a la vista, más desplegables, íconos y animaciones. La decisión queda registrada en `DESIGN.md` y en `PRODUCT.md`.
+
+- Lienzo: degradé Neutral en todas las rutas. Emoción, factores y revisión conservan el ambiente del ánimo elegido, con el CTA en su acento. Al salir vuelve al Neutral en 600 ms.
+- Tokens oscuros AA (secundario ≥4.95:1 y acción ≥4.87:1 contra la parada superior de los siete ambientes, también sobre tarjeta). Campos y diálogos opacos. Impresión clara.
+- Texto: las explicaciones de Evolución, Factores, gráfico, calendario y Exportar pasan a `Disclosure`. Se quitan los textos redundantes de la revisión, del tipo de registro y de factores. El estado «Elegiste» queda solo para lectores de pantalla. La tabla «Datos por día» y Ayuda siguen visibles.
+- Íconos: momentos del día, atajos de Hoy/Calendario (Otros días, Evolución, Factores, Exportar), pestañas de análisis segmentadas, descargas/impresión, teléfono en Ayuda y en el header, aviso de vista previa.
+- Movimiento: entrada por pantalla y por paso, listas escalonadas, selección/press, desplegables y tab activa. El fundido se conserva con movimiento reducido.
+- Correcciones durante la verificación: el aviso de vista previa vuelve a ser transparente (generaba una banda sobre el ambiente). El CTA del slider ya no transiciona color: rompía el AA por cuadro (1.36:1). El chip de ánimo en emoción se compacta para mantener seis sugerencias visibles a 320 × 568.
+- Test actualizado: `design-mood.test.py` ahora espera degradé Neutral sin `data-mood` fuera del slider, en lugar de `background-image: none`.
+
+Verificación: lint, tipos, formato, `node --test` 30/30. Pasan `frontend`, `design-actions`, `design-mood`, `mood/motion`, `mood/continuous`, `emociones` y `ayuda`. Siguen fallando con la misma aserción que en `HEAD`: `analisis/browser` (main de 86 px a 320 × 568 al 200%) y `tokens` (`height:6` del selector de `max-height:600px` en `registro.tsx`). Ambas son preexistentes.
+
+## Ajuste: lienzo Grafito · 18/10/2026
+
+Al usuario no lo convenció que el fondo tuviera el mismo turquesa que el logo. Se compararon en vivo, sobre Hoy, grafito, azul noche e índigo grafito; se eligió Grafito (`#2A2A2E` → `#0B0B0C`). Es color del brandbook, deja el color al logo, al orbe y al ánimo, y evita que el fondo lea como Neutral. El azul noche se descartó porque se confunde con los estados 2–3. Los pasos del registro conservan ambiente y piso `#071416` del ánimo, con transición de vuelta a Grafito. Superficie opaca neutra `#161618`. Pasan `design-mood`, `design-actions`, `mood/motion`, `mood/continuous`, `frontend` y `ayuda`.
+
+## Ajuste: lienzo «Aurora» · 18/10/2026
+
+Al usuario el Grafito le pareció «muy triste» y habilitó cambiar el brandbook. Se compararon en vivo, sobre Hoy, cuatro opciones: Aurora, Atardecer (azul → violeta), Ciruela con halo rosado y Laguna (petróleo con luz aguamarina). Eligió Aurora: base #1A1626 → #100D18 con luces radiales estáticas de los tonos del orbe (violeta 32%, celeste 26%, ámbar 22%). En el registro las luces se apagan con `--glow` y aparece el ambiente del ánimo; al salir vuelven en 600 ms. El slider conserva su degradé aprobado sin luces, de modo que el test de paradas sigue vigente. Contraste en el peor punto (luces superiores superpuestas en su pico y sobre tarjeta): secundario 4.96:1, acción 4.88:1. Superficie opaca #18151F. Pasan lint, tipos, `node --test` 30/30, `design-mood`, `design-actions`, `mood/motion`, `mood/continuous`, `frontend` y `ayuda`.
+
+## Ajuste: neutrales teñidos de violeta · 18/10/2026
+
+Tras Aurora quedaban colores del lienzo turquesa: texto secundario gris verdoso (#CFDADA), líneas y tarjetas blancas neutras y enlaces en menta pálida (#9BE3E1). Se tiñeron hacia el violeta de la base: texto #F4F1FA, secundario #DAD5EA, tarjetas y líneas lavanda #D6D0E6 (6% / 30% / 48%), texto sobre el slider #E6E2F0. La acción pasa a #8EE2DF, más saturada, y se conserva como único turquesa (color del logo). Contraste en el peor punto de Aurora sobre tarjeta: texto 6.4, secundario 5.0, acción 4.8. Pasan `design-mood`, `design-actions`, `mood/motion`, `mood/continuous`, `frontend` y `ayuda`.
+
+## Decisión: mascota eudila y logo Muy agradable · 23/10/2026
+
+El usuario pidió ideas para convertir a eudila en mascota o avatar. Se exploraron cuatro direcciones en una página interactiva (Orbe vivo, Mirada, Chispa y Tu eudila), construidas con la geometría, el material y los tiempos reales del orbe. Después la iteró y la aprobó como nuevo branding.
+
+- Aprobado: estética de la exploración; Neutral con tres capas («sacale círculos del medio»); logo principal en el estado «más alegre» (Muy agradable); logo con carita, más visible y con detalles.
+- Rechazado: cachetes rojos; cualquier seguimiento del mouse, directo o indirecto (mirada al puntero, saltos por hover, mirada hacia el pulgar del slider); movimientos sincronizados entre mascotas.
+- Excepción documentada: DESIGN.md descartaba caras tipo emoji. La carita de la mascota es la única cara permitida y no habilita otras ilustraciones.
+- Referencia: [`mascota/eudila-viva.html`](mascota/eudila-viva.html), [especificación](mascota/README.md), [`public/brand/logo-mascota.svg`](../../public/brand/logo-mascota.svg) y [capturas](mascota/capturas/). Publicada en https://eudila.agustinpedernera.com (VPS Oracle, Cloudflare Tunnel `eudila-site`).
+
+Verificación de la referencia: sin desborde horizontal en Chromium y WebKit a 320, 375, 414, 768, 1024 y 1440 px; tabla apilada y franja de temperamentos desplazable con aviso en celular; script sin errores. La ausencia de dependencia del puntero se verificó en el código: solo los toques leen el puntero. Una comparación de cuadros con y sin mouse no fue concluyente porque la página no es determinista entre corridas. No se probó Safari físico ni la app Next.js, que no cambió.

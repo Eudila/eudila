@@ -115,18 +115,18 @@ with sync_playwright() as p:
     page.get_by_role('button', name='Seguir registrando').click()
     expect(slider).to_have_value('6')
 
-    # Persistent navigation must leave the dark surface immediately, while retaining the draft.
+    # Persistent navigation leaves the mood state immediately (dark Neutral canvas since 18/10/2026), retaining the draft.
     for name, path in [('Ayuda ahora', '/ayuda'), ('Hoy', '/hoy'), ('Calendario', '/calendario')]:
         page.get_by_role('link', name=name, exact=True).click()
         page.wait_for_url(base + path)
-        assert shell.evaluate('e => getComputedStyle(e).backgroundImage') == 'none'
+        assert shell.get_attribute('data-mood') is None and 'gradient' in shell.evaluate('e => getComputedStyle(e).backgroundImage')
         page.go_back()
         expect(slider).to_have_value('6')
         expect(shell).to_have_attribute('data-mood', '6')
     page.get_by_role('link', name='Volver', exact=True).focus()
     page.keyboard.press('Enter')
     page.wait_for_url(base + '/registro/tipo')
-    assert shell.evaluate('e => getComputedStyle(e).backgroundImage') == 'none'
+    assert shell.get_attribute('data-mood') is None and 'gradient' in shell.evaluate('e => getComputedStyle(e).backgroundImage')
     page.get_by_role('button', name='Siguiente', exact=True).click()
     slider.focus()
     page.keyboard.press('Tab')
@@ -134,7 +134,7 @@ with sync_playwright() as p:
     capture(page, 'keyboard-focus')
     page.keyboard.press('Enter')
     page.wait_for_url(base + '/registro/emocion')
-    assert shell.evaluate('e => getComputedStyle(e).backgroundImage') == 'none'
+    assert shell.get_attribute('data-mood') is None and 'gradient' in shell.evaluate('e => getComputedStyle(e).backgroundImage')
     page.go_back()
 
     for width in [320, 390, 520]:
@@ -174,7 +174,7 @@ with sync_playwright() as p:
     page.get_by_role('button', name='Cerrar registro').click()
     page.get_by_role('button', name='Descartar registro').click()
     page.wait_for_url(base + '/')
-    assert shell.evaluate('e => getComputedStyle(e).backgroundImage') == 'none'
+    assert shell.get_attribute('data-mood') is None and 'gradient' in shell.evaluate('e => getComputedStyle(e).backgroundImage')
     assert page.evaluate("sessionStorage.getItem('eudila-draft-v1')") is None
     assert not errors, errors
     browser.close()

@@ -32,9 +32,9 @@
   min-width: 0;
   min-height: 50px;
   padding: 12px;
-  border: 1px solid var(--color-line);
+  border: 1px solid var(--color-line-strong);
   border-radius: var(--radius-field);
-  background: var(--color-white);
+  background: var(--color-surface);
   color: var(--color-text);
 }
 .auth-field input[aria-invalid="true"] {
@@ -92,7 +92,7 @@
 }
 .auth-screen ::selection {
   background: var(--color-action);
-  color: var(--color-white);
+  color: var(--color-on-action);
 }
 @media (max-width: 360px) {
   .auth-screen {
