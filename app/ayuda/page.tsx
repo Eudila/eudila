@@ -1,15 +1,27 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import type { Metadata } from "next";
 import { Icon } from "../ui";
+import MoodOrb from "../mood/orb";
+import Mascota from "../mood/mascota";
 
 export const metadata: Metadata = { title: "Ayuda ahora · eudila" };
 
 export default function Help() {
   return (
     <div className="space-y-8 px-6 py-8">
-      <h1 className="font-display text-question leading-question font-bold tracking-brand text-balance">
-        Ayuda ahora
-      </h1>
+      <div className="flex items-center justify-between gap-4">
+        <h1 className="font-display text-question leading-question font-bold tracking-brand text-balance">
+          Ayuda ahora
+        </h1>
+        {/* Peeks in on first use only; the numbers below never wait for it. */}
+        <Mascota
+          mood={4}
+          moment="asomar"
+          once="local:eudila-ayuda-vista"
+          className="size-16 shrink-0"
+          fallback={<MoodOrb level={4} />}
+        />
+      </div>
       <section aria-labelledby="emergency-title" className="space-y-4">
         <h2 id="emergency-title" className="text-title font-semibold">
           Peligro inmediato

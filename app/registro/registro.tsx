@@ -287,7 +287,6 @@ export default function Registro({ paso }: { paso: string }) {
               <Mascota
                 ref={mascota}
                 mood={moodInput.position}
-                size={0.34}
                 className="mood-orb mx-auto max-w-full shrink-0"
                 fallback={<MoodOrb level={draft.mood} />}
               />

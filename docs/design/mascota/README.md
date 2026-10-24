@@ -1,6 +1,6 @@
 # Mascota eudila · branding vigente desde el 23/10/2026
 
-**Estado:** decisión de marca aprobada por el usuario el 23/10/2026 («hacé que esta sea el nuevo branding de eudila»). Reemplaza al logo Neutral estático y a la regla anterior que descartaba cualquier cara. **La app Next.js todavía no la implementa:** ver brechas VIS-13 a VIS-17 en [la revisión de marca](../brand-review-2026-10-04.md). No marcar esas brechas como resueltas sin comprobar la ruta Next.js real.
+**Estado:** decisión de marca aprobada por el usuario el 23/10/2026 («hacé que esta sea el nuevo branding de eudila»). Reemplaza al logo Neutral estático y a la regla anterior que descartaba cualquier cara. **Implementada en la app Next.js desde el 24/10/2026** (VIS-13 a VIS-17 resueltas en [la revisión de marca](../brand-review-2026-10-04.md)): motor canvas `app/mood/critter.ts` y componente `app/mood/mascota.tsx`; `app/mood/orb.tsx` queda como «Orbe vivo» estático y fallback sin JS. Si cambia un valor, cambiarlo acá primero y después en el motor.
 
 Fuentes, en orden de autoridad:
 
@@ -103,6 +103,7 @@ La referencia conserva cuatro direcciones. **Vigente:** mascota con carita («Mi
 
 ## Implementar en la app
 
-- Portar la mascota a `app/mood/orb.tsx` (SVG) o a un componente canvas compartido. No duplicar geometría: usar `prototype/moods.js`.
+- Hecho el 24/10/2026 con un componente canvas compartido (`app/mood/mascota.tsx` sobre `app/mood/critter.ts`), un solo `requestAnimationFrame` para todas las mascotas y la geometría de `prototype/moods.js`.
+- Ubicaciones: logo del header, `/registro/animo` (temperamentos y Escucha), Saludo en `/` y `/bienvenida` (una vez por sesión), Guardado en `/hoy` tras guardar, Descanso en los vacíos de Hoy y Calendario (de noche), Ayuda en el primer uso de `/ayuda`.
 - Mantener las reglas de arriba y las pruebas existentes de movimiento reducido, pausa al ocultar y AA.
 - Al cerrar cada brecha, agregar evidencia en `docs/design/evidence/` y actualizar este documento si cambia algún valor.

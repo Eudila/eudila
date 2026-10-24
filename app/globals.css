@@ -562,13 +562,6 @@ dialog::backdrop {
   margin-block: auto;
 }
 
-/* Room for Escucha's rings and the hops without changing the layout box. */
-.mascota.mood-orb > canvas {
-  inset: -15%;
-  width: 130%;
-  height: 130%;
-}
-
 .mood-secondary {
   color: var(--color-mood-secondary);
 }
@@ -634,12 +627,20 @@ dialog::backdrop {
   display: inline-block;
 }
 
+/* The canvas overhangs its box by 15% for hops, rings and sparks; with size .34
+   the orb then matches the static SVG fallback (radius .44 of the box). */
 .mascota > canvas {
   position: absolute;
+  inset: -15%;
+  width: 130%;
+  height: 130%;
+  touch-action: manipulation;
+}
+
+.mascota.app-logo > canvas {
   inset: 0;
   width: 100%;
   height: 100%;
-  touch-action: manipulation;
 }
 
 .mascota > :not(canvas) {
