@@ -591,6 +591,29 @@ dialog::backdrop {
   }
 }
 
+/* Mascot canvas sits over its static fallback, which hides after the first frame. */
+.mascota {
+  position: relative;
+  display: inline-block;
+}
+
+.mascota > canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: manipulation;
+}
+
+.mascota > :not(canvas) {
+  width: 100%;
+  height: 100%;
+}
+
+.mascota[data-live] > :not(canvas) {
+  visibility: hidden;
+}
+
 /* Continuous cycles are confined to the state symbol, never other surfaces. */
 .orb-scene[data-animated] .orb-breath,
 .orb-scene[data-animated] .orb-turn {
