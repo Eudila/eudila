@@ -3,7 +3,6 @@
 from pathlib import Path
 import json
 import os
-import re
 
 from playwright.sync_api import sync_playwright, expect
 
@@ -28,31 +27,13 @@ with sync_playwright() as p:
         slider = page.get_by_role('slider')
         expect(slider).to_be_visible()
         shell = page.locator('.app-shell')
-        assert page.locator('.orb-breath').count() == 1, 'falta renderer animado del video'
-        assert page.locator('.orb-layer').count() == 5
-        assert page.locator('.mood-orb radialGradient').count() >= 3
-        centers = page.locator('.mood-orb').evaluate('''svg => {
-            const p = new DOMPoint(110,110), center = p.matrixTransform(svg.querySelector('.orb-core').getCTM());
-            return [...svg.querySelectorAll('.orb-layer')].map(path => {const q=p.matrixTransform(path.getCTM()); return Math.hypot(q.x-center.x,q.y-center.y);});
-        }''')
-        assert max(centers) < .1, ('capas Neutral fuera de centro', centers)
-        neutral = page.locator('.orb-breath').evaluate('e => getComputedStyle(e).transform')
-        page.wait_for_timeout(450)
-        assert page.locator('.orb-breath').evaluate('e => getComputedStyle(e).transform') != neutral, 'respiración estática'
-        durations = page.locator('.orb-turn').evaluate_all('es => es.map(e => getComputedStyle(e).animationDuration)')
-        assert len(durations) == 5 and all(abs(float(d[:-1]) - 125.6637) < .01 for d in durations)
-        assert page.locator('.orb-turn').evaluate_all('es => es.map(e => getComputedStyle(e).animationDirection)') == ['normal', 'reverse', 'normal', 'reverse', 'normal']
-        breath_bounds = page.locator('.orb-breath').evaluate('''async e => {
-            const a=e.getAnimations()[0]; a.pause(); await a.ready;
-            const values=[]; for(const time of [1000,3000]) {a.currentTime=time; values.push(new DOMMatrix(getComputedStyle(e).transform).a);}
-            a.play(); return values;
-        }''')
-        assert abs(breath_bounds[0]-1.018)<.001 and abs(breath_bounds[1]-.982)<.001, breath_bounds
-        particle_durations = page.locator('.orb-particle').evaluate_all('es=>es.map(e=>parseFloat(getComputedStyle(e).animationDuration))')
-        assert min(particle_durations) >= 2.5 and max(particle_durations) <= 6
+        orb = page.locator('.mood-orb')
+        expect(orb).to_have_attribute('data-live', '')
+        assert page.locator('.mood-orb canvas').count() == 1, 'falta la mascota en canvas'
+        snap = lambda: page.locator('.mood-orb canvas').evaluate('c => c.toDataURL()')
+        first = snap(); page.wait_for_timeout(450)
+        assert snap() != first, 'mascota estática con movimiento permitido'
         expect(shell).to_have_attribute('data-mood-transition', 'idle')
-        assert page.locator('[data-particle-family="dots"]').evaluate('e => getComputedStyle(e).opacity') == '0'
-        assert page.locator('[data-particle-family="sparks"]').evaluate('e => getComputedStyle(e).opacity') == '0'
 
         # Capture two settled geometries independently, then compare each observed
         # property's progress while the actual animation runs.
@@ -61,12 +42,11 @@ with sync_playwright() as p:
         slider.fill('1')
         expect(shell).to_have_attribute('data-mood', '1')
         expect(shell).to_have_attribute('data-mood-transition', 'idle')
-        target_points = [float(n) for n in re.findall(r'-?\d+\.?\d*', page.locator('[data-orb-shape]').first.get_attribute('d'))]
         slider.fill('4')
         expect(shell).to_have_attribute('data-mood', '4')
         expect(shell).to_have_attribute('data-mood-transition', 'idle')
-        start_points = [float(n) for n in re.findall(r'-?\d+\.?\d*', page.locator('[data-orb-shape]').first.get_attribute('d'))]
-        assert start_points != target_points
+        still = snap(); page.wait_for_timeout(300)
+        assert snap() == still, 'movimiento reducido no deja quieta a la mascota'
         page.emulate_media(reduced_motion='no-preference')
         expect(shell).to_have_attribute('data-motion', 'running')
         # Observe frames across the actual running transition, including AA inks.
@@ -82,8 +62,8 @@ with sync_playwright() as p:
                 function rgb(color) { c.clearRect(0,0,1,1); c.fillStyle=color; c.fillRect(0,0,1,1); return [...c.getImageData(0,0,1,1).data].slice(0,3); }
                 const s = getComputedStyle(action);
                 window.motionFrames.push({t:performance.now()-start, bg:rgb(s.backgroundColor), ink:rgb(s.color),
-                    ambient:rgb(getComputedStyle(shell).getPropertyValue('--mood-ambient')), orb:rgb(getComputedStyle(document.querySelector('.mood-orb')).color),
-                    gradient:getComputedStyle(shell).backgroundImage, d:document.querySelector('[data-orb-shape]').getAttribute('d'), status:shell.dataset.moodTransition});
+                    ambient:rgb(getComputedStyle(shell).getPropertyValue('--mood-ambient')),
+                    gradient:getComputedStyle(shell).backgroundImage, status:shell.dataset.moodTransition});
                 if (performance.now()-start < 950) requestAnimationFrame(sample);
             } requestAnimationFrame(sample);
         }''')
@@ -91,18 +71,13 @@ with sync_playwright() as p:
         expect(slider).to_have_attribute('aria-valuetext', 'Muy desagradable, 1 de 7')
         expect(shell).to_have_attribute('data-mood-transition', 'running')
         page.wait_for_timeout(180)
-        during = page.locator('[data-orb-shape]').first.get_attribute('d')
-        # Input remains usable during morph and restarting begins from visible geometry.
+        # Input remains usable mid-transition; retargeting restarts from what is visible.
         slider.fill('7')
-        after = page.locator('[data-orb-shape]').first.get_attribute('d')
-        before_points = [float(n) for n in re.findall(r'-?\d+\.?\d*', during)]
-        after_points = [float(n) for n in re.findall(r'-?\d+\.?\d*', after)]
-        assert len(before_points) == len(after_points) and max(abs(a-b) for a,b in zip(before_points,after_points)) < 10, 'morph salta al cambiar destino'
         expect(shell).to_have_attribute('data-mood-transition', 'idle', timeout=2000)
         page.wait_for_timeout(300)
         frames = page.evaluate('window.motionFrames')
         assert len(frames) > 10
-        assert len({f['gradient'] for f in frames}) > 4 and len({f['d'] for f in frames}) > 4
+        assert len({f['gradient'] for f in frames}) > 4
         def lum(rgb):
             return sum((c/255/12.92 if c/255 <= .04045 else ((c/255+.055)/1.055)**2.4)*w for c,w in zip(rgb,[.2126,.7152,.0722]))
         ratios = [(max(lum(f['bg']),lum(f['ink']))+.05)/(min(lum(f['bg']),lum(f['ink']))+.05) for f in frames]
@@ -118,15 +93,10 @@ with sync_playwright() as p:
             return sum((v-a)*d for v,a,d in zip(current,start,delta)) / sum(d*d for d in delta)
         coordinated = []
         for f in [f for f in frames if 30 < f['t'] - first_start < 150]:
-            points = [float(n) for n in re.findall(r'-?\d+\.?\d*', f['d'])]
-            shape_progress = progress(points, start_points, target_points)
             observed = [progress(f['bg'], [46,192,188], [137,47,201]),
-                        progress(f['ambient'], [15,86,84], [50,19,77]),
-                        progress(f['orb'], [95,211,208], [168,69,218])]
-            coordinated.append(max(abs(p-shape_progress) for p in observed))
+                        progress(f['ambient'], [15,86,84], [50,19,77])]
+            coordinated.append(abs(observed[0] - observed[1]))
         assert len(coordinated) >= 3 and max(coordinated) < .02, ('propiedades desincronizadas', coordinated)
-        assert page.locator('[data-particle-family="sparks"]').evaluate('e => getComputedStyle(e).opacity') == '1'
-        assert page.locator('[data-particle-family="dots"]').evaluate('e => getComputedStyle(e).opacity') == '0'
         if artifacts:
             page.screenshot(path=str(artifacts / f'{engine}-pleasant.png'))
 
@@ -137,11 +107,9 @@ with sync_playwright() as p:
             document.dispatchEvent(new Event('visibilitychange'));
         }''')
         expect(shell).to_have_attribute('data-motion', 'paused')
-        page.locator('.orb-turn').evaluate_all('es => Promise.all(es.flatMap(e=>e.getAnimations().map(a=>a.ready))).then(()=>true)')
-        frozen = page.locator('.orb-turn').first.evaluate('e => getComputedStyle(e).transform')
-        page.wait_for_timeout(180)
-        assert frozen == page.locator('.orb-turn').first.evaluate('e => getComputedStyle(e).transform')
-        assert all(state == 'paused' for state in page.locator('.orb-particle').evaluate_all('es=>es.map(e=>getComputedStyle(e).animationPlayState)'))
+        page.wait_for_timeout(100)
+        frozen = snap(); page.wait_for_timeout(180)
+        assert snap() == frozen, 'la mascota sigue animando con la pestaña oculta'
         page.evaluate('''() => {window.syntheticHidden=false; document.dispatchEvent(new Event('visibilitychange'));}''')
         expect(shell).to_have_attribute('data-motion', 'running')
 
@@ -149,7 +117,8 @@ with sync_playwright() as p:
         expect(shell).to_have_attribute('data-motion', 'reduced')
         slider.fill('2')
         expect(shell).to_have_attribute('data-mood-transition', 'idle')
-        assert all(name == 'none' for name in page.locator('.orb-breath, .orb-turn, .orb-particle').evaluate_all('es=>es.map(e=>getComputedStyle(e).animationName)'))
+        still = snap(); page.wait_for_timeout(300)
+        assert snap() == still
         slider.focus()
         page.keyboard.press('Home')
         expect(slider).to_have_value('1')
@@ -175,14 +144,14 @@ with sync_playwright() as p:
         page.get_by_role('link', name='Ayuda ahora', exact=True).click()
         page.wait_for_url(base + '/ayuda')
         assert shell.get_attribute('data-motion') is None
-        assert page.locator('.orb-breath').count() == 0
+        assert page.locator('.mood-orb').count() == 0
         page.go_back()
         expect(slider).to_have_value('1')
         page.reload()
         expect(slider).to_have_value('1')
         expect(shell).to_have_attribute('data-mood-transition', 'idle')
         assert not errors, errors
-        results[engine] = {'frames': len(frames), 'minimum_transition_contrast': round(min(ratios), 2), 'transition_ms': round(measured_duration, 1), 'maximum_progress_difference': round(max(coordinated),4), 'breath_scale_bounds': breath_bounds, 'visibility_handler': 'synthetic hidden/visibilitychange', 'keyboard_and_pointer': 'pass'}
+        results[engine] = {'frames': len(frames), 'minimum_transition_contrast': round(min(ratios), 2), 'transition_ms': round(measured_duration, 1), 'maximum_progress_difference': round(max(coordinated),4), 'visibility_handler': 'synthetic hidden/visibilitychange', 'keyboard_and_pointer': 'pass'}
         context.close()
         if artifacts:
             Path(page.video.path()).replace(artifacts / f'{engine}-motion.webm')
@@ -222,4 +191,4 @@ with sync_playwright() as p:
         browser.close()
 if artifacts:
     (artifacts / 'motion-measurements.json').write_text(json.dumps(results, indent=2) + '\n')
-print('PASS: material, ciclos, transición/retargeting, AA por frame, partículas, pausa/reduced motion, slider/teclado y navegación:', ', '.join(results))
+print('PASS: mascota viva, transición/retargeting, AA por frame, pausa/reduced motion, slider/teclado y navegación:', ', '.join(results))

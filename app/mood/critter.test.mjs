@@ -110,3 +110,20 @@ test("el ánimo se acerca al destino sin saltos y el logo queda fijo", () => {
   frames(logo, [1]);
   assert.equal(logo.m, 7);
 });
+
+test("la mascota nunca sigue al puntero: solo reacciona al toque", async () => {
+  const { readFile } = await import("node:fs/promises");
+  for (const file of ["critter.ts", "mascota.tsx"]) {
+    const source = await readFile(new URL(file, import.meta.url), "utf8");
+    assert.doesNotMatch(
+      source,
+      /pointermove|mousemove|pointerenter|mouseenter|pointerover|mouseover|onPointerMove|onMouse|clientX|clientY|offsetX|pageX|:hover/i,
+      file,
+    );
+  }
+  const component = await readFile(
+    new URL("mascota.tsx", import.meta.url),
+    "utf8",
+  );
+  assert.equal(component.match(/onPointer\w+/g)?.join(), "onPointerDown");
+});

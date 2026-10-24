@@ -12,6 +12,7 @@ import {
 } from "@/prototype/flow-state.js";
 import { moods } from "@/prototype/moods.js";
 import MoodOrb from "../mood/orb";
+import Mascota, { type MascotaHandle } from "../mood/mascota";
 import Emociones from "./emociones";
 import Factores from "./factores";
 import Confirmacion from "./confirmacion";
@@ -120,6 +121,7 @@ export default function Registro({ paso }: { paso: string }) {
   const { draft, ready, persistent, moodInput, changeMood, update, discard } =
     state;
   const scrubbing = useRef(false);
+  const mascota = useRef<MascotaHandle>(null);
   const router = useRouter();
   const pathname = usePathname();
   const title = useRef<HTMLHeadingElement>(null);
@@ -282,10 +284,12 @@ export default function Registro({ paso }: { paso: string }) {
           )}
           {paso === "animo" && (
             <>
-              <MoodOrb
-                level={draft.mood}
-                animated
-                className="mood-orb mx-auto h-auto max-w-full shrink-0"
+              <Mascota
+                ref={mascota}
+                mood={moodInput.position}
+                size={0.34}
+                className="mood-orb mx-auto max-w-full shrink-0"
+                fallback={<MoodOrb level={draft.mood} />}
               />
               <p
                 role="status"
@@ -310,9 +314,10 @@ export default function Registro({ paso }: { paso: string }) {
                   onPointerDown={() => {
                     scrubbing.current = true;
                   }}
-                  onChange={(event) =>
-                    changeMood(Number(event.target.value), !scrubbing.current)
-                  }
+                  onChange={(event) => {
+                    changeMood(Number(event.target.value), !scrubbing.current);
+                    mascota.current?.listen(0.9);
+                  }}
                   onKeyDown={(event) => {
                     const position =
                       Math.abs(
@@ -334,6 +339,7 @@ export default function Registro({ paso }: { paso: string }) {
                     event.preventDefault();
                     scrubbing.current = false;
                     changeMood(choices[event.key], true);
+                    mascota.current?.listen(0.9);
                   }}
                   className="mood-range min-h-touch w-full cursor-pointer"
                 />
