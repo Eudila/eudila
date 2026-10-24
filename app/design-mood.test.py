@@ -135,6 +135,14 @@ with sync_playwright() as p:
     page.keyboard.press('Enter')
     page.wait_for_url(base + '/registro/emocion')
     assert shell.get_attribute('data-mood') is None and 'gradient' in shell.evaluate('e => getComputedStyle(e).backgroundImage')
+    # The chosen mood's ambient survives the slider unmounting (client navigation).
+    page.wait_for_timeout(700)
+    tint, ambient, expected = shell.evaluate('''e => {
+        const probe = document.createElement('i'); probe.style.color = `var(--color-mood-${e.dataset.tint}-ambient)`;
+        e.append(probe); const want = getComputedStyle(probe).color; probe.remove();
+        return [e.dataset.tint, getComputedStyle(e).getPropertyValue('--mood-ambient'), want];
+    }''')
+    assert tint and ambient == expected, ('el ambiente del estado se pierde al salir del slider', tint, ambient, expected)
     page.go_back()
 
     for width in [320, 390, 520]:

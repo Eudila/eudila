@@ -56,7 +56,7 @@ export function createMoodController(
 
   const cssColor = (color: Color) => `rgb(${color.map(Math.round).join(" ")})`;
   function paint(frame: Frame) {
-    root.style.setProperty("--mood-ambient", cssColor(frame.ambient));
+    root.style.setProperty("--mood-live", cssColor(frame.ambient));
     root.style.setProperty("--mood-accent", cssColor(frame.accent));
     root.style.setProperty(
       "--mood-action-ink",
@@ -144,7 +144,7 @@ export function createMoodController(
       media.removeEventListener("change", syncMotion);
       delete root.dataset.motion;
       delete root.dataset.moodTransition;
-      ["--mood-ambient", "--mood-accent", "--mood-action-ink"].forEach((name) =>
+      ["--mood-live", "--mood-accent", "--mood-action-ink"].forEach((name) =>
         root.style.removeProperty(name),
       );
     },

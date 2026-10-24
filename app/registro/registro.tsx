@@ -362,7 +362,7 @@ export default function Registro({ paso }: { paso: string }) {
           {paso === "emocion" && (
             <>
               <p className="inline-flex items-center gap-2 self-start rounded-pill border border-line bg-raised py-0.5 pr-3 pl-0.5">
-                <MoodOrb level={draft.mood} className="size-6" />
+                <MoodOrb level={draft.mood} compact className="size-6" />
                 <span>
                   <span className="sr-only">Ánimo: </span>
                   {mood.label}

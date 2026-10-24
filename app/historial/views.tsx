@@ -41,6 +41,7 @@ function MoodShape({ mood, small = false }: { mood: number; small?: boolean }) {
   return (
     <MoodOrb
       level={mood}
+      compact
       className={small ? "size-6 shrink-0" : "size-12 shrink-0"}
     />
   );

@@ -6,16 +6,73 @@ import { moods, shapePath } from "../../prototype/moods.js";
 import { innerLayerOpacity } from "./critter";
 
 const layers = [1, 0.84, 0.68, 0.52, 0.36];
+const clamp = (v: number) => Math.min(1, Math.max(0, v));
+
+/** Still face from the mascot spec: same eyes per state, no blink or gaze. */
+function Face({ level, scale }: { level: number; scale: number }) {
+  const W = 4.8,
+    H = 9.4,
+    S = 7.6,
+    ey = -1;
+  // Eye ink: the state's ambient mixed with 35% black.
+  const ink = `#${moods[level - 1].ambient
+    .slice(1)
+    .match(/../g)!
+    .map((h: string) =>
+      Math.round(parseInt(h, 16) * 0.65)
+        .toString(16)
+        .padStart(2, "0"),
+    )
+    .join("")}`;
+  const sad = clamp((3.6 - level) / 2.2) * 0.9;
+  const happy = level >= 6;
+  return (
+    <g transform={`translate(110 110) scale(${scale})`}>
+      <circle r="22" fill="var(--color-white)" />
+      {[-1, 1].map((side) => {
+        const ex = side * S;
+        if (happy)
+          return (
+            <path
+              key={side}
+              d={`M${ex - W * 0.8} ${ey + H * 0.18}Q${ex} ${ey - H * 0.55} ${ex + W * 0.8} ${ey + H * 0.18}`}
+              fill="none"
+              stroke={ink}
+              strokeWidth="2.6"
+              strokeLinecap="round"
+            />
+          );
+        const xo = ex + side * (W / 2 + 1.2),
+          xi = ex - side * (W / 2 + 1.2);
+        return (
+          <g key={side}>
+            <ellipse cx={ex} cy={ey} rx={W / 2} ry={H / 2} fill={ink} />
+            {sad > 0 && (
+              // Eyelid sits lower on the outer side.
+              <path
+                d={`M${xo} ${ey - H}L${xi} ${ey - H}L${xi} ${ey - H / 2 - 1 + sad * H * 0.08}L${xo} ${ey - H / 2 - 1 + sad * H * 0.55}Z`}
+                fill="var(--color-white)"
+              />
+            )}
+          </g>
+        );
+      })}
+    </g>
+  );
+}
 
 /**
- * Static «Orbe vivo» (no face) for compact uses and the mascot's no-JS fallback.
- * The living mascot is the canvas in ./mascota.
+ * Static eudila with its face for lists, chips and the mascot's no-JS fallback;
+ * it never moves (no breathing in lists). The living mascot is ./mascota.
  */
 export default function MoodOrb({
   level,
+  compact = false,
   className = "",
 }: {
   level: number;
+  /** Small sizes enlarge the face (x1.75, as the logo) so the eyes still read. */
+  compact?: boolean;
   className?: string;
 }) {
   const id = useId().replace(/:/g, "");
@@ -63,7 +120,7 @@ export default function MoodOrb({
         ),
       )}
       <circle cx="110" cy="110" r="53" fill={`url(#${id}-core)`} />
-      <circle cx="110" cy="110" r="12" fill="var(--color-white)" />
+      <Face level={level} scale={compact ? 1.75 : 1} />
     </svg>
   );
 }

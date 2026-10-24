@@ -118,7 +118,11 @@ export default function Confirmacion() {
               <dt className="text-muted">{label}</dt>
               <dd className="flex items-center gap-2 font-semibold">
                 {step === "animo" && (
-                  <MoodOrb level={draft.mood} className="size-6 shrink-0" />
+                  <MoodOrb
+                    level={draft.mood}
+                    compact
+                    className="size-6 shrink-0"
+                  />
                 )}
                 <span className="min-w-0">{value}</span>
               </dd>

@@ -134,7 +134,7 @@ function Distribution({ values }: { values: number[] }) {
           className="flex items-start justify-between gap-3"
         >
           <dt className="flex min-w-0 items-center gap-2">
-            <MoodOrb level={index + 1} className="size-5" />
+            <MoodOrb level={index + 1} compact className="size-5" />
             {index + 1} · {mood.label}
           </dt>
           <dd className="shrink-0 font-semibold">{values[index]}</dd>
