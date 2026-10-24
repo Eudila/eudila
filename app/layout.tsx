@@ -7,6 +7,7 @@ import Navigation from "./navigation";
 import { Icon } from "./ui";
 import AppShell from "./shell";
 import Mascota from "./mood/mascota";
+import { brandMood } from "./mood/critter";
 import SessionScope from "./auth/session-scope";
 import { previewEnabled } from "./frontend-preview";
 import "./globals.css";
@@ -43,7 +44,7 @@ export default function RootLayout({
                 </a>
                 <p className="app-brand inline-flex items-center font-display text-wordmark leading-wordmark font-bold tracking-wordmark">
                   <Mascota
-                    mood={7}
+                    mood={brandMood}
                     logo
                     className="app-logo"
                     fallback={

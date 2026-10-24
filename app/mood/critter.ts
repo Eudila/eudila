@@ -148,6 +148,9 @@ function spark(ctx: CanvasRenderingContext2D, x: number, y: number, s: number) {
   ctx.closePath();
 }
 
+/** eudila's identity state: Muy agradable, the coral of the logo (README). */
+export const brandMood = 7;
+
 /** Neutral draws three layers; the inner two fade in away from it (README rule 3). */
 export const innerLayerOpacity = (m: number) => clamp(Math.abs(m - 4) * 1.5);
 
@@ -598,8 +601,10 @@ export class Critter {
       dy = 0,
       rot = 0;
     if (!rm) {
-      rot += ((tem("sw", m) * PI) / 180) * Math.sin((ta * TAU) / 3.4);
-      const hp = tem("hop", m);
+      // Descanso is still: resting fades out the sway and the little hops.
+      const calm = 1 - this.rest;
+      rot += ((tem("sw", m) * calm * PI) / 180) * Math.sin((ta * TAU) / 3.4);
+      const hp = tem("hop", m) * calm;
       if (hp > 0.002 && !this.mom) {
         const h = hop((ta % 3.2) - 2.0, hp);
         sx *= h.sx;

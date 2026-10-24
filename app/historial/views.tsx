@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { moods } from "@/prototype/moods.js";
 import MoodOrb from "../mood/orb";
 import Mascota from "../mood/mascota";
+import { brandMood } from "../mood/critter";
 import { clearSaved, savedMood } from "../registro/confirmacion";
 import { Disclosure, Icon } from "../ui";
 import {
@@ -239,10 +240,10 @@ export function TodayView() {
         ) : (
           <div className="flex items-start gap-4">
             <Mascota
-              mood={4}
+              mood={brandMood}
               rest="night"
               className="size-16 shrink-0"
-              fallback={<MoodOrb level={4} />}
+              fallback={<MoodOrb level={brandMood} />}
             />
             <div className="min-w-0 space-y-2">
               <h2 className="font-semibold">Un espacio para tu día</h2>
@@ -411,10 +412,10 @@ export function CalendarView({
             {!records.length && (
               <div className="flex items-center gap-4">
                 <Mascota
-                  mood={4}
+                  mood={brandMood}
                   rest="night"
                   className="size-12 shrink-0"
-                  fallback={<MoodOrb level={4} />}
+                  fallback={<MoodOrb level={brandMood} />}
                 />
                 <p className="text-muted">
                   Tu calendario está vacío. Los registros que guardes aparecerán

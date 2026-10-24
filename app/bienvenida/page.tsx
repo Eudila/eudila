@@ -2,6 +2,7 @@
 import Link from "next/link";
 import MoodOrb from "../mood/orb";
 import Mascota from "../mood/mascota";
+import { brandMood } from "../mood/critter";
 import { previewEnabled } from "../frontend-preview";
 import "../auth/auth.css";
 
@@ -12,11 +13,11 @@ export default function Bienvenida() {
       aria-labelledby="welcome-title"
     >
       <Mascota
-        mood={4}
+        mood={brandMood}
         moment="hola"
         once="session:eudila-saludo"
         className="auth-orb"
-        fallback={<MoodOrb level={4} />}
+        fallback={<MoodOrb level={brandMood} />}
       />
       <div className="auth-intro">
         <h1

@@ -16,3 +16,7 @@ Verificación:
 ## Acción coral por defecto
 
 [Inicio, Hoy vacío y con datos, Calendario, Evolución, Ayuda, momento del registro y bienvenida](accion-coral.png) con la acción coral: rellenos `#E65175` con tinta Grafito (4,65:1) y texto o contorno `#F6C2CF`, que mantiene ≥4,6:1 en la luz más clara de Aurora sobre tarjeta. Dentro del registro, después de elegir el ánimo, siguen mandando el acento del estado y su tono claro. `app/design-actions.test.py` ahora compara el relleno con `--color-action-fill`: 7 pares AA, estados y 54 casos de reflujo. `design-mood`, `motion` y `continuous` pasan en los tres motores.
+
+## Mascota coral por defecto
+
+[Inicio, bienvenida, Ayuda, Hoy de día y de noche, Calendario de noche e inicio sin JS](mascota-coral.png): la mascota que representa a eudila es la Muy agradable coral del logo (`brandMood`). En Descanso se apagan el saltito y el balanceo propios de ese temperamento; `node --test app/mood/critter.test.mjs` lo comprueba y falla sin el arreglo.

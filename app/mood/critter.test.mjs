@@ -127,3 +127,21 @@ test("la mascota nunca sigue al puntero: solo reacciona al toque", async () => {
   );
   assert.equal(component.match(/onPointer\w+/g)?.join(), "onPointerDown");
 });
+
+test("en descanso la mascota coral no salta ni se balancea", () => {
+  // One full hop cycle of Muy agradable (3.2 s); position comes from the first translate.
+  const times = Array.from({ length: 33 }, (_, i) => i * 0.1);
+  const poses = (critter) =>
+    new Set(
+      frames(critter, times).map((f) =>
+        JSON.stringify(
+          JSON.parse(f).filter(([k]) => k === "translate" || k === "rotate")[0],
+        ),
+      ),
+    ).size;
+  const awake = new Critter({ mood: 7, random: () => 0.5 });
+  const resting = new Critter({ mood: 7, random: () => 0.5 });
+  resting.restT = resting.rest = 1;
+  assert.ok(poses(awake) > 1, "despierta debería saltar");
+  assert.equal(poses(resting), 1);
+});

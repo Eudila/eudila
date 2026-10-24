@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Icon } from "../ui";
 import MoodOrb from "../mood/orb";
 import Mascota from "../mood/mascota";
+import { brandMood } from "../mood/critter";
 
 export const metadata: Metadata = { title: "Ayuda ahora · eudila" };
 
@@ -15,11 +16,11 @@ export default function Help() {
         </h1>
         {/* Peeks in on first use only; the numbers below never wait for it. */}
         <Mascota
-          mood={4}
+          mood={brandMood}
           moment="asomar"
           once="local:eudila-ayuda-vista"
           className="help-mascota size-16 shrink-0"
-          fallback={<MoodOrb level={4} />}
+          fallback={<MoodOrb level={brandMood} />}
         />
       </div>
       <section aria-labelledby="emergency-title" className="space-y-4">
