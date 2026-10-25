@@ -36,7 +36,6 @@ type Pose = {
   burst?: number;
   spin: number;
   faceScale: number;
-  pScale: number;
 };
 type MomentFrame = Partial<{
   unfold: number[];
@@ -304,13 +303,13 @@ function drawOrb(ctx: CanvasRenderingContext2D, o: Pose) {
         ctx.globalAlpha = dw * a;
         ctx.fillStyle = rgba(col, 1);
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.s * 1.7 * o.pScale, 0, TAU);
+        ctx.arc(p.x, p.y, p.s * 1.7, 0, TAU);
         ctx.fill();
       }
       if (sw > 0.01) {
         ctx.globalAlpha = sw * a;
         ctx.fillStyle = "#fff";
-        spark(ctx, p.x, p.y, p.s * 3.4 * o.pScale);
+        spark(ctx, p.x, p.y, p.s * 3.4);
         ctx.fill();
       }
     }
@@ -488,7 +487,7 @@ export class Critter {
   eyes: boolean;
   mRate: number;
   faceScale: number;
-  pScale: number;
+  particles: number;
   reduced = false;
   restT = 0;
   rest = 0;
@@ -514,14 +513,15 @@ export class Critter {
     eyes?: boolean;
     mRate?: number;
     faceScale?: number;
-    pScale?: number;
+    /** 0 hides the dots and sparkles around the orb. */
+    particles?: number;
     random?: () => number;
   }) {
     this.m = this.mt = o.mood;
     this.eyes = o.eyes ?? true;
     this.mRate = o.mRate ?? 7;
     this.faceScale = o.faceScale ?? 1;
-    this.pScale = o.pScale ?? 1;
+    this.particles = o.particles ?? 1;
     // Each mascot keeps its own clock (README rule 2).
     const random = (this.random = o.random ?? Math.random);
     this.ph = random() * 20;
@@ -673,14 +673,13 @@ export class Critter {
       core: mo.core ?? 1,
       glow: mo.glow ?? 1,
       eyes,
-      particles: (1 - 0.85 * this.rest) * (mo.particles ?? 1),
+      particles: this.particles * (1 - 0.85 * this.rest) * (mo.particles ?? 1),
       dim: 1 - 0.3 * this.rest,
       rings,
       ringA: this.listen,
       burst: mo.burst,
       spin: this.spinA + (mo.spin || 0),
       faceScale: this.faceScale,
-      pScale: this.pScale,
     });
   }
 }

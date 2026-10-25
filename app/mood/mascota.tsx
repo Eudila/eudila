@@ -86,8 +86,8 @@ export default function Mascota({
     const c = (critter.current = new Critter({
       mood,
       eyes,
-      // The logo is brand identity: fixed state, bigger face and sparkles.
-      ...(logo ? { mRate: 0, faceScale: 1.75, pScale: 2.4 } : {}),
+      // The logo is brand identity: fixed state, bigger face, no sparkles.
+      ...(logo ? { mRate: 0, faceScale: 1.75, particles: 0 } : {}),
     }));
     const media = matchMedia("(prefers-reduced-motion: reduce)");
     c.reduced = media.matches;
