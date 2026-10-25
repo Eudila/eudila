@@ -1,0 +1,22 @@
+{
+  "logo.svg": {
+    "source": "../public/brand/logo.svg",
+    "description": "Símbolo Neutral oficial de Eudila, cinco capas y núcleo blanco"
+  },
+  "Figtree.ttf": {
+    "source": "../prototype/fonts/Figtree.ttf",
+    "license": "SIL Open Font License 1.1"
+  },
+  "app-registro.png": {
+    "source": "../docs/design/evidence/logo-navigation-2026-10-11/registro-390.png",
+    "description": "Captura real de la ruta Next.js de registro; el aviso de vista previa permanece visible"
+  },
+  "app-hoy.png": {
+    "source": "../docs/design/evidence/visual-actions-2026-10-04/route-hoy.png",
+    "description": "Captura real de la ruta Next.js Hoy en estado vacío"
+  },
+  "og-eudila.png": {
+    "source": "../scripts/og-source.html + logo.svg + Figtree.ttf",
+    "description": "Composición 1200×630 generada localmente con tokens y activos propios de Eudila"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "eudila-landing",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test api/contact.test.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

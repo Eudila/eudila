@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#fbfbfd" />
+    <meta
+      name="description"
+      content="Eudila es una herramienta abierta para registrar cómo te sentís, revisar tu historia y llevar tus datos con vos."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:title" content="eudila · Un espejo tranquilo para cada estado de ánimo" />
+    <meta
+      property="og:description"
+      content="Registro emocional abierto, portable y diseñado con privacidad verificable."
+    />
+    <meta property="og:image" content="/assets/og-eudila.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>eudila · Registro emocional abierto</title>
+    <link rel="icon" href="/assets/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/runtime-config.js" defer></script>
+    <script src="/main.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <header class="site-header">
+      <a class="brand" href="#inicio" aria-label="eudila, inicio">
+        <img src="/assets/logo.svg" alt="" width="40" height="40" />
+        <span>eudila</span>
+      </a>
+      <nav aria-label="Secciones principales">
+        <a href="#gobiernos">Gobiernos</a>
+        <a href="#desarrolladores">Desarrolladores</a>
+        <a class="nav-contact" href="#contacto">Conversemos</a>
+      </nav>
+    </header>
+
+    <main id="contenido">
+      <section class="hero" id="inicio" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow">Registro emocional abierto y portable</p>
+          <h1 id="hero-title">Un espejo tranquilo para cada estado de ánimo.</h1>
+          <p class="lede">
+            Eudila ayuda a registrar cómo te sentís, revisar tu historia y llevar información
+            descriptiva a una conversación profesional, sin diagnósticos automáticos ni juicios.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#gobiernos">Conocer la propuesta</a>
+            <a class="button button-secondary" href="https://github.com/Eudila/eudila"
+              >Ver el código</a
+            >
+          </div>
+          <ul class="trust-list" aria-label="Principios del proyecto">
+            <li>Código auditable</li>
+            <li>Datos portables</li>
+            <li>Ayuda humana visible</li>
+          </ul>
+        </div>
+
+        <figure class="app-capture hero-capture">
+          <div class="capture-frame">
+            <img
+              src="/assets/app-registro.png"
+              alt="Captura real de Eudila en un celular: selección de una emoción durante un registro"
+              width="390"
+              height="844"
+            />
+          </div>
+          <figcaption>Captura real de la app · Modo de vista previa</figcaption>
+        </figure>
+      </section>
+
+      <section class="section section-government" id="gobiernos" aria-labelledby="gov-title">
+        <div class="section-intro">
+          <p class="eyebrow">Para gobiernos y equipos de salud</p>
+          <h2 id="gov-title">Una herramienta abierta. Una implementación que se acuerda.</h2>
+          <p>
+            Eudila propone un registro emocional individual con acceso a ayuda y exportaciones
+            controladas por la persona. Una implementación institucional exige definir propósito,
+            acceso, almacenamiento y responsabilidades antes de reunir datos reales.
+          </p>
+        </div>
+
+        <div class="feature-grid">
+          <article>
+            <span class="feature-number" aria-hidden="true">01</span>
+            <h3>La persona conserva una copia</h3>
+            <p>
+              Puede descargar su historial en PDF, CSV y JSON. Los archivos se generan en el
+              navegador, sin enviarlos a un servidor adicional para producir la exportación.
+            </p>
+          </article>
+          <article>
+            <span class="feature-number" aria-hidden="true">02</span>
+            <h3>Los límites quedan visibles</h3>
+            <p>
+              Eudila no diagnostica, no estima riesgo individual y no reemplaza atención
+              profesional. La ayuda humana permanece disponible desde el recorrido.
+            </p>
+          </article>
+          <article>
+            <span class="feature-number" aria-hidden="true">03</span>
+            <h3>La privacidad se diseña antes</h3>
+            <p>
+              La versión con cuenta requiere almacenamiento remoto seguro. Autenticación, permisos,
+              RLS, retención y acceso deben comprobarse para cada implementación.
+            </p>
+          </article>
+        </div>
+
+        <div class="privacy-panel">
+          <div>
+            <p class="eyebrow">Privacidad verificable</p>
+            <h3>Portabilidad no significa prometer que nunca existe un servidor.</h3>
+          </div>
+          <p>
+            La exportación ocurre localmente; una cuenta puede guardar registros en infraestructura
+            remota. Diferenciar ambas cosas permite conversar con precisión sobre seguridad y control.
+          </p>
+        </div>
+      </section>
+
+      <section class="section product-view" aria-labelledby="product-title">
+        <div class="product-copy">
+          <p class="eyebrow">Lo que ya se puede recorrer</p>
+          <h2 id="product-title">Del registro a una historia que se puede leer.</h2>
+          <p>
+            El frontend integra registro en cinco pasos, vista de hoy, calendario, detalle,
+            evolución descriptiva y exportaciones. La vista previa guarda información solamente en
+            la pestaña y no se presenta como una cuenta en producción.
+          </p>
+          <a class="text-link" href="https://github.com/Eudila/eudila#readme"
+            >Revisar alcance y estado en GitHub <span aria-hidden="true">↗</span></a
+          >
+        </div>
+        <figure class="app-capture wide-capture">
+          <div class="capture-frame">
+            <img
+              src="/assets/app-hoy.png"
+              alt="Captura real de la vista Hoy de Eudila, sin registros y con acceso a registrar y exportar"
+              width="390"
+              height="844"
+            />
+          </div>
+          <figcaption>Captura real de la app · Datos de ejemplo identificados</figcaption>
+        </figure>
+      </section>
+
+      <section class="section section-developers" id="desarrolladores" aria-labelledby="dev-title">
+        <div class="section-intro">
+          <p class="eyebrow">Para desarrolladores</p>
+          <h2 id="dev-title">Código abierto para construir sin una caja negra.</h2>
+          <p>
+            Eudila se publica bajo AGPL-3.0. La interfaz usa Next.js, React y TypeScript; el repositorio
+            incluye decisiones de producto, sistema visual, pruebas y el estado explícito de las
+            integraciones pendientes.
+          </p>
+        </div>
+
+        <div class="developer-panel">
+          <div class="code-block" aria-label="Comandos para probar Eudila localmente">
+            <div class="code-header"><span></span><span></span><span></span></div>
+            <pre><code>git clone https://github.com/Eudila/eudila.git
+cd eudila
+npm install
+npm run dev</code></pre>
+          </div>
+          <div class="developer-copy">
+            <h3>Auditá, probá y contribuí.</h3>
+            <p>
+              Las contribuciones empiezan por un issue concreto. Priorizamos accesibilidad,
+              seguridad, integración verificable y una experiencia móvil que conserve los límites
+              del producto.
+            </p>
+            <div class="stack" aria-label="Tecnologías principales">
+              <span>Next.js</span><span>React</span><span>TypeScript</span><span>AGPL-3.0</span>
+            </div>
+            <a class="button button-primary" href="https://github.com/Eudila/eudila"
+              >Abrir el repositorio</a
+            >
+          </div>
+        </div>
+      </section>
+
+      <section class="section contact-section" id="contacto" aria-labelledby="contact-title">
+        <div class="contact-copy">
+          <p class="eyebrow">Conversemos</p>
+          <h2 id="contact-title">¿Qué necesitaría tu equipo?</h2>
+          <p>
+            Contanos qué querés explorar y desde qué organización escribís. No envíes datos de salud
+            ni información personal de terceros: este formulario es para consultas sobre el proyecto,
+            no para atención clínica.
+          </p>
+          <p class="contact-fallback">
+            También podés usar el
+            <a href="https://github.com/Eudila/eudila/issues">canal público en GitHub</a>.
+          </p>
+        </div>
+
+        <form class="contact-form" id="contact-form" novalidate>
+          <div class="form-row">
+            <label for="name">Nombre</label>
+            <input id="name" name="name" autocomplete="name" maxlength="100" required />
+          </div>
+          <div class="form-row">
+            <label for="email">Email de contacto</label>
+            <input id="email" name="email" type="email" autocomplete="email" maxlength="200" required />
+          </div>
+          <div class="form-row">
+            <label for="organization">Organización <span>(opcional)</span></label>
+            <input id="organization" name="organization" autocomplete="organization" maxlength="160" />
+          </div>
+          <div class="form-row">
+            <label for="message">¿Qué te gustaría conversar?</label>
+            <textarea id="message" name="message" rows="6" minlength="20" maxlength="3000" required></textarea>
+          </div>
+          <div class="honeypot" aria-hidden="true">
+            <label for="website">Sitio web</label>
+            <input id="website" name="website" tabindex="-1" autocomplete="off" />
+          </div>
+          <label class="consent">
+            <input type="checkbox" name="privacy" required />
+            <span>Entiendo que no debo enviar datos de salud ni información personal de terceros.</span>
+          </label>
+          <button class="button button-primary submit-button" type="submit">Enviar consulta</button>
+          <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <a class="brand footer-brand" href="#inicio">
+        <img src="/assets/logo.svg" alt="" width="32" height="32" />
+        <span>eudila</span>
+      </a>
+      <p>
+        Eudila está en desarrollo. No realiza diagnósticos, no evalúa riesgo individual y no
+        reemplaza atención profesional.
+      </p>
+      <div class="footer-links">
+        <a href="https://github.com/Eudila/eudila">GitHub</a>
+        <a href="https://github.com/Eudila/eudila/blob/main/LICENSE">Licencia</a>
+      </div>
+    </footer>
+  </body>
+</html>
