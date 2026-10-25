@@ -24,7 +24,7 @@ Serena, cálida y precisa. «Un espejo tranquilo para cada estado de ánimo». V
 
 - Orbe como símbolo y respuesta al ánimo; espectro de siete estados de desagradable a agradable.
 - La mascota eudila acompaña sin juzgar: cambia de ritmo según el estado, celebra igual cualquier registro, se mueve por su cuenta y nunca sigue al puntero.
-- Lienzo oscuro «Aurora» en toda la app: base violeta profunda con luces del orbe; el ambiente del estado elegido acompaña el registro desde el slider hasta la revisión.
+- Lienzo oscuro «Lisa» en toda la app: base violeta profunda con una luz coral suave arriba; el ambiente del estado elegido acompaña el registro desde el slider hasta la revisión.
 - Poco texto a la vista: explicaciones secundarias en desplegables, íconos de línea y transiciones cortas que comunican estado.
 - Una pregunta principal y camino corto; contenido opcional no debe bloquear el registro.
 - Datos y vista previa identificados sin confundirlos con persistencia de cuenta.

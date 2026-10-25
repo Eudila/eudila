@@ -11,9 +11,9 @@
   --color-mood-bottom: #071416;
   --color-mood-secondary: #e6e2f0;
 
-  /* Dark canvas everywhere (decision 18/10/2026): "Aurora", a deep violet
-     base lit by three orb tones. AA measured at the worst point (both top
-     glows overlapping at peak, on a card): text 6.4, secondary 5.0, action 4.8.
+  /* Dark canvas everywhere (decision 18/10/2026), deep violet base. Since
+     24/10/2026 "Lisa": one faint coral light instead of Aurora's three. AA at
+     the brightest point on a card: text 11.9, secondary 9.3, action 8.6.
      Neutrals are tinted toward the base's violet; the green-gray ones were
      left over from the turquoise canvas. */
   --color-canvas: #1a1626;
@@ -26,7 +26,7 @@
   --color-line-strong: rgb(214 208 230 / 0.48);
   /* Default action color is the logo's coral (24/10/2026). Fills use the
      icon coral with Graphite ink (4.65:1); text and outlines use a light coral
-     (orb + 65% white) that keeps AA at the brightest Aurora glow on a card. */
+     (orb + 65% white) that keeps AA at the canvas's brightest point on a card. */
   --color-action: #f6c2cf;
   --color-action-fill: var(--color-mood-7-orb);
   --color-on-action: var(--color-graphite);
@@ -98,7 +98,20 @@
 
 :root {
   color-scheme: dark;
-  background: var(--color-canvas-floor);
+  /* Beside the phone-width shell on wide screens: the same "Lisa" canvas. */
+  background:
+    radial-gradient(
+      140% 45% at 50% 0%,
+      color-mix(in srgb, var(--color-mood-7-orb) 12%, transparent),
+      transparent 70%
+    ),
+    linear-gradient(
+      180deg,
+      var(--color-canvas) 0%,
+      color-mix(in srgb, var(--color-canvas) 72%, var(--color-graphite)) 56%,
+      var(--color-canvas-floor) 100%
+    );
+  min-height: 100%;
   color: var(--color-text);
   font-family: var(--font-sans);
 }
@@ -121,16 +134,17 @@ body {
   initial-value: #100d18;
 }
 
-/* Aurora intensity: 1 off-mood, 0 while the registro shows the mood ambient. */
+/* Coral light intensity: 1 off-mood, 0 while the registro shows the mood ambient. */
 @property --glow {
   syntax: "<number>";
   inherits: true;
   initial-value: 1;
 }
 
-/* One continuous canvas. Off-mood, "Aurora": the orb's violet, celeste and
-   amber light the base from its edges. The registro steps dim the glows and
-   take the draft's ambient and floor; the controller animates the slider.
+/* One continuous canvas. Off-mood, "Lisa" (24/10/2026): the deep violet base
+   with a faint coral light from the top, so the coral actions and mascot lead.
+   The registro steps dim the light and take the draft's ambient and floor;
+   the controller animates the slider.
    React owns --mood-base and the controller owns --mood-live, so neither
    can erase the other's value when the slider unmounts. */
 .app-shell {
@@ -143,31 +157,13 @@ body {
   color: var(--color-text);
   background:
     radial-gradient(
-      120% 60% at 15% 0%,
+      140% 45% at 50% 0%,
       color-mix(
         in srgb,
-        var(--color-mood-1-orb) calc(32% * var(--glow)),
+        var(--color-mood-7-orb) calc(12% * var(--glow)),
         transparent
       ),
-      transparent 60%
-    ),
-    radial-gradient(
-      90% 50% at 100% 10%,
-      color-mix(
-        in srgb,
-        var(--color-mood-3-orb) calc(26% * var(--glow)),
-        transparent
-      ),
-      transparent 60%
-    ),
-    radial-gradient(
-      100% 45% at 50% 100%,
-      color-mix(
-        in srgb,
-        var(--color-mood-6-orb) calc(22% * var(--glow)),
-        transparent
-      ),
-      transparent 65%
+      transparent 70%
     ),
     linear-gradient(
       180deg,
@@ -175,6 +171,8 @@ body {
       color-mix(in srgb, var(--mood-ambient) 72%, var(--color-graphite)) 56%,
       var(--mood-floor) 100%
     );
+  /* Sized to the viewport like the page's, so wide screens show no seam. */
+  background-attachment: fixed;
 }
 
 /* From the slider to the review, links and secondary actions take a light
@@ -776,6 +774,7 @@ dialog::backdrop {
     color-scheme: light;
   }
 
+  :root,
   .app-shell {
     background: none !important;
   }

@@ -641,7 +641,7 @@ const SEVEN = MOODS.map((_, i) => new Critter({ m: i + 1, mt: i + 1, mRate: 0, e
 const AV = [[4, 4, 5, 4, 3], [6, 5, 4, 3, 2], [2, 6, 3, 7, 4]];
 const BLOOM = [4, 6, 2, 5, 7, 3, 1];
 
-const logo = new Critter({ m: 7, mt: 7, mRate: 0, eyes: true, extra: { faceScale: 1.75, pScale: 2.4 } });
+const logo = new Critter({ m: 7, mt: 7, mRate: 0, eyes: true, extra: { faceScale: 1.75, particles: 0 } });
 const scenes = [
   { id: 'logo', draw(ctx, w, h, t, dt, r) { const R = w * .34; logo.render(ctx, w / 2, h / 2, R, h, t, dt, r.left + w / 2, r.top + h / 2); } },
   { id: 'hero', draw(ctx, w, h, t, dt, r) {
