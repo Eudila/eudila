@@ -6,8 +6,6 @@ import Image from "next/image";
 import Navigation from "./navigation";
 import { Icon } from "./ui";
 import AppShell from "./shell";
-import Mascota from "./mood/mascota";
-import { brandMood } from "./mood/critter";
 import SessionScope from "./auth/session-scope";
 import { previewEnabled } from "./frontend-preview";
 import "./globals.css";
@@ -43,20 +41,17 @@ export default function RootLayout({
                   Ir al contenido
                 </a>
                 <p className="app-brand inline-flex items-center font-display text-wordmark leading-wordmark font-bold tracking-wordmark">
-                  <Mascota
-                    mood={brandMood}
-                    logo
-                    className="app-logo"
-                    fallback={
-                      <Image
-                        src="/brand/logo-mascota.svg"
-                        width={72}
-                        height={72}
-                        alt=""
-                        unoptimized
-                      />
-                    }
-                  />
+                  {/* Static on purpose: the header logo never moves, hops or sparkles. */}
+                  <span className="app-logo">
+                    <Image
+                      src="/brand/logo-mascota.svg"
+                      width={72}
+                      height={72}
+                      alt=""
+                      unoptimized
+                      className="size-full"
+                    />
+                  </span>
                   <span>eudila</span>
                 </p>
                 <Link
