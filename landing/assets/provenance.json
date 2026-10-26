@@ -1,22 +1,22 @@
 {
   "logo.svg": {
-    "source": "../public/brand/logo.svg",
-    "description": "Símbolo Neutral oficial de Eudila, cinco capas y núcleo blanco"
+    "source": "../public/brand/logo-mascota.svg",
+    "description": "Logo estático vigente: mascota Muy agradable coral, con carita y sin destellos"
   },
   "Figtree.ttf": {
     "source": "../prototype/fonts/Figtree.ttf",
     "license": "SIL Open Font License 1.1"
   },
   "app-registro.png": {
-    "source": "../docs/design/evidence/logo-navigation-2026-10-11/registro-390.png",
-    "description": "Captura real de la ruta Next.js de registro; el aviso de vista previa permanece visible"
+    "source": "captura local de /registro/animo sobre origin/main 7d98557",
+    "description": "Captura real de la ruta Next.js de ánimo, identidad vigente al 26/10/2026"
   },
   "app-hoy.png": {
-    "source": "../docs/design/evidence/visual-actions-2026-10-04/route-hoy.png",
-    "description": "Captura real de la ruta Next.js Hoy en estado vacío"
+    "source": "captura local de /hoy sobre origin/main 7d98557",
+    "description": "Captura real de Hoy con datos ficticios identificados, estética Lisa"
   },
   "og-eudila.png": {
     "source": "../scripts/og-source.html + logo.svg + Figtree.ttf",
-    "description": "Composición 1200×630 generada localmente con tokens y activos propios de Eudila"
+    "description": "Composición 1200×630 generada localmente con Lisa, acción coral y logo vigente de Eudila"
   }
 }

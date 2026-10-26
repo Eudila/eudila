@@ -3,11 +3,10 @@ const path = require("node:path");
 const { chromium } = require("playwright");
 
 const baseUrl = process.env.LANDING_URL || "http://127.0.0.1:4173/";
-const chrome = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 const evidence = path.resolve(__dirname, "..", "evidence");
 
 (async () => {
-  const browser = await chromium.launch({ executablePath: chrome, headless: true });
+  const browser = await chromium.launch({ channel: "chrome", headless: true });
   const cases = [
     { width: 320, height: 844, scale: 1 },
     { width: 390, height: 844, scale: 1 },

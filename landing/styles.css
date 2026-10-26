@@ -7,18 +7,27 @@
 
 :root {
   --color-primary: #0c8a86;
-  --color-action: #086e6b;
-  --color-cloud: #fbfbfd;
+  --color-canvas: #1a1626;
+  --color-canvas-floor: #100d18;
+  --color-surface: #18151f;
+  --color-raised: rgb(214 208 230 / 0.06);
+  --color-text: #f4f1fa;
+  --color-muted: #dad5ea;
+  --color-action: #f6c2cf;
+  --color-action-fill: #e65175;
+  --color-on-action: #1d1d1f;
+  --color-cloud: var(--color-canvas);
   --color-graphite: #1d1d1f;
-  --color-fog: #6e6e73;
-  --color-line: #b5b5ba;
+  --color-fog: var(--color-muted);
+  --color-line: rgb(214 208 230 / 0.3);
+  --color-line-strong: rgb(214 208 230 / 0.48);
   --color-white: #ffffff;
-  --color-orb: #5fd3d0;
+  --color-orb: #e65175;
   --font-display: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --radius-control: 0.875rem;
   --radius-pill: 9999px;
-  --shadow-soft: 0 24px 70px rgb(12 138 134 / 0.13);
+  --shadow-soft: 0 24px 70px rgb(0 0 0 / 0.38);
 }
 
 * {
@@ -27,12 +36,18 @@
 
 html {
   scroll-behavior: smooth;
+  min-height: 100%;
+  background:
+    radial-gradient(140% 45% at 50% 0%, rgb(230 81 117 / 0.12), transparent 70%),
+    linear-gradient(180deg, var(--color-canvas) 0%, #171320 56%, var(--color-canvas-floor) 100%);
+  background-attachment: fixed;
+  color-scheme: dark;
 }
 
 body {
   margin: 0;
-  background: var(--color-cloud);
-  color: var(--color-graphite);
+  background: transparent;
+  color: var(--color-text);
   font-family: var(--font-body);
   font-size: 1.0625rem;
   line-height: 1.55;
@@ -54,7 +69,7 @@ a:hover {
 }
 
 :focus-visible {
-  outline: 3px solid var(--color-graphite);
+  outline: 3px solid var(--color-white);
   outline-offset: 4px;
 }
 
@@ -79,13 +94,13 @@ a:hover {
   z-index: 10;
   top: 0;
   display: flex;
-  min-height: 76px;
+  min-height: 88px;
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
   padding: 0.75rem max(1rem, calc((100vw - 1180px) / 2));
-  border-bottom: 1px solid rgb(181 181 186 / 0.65);
-  background: rgb(251 251 253 / 0.92);
+  border-bottom: 1px solid var(--color-line);
+  background: rgb(16 13 24 / 0.88);
   backdrop-filter: blur(18px);
 }
 
@@ -93,7 +108,7 @@ a:hover {
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
-  color: var(--color-graphite);
+  color: var(--color-text);
   font-family: var(--font-display);
   font-size: 2rem;
   font-weight: 700;
@@ -103,8 +118,8 @@ a:hover {
 }
 
 .brand img {
-  width: 2rem;
-  height: 2rem;
+  width: 3rem;
+  height: 3rem;
 }
 
 nav {
@@ -119,23 +134,24 @@ nav a {
   align-items: center;
   padding: 0.55rem 0.8rem;
   border-radius: var(--radius-pill);
-  color: var(--color-graphite);
+  color: var(--color-text);
   font-weight: 600;
   text-decoration: none;
 }
 
 nav a:hover {
-  background: #edf7f6;
+  background: var(--color-raised);
   text-decoration: underline;
 }
 
 nav .nav-contact {
-  background: var(--color-action);
-  color: var(--color-white);
+  background: var(--color-action-fill);
+  color: var(--color-on-action);
 }
 
 nav .nav-contact:hover {
-  background: #075e5c;
+  background: var(--color-action-fill);
+  box-shadow: inset 0 0 0 2px var(--color-action);
 }
 
 main,
@@ -151,7 +167,7 @@ footer {
 
 .hero {
   display: grid;
-  min-height: calc(100svh - 76px);
+  min-height: calc(100svh - 88px);
   grid-template-columns: minmax(0, 1.08fr) minmax(260px, 0.72fr);
   align-items: center;
   gap: clamp(3rem, 8vw, 8rem);
@@ -209,7 +225,7 @@ p {
 .section-intro > p:last-child,
 .product-copy > p {
   max-width: 62ch;
-  color: #505056;
+  color: var(--color-muted);
   font-size: clamp(1.15rem, 2vw, 1.4rem);
 }
 
@@ -240,12 +256,13 @@ p {
 }
 
 .button-primary {
-  background: var(--color-action);
-  color: var(--color-white);
+  background: var(--color-action-fill);
+  color: var(--color-on-action);
 }
 
 .button-primary:hover {
-  background: #075e5c;
+  background: var(--color-action-fill);
+  box-shadow: inset 0 0 0 2px var(--color-action);
 }
 
 .button-secondary {
@@ -279,9 +296,9 @@ p {
   width: min(100%, 380px);
   padding: 0.7rem;
   margin-inline: auto;
-  border: 1px solid rgb(181 181 186 / 0.8);
+  border: 1px solid var(--color-line-strong);
   border-radius: 2rem;
-  background: var(--color-white);
+  background: var(--color-surface);
   box-shadow: var(--shadow-soft);
 }
 
@@ -297,11 +314,11 @@ figcaption {
 }
 
 .section {
-  border-top: 1px solid rgb(181 181 186 / 0.55);
+  border-top: 1px solid var(--color-line);
 }
 
 .section-government {
-  background: var(--color-white);
+  background: rgb(214 208 230 / 0.025);
 }
 
 .section-intro {
@@ -313,7 +330,7 @@ figcaption {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1px;
-  border: 1px solid var(--color-line);
+  border: 1px solid var(--color-line-strong);
   border-radius: var(--radius-control);
   background: var(--color-line);
   overflow: hidden;
@@ -322,7 +339,7 @@ figcaption {
 .feature-grid article {
   min-height: 290px;
   padding: clamp(1.5rem, 4vw, 2.5rem);
-  background: var(--color-cloud);
+  background: var(--color-surface);
 }
 
 .feature-number {
@@ -337,7 +354,7 @@ figcaption {
 .feature-grid p,
 .developer-copy p,
 .contact-copy > p {
-  color: #505056;
+  color: var(--color-muted);
 }
 
 .privacy-panel {
@@ -348,12 +365,13 @@ figcaption {
   padding: clamp(2rem, 5vw, 4rem);
   margin-top: 1rem;
   border-radius: var(--radius-control);
-  background: #092f2e;
-  color: var(--color-white);
+  border: 1px solid var(--color-line-strong);
+  background: var(--color-surface);
+  color: var(--color-text);
 }
 
 .privacy-panel .eyebrow {
-  color: #9ee7e3;
+  color: var(--color-action);
 }
 
 .privacy-panel h3 {
@@ -364,7 +382,7 @@ figcaption {
 
 .privacy-panel p:last-child {
   margin: 0;
-  color: #dcebea;
+  color: var(--color-muted);
   font-size: 1.15rem;
 }
 
@@ -388,7 +406,7 @@ figcaption {
 }
 
 .section-developers {
-  background: #eef7f6;
+  background: var(--color-raised);
 }
 
 .developer-panel {
@@ -399,11 +417,11 @@ figcaption {
 }
 
 .code-block {
-  border: 1px solid #315a58;
+  border: 1px solid var(--color-line-strong);
   border-radius: var(--radius-control);
-  background: #071e1d;
-  color: #eaf8f7;
-  box-shadow: 0 24px 60px rgb(7 30 29 / 0.18);
+  background: #0e0b15;
+  color: var(--color-text);
+  box-shadow: 0 24px 60px rgb(0 0 0 / 0.28);
   overflow: hidden;
 }
 
@@ -411,7 +429,7 @@ figcaption {
   display: flex;
   gap: 0.5rem;
   padding: 1rem;
-  border-bottom: 1px solid #315a58;
+  border-bottom: 1px solid var(--color-line);
 }
 
 .code-header span {
@@ -446,9 +464,9 @@ pre {
 
 .stack span {
   padding: 0.45rem 0.75rem;
-  border: 1px solid #73aaa7;
+  border: 1px solid var(--color-line-strong);
   border-radius: var(--radius-pill);
-  background: var(--color-white);
+  background: var(--color-raised);
   font-size: 0.9rem;
   font-weight: 700;
 }
@@ -457,7 +475,7 @@ pre {
   display: grid;
   grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
   gap: clamp(3rem, 9vw, 8rem);
-  background: var(--color-white);
+  background: rgb(214 208 230 / 0.025);
 }
 
 .contact-copy {
@@ -495,8 +513,8 @@ textarea {
   padding: 0.8rem 0.9rem;
   border: 1px solid var(--color-line);
   border-radius: var(--radius-control);
-  background: var(--color-cloud);
-  color: var(--color-graphite);
+  background: var(--color-surface);
+  color: var(--color-text);
   font: inherit;
 }
 
@@ -537,7 +555,8 @@ textarea:focus {
 }
 
 .submit-button:disabled {
-  background: var(--color-fog);
+  background: var(--color-line-strong);
+  color: var(--color-muted);
   cursor: progress;
 }
 
@@ -548,11 +567,11 @@ textarea:focus {
 }
 
 .form-status[data-state="error"] {
-  color: #9a271d;
+  color: #ffb4b4;
 }
 
 .form-status[data-state="success"] {
-  color: #075e5c;
+  color: var(--color-action);
 }
 
 footer {
@@ -641,7 +660,7 @@ footer p {
 
 @media (max-width: 480px) {
   .site-header {
-    min-height: 68px;
+    min-height: 76px;
   }
 
   .brand {
@@ -649,8 +668,8 @@ footer p {
   }
 
   .brand img {
-    width: 1.75rem;
-    height: 1.75rem;
+    width: 2.5rem;
+    height: 2.5rem;
   }
 
   nav .nav-contact {

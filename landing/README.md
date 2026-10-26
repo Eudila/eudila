@@ -2,6 +2,8 @@
 
 Proyecto estático separado de la aplicación Next.js. Usa la identidad y capturas reales del repositorio principal, pero no comparte su runtime.
 
+La revisión del 26/10/2026 adopta el branding vigente: lienzo oscuro Lisa, acción coral, logo estático de la mascota Muy agradable y capturas reales de la app actual.
+
 ## Revisión local
 
 ```sh

@@ -5,7 +5,13 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test": "node --test api/contact.test.mjs"
+    "test": "node --test api/contact.test.mjs",
+    "capture:app": "node scripts/capture-app.cjs",
+    "capture:og": "node scripts/capture-og.cjs",
+    "check:visual": "node scripts/visual-check.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
   },
   "engines": {
     "node": ">=22"
