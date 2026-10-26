@@ -112,10 +112,7 @@ function ExportControls({ records }: { records: RecordEntry[] }) {
     <>
       <div className="export-controls space-y-6">
         <Disclosure summary="Privacidad y alcance">
-          <p>
-            Vista previa: solo incluye los registros y ejemplos de esta pestaña.
-            Los archivos se preparan en tu navegador.
-          </p>
+          <p>Los archivos se preparan en tu navegador.</p>
           <p>
             Los archivos y el informe contienen información personal. Guardalos
             en un lugar seguro y elegí con quién compartirlos.

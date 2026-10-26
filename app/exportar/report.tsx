@@ -16,7 +16,7 @@ export default function Report({
   return (
     <article className="history-report" aria-labelledby="report-title">
       <header>
-        <p className="font-semibold">eudila · Vista previa</p>
+        <p className="font-semibold">eudila</p>
         <h2 id="report-title" className="font-display text-question font-bold">
           Resumen de registros
         </h2>
@@ -141,10 +141,8 @@ export default function Report({
       </section>
       <footer>
         <p>
-          Vista previa del frontend: incluye únicamente los registros y ejemplos
-          de esta pestaña. No representa el historial de una cuenta. Este
-          informe describe selecciones registradas; no ofrece diagnósticos ni
-          recomendaciones de salud.
+          Este informe describe selecciones registradas; no ofrece diagnósticos
+          ni recomendaciones de salud.
         </p>
       </footer>
     </article>
