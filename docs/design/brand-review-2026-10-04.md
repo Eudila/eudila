@@ -250,3 +250,13 @@ Con la acción y la mascota en coral, el usuario pidió un fondo más limpio que
 ## Ajuste: logo sin destellos · 24/10/2026
 
 A pedido del usuario («sacale los brillos al logo principal»), el logo Muy agradable deja de mostrar los destellos de cuatro puntas. Se probó además agrandar el disco blanco ×1,3, pero el usuario prefirió el tamaño anterior («mismo tamaño de cara»): núcleo y ojos quedan como estaban. Aplica al logo animado del header (`Critter` con `particles: 0`), al SVG estático `public/brand/logo-mascota.svg`, al favicon `app/icon.svg` (mismo archivo) y a los íconos `apple-icon.png`, `icon-192.png` e `icon-512.png`, regenerados desde el SVG al 64 % sobre `#1A1626`. La referencia viva `eudila-viva.html` usa el mismo valor. Las demás mascotas conservan sus partículas.
+
+## Apertura del onboarding · 26/10/2026
+
+Pedido del usuario: una animación inicial del onboarding «como un showreel» de motion design. Hubo dos versiones: la de Sonnet 5.5 (rama `147pop/intro-sonnet`, commit `a8f045b`) y la vigente, hecha a partir de sus debilidades documentadas en `docs/design/handoff-intro-opus.md`. Especificación en la fila «Apertura» del [README de la mascota](mascota/README.md).
+
+- Dentro de la marca: solo el orbe y su carita, Figtree en wordmark y nombres, lienzo «Lisa» con las luces bajas, ambientes de la tabla, slider con sus medidas reales. Sin gamificación, glassmorphism ni degradés de texto. Los siete estados pesan lo mismo: el péndulo alterna lados desde Neutral, cada estado dura un pulso de 600 ms y la fila final los muestra iguales. El coral del final es el logo, separado del recorrido por la fusión en un núcleo blanco.
+- Nunca lee el puntero; cada mascota de la fila tiene su reloj. Neutral con tres capas, sin cachetes ni boca (motor sin cambios de dibujo; se agregaron `still` y `spinA` públicos).
+- Accesibilidad: «Ayuda ahora» queda encima y responde; «Saltar» (y Esc) en todo momento; formulario `inert` y foco al título al terminar o saltar; con movimiento reducido se omite; reflujo a 320 px y texto al 200 %.
+- Corrección encontrada en la verificación: la entrada de ruta (`.route-enter`, con `transform`) encerraba la capa fija dentro de `<main>`; en esta página la entrada la hace la apertura. `SessionScope` vuelve a montar la página al resolver la sesión, así que la marca de «vista» se guarda al terminar o saltar.
+- Verificado en Chromium headless (Playwright) a 320, 390 y 1440 px, con texto al 200 %, movimiento reducido, saltar, teclado y Ayuda. No se probó un celular real, Safari ni Firefox. [Evidencia, mediciones y límites](evidence/apertura-2026-10-26/README.md).

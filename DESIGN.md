@@ -192,7 +192,7 @@ Especificación completa, parámetros y momentos en [docs/design/mascota/README.
 - Nunca sigue al puntero (mirada, hover, pulgar del slider). Solo reacciona al toque. Mirada autónoma con sacadas de 1,1–3,3 s.
 - Cada mascota tiene reloj propio: fases aleatorias de balanceo, saltitos, tiritona, destellos, respiración, giro, parpadeo y mirada.
 - Temperamentos por estado: más lenta y hundida en lo desagradable, se mece y salta en lo agradable. Guardado igual en los siete estados.
-- Momentos: Saludo, Escucha, Guardado, Descanso, Ayuda y Toque. Movimiento reducido: quieta e instantánea.
+- Momentos: Saludo, Escucha, Guardado, Descanso, Ayuda, Toque y Apertura (onboarding, 26/10/2026: sale del logo del header y vuelve a él, recorre los siete estados con el mismo tiempo cada uno; saltable, una vez por sesión, «Ayuda ahora» siempre encima). Movimiento reducido: quieta e instantánea, momentos omitidos.
 - Vive en logo, ánimo, splash, vacíos y Ayuda; no en historial, tarjetas, inputs ni listas. En tamaños chicos usar el orbe sin cara.
 
 ### Próximas funcionalidades

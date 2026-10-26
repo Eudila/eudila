@@ -1,23 +1,18 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 "use client";
 
-import { useRef, useState, useSyncExternalStore, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { completeOnboarding } from "./actions";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { createPortal } from "react-dom";
+import { flushSync } from "react-dom";
 import Intro from "./intro";
 import "../auth/auth.css";
 
-export default function Onboarding() {
+/** `intro`: the server found no `eudila-intro` cookie, so the opener plays. */
+export default function Onboarding({ intro: opener }: { intro: boolean }) {
   const router = useRouter();
-  // False while hydrating, so the portal never mismatches the server HTML.
-  const client = useSyncExternalStore(
-    () => () => {},
-    () => true,
-    () => false,
-  );
-  const [intro, setIntro] = useState(true);
+  const [intro, setIntro] = useState(opener);
   const [step, setStep] = useState(0);
   const [name, setName] = useState("");
   const [error, setError] = useState("");
@@ -53,21 +48,22 @@ export default function Onboarding() {
 
   return (
     <>
-      {intro &&
-        client &&
-        createPortal(
-          <Intro
-            onDone={(played) => {
-              setIntro(false);
-              if (played) requestAnimationFrame(() => heading.current?.focus());
-            }}
-          />,
-          document.body,
-        )}
+      {/* Server-rendered, so the form never flashes before the opener. */}
+      {intro && (
+        <Intro
+          onDone={(played) => {
+            if (!played) return setIntro(false);
+            // Commit first: the form is inert until the opener unmounts.
+            flushSync(() => setIntro(false));
+            heading.current?.focus();
+          }}
+        />
+      )}
       <section
         className="auth-screen"
         aria-labelledby="onboarding-title"
         inert={intro}
+        data-opener={opener || undefined}
       >
         <p className="text-muted text-sm mb-6">
           Para empezar · {step + 1} de 2

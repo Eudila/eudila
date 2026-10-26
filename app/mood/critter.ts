@@ -53,6 +53,8 @@ export type MomentFrame = Partial<{
   closed: number;
   spin: number;
   gaze: number[] | null;
+  /** 0–1: fades out breath, sway, hops, shiver and sink (the static logo pose). */
+  still: number;
 }>;
 export type Moment = "hop" | "hola" | "guardar" | "asomar";
 
@@ -509,7 +511,8 @@ export class Critter {
   private blinkAt: number;
   private mom: Moment | null = null;
   private t0 = 0;
-  private spinA: number;
+  /** Layer spin (rad). The logo SVG is drawn at 0; the intro lands on it. */
+  spinA: number;
   private breathPh: number;
   private ph: number;
   private random: () => number;
@@ -598,9 +601,12 @@ export class Critter {
       this.breathPh += (dt * TAU) / (tem("bp", m) * (1 + this.rest));
       this.spinA += dt * 0.05 * (1 - 0.6 * this.rest);
     }
+    const live = 1 - clamp(mo.still ?? 0);
     const b =
       1 +
-      (rm ? 0 : tem("ba", m) * (1 + 0.6 * this.rest)) * Math.sin(this.breathPh);
+      (rm ? 0 : tem("ba", m) * (1 + 0.6 * this.rest)) *
+        Math.sin(this.breathPh) *
+        live;
     let sx = b,
       sy = b,
       dx = 0,
@@ -608,7 +614,7 @@ export class Critter {
       rot = 0;
     if (!rm) {
       // Descanso is still: resting fades out the sway and the little hops.
-      const calm = 1 - this.rest;
+      const calm = (1 - this.rest) * live;
       rot += ((tem("sw", m) * calm * PI) / 180) * Math.sin((ta * TAU) / 3.4);
       const hp = tem("hop", m) * calm;
       if (hp > 0.002 && !this.mom) {
@@ -617,13 +623,13 @@ export class Critter {
         sy *= h.sy;
         dy += h.dy * R;
       }
-      const sh = tem("sh", m);
+      const sh = tem("sh", m) * live;
       if (sh > 0) {
         dx += sh * K * Math.sin(ta * 43) * Math.sin(ta * 19.3);
         dy += sh * K * 0.5 * Math.sin(ta * 37);
       }
     }
-    dy += tem("sink", m) * R + 0.05 * this.rest * R;
+    dy += (tem("sink", m) * R + 0.05 * this.rest * R) * live;
     sx *= 1 + 0.025 * this.listen;
     sy *= 1 - 0.04 * this.listen;
     dy += 0.03 * R * this.listen;
