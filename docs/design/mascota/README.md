@@ -90,6 +90,7 @@ Interpolados con la posición continua del slider.
 | Descanso | historial vacío, de noche | hasta apagarlo | respiración al doble del período, ojos cerrados, se hunde 5%, partículas al 15%, brillo 70% |
 | Ayuda | primer uso de Ayuda | 3 s | asoma desde abajo con la curva de marca, mira a izquierda, derecha y arriba, sube de un salto |
 | Toque | al tocarla | 1,2 s | resorte de 3,1 Hz, amortiguación 4,2, ±11% |
+| Apertura | onboarding (`/empezar`), una vez por sesión | 11,4 s, saltable | `app/empezar/intro.tsx` guioniza el motor con `Critter.scene`: chispa y capas desplegándose; recorre los siete estados con el mismo tiempo cada uno (Neutral → Muy desagradable → Muy agradable) con su nombre, anillos y la escala del slider; aterriza en el coral de marca con salto; el orbe sube y aparece `eudila` y el lema. Nunca sigue al puntero; movimiento reducido la omite. |
 | Salto | base de otros momentos | 1 s | anticipación 140 ms (−10% alto), aire 320 ms (+8% alto, 22% del radio), aterrizaje con resorte de 3 Hz |
 
 El aplastamiento siempre apoya en el piso (la base de la mascota no se mueve al aplastarse).

@@ -37,7 +37,7 @@ type Pose = {
   spin: number;
   faceScale: number;
 };
-type MomentFrame = Partial<{
+export type MomentFrame = Partial<{
   unfold: number[];
   core: number;
   glow: number;
@@ -82,12 +82,12 @@ function brand(t: number) {
   }
   return f(0.72, 1, u);
 }
-const backOut = (t: number, s = 1.70158) => {
+export const backOut = (t: number, s = 1.70158) => {
   t = clamp(t) - 1;
   return t * t * ((s + 1) * t + s) + 1;
 };
 const inCubic = (t: number) => t * t * t;
-const outCubic = (t: number) => 1 - (1 - t) ** 3;
+export const outCubic = (t: number) => 1 - (1 - t) ** 3;
 const damp = (t: number, f: number, d: number) =>
   Math.exp(-d * t) * Math.sin(TAU * f * t);
 const hump = (t: number, a: number, b: number) =>
@@ -105,8 +105,12 @@ function at(table: RGB[], m: number) {
     (j) => table[i][j] + (table[i + 1][j] - table[i][j]) * f,
   );
 }
-const rgba = (c: RGB, a: number) =>
+export const rgba = (c: RGB, a: number) =>
   `rgba(${c[0] | 0},${c[1] | 0},${c[2] | 0},${a})`;
+
+/** Orb and ambient colors at a continuous mood (1–7), for scenes drawn around the mascot. */
+export const orbAt = (m: number) => at(ORB, m);
+export const ambientAt = (m: number) => at(AMBIENT, m);
 
 const N = 180;
 const SHAPES = moods.map((mood) =>
@@ -380,7 +384,7 @@ function tem(k: keyof typeof TEMPER, m: number) {
   return lerp(a[i], a[i + 1], m - 1 - i);
 }
 
-function hop(t: number, a = 0.22) {
+export function hop(t: number, a = 0.22) {
   const k = a / 0.22;
   if (t < 0 || t > 1.05) return { sx: 1, sy: 1, dy: 0 };
   if (t < 0.14) {
@@ -491,6 +495,8 @@ export class Critter {
   reduced = false;
   restT = 0;
   rest = 0;
+  /** A scripted pose (the onboarding intro) that replaces any moment while set. */
+  scene: MomentFrame | null = null;
   listenUntil = -9;
   wobT = -9;
   // Escucha looks down toward the slider, never at the thumb or pointer.
@@ -571,7 +577,7 @@ export class Critter {
       mo = MOMENTS[this.mom](t - this.t0, { H, R, y });
       if (!mo) this.mom = null;
     }
-    mo = mo || {};
+    mo = this.scene ?? mo ?? {};
     if (t > this.sacAt) {
       this.sac =
         random() < 0.3
