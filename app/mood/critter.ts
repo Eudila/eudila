@@ -37,7 +37,7 @@ type Pose = {
   spin: number;
   faceScale: number;
 };
-type MomentFrame = Partial<{
+export type MomentFrame = Partial<{
   unfold: number[];
   core: number;
   glow: number;
@@ -53,6 +53,8 @@ type MomentFrame = Partial<{
   closed: number;
   spin: number;
   gaze: number[] | null;
+  /** 0–1: fades out breath, sway, hops, shiver and sink (the static logo pose). */
+  still: number;
 }>;
 export type Moment = "hop" | "hola" | "guardar" | "asomar";
 
@@ -82,12 +84,12 @@ function brand(t: number) {
   }
   return f(0.72, 1, u);
 }
-const backOut = (t: number, s = 1.70158) => {
+export const backOut = (t: number, s = 1.70158) => {
   t = clamp(t) - 1;
   return t * t * ((s + 1) * t + s) + 1;
 };
 const inCubic = (t: number) => t * t * t;
-const outCubic = (t: number) => 1 - (1 - t) ** 3;
+export const outCubic = (t: number) => 1 - (1 - t) ** 3;
 const damp = (t: number, f: number, d: number) =>
   Math.exp(-d * t) * Math.sin(TAU * f * t);
 const hump = (t: number, a: number, b: number) =>
@@ -105,8 +107,12 @@ function at(table: RGB[], m: number) {
     (j) => table[i][j] + (table[i + 1][j] - table[i][j]) * f,
   );
 }
-const rgba = (c: RGB, a: number) =>
+export const rgba = (c: RGB, a: number) =>
   `rgba(${c[0] | 0},${c[1] | 0},${c[2] | 0},${a})`;
+
+/** Orb and ambient colors at a continuous mood (1–7), for scenes drawn around the mascot. */
+export const orbAt = (m: number) => at(ORB, m);
+export const ambientAt = (m: number) => at(AMBIENT, m);
 
 const N = 180;
 const SHAPES = moods.map((mood) =>
@@ -380,7 +386,7 @@ function tem(k: keyof typeof TEMPER, m: number) {
   return lerp(a[i], a[i + 1], m - 1 - i);
 }
 
-function hop(t: number, a = 0.22) {
+export function hop(t: number, a = 0.22) {
   const k = a / 0.22;
   if (t < 0 || t > 1.05) return { sx: 1, sy: 1, dy: 0 };
   if (t < 0.14) {
@@ -491,6 +497,8 @@ export class Critter {
   reduced = false;
   restT = 0;
   rest = 0;
+  /** A scripted pose (the onboarding intro) that replaces any moment while set. */
+  scene: MomentFrame | null = null;
   listenUntil = -9;
   wobT = -9;
   // Escucha looks down toward the slider, never at the thumb or pointer.
@@ -503,7 +511,8 @@ export class Critter {
   private blinkAt: number;
   private mom: Moment | null = null;
   private t0 = 0;
-  private spinA: number;
+  /** Layer spin (rad). The logo SVG is drawn at 0; the intro lands on it. */
+  spinA: number;
   private breathPh: number;
   private ph: number;
   private random: () => number;
@@ -571,7 +580,7 @@ export class Critter {
       mo = MOMENTS[this.mom](t - this.t0, { H, R, y });
       if (!mo) this.mom = null;
     }
-    mo = mo || {};
+    mo = this.scene ?? mo ?? {};
     if (t > this.sacAt) {
       this.sac =
         random() < 0.3
@@ -592,9 +601,12 @@ export class Critter {
       this.breathPh += (dt * TAU) / (tem("bp", m) * (1 + this.rest));
       this.spinA += dt * 0.05 * (1 - 0.6 * this.rest);
     }
+    const live = 1 - clamp(mo.still ?? 0);
     const b =
       1 +
-      (rm ? 0 : tem("ba", m) * (1 + 0.6 * this.rest)) * Math.sin(this.breathPh);
+      (rm ? 0 : tem("ba", m) * (1 + 0.6 * this.rest)) *
+        Math.sin(this.breathPh) *
+        live;
     let sx = b,
       sy = b,
       dx = 0,
@@ -602,7 +614,7 @@ export class Critter {
       rot = 0;
     if (!rm) {
       // Descanso is still: resting fades out the sway and the little hops.
-      const calm = 1 - this.rest;
+      const calm = (1 - this.rest) * live;
       rot += ((tem("sw", m) * calm * PI) / 180) * Math.sin((ta * TAU) / 3.4);
       const hp = tem("hop", m) * calm;
       if (hp > 0.002 && !this.mom) {
@@ -611,13 +623,13 @@ export class Critter {
         sy *= h.sy;
         dy += h.dy * R;
       }
-      const sh = tem("sh", m);
+      const sh = tem("sh", m) * live;
       if (sh > 0) {
         dx += sh * K * Math.sin(ta * 43) * Math.sin(ta * 19.3);
         dy += sh * K * 0.5 * Math.sin(ta * 37);
       }
     }
-    dy += tem("sink", m) * R + 0.05 * this.rest * R;
+    dy += (tem("sink", m) * R + 0.05 * this.rest * R) * live;
     sx *= 1 + 0.025 * this.listen;
     sy *= 1 - 0.04 * this.listen;
     dy += 0.03 * R * this.listen;

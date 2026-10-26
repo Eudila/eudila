@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { requireUser, serverAuth } from "../auth/server";
 import Onboarding from "./onboarding";
@@ -12,5 +13,7 @@ export default async function Empezar() {
     .eq("id", user.id)
     .maybeSingle();
   if (data?.onboarding_completed_at) redirect("/");
-  return <Onboarding />;
+  // Session cookie set by ./intro.tsx: the opener plays once per session.
+  const seen = (await cookies()).has("eudila-intro");
+  return <Onboarding intro={!seen} />;
 }

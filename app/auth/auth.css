@@ -149,3 +149,149 @@
     padding-inline: 16px;
   }
 }
+
+/* Apertura del onboarding (app/empezar/intro.tsx; docs/design/mascota/README.md).
+   Server-rendered over the page; the script marks its stages with data-*. */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  overflow: hidden;
+  color: var(--color-text);
+}
+.intro canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.intro-stage {
+  position: absolute;
+  inset-inline: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding-inline: 24px;
+  text-align: center;
+  opacity: 0;
+}
+/* State names grow with the text size up to a tenth of the width, so a
+   whole word always fits: they are decorative here (aria-hidden, 600 ms). */
+.intro-label {
+  display: grid;
+  width: 100%;
+  font-size: min(var(--text-state), 10vw);
+  line-height: var(--leading-question);
+  overflow-wrap: normal;
+}
+.intro-label > p {
+  grid-area: 1 / 1;
+  text-wrap: balance;
+}
+.intro-label > p:not(.invisible) {
+  opacity: 0;
+}
+/* The slider of /registro/animo in miniature: 6px spectrum, white thumb with
+   the state's dot and a 9px halo (.mood-range in globals.css). */
+.intro-track {
+  position: relative;
+  width: min(100%, 26.25rem);
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(
+    90deg,
+    var(--color-mood-1),
+    var(--color-mood-2),
+    var(--color-mood-3),
+    var(--color-mood-4),
+    var(--color-mood-5),
+    var(--color-mood-6),
+    var(--color-mood-7)
+  );
+}
+.intro-thumb {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 30px;
+  height: 30px;
+  margin: -15px 0 0 -15px;
+  border: 7px solid var(--color-white);
+  border-radius: var(--radius-pill);
+  background: var(--color-mood-4);
+  box-shadow: 0 0 0 9px rgb(255 255 255 / 0.16);
+}
+.intro-word {
+  position: absolute;
+  top: 0;
+  left: 0;
+  white-space: nowrap;
+  transform-origin: 0 0;
+  opacity: 0;
+}
+.intro-line {
+  position: absolute;
+  inset-inline: 0;
+  max-width: calc(var(--container-copy) + 48px);
+  margin-inline: auto;
+  padding-inline: 24px;
+  text-align: center;
+  text-wrap: balance;
+}
+.intro-line > span {
+  display: inline-block;
+  opacity: 0;
+}
+.intro-skip {
+  position: absolute;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  left: 50%;
+  translate: -50% 0;
+}
+.intro:not([data-playing]) .intro-skip {
+  display: none;
+}
+/* The route entrance's transform would trap the fixed opener inside <main>;
+   the opener is this page's entrance. */
+.route-enter:has(> [data-opener]) {
+  animation: none;
+}
+/* The form waits under the opener; Ayuda stays one tap away above it. */
+.intro:not([data-reveal]) ~ .auth-screen {
+  visibility: hidden;
+}
+:root:has(.intro[data-playing]) .app-header {
+  position: relative;
+  z-index: 51;
+}
+/* The canvas draws the logo while it is away (opacity keeps it readable). */
+:root:has(.intro[data-hold]) .app-brand {
+  opacity: 0;
+}
+/* If the script never starts, the page shows up anyway. */
+.intro:not([data-playing]) {
+  animation: intro-gone 0s 4s forwards;
+}
+.intro:not([data-playing]) ~ .auth-screen {
+  animation: intro-page 0s 4s forwards;
+}
+@keyframes intro-gone {
+  to {
+    visibility: hidden;
+  }
+}
+@keyframes intro-page {
+  to {
+    visibility: visible;
+  }
+}
+/* Movimiento reducido omits it before the script even runs. */
+@media print, (prefers-reduced-motion: reduce) {
+  .intro {
+    display: none;
+  }
+  .intro:not([data-reveal]) ~ .auth-screen {
+    visibility: visible;
+  }
+}
