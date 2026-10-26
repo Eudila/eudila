@@ -204,30 +204,9 @@ try:
                             box = target.bounding_box()
                             assert box['height'] >= 44 and box['width'] >= 44, (route,width,percent,box)
                             assert box['y'] >= 0 and box['y'] + box['height'] <= height, box
-                        toggle = page.get_by_role('button', name='Vista previa · En esta pestaña', exact=True)
-                        toggle.focus()
-                        page.keyboard.press('Enter')
-                        notice = page.get_by_role('note', name='Sobre la vista previa', exact=True)
-                        expect(notice).to_be_visible()
-                        notice_box = notice.bounding_box()
-                        assert notice_box['x'] >= 0 and notice_box['x'] + notice_box['width'] <= width
-                        assert notice_box['y'] >= 0 and notice_box['y'] + notice_box['height'] <= height
-                        assert main.bounding_box()['height'] == main_height
-                        expect(notice).to_contain_text('Al cerrarla, se pierden')
-                        page.keyboard.press('Escape')
-                        expect(notice).not_to_be_visible()
-                        expect(toggle).to_be_focused()
                     page.evaluate("document.documentElement.style.fontSize = '100%'")
             assert page.evaluate('sessionStorage.getItem("eudila-preview-records-v1")') == before
             page.goto(base + '/exportar')
-            page.get_by_role('button', name='Vista previa · En esta pestaña', exact=True).click()
-            notice = page.get_by_role('note', name='Sobre la vista previa', exact=True)
-            expect(notice).to_be_visible()
-            page.emulate_media(media='print')
-            expect(notice).not_to_be_visible()
-            page.emulate_media(media='screen')
-            page.get_by_role('button', name='Cerrar aviso de vista previa', exact=True).click()
-            expect(notice).not_to_be_visible()
             page.get_by_role('link', name='Ayuda ahora', exact=True).click()
             page.wait_for_url(base + '/ayuda')
             expect(page.get_by_role('heading', name='Ayuda ahora', exact=True)).to_be_visible()

@@ -13,3 +13,4 @@ build/
 
 # Herramientas locales de diseño, no assets de la app.
 .agents/
+.vercel

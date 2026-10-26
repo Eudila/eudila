@@ -239,8 +239,7 @@ body {
 }
 
 .app-help,
-.app-tab,
-.app-preview-toggle {
+.app-tab {
   min-height: 44px;
   padding: 6px 12px;
 }
@@ -256,19 +255,6 @@ body {
 
 .app-tab[aria-current="page"] svg {
   transform: translateY(-2px) scale(1.08);
-}
-
-.preview-notice {
-  width: min(30rem, calc(100vw - 32px));
-  max-height: 60dvh;
-  margin: auto;
-  padding: 16px;
-  overflow-y: auto;
-  overflow-wrap: anywhere;
-}
-
-.preview-notice::backdrop {
-  background: rgb(0 0 0 / 0.45);
 }
 
 :focus-visible {
@@ -449,8 +435,7 @@ body {
   color: var(--color-text);
 }
 
-dialog,
-.preview-notice {
+dialog {
   border: 1px solid var(--color-line);
   background: var(--color-surface);
   color: var(--color-text);

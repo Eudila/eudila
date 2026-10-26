@@ -45,7 +45,6 @@ try:
         errors = []
         page.on('pageerror', lambda error: errors.append(str(error)))
         page.goto(base + '/hoy')
-        expect(page.locator('[data-frontend-preview]')).to_be_visible()
         assert page.evaluate(f'sessionStorage.getItem({json.dumps(key)})') is None
         page.goto(base + '/exportar')
         assert page.get_by_role('button', name='Descargar JSON', exact=True).count() == 0 or not page.get_by_role('button', name='Descargar JSON', exact=True).is_enabled()

@@ -6,10 +6,7 @@ import Image from "next/image";
 import Navigation from "./navigation";
 import { Icon } from "./ui";
 import AppShell from "./shell";
-import Mascota from "./mood/mascota";
-import { brandMood } from "./mood/critter";
 import SessionScope from "./auth/session-scope";
-import { previewEnabled } from "./frontend-preview";
 import "./globals.css";
 
 const figtree = localFont({
@@ -43,20 +40,17 @@ export default function RootLayout({
                   Ir al contenido
                 </a>
                 <p className="app-brand inline-flex items-center font-display text-wordmark leading-wordmark font-bold tracking-wordmark">
-                  <Mascota
-                    mood={brandMood}
-                    logo
-                    className="app-logo"
-                    fallback={
-                      <Image
-                        src="/brand/logo-mascota.svg"
-                        width={72}
-                        height={72}
-                        alt=""
-                        unoptimized
-                      />
-                    }
-                  />
+                  {/* Static on purpose: the header logo never moves, hops or sparkles. */}
+                  <span className="app-logo">
+                    <Image
+                      src="/brand/logo-mascota.svg"
+                      width={72}
+                      height={72}
+                      alt=""
+                      unoptimized
+                      className="size-full"
+                    />
+                  </span>
                   <span>eudila</span>
                 </p>
                 <Link
@@ -68,44 +62,6 @@ export default function RootLayout({
                   Ayuda ahora
                 </Link>
               </header>
-              {previewEnabled && (
-                <div data-frontend-preview>
-                  <button
-                    type="button"
-                    popoverTarget="preview-notice"
-                    className="app-preview-toggle flex w-full items-center gap-2 border-y border-line text-left text-muted"
-                  >
-                    <Icon name="info" className="size-4" />
-                    <span>
-                      <strong>Vista previa</strong> · En esta pestaña
-                    </span>
-                  </button>
-                  <div
-                    id="preview-notice"
-                    popover="auto"
-                    className="preview-notice rounded-control border border-line bg-surface text-text"
-                    role="note"
-                    aria-labelledby="preview-notice-title"
-                  >
-                    <h2 id="preview-notice-title" className="font-semibold">
-                      Sobre la vista previa
-                    </h2>
-                    <p className="my-3">
-                      Los registros se conservan solo en esta pestaña. Al
-                      cerrarla, se pierden. Los ejemplos se cargan cuando vos
-                      los elegís.
-                    </p>
-                    <button
-                      type="button"
-                      popoverTarget="preview-notice"
-                      popoverTargetAction="hide"
-                      className="app-help text-action underline"
-                    >
-                      Cerrar aviso de vista previa
-                    </button>
-                  </div>
-                </div>
-              )}
             </div>
             <main
               id="contenido"
