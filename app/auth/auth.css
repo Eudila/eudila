@@ -71,39 +71,6 @@
 .auth-intro p {
   overflow-wrap: anywhere;
 }
-.auth-social {
-  margin-top: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.auth-divider {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  color: var(--color-muted);
-}
-.auth-divider::before,
-.auth-divider::after {
-  content: "";
-  height: 1px;
-  flex: 1;
-  background: var(--color-line);
-}
-.auth-welcome {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-.auth-welcome .auth-form {
-  margin-top: 0;
-  gap: 12px;
-}
-.auth-orb {
-  width: 8rem;
-  height: 8rem;
-  align-self: center;
-}
 .onboarding-steps {
   display: flex;
   flex-direction: column;
@@ -144,13 +111,94 @@
   background: var(--color-action);
   color: var(--color-on-action);
 }
+.auth-access {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-block: 24px;
+}
+.auth-access .auth-intro {
+  gap: 8px;
+  text-align: center;
+}
+.auth-access .auth-form,
+.auth-access .auth-availability,
+.auth-access .auth-notice,
+.auth-access .auth-back {
+  margin: 0;
+}
+.auth-access .auth-form {
+  gap: 16px;
+}
+.auth-access .action-primary,
+.auth-access .action-secondary {
+  width: 100%;
+  min-height: var(--spacing-action);
+}
+.auth-access .auth-field input {
+  padding-inline: 16px;
+}
+.auth-access .auth-password {
+  gap: 0;
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-field);
+  background: var(--color-surface);
+}
+.auth-access .auth-password:has([aria-invalid="true"]) {
+  border: 2px solid var(--color-text);
+}
+.auth-access .auth-password input {
+  border: 0;
+  background: transparent;
+}
+.auth-access .auth-password button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--spacing-touch);
+  padding: 0;
+  border-radius: var(--radius-field);
+}
+.auth-access .auth-password :focus-visible {
+  outline-offset: -3px;
+}
+.auth-forgot {
+  align-self: flex-end;
+  margin-block: -12px;
+  padding-inline: 0;
+  font-size: 0.875rem;
+}
+.auth-gateway {
+  gap: 12px;
+  margin-block: clamp(24px, 12dvh, 112px) auto;
+}
+.auth-gateway .auth-intro {
+  margin-bottom: 12px;
+}
+.auth-access .auth-switch {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-line);
+}
+.auth-access .auth-switch a {
+  text-decoration: none;
+}
+.auth-access .auth-switch a:hover {
+  text-decoration: underline;
+}
+.auth-access > [role="status"]:empty {
+  display: none;
+}
 @media (max-width: 360px) {
   .auth-screen {
     padding-inline: 16px;
   }
 }
 
-/* Apertura del onboarding (app/empezar/intro.tsx; docs/design/mascota/README.md).
+/* Apertura de bienvenida (app/empezar/intro.tsx; docs/design/mascota/README.md).
    Server-rendered over the page; the script marks its stages with data-*. */
 .intro {
   position: fixed;

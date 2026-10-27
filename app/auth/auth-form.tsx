@@ -4,8 +4,9 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState, type FormEvent } from "react";
+import { Icon } from "../ui";
 import { authClient } from "./client";
-import { authConfigured, googleEnabled } from "./config";
+import { authConfigured } from "./config";
 import { authError } from "./errors";
 import "./auth.css";
 
@@ -128,7 +129,7 @@ export default function AuthForm({
           return;
         }
         if (data.session) {
-          router.replace("/empezar");
+          router.replace("/registro/tipo");
           router.refresh();
           return;
         }
@@ -153,7 +154,7 @@ export default function AuthForm({
           setCanResend(error.code === "email_not_confirmed");
           return;
         }
-        router.replace("/empezar");
+        router.replace("/registro/tipo");
         router.refresh();
         return;
       }
@@ -183,25 +184,8 @@ export default function AuthForm({
     });
   }
 
-  function google() {
-    void run(async () => {
-      const { data, error } = await authClient().auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-          skipBrowserRedirect: true,
-        },
-      });
-      if (error) {
-        setNotice(authError(error));
-        return;
-      }
-      if (data.url) window.location.assign(data.url);
-    });
-  }
-
   return (
-    <section className="auth-screen" aria-labelledby="auth-title">
+    <section className="auth-screen auth-access" aria-labelledby="auth-title">
       <div className="auth-intro">
         <h1
           ref={heading}
@@ -258,25 +242,6 @@ export default function AuthForm({
         </div>
       ) : (
         <>
-          {!recovery && !update && (
-            <div className="auth-social">
-              <button
-                type="button"
-                className="action action-secondary w-full"
-                onClick={google}
-                disabled={busy || !authConfigured || !googleEnabled}
-                aria-describedby={!googleEnabled ? "google-status" : undefined}
-              >
-                Continuar con Google
-              </button>
-              {!googleEnabled && (
-                <p id="google-status" className="text-muted text-sm">
-                  Google todavía no está habilitado. Podés continuar con email.
-                </p>
-              )}
-              <p className="auth-divider">o con tu email</p>
-            </div>
-          )}
           <form
             noValidate
             onSubmit={submit}
@@ -362,9 +327,12 @@ export default function AuthForm({
                     }
                     aria-pressed={visible}
                     aria-controls="auth-password"
+                    title={
+                      visible ? "Ocultar contraseña" : "Mostrar contraseña"
+                    }
                     onClick={() => setVisible((previous) => !previous)}
                   >
-                    {visible ? "Ocultar" : "Mostrar"}
+                    <Icon name={visible ? "eyeOff" : "eye"} />
                   </button>
                 </div>
                 {(signup || update) && (
@@ -378,6 +346,14 @@ export default function AuthForm({
                   </p>
                 )}
               </div>
+            )}
+            {!signup && !recovery && !update && (
+              <Link
+                href="/recuperar"
+                className="auth-forgot action action-text"
+              >
+                Olvidé mi contraseña
+              </Link>
             )}
             {update && (
               <div className="auth-field">
@@ -435,22 +411,22 @@ export default function AuthForm({
           Reenviar confirmación
         </button>
       )}
-      {!signup && !recovery && !update && (
-        <Link href="/recuperar" className="auth-back">
-          Olvidé mi contraseña
-        </Link>
-      )}
       {!update && (
-        <p className="auth-switch">
-          {signup
-            ? "¿Ya tenés cuenta?"
-            : recovery
-              ? "¿Recordaste tu contraseña?"
-              : "¿Es tu primera vez?"}{" "}
-          <Link href={signup || recovery ? "/ingresar" : "/crear-cuenta"}>
+        <div className="auth-switch">
+          <p className="text-muted">
+            {signup
+              ? "¿Ya tenés cuenta?"
+              : recovery
+                ? "¿Recordaste tu contraseña?"
+                : "¿Es tu primera vez?"}
+          </p>
+          <Link
+            href={signup || recovery ? "/ingresar" : "/crear-cuenta"}
+            className="action action-secondary"
+          >
             {signup || recovery ? "Ingresar" : "Crear cuenta"}
           </Link>
-        </p>
+        </div>
       )}
       <Link href={update ? "/cuenta" : "/bienvenida"} className="auth-back">
         {update ? "Volver a mi cuenta" : "Volver al inicio"}

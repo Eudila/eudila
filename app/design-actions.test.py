@@ -159,6 +159,13 @@ with sync_playwright() as p:
     page.goto(base + '/ingresar')
     assert page.get_by_label('Email', exact=True).evaluate('e => parseFloat(getComputedStyle(e).borderRadius)') == 14
     # El logout ya es real y requiere sesión; Google sin configurar cubre disabled.
+    page.goto(base + '/bienvenida')
+    if page.locator('.intro').count():
+        expect(page.locator('.intro')).to_have_attribute('data-playing', '')
+        page.keyboard.press('Escape')
+        expect(page.locator('.intro')).to_have_count(0)
+    page.evaluate('''async () => Promise.all(document.querySelector('.auth-gateway')
+        .getAnimations({subtree: true}).map(animation => animation.finished))''')
     account_action = page.get_by_role('button', name='Continuar con Google', exact=True)
     expect(account_action).to_be_disabled()
     legible(account_action)

@@ -13,14 +13,15 @@ export async function GET(request: NextRequest) {
     const client = await serverAuth();
     if (code) {
       const { error } = await client.auth.exchangeCodeForSession(code);
-      if (!error) destination = "/empezar";
+      if (!error) destination = "/registro/tipo";
     } else if (token && (type === "signup" || type === "recovery")) {
       const { error } = await client.auth.verifyOtp({
         token_hash: token,
         type,
       });
       if (!error)
-        destination = type === "recovery" ? "/actualizar-clave" : "/empezar";
+        destination =
+          type === "recovery" ? "/actualizar-clave" : "/registro/tipo";
     }
   }
   // Conservar el origen del navegador incluso detrás de un proxy o en 127.0.0.1.

@@ -17,7 +17,7 @@ import { brandEase } from "../mood/motion";
 import { moods } from "../../prototype/moods.js";
 
 /**
- * Apertura del onboarding: one clock, ~11.5 s, skippable, once per session.
+ * Apertura de bienvenida: one clock, ~12.7 s, skippable, once per session.
  * Spec and rules: docs/design/mascota/README.md («Apertura»).
  *
  * The header logo wakes up, pulls its wordmark in and folds into its core,
@@ -28,7 +28,7 @@ import { moods } from "../../prototype/moods.js";
  * which blooms as the brand's coral, writes `eudila` and lands back in the
  * header, where the page opens. It never reads the pointer.
  */
-const COOKIE = "eudila-intro"; // also read by ./page.tsx
+const COOKIE = "eudila-intro"; // also read by ../bienvenida/page.tsx
 const EASE = "cubic-bezier(.32,.72,0,1)";
 const BEAT = 0.6;
 // Out from Neutral to both sides, so neither end of the scale is the goal.
@@ -845,8 +845,9 @@ export default function Intro({
       measure();
       stop = subscribe((_, dt) => {
         // Own clock: pauses with the tab and never skips a beat.
-        T += dt;
-        draw(T, dt);
+        const pace = T >= S.bloom ? 0.7 : 1;
+        T += dt * pace;
+        draw(T, dt * pace);
       });
     }
 
