@@ -52,7 +52,11 @@ test("no afirma entrega sin configuración", async () => {
 test("envía mediante Resend y usa reply-to", async () => {
   let sent;
   const handler = createHandler(
-    { RESEND_API_KEY: "secret", CONTACT_TO: "equipo@example.org", CONTACT_FROM: "Eudila <web@example.org>" },
+    {
+      RESEND_API_KEY: "secret",
+      CONTACT_TO: "equipo@example.org",
+      CONTACT_FROM: "Eudila <web@example.org>",
+    },
     async (url, options) => {
       sent = { url, options, body: JSON.parse(options.body) };
       return new Response("{}", { status: 200 });

@@ -7,7 +7,9 @@ const output = path.resolve(__dirname, "..", "assets", "og-eudila.png");
 
 (async () => {
   const browser = await chromium.launch({ channel: "chrome", headless: true });
-  const context = await browser.newContext({ viewport: { width: 1200, height: 630 } });
+  const context = await browser.newContext({
+    viewport: { width: 1200, height: 630 },
+  });
   const page = await context.newPage();
   await page.goto(pathToFileURL(source).href, { waitUntil: "load" });
   await page.evaluate(() => document.fonts.ready);

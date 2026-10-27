@@ -13,7 +13,11 @@ export function validateContact(input) {
     return { ok: false, error: "La consulta no tiene un formato válido." };
   }
 
-  const singleLine = (value) => String(value || "").replace(/[\r\n\t]+/g, " ").replace(/\s{2,}/g, " ").trim();
+  const singleLine = (value) =>
+    String(value || "")
+      .replace(/[\r\n\t]+/g, " ")
+      .replace(/\s{2,}/g, " ")
+      .trim();
   const name = singleLine(input.name);
   const email = String(input.email || "").trim();
   const organization = singleLine(input.organization);
@@ -31,7 +35,10 @@ export function validateContact(input) {
     return { ok: false, error: "La organización es demasiado larga." };
   }
   if (message.length < 20 || message.length > 3000) {
-    return { ok: false, error: "La consulta debe tener entre 20 y 3000 caracteres." };
+    return {
+      ok: false,
+      error: "La consulta debe tener entre 20 y 3000 caracteres.",
+    };
   }
 
   return { ok: true, value: { name, email, organization, message } };
@@ -39,10 +46,12 @@ export function validateContact(input) {
 
 export function createHandler(env = process.env, fetchImpl = fetch) {
   return async function handler(request) {
-    if (request.method !== "POST") return json({ error: "Método no permitido." }, 405);
+    if (request.method !== "POST")
+      return json({ error: "Método no permitido." }, 405);
 
     const length = Number(request.headers.get("content-length") || 0);
-    if (length > MAX_BODY_BYTES) return json({ error: "La consulta es demasiado grande." }, 413);
+    if (length > MAX_BODY_BYTES)
+      return json({ error: "La consulta es demasiado grande." }, 413);
 
     let payload;
     try {
@@ -56,7 +65,10 @@ export function createHandler(env = process.env, fetchImpl = fetch) {
     if (validation.spam) return json({ ok: true }, 202);
 
     if (!env.RESEND_API_KEY || !env.CONTACT_TO || !env.CONTACT_FROM) {
-      return json({ error: "El canal de contacto todavía no está configurado." }, 503);
+      return json(
+        { error: "El canal de contacto todavía no está configurado." },
+        503,
+      );
     }
 
     const { name, email, organization, message } = validation.value;
@@ -81,7 +93,8 @@ export function createHandler(env = process.env, fetchImpl = fetch) {
       }),
     });
 
-    if (!delivery.ok) return json({ error: "No pudimos entregar la consulta." }, 502);
+    if (!delivery.ok)
+      return json({ error: "No pudimos entregar la consulta." }, 502);
     return json({ ok: true }, 200);
   };
 }
@@ -96,7 +109,10 @@ export default async function vercelHandler(request, response) {
       : typeof request.body === "string"
         ? request.body
         : JSON.stringify(request.body || {});
-  const url = new URL(request.url || "/api/contact", "https://landing.eudila.invalid");
+  const url = new URL(
+    request.url || "/api/contact",
+    "https://landing.eudila.invalid",
+  );
   const webRequest = new Request(url, {
     method,
     headers: request.headers,
@@ -104,6 +120,7 @@ export default async function vercelHandler(request, response) {
   });
   const webResponse = await webHandler(webRequest);
   response.statusCode = webResponse.status;
-  for (const [name, value] of webResponse.headers) response.setHeader(name, value);
+  for (const [name, value] of webResponse.headers)
+    response.setHeader(name, value);
   response.end(await webResponse.text());
 }

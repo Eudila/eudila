@@ -8,6 +8,11 @@ export default defineConfig([
   ...nextVitals,
   ...nextTypescript,
   prettier,
+  {
+    // Los scripts de herramientas de la landing son CommonJS.
+    files: ["**/*.cjs"],
+    rules: { "@typescript-eslint/no-require-imports": "off" },
+  },
   globalIgnores([
     ".next/**",
     ".agents/**",
@@ -15,5 +20,10 @@ export default defineConfig([
     "build/**",
     "next-env.d.ts",
     "prototype/**",
+    "landing/dist/**",
+    "landing/outputs/**",
+    // Copias generadas del motor de la mascota (landing/scripts/sync-mascota.mjs).
+    "landing/mascota.js",
+    "landing/moods.js",
   ]),
 ]);
