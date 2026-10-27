@@ -29,6 +29,7 @@ for (const file of [
   "privacidad.html",
   "terminos.html",
   "styles.css",
+  "brand-tokens.css",
   "main.js",
   "escena.js",
   "mascota.js",

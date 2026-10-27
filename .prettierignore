@@ -2,7 +2,6 @@
 out/
 build/
 node_modules/
-prototype/
 landing/dist/
 landing/outputs/
 landing/mascota.js
@@ -14,3 +13,6 @@ package-lock.json
 next-env.d.ts
 
 .agents/
+
+PRODUCT.md
+DESIGN.md

@@ -1,5 +1,5 @@
 // Copia el motor de la mascota de la app a la landing, sin reinterpretarlo.
-// Fuente única: app/mood/critter.ts y prototype/moods.js (docs/design/mascota/README.md manda).
+// Fuente única: packages/mood/critter.ts y packages/mood/moods.js (docs/design/mascota/README.md manda).
 // Uso: npm run sync:mascota (requiere el `typescript` instalado en la raíz del repo).
 import { readFile, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
@@ -16,7 +16,10 @@ const ts = createRequire(path.join(repo, "package.json"))("typescript");
 const header = (from) =>
   `// GENERADO por landing/scripts/sync-mascota.mjs desde ${from}. No editar a mano.\n`;
 
-const critter = await readFile(path.join(repo, "app/mood/critter.ts"), "utf8");
+const critter = await readFile(
+  path.join(repo, "packages/mood/critter.ts"),
+  "utf8",
+);
 const { outputText } = ts.transpileModule(critter, {
   compilerOptions: {
     target: ts.ScriptTarget.ES2022,
@@ -25,14 +28,14 @@ const { outputText } = ts.transpileModule(critter, {
 });
 await writeFile(
   path.join(landing, "mascota.js"),
-  header("app/mood/critter.ts") +
-    outputText.replace("../../prototype/moods.js", "./moods.js"),
+  header("packages/mood/critter.ts") +
+    outputText.replace("@eudila/mood/moods.js", "./moods.js"),
 );
 
-const moods = await readFile(path.join(repo, "prototype/moods.js"), "utf8");
+const moods = await readFile(path.join(repo, "packages/mood/moods.js"), "utf8");
 await writeFile(
   path.join(landing, "moods.js"),
-  header("prototype/moods.js") + moods,
+  header("packages/mood/moods.js") + moods,
 );
 
 console.log(

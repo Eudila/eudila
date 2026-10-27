@@ -1,5 +1,5 @@
 {
-  "name": "eudila-landing",
+  "name": "@eudila/landing",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -10,13 +10,18 @@
     "capture:og": "node scripts/capture-og.cjs",
     "check:visual": "node scripts/visual-check.cjs",
     "render:film": "node scripts/render-film.mjs",
-    "sync:mascota": "node scripts/sync-mascota.mjs",
-    "deploy:vps": "bash scripts/deploy-vps.sh"
+    "sync:mascota": "node scripts/sync-mascota.mjs && node ../app/infra/scripts/sync-assets.mjs",
+    "deploy:vps": "bash ../app/infra/scripts/deploy-landing.sh",
+    "prebuild": "npm run sync:mascota"
   },
   "devDependencies": {
     "playwright": "1.62.1"
   },
   "engines": {
     "node": ">=22"
+  },
+  "dependencies": {
+    "@eudila/mood": "*",
+    "@eudila/brand": "*"
   }
 }

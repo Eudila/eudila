@@ -1,0 +1,28 @@
+{
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "AGPL-3.0-only",
+  "engines": {
+    "node": "^22.13.0 || >=24.0.0"
+  },
+  "dependencies": {
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.118.0",
+    "next": "16.3.8",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "@eudila/domain": "*",
+    "@eudila/mood": "*",
+    "@eudila/brand": "*"
+  },
+  "name": "@eudila/app",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "next typegen && tsc --noEmit",
+    "predev": "node infra/scripts/sync-assets.mjs",
+    "prebuild": "node infra/scripts/sync-assets.mjs"
+  }
+}

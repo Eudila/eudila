@@ -8,23 +8,20 @@
     "node": "^22.13.0 || >=24.0.0"
   },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "npm run dev --workspace @eudila/app --",
+    "build": "npm run build --workspace @eudila/app",
+    "start": "npm run start --workspace @eudila/app --",
     "lint": "eslint . --max-warnings=0",
-    "typecheck": "next typegen && tsc --noEmit",
+    "typecheck": "npm run typecheck --workspace @eudila/app",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "supabase:start": "node scripts/local-auth.mjs",
-    "supabase:stop": "supabase stop",
-    "test:auth": "uv run --with playwright python app/auth/browser.test.py"
-  },
-  "dependencies": {
-    "@supabase/ssr": "^0.12.7",
-    "@supabase/supabase-js": "^2.118.0",
-    "next": "16.3.8",
-    "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "supabase:start": "node app/infra/scripts/local-auth.mjs",
+    "supabase:stop": "supabase --workdir app stop",
+    "test:auth": "uv run --with playwright python app/app/auth/browser.test.py",
+    "test": "node --test \"packages/**/*.test.mjs\" \"app/**/*.test.mjs\" \"landing/**/*.test.mjs\"",
+    "build:landing": "npm run build --workspace @eudila/landing",
+    "sync:assets": "node app/infra/scripts/sync-assets.mjs",
+    "pretest": "npm run sync:assets"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "4.3.3",
@@ -39,5 +36,10 @@
     "supabase": "^2.121.0",
     "tailwindcss": "4.3.3",
     "typescript": "5.9.3"
-  }
+  },
+  "workspaces": [
+    "app",
+    "landing",
+    "packages/*"
+  ]
 }

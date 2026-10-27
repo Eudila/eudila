@@ -111,3 +111,13 @@ La referencia conserva cuatro direcciones. **Vigente:** mascota con carita («Mi
 - Mantener las reglas de arriba y las pruebas existentes de movimiento reducido, pausa al ocultar y AA.
 - Landing (26/10/2026): `landing/mascota.js` es el motor de `app/mood/critter.ts` copiado por `npm run sync:mascota` dentro de `landing/`; si cambia un valor acá y en el motor, volver a sincronizar y a renderizar la pieza (`npm run render:film`). Vive en la portada (con reflejo), la semana, Lo que viene, Noainova y el video; el header de la landing usa el logo estático. [Evidencia](../evidence/landing-showreel-2026-10-26/README.md).
 - Al cerrar cada brecha, agregar evidencia en `docs/design/evidence/` y actualizar este documento si cambia algún valor.
+
+
+## Organización técnica · 27/10/2026
+
+La arquitectura solicitada separa `apps/web` y `apps/landing`. La fuente canónica de tokens pasa a `packages/brand/tokens.css`, importada por `apps/web/app/globals.css`; logos y Figtree viven en `packages/brand`. Mascota, controlador y geometría pasan a `packages/mood`; la landing genera su motor desde ese paquete. `docs/historia/prototype` conserva la referencia histórica, sin dependencia desde producción. Los valores visuales, temperamentos, carita y comportamiento de movimiento reducido se conservan. Las rutas públicas no cambian. No se cierra ninguna brecha estética por mover código; la validación de esta entrega se registra en `docs/arquitectura/verificacion-2026-10-27.md`. Las rutas de las evidencias anteriores describen la estructura de su fecha.
+
+
+### Organización para publicación · 27/10/2026
+
+Las aplicaciones ahora viven en `app/` y `landing/`, directamente en la raíz. El código compartido conserva `packages/mood` y `packages/brand`; `app/app/globals.css` importa sus tokens. PRODUCT.md y DESIGN.md quedan como documentos internos locales ignorados por Git. Esta mudanza no cambia decisiones visuales ni cierra brechas de marca.
