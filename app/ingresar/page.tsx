@@ -8,6 +8,6 @@ export default async function Ingresar({
   searchParams: Promise<{ error?: string }>;
 }) {
   const { error } = await searchParams;
-  if (!error && (await currentUser())) redirect("/empezar");
+  if (!error && (await currentUser())) redirect("/registro/tipo");
   return <AuthForm mode="ingresar" invalidLink={error === "enlace"} />;
 }

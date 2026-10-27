@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import Link from "next/link";
-import { currentUser, serverAuth } from "./auth/server";
+import { currentUser } from "./auth/server";
 import { redirect } from "next/navigation";
 import { authConfigured } from "./auth/config";
 import { previewEnabled } from "./frontend-preview";
@@ -10,16 +10,7 @@ import { brandMood } from "./mood/critter";
 
 export default async function Home() {
   const user = await currentUser();
-  if (authConfigured && !previewEnabled) {
-    if (!user) redirect("/bienvenida");
-    const client = await serverAuth();
-    const { data } = await client
-      .from("profiles")
-      .select("onboarding_completed_at")
-      .eq("id", user.id)
-      .maybeSingle();
-    if (!data?.onboarding_completed_at) redirect("/empezar");
-  }
+  if (authConfigured && !previewEnabled && !user) redirect("/bienvenida");
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-6 px-6 py-8 text-center">
       {/* Saludo once per session instead of a splash: no delay before the task. */}
