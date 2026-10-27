@@ -1,0 +1,13 @@
+{
+  "name": "@eudila/mood",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "AGPL-3.0-only",
+  "exports": {
+    "./*": "./*"
+  },
+  "peerDependencies": {
+    "react": "^19.3.0"
+  }
+}

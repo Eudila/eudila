@@ -8,7 +8,7 @@ Proyecto estático separado de la aplicación Next.js. Usa la identidad, la masc
 
 - `index.html`, `styles.css`: página y estilos.
 - `escena.js`: movimiento de la página (portada con reflejo y selector, semana, pasos, gráfico, video, Noainova).
-- `mascota.js`, `moods.js`: **generados** por `npm run sync:mascota` desde `app/mood/critter.ts` y `prototype/moods.js`. No editarlos a mano.
+- `mascota.js`, `moods.js`: **generados** por `npm run sync:mascota` desde `packages/mood/critter.ts` y `packages/mood/moods.js`. No editarlos a mano.
 - `film/pelicula.js`: guion de la pieza de video; `film/render.html` la reproduce en un navegador (servida desde `landing/`).
 - `main.js`: formulario de contacto y analítica opcional.
 - `privacidad.html`, `terminos.html`: política de privacidad y condiciones del servicio (26/10/2026), publicadas en `/privacidad` y `/terminos`. Las pide el consentimiento OAuth de Google. Describen lo que la app hace hoy (la cuenta de Google y un perfil mínimo; los registros emocionales no se guardan en servidores); si eso cambia, hay que actualizarlas antes. El contacto es `privacidad@eudila.com`: debe existir como reenvío en Namecheap.
@@ -16,7 +16,9 @@ Proyecto estático separado de la aplicación Next.js. Usa la identidad, la masc
 ## Revisión local
 
 ```sh
+cd ..
 npm ci
+cd landing
 npm test
 npm run build
 npx serve dist
@@ -34,13 +36,13 @@ El build local no envía formularios ni carga analítica. El formulario queda vi
 
 ## Despliegue en el VPS (Docker + Cloudflare Tunnel)
 
-`deploy/` tiene un nginx mínimo (`Dockerfile`, `nginx.conf`, `compose.yaml`) que sirve `dist/`. Vive en su propia carpeta (`/opt/eudila-landing`) y su propio proyecto de Docker: no usa el nginx del host, no publica puertos (solo `127.0.0.1:8081` para comprobarlo) y no cambia el firewall, así que convive con otros servicios.
+`app/infra/landing/` tiene un nginx mínimo (`Dockerfile`, `nginx.conf`, `compose.yaml`) que sirve `dist/`. Vive en su propia carpeta (`/opt/eudila-landing`) y su propio proyecto de Docker: no usa el nginx del host, no publica puertos (solo `127.0.0.1:8081` para comprobarlo) y no cambia el firewall, así que convive con otros servicios.
 
 ```sh
 VPS_HOST=usuario@ip-del-vps SSHPASS='…' npm run deploy:vps   # o sin SSHPASS si usás clave SSH
 ```
 
-El script compila, sube `dist/` y `deploy/` y corre `docker compose up -d --build`. La contraseña va solo por entorno y no se guarda. El tráfico público llega por un túnel de Cloudflare: poné el token en `/opt/eudila-landing/secrets/tunnel-token` en el VPS y el siguiente despliegue levanta también `cloudflared` (perfil `tunnel`). Cloudflare termina el HTTPS.
+El script compila, sube `dist/` y `app/infra/landing/` y corre `docker compose up -d --build`. La contraseña va solo por entorno y no se guarda. El tráfico público llega por un túnel de Cloudflare: poné el token en `/opt/eudila-landing/secrets/tunnel-token` en el VPS y el siguiente despliegue levanta también `cloudflared` (perfil `tunnel`). Cloudflare termina el HTTPS.
 
 Mientras no haya casilla monitoreada y Resend, el formulario sigue deshabilitado y remite al canal de GitHub: nginx no ejecuta `api/contact.mjs`.
 
@@ -57,3 +59,5 @@ Mientras no haya casilla monitoreada y Resend, el formulario sigue deshabilitado
 El build de publicación falla si falta cualquiera de estas variables. La analítica respeta Do Not Track, no conserva query/hash y este sitio no agrega cookies ni almacenamiento del navegador.
 
 Antes de considerar ANI-76 terminada hay que comprobar entrega real a `CONTACT_TO`, dominio propio, HTTPS, captura móvil, navegación con teclado y el fetch público de `og-eudila.png` por un depurador social.
+
+En Vercel, configurar Root Directory `landing` y permitir archivos fuera de ese directorio (paquetes compartidos). El comando `npm run build` ejecuta la sincronización antes del build; no invocar `node scripts/build.mjs` directamente.

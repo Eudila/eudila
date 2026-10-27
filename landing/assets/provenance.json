@@ -4,7 +4,7 @@
     "description": "Logo estático vigente: mascota Muy agradable coral, con carita y sin destellos"
   },
   "Figtree.ttf": {
-    "source": "../prototype/fonts/Figtree.ttf",
+    "source": "../../packages/brand/fonts/Figtree.ttf",
     "license": "SIL Open Font License 1.1"
   },
   "app-tipo.png · app-animo.png · app-emocion.png · app-factores.png · app-confirmacion.png": {
@@ -12,7 +12,7 @@
     "description": "Capturas reales de los cinco pasos: área útil de un celular (390 × 763) más barra de estado e indicador de inicio con el color de cada borde, 780 × 1688; un mismo borrador ficticio (Noche, Agradable, Alivio, Amistades y Actividad física)"
   },
   "eudila-film.mp4": {
-    "source": "scripts/render-film.mjs + film/pelicula.js + mascota.js (sincronizado desde app/mood/critter.ts)",
+    "source": "scripts/render-film.mjs + film/pelicula.js + mascota.js (sincronizado desde packages/mood/critter.ts)",
     "description": "Pieza de 32 s, 1920 × 1080, 60 cuadros por segundo, H.264 sin audio; renderizada cuadro a cuadro con el motor de la mascota. El gráfico usa datos ficticios"
   },
   "eudila-film-poster.jpg": {

@@ -15,3 +15,13 @@ build/
 # Herramientas locales de diseño, no assets de la app.
 .agents/
 .vercel
+
+# Assets servidos generados desde packages/brand.
+app/public/brand/
+landing/brand-tokens.css
+landing/assets/Figtree.ttf
+landing/assets/logo.svg
+
+# Documentos internos de producto y diseño (copias locales).
+/PRODUCT.md
+/DESIGN.md

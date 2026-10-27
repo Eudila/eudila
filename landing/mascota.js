@@ -1,4 +1,4 @@
-// GENERADO por landing/scripts/sync-mascota.mjs desde app/mood/critter.ts. No editar a mano.
+// GENERADO por landing/scripts/sync-mascota.mjs desde packages/mood/critter.ts. No editar a mano.
 // SPDX-License-Identifier: AGPL-3.0-only
 // Canvas engine of the eudila mascot, ported from docs/design/mascota/eudila-viva.html.
 // docs/design/mascota/README.md owns every value; change it there first.
