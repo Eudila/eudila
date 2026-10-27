@@ -260,3 +260,21 @@ Pedido del usuario: una animación inicial del onboarding «como un showreel» d
 - Accesibilidad: «Ayuda ahora» queda encima y responde; «Saltar» (y Esc) en todo momento; formulario `inert` y foco al título al terminar o saltar; con movimiento reducido se omite; reflujo a 320 px y texto al 200 %.
 - Corrección encontrada en la verificación: la entrada de ruta (`.route-enter`, con `transform`) encerraba la capa fija dentro de `<main>`; en esta página la entrada la hace la apertura. `SessionScope` vuelve a montar la página al resolver la sesión, así que la marca de «vista» se guarda al terminar o saltar.
 - Verificado en Chromium headless (Playwright) a 320, 390 y 1440 px, con texto al 200 %, movimiento reducido, saltar, teclado y Ayuda. No se probó un celular real, Safari ni Firefox. [Evidencia, mediciones y límites](evidence/apertura-2026-10-26/README.md).
+
+## Ajuste del acceso · 26/10/2026
+
+A pedido del usuario se ordenan las pills del login: email primero, recuperación junto a contraseña, ingreso coral, Google debajo del separador y alta en una cápsula secundaria del mismo ancho. Introducción centrada y control «Mostrar» integrado al campo. Se aplica al componente `AuthForm`; bienvenida, cuenta y onboarding conservan su composición. Build de producción, lint, tipos, teclado, validaciones, 36 casos de reflujo/movimiento y regresión existente de acciones AA verificados. [Evidencia y límites](evidence/login-2026-10-26/README.md). No cambia el estado de las brechas globales.
+
+Refinamiento posterior del mismo día: «Mostrar/Ocultar» se reemplaza por ojo/ojo tachado, con nombre accesible, tooltip y objetivo mínimo de 44 px. Se conservan los textos de las demás acciones y campos. Verificados teclado, visibilidad de contraseña y 12 casos de reflujo en ingreso/alta en desarrollo; lint, tipos y formato pasan. [Captura actual](evidence/login-2026-10-26/iconos-390.png).
+
+## Entrada antes del acceso · 26/10/2026
+
+El usuario pidió una pantalla posterior a la animación con solo Google, Ingresar y Registrarse, antes de pedir datos. `/bienvenida` reutiliza la apertura existente; `/ingresar` y `/crear-cuenta` quedan para los campos, y `/empezar` ya no repite la presentación. Se conservan Lisa, la mascota/coreografía, el logo estático y Ayuda. Verificados apertura completa/salto/Esc, cookie, foco, movimiento reducido, navegación y seis casos de reflujo en Next.js real de desarrollo y producción. Build, lint, tipos, formato y 37 pruebas Node pasan. [Captura, comandos y límites](evidence/entrada-acceso-2026-10-26/README.md). No se cierran brechas globales por esta reorganización.
+
+## Cierre pausado y bienvenida elevada · 26/10/2026
+
+A pedido del usuario, el último tramo de la apertura (desde el florecimiento coral) corre al 70 % de velocidad: duración total ≈12,67 s. La entrada muestra «Un momento para vos.» y «Elegí cómo querés entrar.» sobre las tres opciones, con el bloque centrado horizontalmente y más arriba en la pantalla. Se mantienen el motor, las reglas de mascota, Lisa y acciones existentes. Build, lint, tipos y formato pasan; se amplía la prueba de bienvenida para duración, posición y errores de consola. [Captura y comprobaciones](evidence/bienvenida-cierre-2026-10-26/README.md). El error de Next reportado no se reprodujo en una sesión nueva y queda pendiente del mensaje exacto; no se declara corregido.
+
+## Recorrido principal · 26/10/2026
+
+El usuario define bienvenida → ingreso/alta → registro emocional. Se unifican los destinos de acceso/confirmación en `/registro/tipo` y se quita la personalización obligatoria del inicio; nombre e introducción quedan opcionales desde Cuenta. Validado en producción con Supabase local: alta/confirmación/reenvío, ingreso, cuenta sin nombre, recuperación, sesiones, RLS, cookies falsas, logout entre pestañas y 18 casos de reflujo. Build, lint, tipos, formato, 37 pruebas Node y prueba de bienvenida pasan. [Evidencia y límites](evidence/recorrido-acceso-2026-10-26/README.md). La sincronización emocional en cuenta continúa pendiente y la UI conserva el aviso.

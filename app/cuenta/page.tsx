@@ -41,7 +41,7 @@ export default async function Cuenta({
         </p>
         {!profile?.onboarding_completed_at && (
           <Link href="/empezar" className="action action-primary">
-            Completar bienvenida
+            Personalizar mi cuenta
           </Link>
         )}
         <Link href="/recuperar" className="action action-text">

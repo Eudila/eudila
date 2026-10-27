@@ -16,6 +16,8 @@ Personas que registran su estado de ánimo desde el celular y consultan su histo
 
 Registrar ánimo, emoción y factores con poca fricción; consultar días, evolución y exportaciones descriptivas. Frontend Next.js con vista previa explícita y onboarding/autenticación Supabase: email, confirmación, recuperación, sesión y perfil privado. Google usa el mismo proveedor y requiere credenciales OAuth configuradas. La persistencia de registros emocionales en una cuenta sigue pendiente; iniciar sesión no implica sincronizarlos. Diario, sueño, fotos y logros están en backlog ANI-100–106.
 
+Recorrido principal definido el 26/10/2026: bienvenida con apertura → ingresar o registrarse (confirmar email cuando corresponda) → registro emocional: momento, ánimo, emoción, factores opcionales y revisión. El nombre y la introducción quedan como personalización opcional desde Cuenta; no bloquean el registro.
+
 ## Brand Personality
 
 Serena, cálida y precisa. «Un espejo tranquilo para cada estado de ánimo». Voseo rioplatense, sin juicio, sin promesas clínicas. La identidad de Eudila está definida en DESIGN.md y procede del brandbook v1.0 y los videos de marca revisados. Desde el 23/10/2026 la marca tiene mascota: el propio orbe con una carita mínima, y el logo principal es la mascota Muy agradable ([docs/design/mascota/README.md](docs/design/mascota/README.md)).

@@ -199,6 +199,18 @@ Especificación completa, parámetros y momentos en [docs/design/mascota/README.
 
 Diario, sueño, fotos y Logros (ANI-100–106) heredan esta identidad. Los relatos y fotos del usuario son contenido, no ilustraciones de marca. Medallas deben integrarse al sistema, sin importar los assets JBG de la referencia ni premiar emociones agradables. Cambiar identidad o reglas requiere decisión documentada, no reinterpretación por sesión.
 
+### Acceso · ajuste del 26/10/2026
+
+En el formulario compartido de acceso, el título y la introducción se centran; los campos conservan etiquetas a la izquierda. Email y contraseña aparecen después de elegir ingreso o alta en bienvenida; Google se elige en esa pantalla previa. «Ingresar» usa la cápsula coral principal; el cambio entre ingreso/alta usa una cápsula secundaria del mismo ancho y alto mínimo de 50 px. Recuperación queda junto a contraseña, el control de visibilidad dentro del contorno del campo y volver al inicio como enlace al pie. El control usa ojo/ojo tachado, nombre accesible «Mostrar/Ocultar contraseña», tooltip y objetivo mínimo de 44 px. Las acciones principales, recuperación y etiquetas conservan texto. Se conservan los tokens de Lisa, Figtree y las acciones existentes. Los estilos del formulario se limitan a `auth-access`; la bienvenida usa además `auth-gateway`. [Capturas y verificación en Next.js](docs/design/evidence/login-2026-10-26/README.md).
+
+### Entrada antes del acceso · 26/10/2026
+
+A pedido del usuario, `/bienvenida` reproduce la apertura existente y después muestra «Un momento para vos.», el subtítulo «Elegí cómo querés entrar.» y las tres opciones: «Continuar con Google», «Ingresar» y «Registrarse». Sin campos ni otra mascota después de la animación. El bloque queda centrado horizontalmente y más arriba que el centro de la pantalla, con margen superior adaptable de 24–112 px. Conserva el logo estático y Ayuda en el header. Google se ofrece en esta entrada, y los campos de email/contraseña aparecen en `/ingresar` o `/crear-cuenta`. Las tres cápsulas comparten ancho y alto mínimo de 50 px; Ingresar es coral y las otras secundarias. La apertura se omite con movimiento reducido, se puede saltar con botón/Esc y se reproduce una vez por sesión; ya no aparece en `/empezar`. Se conserva su coreografía y el motor; desde el florecimiento coral, el cierre corre al 70 % de velocidad y la pieza pasa de 11,45 a ≈12,67 s. [Ajuste y comprobaciones](docs/design/evidence/bienvenida-cierre-2026-10-26/README.md). [Evidencia de la entrada](docs/design/evidence/entrada-acceso-2026-10-26/README.md).
+
+### Recorrido principal · 26/10/2026
+
+Bienvenida → ingreso/alta → registro emocional. Tras ingresar, completar un alta con sesión o confirmar email/Google, se abre `/registro/tipo`; siguen ánimo, emoción, factores opcionales y revisión. Nombre e introducción ya no son un paso obligatorio: se accede a ellos desde «Personalizar mi cuenta» en Cuenta. La confirmación de email, recuperación, validación de sesión, Ayuda y vista previa conservan sus reglas. [Verificación con Supabase local](docs/design/evidence/recorrido-acceso-2026-10-26/README.md).
+
 ## Do's and Don'ts
 
 - Leer `PRODUCT.md`, este archivo y brechas abiertas antes de trabajo visual; consultar `app/globals.css` y componentes existentes.

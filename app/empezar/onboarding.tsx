@@ -5,14 +5,10 @@ import { useRef, useState, type FormEvent } from "react";
 import { completeOnboarding } from "./actions";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { flushSync } from "react-dom";
-import Intro from "./intro";
 import "../auth/auth.css";
 
-/** `intro`: the server found no `eudila-intro` cookie, so the opener plays. */
-export default function Onboarding({ intro: opener }: { intro: boolean }) {
+export default function Onboarding() {
   const router = useRouter();
-  const [intro, setIntro] = useState(opener);
   const [step, setStep] = useState(0);
   const [name, setName] = useState("");
   const [error, setError] = useState("");
@@ -48,23 +44,7 @@ export default function Onboarding({ intro: opener }: { intro: boolean }) {
 
   return (
     <>
-      {/* Server-rendered, so the form never flashes before the opener. */}
-      {intro && (
-        <Intro
-          onDone={(played) => {
-            if (!played) return setIntro(false);
-            // Commit first: the form is inert until the opener unmounts.
-            flushSync(() => setIntro(false));
-            heading.current?.focus();
-          }}
-        />
-      )}
-      <section
-        className="auth-screen"
-        aria-labelledby="onboarding-title"
-        inert={intro}
-        data-opener={opener || undefined}
-      >
+      <section className="auth-screen" aria-labelledby="onboarding-title">
         <p className="text-muted text-sm mb-6">
           Para empezar · {step + 1} de 2
         </p>

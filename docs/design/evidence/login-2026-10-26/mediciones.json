@@ -1,0 +1,882 @@
+{
+  "cases": [
+    {
+      "route": "/ingresar",
+      "width": 320,
+      "text": 100,
+      "motion": "no-preference",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 16,
+          "width": 288,
+          "height": 53.5
+        },
+        {
+          "x": 16,
+          "width": 288,
+          "height": 53.5
+        },
+        {
+          "x": 16,
+          "width": 288,
+          "height": 53.5
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/ingresar",
+      "width": 320,
+      "text": 200,
+      "motion": "no-preference",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 16,
+          "width": 288,
+          "height": 103
+        },
+        {
+          "x": 16,
+          "width": 288,
+          "height": 154
+        },
+        {
+          "x": 16,
+          "width": 288,
+          "height": 103
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/ingresar",
+      "width": 390,
+      "text": 100,
+      "motion": "no-preference",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 24,
+          "width": 342,
+          "height": 53.5
+        },
+        {
+          "x": 24,
+          "width": 342,
+          "height": 53.5
+        },
+        {
+          "x": 24,
+          "width": 342,
+          "height": 53.5
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/ingresar",
+      "width": 390,
+      "text": 200,
+      "motion": "no-preference",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 24,
+          "width": 342,
+          "height": 103
+        },
+        {
+          "x": 24,
+          "width": 342,
+          "height": 154
+        },
+        {
+          "x": 24,
+          "width": 342,
+          "height": 103
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/ingresar",
+      "width": 1440,
+      "text": 100,
+      "motion": "no-preference",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 520,
+          "width": 400,
+          "height": 53.5
+        },
+        {
+          "x": 520,
+          "width": 400,
+          "height": 53.5
+        },
+        {
+          "x": 520,
+          "width": 400,
+          "height": 53.5
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/ingresar",
+      "width": 1440,
+      "text": 200,
+      "motion": "no-preference",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 296,
+          "width": 848,
+          "height": 103
+        },
+        {
+          "x": 296,
+          "width": 848,
+          "height": 103
+        },
+        {
+          "x": 296,
+          "width": 848,
+          "height": 103
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/crear-cuenta",
+      "width": 320,
+      "text": 100,
+      "motion": "no-preference",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 16,
+          "width": 288,
+          "height": 53.5
+        },
+        {
+          "x": 16,
+          "width": 288,
+          "height": 53.5
+        },
+        {
+          "x": 16,
+          "width": 288,
+          "height": 53.5
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/crear-cuenta",
+      "width": 320,
+      "text": 200,
+      "motion": "no-preference",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 16,
+          "width": 288,
+          "height": 103
+        },
+        {
+          "x": 16,
+          "width": 288,
+          "height": 154
+        },
+        {
+          "x": 16,
+          "width": 288,
+          "height": 103
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/crear-cuenta",
+      "width": 390,
+      "text": 100,
+      "motion": "no-preference",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 24,
+          "width": 342,
+          "height": 53.5
+        },
+        {
+          "x": 24,
+          "width": 342,
+          "height": 53.5
+        },
+        {
+          "x": 24,
+          "width": 342,
+          "height": 53.5
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/crear-cuenta",
+      "width": 390,
+      "text": 200,
+      "motion": "no-preference",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 24,
+          "width": 342,
+          "height": 103
+        },
+        {
+          "x": 24,
+          "width": 342,
+          "height": 154
+        },
+        {
+          "x": 24,
+          "width": 342,
+          "height": 103
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/crear-cuenta",
+      "width": 1440,
+      "text": 100,
+      "motion": "no-preference",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 520,
+          "width": 400,
+          "height": 53.5
+        },
+        {
+          "x": 520,
+          "width": 400,
+          "height": 53.5
+        },
+        {
+          "x": 520,
+          "width": 400,
+          "height": 53.5
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/crear-cuenta",
+      "width": 1440,
+      "text": 200,
+      "motion": "no-preference",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 296,
+          "width": 848,
+          "height": 103
+        },
+        {
+          "x": 296,
+          "width": 848,
+          "height": 103
+        },
+        {
+          "x": 296,
+          "width": 848,
+          "height": 103
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/recuperar",
+      "width": 320,
+      "text": 100,
+      "motion": "no-preference",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 16,
+          "width": 288,
+          "height": 53.5
+        },
+        {
+          "x": 16,
+          "width": 288,
+          "height": 53.5
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/recuperar",
+      "width": 320,
+      "text": 200,
+      "motion": "no-preference",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 16,
+          "width": 288,
+          "height": 103
+        },
+        {
+          "x": 16,
+          "width": 288,
+          "height": 103
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/recuperar",
+      "width": 390,
+      "text": 100,
+      "motion": "no-preference",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 24,
+          "width": 342,
+          "height": 53.5
+        },
+        {
+          "x": 24,
+          "width": 342,
+          "height": 53.5
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/recuperar",
+      "width": 390,
+      "text": 200,
+      "motion": "no-preference",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 24,
+          "width": 342,
+          "height": 103
+        },
+        {
+          "x": 24,
+          "width": 342,
+          "height": 103
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/recuperar",
+      "width": 1440,
+      "text": 100,
+      "motion": "no-preference",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 520,
+          "width": 400,
+          "height": 53.5
+        },
+        {
+          "x": 520,
+          "width": 400,
+          "height": 53.5
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/recuperar",
+      "width": 1440,
+      "text": 200,
+      "motion": "no-preference",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 296,
+          "width": 848,
+          "height": 103
+        },
+        {
+          "x": 296,
+          "width": 848,
+          "height": 103
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/ingresar",
+      "width": 320,
+      "text": 100,
+      "motion": "reduce",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 16,
+          "width": 288,
+          "height": 53.5
+        },
+        {
+          "x": 16,
+          "width": 288,
+          "height": 53.5
+        },
+        {
+          "x": 16,
+          "width": 288,
+          "height": 53.5
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/ingresar",
+      "width": 320,
+      "text": 200,
+      "motion": "reduce",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 16,
+          "width": 288,
+          "height": 103
+        },
+        {
+          "x": 16,
+          "width": 288,
+          "height": 154
+        },
+        {
+          "x": 16,
+          "width": 288,
+          "height": 103
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/ingresar",
+      "width": 390,
+      "text": 100,
+      "motion": "reduce",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 24,
+          "width": 342,
+          "height": 53.5
+        },
+        {
+          "x": 24,
+          "width": 342,
+          "height": 53.5
+        },
+        {
+          "x": 24,
+          "width": 342,
+          "height": 53.5
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/ingresar",
+      "width": 390,
+      "text": 200,
+      "motion": "reduce",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 24,
+          "width": 342,
+          "height": 103
+        },
+        {
+          "x": 24,
+          "width": 342,
+          "height": 154
+        },
+        {
+          "x": 24,
+          "width": 342,
+          "height": 103
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/ingresar",
+      "width": 1440,
+      "text": 100,
+      "motion": "reduce",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 520,
+          "width": 400,
+          "height": 53.5
+        },
+        {
+          "x": 520,
+          "width": 400,
+          "height": 53.5
+        },
+        {
+          "x": 520,
+          "width": 400,
+          "height": 53.5
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/ingresar",
+      "width": 1440,
+      "text": 200,
+      "motion": "reduce",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 296,
+          "width": 848,
+          "height": 103
+        },
+        {
+          "x": 296,
+          "width": 848,
+          "height": 103
+        },
+        {
+          "x": 296,
+          "width": 848,
+          "height": 103
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/crear-cuenta",
+      "width": 320,
+      "text": 100,
+      "motion": "reduce",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 16,
+          "width": 288,
+          "height": 53.5
+        },
+        {
+          "x": 16,
+          "width": 288,
+          "height": 53.5
+        },
+        {
+          "x": 16,
+          "width": 288,
+          "height": 53.5
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/crear-cuenta",
+      "width": 320,
+      "text": 200,
+      "motion": "reduce",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 16,
+          "width": 288,
+          "height": 103
+        },
+        {
+          "x": 16,
+          "width": 288,
+          "height": 154
+        },
+        {
+          "x": 16,
+          "width": 288,
+          "height": 103
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/crear-cuenta",
+      "width": 390,
+      "text": 100,
+      "motion": "reduce",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 24,
+          "width": 342,
+          "height": 53.5
+        },
+        {
+          "x": 24,
+          "width": 342,
+          "height": 53.5
+        },
+        {
+          "x": 24,
+          "width": 342,
+          "height": 53.5
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/crear-cuenta",
+      "width": 390,
+      "text": 200,
+      "motion": "reduce",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 24,
+          "width": 342,
+          "height": 103
+        },
+        {
+          "x": 24,
+          "width": 342,
+          "height": 154
+        },
+        {
+          "x": 24,
+          "width": 342,
+          "height": 103
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/crear-cuenta",
+      "width": 1440,
+      "text": 100,
+      "motion": "reduce",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 520,
+          "width": 400,
+          "height": 53.5
+        },
+        {
+          "x": 520,
+          "width": 400,
+          "height": 53.5
+        },
+        {
+          "x": 520,
+          "width": 400,
+          "height": 53.5
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/crear-cuenta",
+      "width": 1440,
+      "text": 200,
+      "motion": "reduce",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 296,
+          "width": 848,
+          "height": 103
+        },
+        {
+          "x": 296,
+          "width": 848,
+          "height": 103
+        },
+        {
+          "x": 296,
+          "width": 848,
+          "height": 103
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/recuperar",
+      "width": 320,
+      "text": 100,
+      "motion": "reduce",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 16,
+          "width": 288,
+          "height": 53.5
+        },
+        {
+          "x": 16,
+          "width": 288,
+          "height": 53.5
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/recuperar",
+      "width": 320,
+      "text": 200,
+      "motion": "reduce",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 16,
+          "width": 288,
+          "height": 103
+        },
+        {
+          "x": 16,
+          "width": 288,
+          "height": 103
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/recuperar",
+      "width": 390,
+      "text": 100,
+      "motion": "reduce",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 24,
+          "width": 342,
+          "height": 53.5
+        },
+        {
+          "x": 24,
+          "width": 342,
+          "height": 53.5
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/recuperar",
+      "width": 390,
+      "text": 200,
+      "motion": "reduce",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 24,
+          "width": 342,
+          "height": 103
+        },
+        {
+          "x": 24,
+          "width": 342,
+          "height": 103
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/recuperar",
+      "width": 1440,
+      "text": 100,
+      "motion": "reduce",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 520,
+          "width": 400,
+          "height": 53.5
+        },
+        {
+          "x": 520,
+          "width": 400,
+          "height": 53.5
+        }
+      ],
+      "targets": true
+    },
+    {
+      "route": "/recuperar",
+      "width": 1440,
+      "text": 200,
+      "motion": "reduce",
+      "page": true,
+      "main": true,
+      "pills": [
+        {
+          "x": 296,
+          "width": 848,
+          "height": 103
+        },
+        {
+          "x": 296,
+          "width": 848,
+          "height": 103
+        }
+      ],
+      "targets": true
+    }
+  ],
+  "browserErrors": [],
+  "interactionChecks": "validation, password visibility, keyboard order and focus, recovery/signup links, invalid link status, Google disabled"
+}
