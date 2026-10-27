@@ -1,0 +1,4 @@
+# Solo para probar en una máquina local: publica la puerta de entrada en loopback.
+services:
+  gateway:
+    ports: ["127.0.0.1:8090:80"]

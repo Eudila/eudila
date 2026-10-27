@@ -3,6 +3,10 @@ out/
 build/
 node_modules/
 prototype/
+landing/dist/
+landing/outputs/
+landing/mascota.js
+landing/moods.js
 docs/
 LICENSE
 NOTICE.md

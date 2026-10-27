@@ -1,0 +1,26 @@
+{
+  "logo.svg": {
+    "source": "../public/brand/logo-mascota.svg",
+    "description": "Logo estático vigente: mascota Muy agradable coral, con carita y sin destellos"
+  },
+  "Figtree.ttf": {
+    "source": "../prototype/fonts/Figtree.ttf",
+    "license": "SIL Open Font License 1.1"
+  },
+  "app-tipo.png · app-animo.png · app-emocion.png · app-factores.png · app-confirmacion.png": {
+    "source": "scripts/capture-app.cjs sobre la app Next.js en vista previa, rama 147pop/landing-showreel (app igual a origin/main 7d98557)",
+    "description": "Capturas reales de los cinco pasos: área útil de un celular (390 × 763) más barra de estado e indicador de inicio con el color de cada borde, 780 × 1688; un mismo borrador ficticio (Noche, Agradable, Alivio, Amistades y Actividad física)"
+  },
+  "eudila-film.mp4": {
+    "source": "scripts/render-film.mjs + film/pelicula.js + mascota.js (sincronizado desde app/mood/critter.ts)",
+    "description": "Pieza de 32 s, 1920 × 1080, 60 cuadros por segundo, H.264 sin audio; renderizada cuadro a cuadro con el motor de la mascota. El gráfico usa datos ficticios"
+  },
+  "eudila-film-poster.jpg": {
+    "source": "cuadro 29,4 s de eudila-film.mp4",
+    "description": "Lockup final con «Lo que pasa entre sesiones, también llega a la consulta.» y el sello del Hackathon Noainova 2026"
+  },
+  "og-eudila.png": {
+    "source": "../scripts/og-source.html + logo.svg + Figtree.ttf",
+    "description": "Composición 1200×630 generada localmente con Lisa, acción coral, logo vigente y sello Noainova"
+  }
+}

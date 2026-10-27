@@ -1,0 +1,809 @@
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#1a1626" />
+    <meta
+      name="description"
+      content="eudila es una app abierta para registrar cómo te sentís entre sesiones, para que tu psicólogo llegue a la consulta con contexto."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_AR" />
+    <meta
+      property="og:title"
+      content="eudila · Lo que pasa entre sesiones, también llega a la consulta."
+    />
+    <meta
+      property="og:description"
+      content="Registro emocional abierto para pacientes y psicólogos. Ganadores del Hackathon Noainova 2026."
+    />
+    <meta property="og:image" content="/assets/og-eudila.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>
+      eudila · Lo que pasa entre sesiones, también llega a la consulta.
+    </title>
+    <link rel="icon" href="/assets/logo.svg" type="image/svg+xml" />
+    <link
+      rel="preload"
+      href="/assets/Figtree.ttf"
+      as="font"
+      type="font/ttf"
+      crossorigin
+    />
+    <link rel="stylesheet" href="/styles.css" />
+    <script>
+      document.documentElement.classList.add("js");
+    </script>
+    <script src="/runtime-config.js" defer></script>
+    <script src="/main.js" defer></script>
+    <script src="/escena.js" type="module"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <header class="site-header">
+      <a class="brand" href="#inicio" aria-label="eudila, inicio">
+        <img src="/assets/logo.svg" alt="" width="44" height="44" />
+        <span>eudila</span>
+      </a>
+      <nav aria-label="Secciones principales">
+        <a class="nav-link" href="#como-funciona">Cómo funciona</a>
+        <a class="nav-link" href="#lo-que-viene">Lo que viene</a>
+        <a class="nav-link" href="#equipo">Equipo</a>
+        <a class="button button-primary button-small" href="#contacto"
+          >Hablemos</a
+        >
+      </nav>
+    </header>
+
+    <main id="contenido">
+      <!-- 1 · Portada: la mascota viva, su reflejo y el mismo selector de la app -->
+      <section class="hero" id="inicio" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="award">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M12 1.5C12.6 8.2 15.8 11.4 22.5 12 15.8 12.6 12.6 15.8 12 22.5 11.4 15.8 8.2 12.6 1.5 12 8.2 11.4 11.4 8.2 12 1.5Z"
+              />
+            </svg>
+            Ganadores · Hackathon Noainova 2026
+          </p>
+          <h1 id="hero-title" class="hero-title">
+            <span class="line"><span>Lo que pasa</span></span>
+            <span class="line"><span>entre sesiones,</span></span>
+            <span class="line"><span>también llega</span></span>
+            <span class="line"><span>a la consulta.</span></span>
+          </h1>
+          <p class="lede">
+            eudila es una app abierta para registrar cómo te sentís en cinco
+            pasos cortos, y que tu psicólogo vea la evolución con datos, no de
+            memoria.
+          </p>
+          <div class="hero-actions">
+            <a
+              class="button button-primary"
+              href="#contacto"
+              data-interest="piloto"
+              >Sumate al piloto</a
+            >
+            <a class="text-link" href="#video">Mirá eudila en movimiento</a>
+          </div>
+        </div>
+
+        <div class="stage" data-stage>
+          <div class="stage-art">
+            <img
+              class="stage-fallback"
+              src="/assets/logo.svg"
+              alt=""
+              width="220"
+              height="220"
+            />
+            <canvas class="stage-canvas" aria-hidden="true"></canvas>
+          </div>
+          <div class="stage-ui">
+            <p class="stage-state" aria-hidden="true" data-stage-state>
+              Muy agradable
+            </p>
+            <label class="stage-label" for="hero-mood"
+              >Probalo: ¿cómo te sentís ahora?</label
+            >
+            <input
+              class="mood-range"
+              id="hero-mood"
+              type="range"
+              min="1"
+              max="7"
+              step="any"
+              value="7"
+              aria-valuetext="Muy agradable"
+              data-stage-range
+            />
+            <div class="stage-ends" aria-hidden="true">
+              <span>Muy desagradable</span><span>Muy agradable</span>
+            </div>
+            <p class="stage-note">No hay una respuesta correcta.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2 · El problema: la semana que esconde un «bien» -->
+      <section
+        class="week"
+        id="problema"
+        aria-labelledby="week-title"
+        data-week
+      >
+        <div class="week-sticky">
+          <p class="week-origin">
+            eudila nació para ayudar a prevenir el suicidio. En el camino
+            entendimos que la prevención empieza antes: en lo que pasa entre una
+            consulta y la siguiente.
+          </p>
+          <h2 class="week-question" id="week-title">
+            ¿Cómo estuviste esta semana?
+          </h2>
+          <p class="week-answer" data-week-answer>Bien.</p>
+          <ol class="week-days" aria-label="La semana real, día por día">
+            <li data-mood="5">
+              <span class="day-orb"
+                ><canvas aria-hidden="true"></canvas
+                ><span class="day-q" aria-hidden="true">?</span></span
+              ><span class="day-name">Lun</span
+              ><span class="day-mood">Algo agradable</span>
+            </li>
+            <li data-mood="3">
+              <span class="day-orb"
+                ><canvas aria-hidden="true"></canvas
+                ><span class="day-q" aria-hidden="true">?</span></span
+              ><span class="day-name">Mar</span
+              ><span class="day-mood">Algo desagradable</span>
+            </li>
+            <li data-mood="2">
+              <span class="day-orb"
+                ><canvas aria-hidden="true"></canvas
+                ><span class="day-q" aria-hidden="true">?</span></span
+              ><span class="day-name">Mié</span
+              ><span class="day-mood">Desagradable</span>
+            </li>
+            <li data-mood="4" class="is-session">
+              <span class="day-orb"
+                ><canvas aria-hidden="true"></canvas
+                ><span class="day-q" aria-hidden="true">?</span></span
+              ><span class="day-name">Jue · sesión</span
+              ><span class="day-mood">Neutral</span>
+            </li>
+            <li data-mood="3">
+              <span class="day-orb"
+                ><canvas aria-hidden="true"></canvas
+                ><span class="day-q" aria-hidden="true">?</span></span
+              ><span class="day-name">Vie</span
+              ><span class="day-mood">Algo desagradable</span>
+            </li>
+            <li data-mood="1">
+              <span class="day-orb"
+                ><canvas aria-hidden="true"></canvas
+                ><span class="day-q" aria-hidden="true">?</span></span
+              ><span class="day-name">Sáb</span
+              ><span class="day-mood">Muy desagradable</span>
+            </li>
+            <li data-mood="3">
+              <span class="day-orb"
+                ><canvas aria-hidden="true"></canvas
+                ><span class="day-q" aria-hidden="true">?</span></span
+              ><span class="day-name">Dom</span
+              ><span class="day-mood">Algo desagradable</span>
+            </li>
+          </ol>
+          <p class="week-close" data-week-close>
+            Seis días quedan afuera de la consulta. eudila los guarda, para que
+            ese «bien» tenga contexto.
+          </p>
+        </div>
+      </section>
+
+      <!-- 3 · La pieza de video -->
+      <section class="reel" id="video" aria-labelledby="reel-title">
+        <div class="reel-head">
+          <h2 id="reel-title">eudila, en treinta segundos.</h2>
+          <p>
+            Renderizado cuadro a cuadro con el mismo motor que mueve a la
+            mascota en la app.
+          </p>
+        </div>
+        <figure class="reel-frame">
+          <video
+            data-reel
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            poster="/assets/eudila-film-poster.jpg"
+            width="1920"
+            height="1080"
+            aria-describedby="reel-desc"
+          >
+            <source src="/assets/eudila-film.mp4" type="video/mp4" />
+          </video>
+          <button
+            class="reel-toggle"
+            type="button"
+            data-reel-toggle
+            aria-pressed="false"
+          >
+            <svg class="icon-play" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M8 5.5v13l11-6.5Z" />
+            </svg>
+            <svg class="icon-pause" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" />
+            </svg>
+            <span data-reel-label>Reproducir video</span>
+          </button>
+        </figure>
+        <details class="reel-desc" id="reel-desc">
+          <summary>Qué muestra el video</summary>
+          <p>
+            Un núcleo blanco aparece en la oscuridad y florece en la mascota de
+            eudila. Recorre los siete estados de ánimo, de Muy desagradable a
+            Muy agradable, mientras el selector acompaña. Los siete estados
+            quedan en fila, cada uno con su propio ritmo. Después se convierten
+            en cuatro semanas de registros que dibujan una línea de evolución,
+            con una proyección hacia adelante. La mascota celebra un registro
+            guardado y termina en el logo de eudila, con la frase «Lo que pasa
+            entre sesiones, también llega a la consulta» y el sello de ganadores
+            del Hackathon Noainova 2026. No tiene sonido.
+          </p>
+        </details>
+      </section>
+
+      <!-- 4 · Para el paciente -->
+      <section
+        class="patient"
+        id="como-funciona"
+        aria-labelledby="patient-title"
+        data-steps
+      >
+        <div class="patient-copy">
+          <h2 id="patient-title">Para el paciente, una pausa corta.</h2>
+          <p>
+            Cinco pasos, una pregunta por pantalla, con palabras de todos los
+            días.
+          </p>
+          <ol class="steps" aria-label="Pasos del registro">
+            <li>
+              <button type="button" data-step="0" aria-current="step">
+                <span class="step-n">1</span>Momento<span
+                  class="step-bar"
+                  aria-hidden="true"
+                ></span>
+              </button>
+            </li>
+            <li>
+              <button type="button" data-step="1">
+                <span class="step-n">2</span>Ánimo<span
+                  class="step-bar"
+                  aria-hidden="true"
+                ></span>
+              </button>
+            </li>
+            <li>
+              <button type="button" data-step="2">
+                <span class="step-n">3</span>Emoción<span
+                  class="step-bar"
+                  aria-hidden="true"
+                ></span>
+              </button>
+            </li>
+            <li>
+              <button type="button" data-step="3">
+                <span class="step-n">4</span>Factores<span
+                  class="step-bar"
+                  aria-hidden="true"
+                ></span>
+              </button>
+            </li>
+            <li>
+              <button type="button" data-step="4">
+                <span class="step-n">5</span>Revisión<span
+                  class="step-bar"
+                  aria-hidden="true"
+                ></span>
+              </button>
+            </li>
+          </ol>
+        </div>
+        <figure class="phone">
+          <div class="phone-device">
+            <div class="phone-screens">
+              <img
+                class="is-active"
+                src="/assets/app-tipo.png"
+                alt="Paso 1 en la app: ¿A qué momento corresponde este registro? Mañana, tarde, noche o registro libre"
+                width="780"
+                height="1688"
+              />
+              <img
+                src="/assets/app-animo.png"
+                alt="Paso 2: ¿Cómo te sentís ahora? La mascota en Agradable sobre el selector de siete estados"
+                width="780"
+                height="1688"
+                loading="lazy"
+              />
+              <img
+                src="/assets/app-emocion.png"
+                alt="Paso 3: ¿Qué emoción describe mejor lo que sentís? Alegría, Calma, Tristeza y otras"
+                width="780"
+                height="1688"
+                loading="lazy"
+              />
+              <img
+                src="/assets/app-factores.png"
+                alt="Paso 4: ¿Qué factores influyeron hoy? Amistades y Actividad física elegidos"
+                width="780"
+                height="1688"
+                loading="lazy"
+              />
+              <img
+                src="/assets/app-confirmacion.png"
+                alt="Paso 5: Revisá tu registro, con momento, ánimo, emoción y factores"
+                width="780"
+                height="1688"
+                loading="lazy"
+              />
+            </div>
+          </div>
+          <figcaption>Capturas reales de la app</figcaption>
+        </figure>
+      </section>
+
+      <!-- 5 · Para el psicólogo -->
+      <section class="pro" id="psicologos" aria-labelledby="pro-title">
+        <figure class="chart" data-chart>
+          <svg
+            viewBox="0 0 608 262"
+            role="img"
+            aria-labelledby="chart-title chart-desc"
+          >
+            <title id="chart-title">Promedio diario de ánimo en 28 días</title>
+            <desc id="chart-desc">
+              Datos ficticios. La línea empieza entre Desagradable y Neutral y
+              sube de a poco hasta Agradable en la última semana.
+            </desc>
+            <g class="chart-grid" aria-hidden="true">
+              <line x1="28" x2="580" y1="232" y2="232" />
+              <line x1="28" x2="580" y1="198" y2="198" />
+              <line x1="28" x2="580" y1="164" y2="164" />
+              <line x1="28" x2="580" y1="130" y2="130" />
+              <line x1="28" x2="580" y1="96" y2="96" />
+              <line x1="28" x2="580" y1="62" y2="62" />
+              <line x1="28" x2="580" y1="28" y2="28" />
+            </g>
+            <path
+              class="chart-line"
+              pathLength="1"
+              d="M28 164 L48.4 198 L68.9 164 L89.3 130 L109.8 164 L130.2 130 L150.7 130 L171.1 164 L191.6 198 L212 164 L232.4 130 L252.9 96 L273.3 130 L293.8 96 L314.2 130 L334.7 96 L355.1 96 L375.6 130 L396 62 L416.4 96 L436.9 96 L457.3 96 L477.8 62 L498.2 96 L518.7 62 L539.1 62 L559.6 28 L580 62"
+            />
+            <g class="chart-dots" aria-hidden="true">
+              <circle cx="28" cy="164" r="5" fill="#3BBADF" style="--i: 0" />
+              <circle cx="48.4" cy="198" r="5" fill="#8A68D8" style="--i: 1" />
+              <circle cx="68.9" cy="164" r="5" fill="#3BBADF" style="--i: 2" />
+              <circle cx="89.3" cy="130" r="5" fill="#5FD3D0" style="--i: 3" />
+              <circle cx="109.8" cy="164" r="5" fill="#3BBADF" style="--i: 4" />
+              <circle cx="130.2" cy="130" r="5" fill="#5FD3D0" style="--i: 5" />
+              <circle cx="150.7" cy="130" r="5" fill="#5FD3D0" style="--i: 6" />
+              <circle cx="171.1" cy="164" r="5" fill="#3BBADF" style="--i: 7" />
+              <circle cx="191.6" cy="198" r="5" fill="#8A68D8" style="--i: 8" />
+              <circle cx="212" cy="164" r="5" fill="#3BBADF" style="--i: 9" />
+              <circle
+                cx="232.4"
+                cy="130"
+                r="5"
+                fill="#5FD3D0"
+                style="--i: 10"
+              />
+              <circle cx="252.9" cy="96" r="5" fill="#B6D57A" style="--i: 11" />
+              <circle
+                cx="273.3"
+                cy="130"
+                r="5"
+                fill="#5FD3D0"
+                style="--i: 12"
+              />
+              <circle cx="293.8" cy="96" r="5" fill="#B6D57A" style="--i: 13" />
+              <circle
+                cx="314.2"
+                cy="130"
+                r="5"
+                fill="#5FD3D0"
+                style="--i: 14"
+              />
+              <circle cx="334.7" cy="96" r="5" fill="#B6D57A" style="--i: 15" />
+              <circle cx="355.1" cy="96" r="5" fill="#B6D57A" style="--i: 16" />
+              <circle
+                cx="375.6"
+                cy="130"
+                r="5"
+                fill="#5FD3D0"
+                style="--i: 17"
+              />
+              <circle cx="396" cy="62" r="5" fill="#F2B24A" style="--i: 18" />
+              <circle cx="416.4" cy="96" r="5" fill="#B6D57A" style="--i: 19" />
+              <circle cx="436.9" cy="96" r="5" fill="#B6D57A" style="--i: 20" />
+              <circle cx="457.3" cy="96" r="5" fill="#B6D57A" style="--i: 21" />
+              <circle cx="477.8" cy="62" r="5" fill="#F2B24A" style="--i: 22" />
+              <circle cx="498.2" cy="96" r="5" fill="#B6D57A" style="--i: 23" />
+              <circle cx="518.7" cy="62" r="5" fill="#F2B24A" style="--i: 24" />
+              <circle cx="539.1" cy="62" r="5" fill="#F2B24A" style="--i: 25" />
+              <circle cx="559.6" cy="28" r="5" fill="#E65175" style="--i: 26" />
+              <circle cx="580" cy="62" r="5" fill="#F2B24A" style="--i: 27" />
+            </g>
+            <g class="chart-axis" aria-hidden="true">
+              <text x="28" y="258">hace 4 semanas</text>
+              <text x="580" y="258" text-anchor="end">hoy</text>
+            </g>
+          </svg>
+          <figcaption>Promedio diario de ánimo · datos ficticios</figcaption>
+        </figure>
+        <div class="pro-copy">
+          <h2 id="pro-title">Para el psicólogo, contexto.</h2>
+          <p>En lugar de un «bien», la evolución de las últimas semanas.</p>
+          <dl class="pro-list">
+            <div>
+              <dt>Evolución</dt>
+              <dd>
+                Cómo cambió el ánimo día a día, sin inventar los días sin
+                registro.
+              </dd>
+            </div>
+            <div>
+              <dt>Factores</dt>
+              <dd>
+                Qué se repite en los días difíciles: sueño, estudio, vínculos.
+              </dd>
+            </div>
+            <div>
+              <dt>Informe</dt>
+              <dd>
+                PDF para la sesión; CSV y JSON para llevarse el historial
+                completo.
+              </dd>
+            </div>
+          </dl>
+          <p class="pro-note">
+            eudila no diagnostica. Ordena información para que el profesional la
+            interprete.
+          </p>
+        </div>
+      </section>
+
+      <!-- 6 · Lo que viene -->
+      <section class="next" id="lo-que-viene" aria-labelledby="next-title">
+        <h2 id="next-title">Lo que viene.</h2>
+        <ul class="next-list">
+          <li>
+            <div class="next-glyph glyph-health" aria-hidden="true">
+              <svg viewBox="0 0 120 48">
+                <path class="pulse-base" d="M2 26h30l6-12 8 26 8-34 7 20h57" />
+                <path
+                  class="pulse"
+                  pathLength="1"
+                  d="M2 26h30l6-12 8 26 8-34 7 20h57"
+                />
+              </svg>
+            </div>
+            <div class="next-copy">
+              <p class="next-when">Próximo</p>
+              <h3>Apple Health y Samsung Health</h3>
+              <p>
+                Sueño, actividad y ritmo cardíaco junto al ánimo, sin que el
+                paciente cargue nada extra.
+              </p>
+            </div>
+          </li>
+          <li>
+            <div class="next-glyph glyph-streak" aria-hidden="true">
+              <canvas data-streak></canvas>
+            </div>
+            <div class="next-copy">
+              <p class="next-when">Próximo</p>
+              <h3>Gamificación de la constancia</h3>
+              <p>
+                Logros por registrar, nunca por sentirse bien. Sostener el
+                hábito es lo que vuelve útiles los datos.
+              </p>
+            </div>
+          </li>
+          <li>
+            <div class="next-glyph glyph-forecast" aria-hidden="true">
+              <svg viewBox="0 0 120 48">
+                <path
+                  class="past"
+                  d="M4 34 L18 38 L32 30 L46 32 L60 22 L74 24"
+                />
+                <path
+                  class="ahead"
+                  pathLength="1"
+                  d="M74 24 L88 26 L102 34 L114 40"
+                />
+                <circle class="alert" cx="114" cy="40" r="4" />
+              </svg>
+            </div>
+            <div class="next-copy">
+              <p class="next-when">Largo plazo</p>
+              <h3>Un modelo predictivo por paciente</h3>
+              <p>
+                Aprende el patrón de cada persona para avisar al profesional
+                antes de una baja. Con consentimiento, y siempre con un humano
+                decidiendo.
+              </p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- 7 · Validación -->
+      <section class="win" id="noainova" aria-labelledby="win-title">
+        <div class="win-art">
+          <img
+            class="stage-fallback"
+            src="/assets/logo.svg"
+            alt=""
+            width="220"
+            height="220"
+          />
+          <canvas data-win aria-hidden="true"></canvas>
+        </div>
+        <h2 id="win-title">Ganamos el Hackathon Noainova 2026.</h2>
+        <p>
+          La primera validación externa de eudila, y el impulso para llevarla a
+          los consultorios.
+        </p>
+      </section>
+
+      <!-- 8 · Propuesta y pedido -->
+      <section class="offer" id="propuesta" aria-labelledby="offer-title">
+        <h2 id="offer-title">
+          Gratis para el paciente.<br />Un servicio para el psicólogo.
+        </h2>
+        <div class="offer-cols">
+          <div>
+            <h3>Paciente</h3>
+            <p class="offer-tag">App abierta y gratuita</p>
+            <ul>
+              <li>
+                Código abierto bajo
+                <a href="https://github.com/Eudila/eudila">AGPL-3.0</a>:
+                cualquiera puede auditar qué pasa con los datos.
+              </li>
+              <li>Registra, consulta y exporta su historial.</li>
+              <li>Ayuda a un toque, también sin conexión.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Psicólogo</h3>
+            <p class="offer-tag">Suscripción por profesional</p>
+            <ul>
+              <li>Un panel con todos sus pacientes.</li>
+              <li>Evolución y factores entre sesiones.</li>
+              <li>
+                Informes listos para la consulta y, más adelante, alertas
+                tempranas.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="asks">
+          <article class="ask">
+            <h3>Psicólogos para un piloto</h3>
+            <p>
+              Profesionales que quieran usar eudila con sus pacientes y
+              ayudarnos a definir qué métricas sirven de verdad en sesión.
+            </p>
+            <a
+              class="button button-primary"
+              href="#contacto"
+              data-interest="piloto"
+              >Quiero sumarme</a
+            >
+          </article>
+          <article class="ask">
+            <h3>Inversión</h3>
+            <p>
+              Para pasar del prototipo al consultorio: panel profesional,
+              registros sincronizados con seguridad para datos de salud,
+              integración con Health y validación clínica.
+            </p>
+            <a
+              class="button button-secondary"
+              href="#contacto"
+              data-interest="inversion"
+              >Quiero invertir</a
+            >
+          </article>
+        </div>
+      </section>
+
+      <!-- 9 · Equipo -->
+      <section class="team" id="equipo" aria-labelledby="team-title">
+        <h2 id="team-title">Ingeniería y psicología, desde el primer día.</h2>
+        <ul class="team-list">
+          <li>
+            <span class="mono" aria-hidden="true">PC</span>
+            <p class="team-name">Pablo Cardozo</p>
+            <p>Estudiante avanzado de Ingeniería en Informática</p>
+          </li>
+          <li>
+            <span class="mono" aria-hidden="true">AP</span>
+            <p class="team-name">Agustín Pedernera</p>
+            <p>Estudiante avanzado de Ingeniería en Informática</p>
+          </li>
+          <li>
+            <span class="mono" aria-hidden="true">ME</span>
+            <p class="team-name">Martín Exeni</p>
+            <p>Estudiante avanzado de Ingeniería en Informática</p>
+          </li>
+          <li>
+            <span class="mono mono-psy" aria-hidden="true">NF</span>
+            <p class="team-name">Noelia Fabbroni</p>
+            <p>Estudiante avanzada de Psicología</p>
+          </li>
+        </ul>
+      </section>
+
+      <!-- 10 · Contacto -->
+      <section
+        class="contact-section"
+        id="contacto"
+        aria-labelledby="contact-title"
+      >
+        <div class="contact-copy">
+          <h2 id="contact-title">Hablemos.</h2>
+          <p>
+            Si sos psicólogo y querés probar eudila con tus pacientes, o si
+            querés invertir, escribinos. Este formulario es para consultas sobre
+            el proyecto, no para atención clínica: no envíes datos de salud ni
+            información personal de terceros.
+          </p>
+          <p class="contact-fallback">
+            También podés usar el
+            <a href="https://github.com/Eudila/eudila/issues"
+              >canal público en GitHub</a
+            >.
+          </p>
+        </div>
+
+        <form class="contact-form" id="contact-form" novalidate>
+          <fieldset class="interest">
+            <legend>Te escribo por</legend>
+            <label
+              ><input
+                type="radio"
+                name="interest"
+                value="Piloto como psicólogo"
+                id="interest-piloto"
+              />El piloto</label
+            >
+            <label
+              ><input
+                type="radio"
+                name="interest"
+                value="Inversión"
+                id="interest-inversion"
+              />Inversión</label
+            >
+            <label
+              ><input
+                type="radio"
+                name="interest"
+                value="Otra consulta"
+                id="interest-otra"
+              />Otra consulta</label
+            >
+          </fieldset>
+          <div class="form-row">
+            <label for="name">Nombre</label>
+            <input
+              id="name"
+              name="name"
+              autocomplete="name"
+              maxlength="100"
+              required
+            />
+          </div>
+          <div class="form-row">
+            <label for="email">Email de contacto</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              maxlength="200"
+              required
+            />
+          </div>
+          <div class="form-row">
+            <label for="organization"
+              >Consultorio u organización <span>(opcional)</span></label
+            >
+            <input
+              id="organization"
+              name="organization"
+              autocomplete="organization"
+              maxlength="160"
+            />
+          </div>
+          <div class="form-row">
+            <label for="message">¿Qué te gustaría conversar?</label>
+            <textarea
+              id="message"
+              name="message"
+              rows="5"
+              minlength="20"
+              maxlength="3000"
+              required
+            ></textarea>
+          </div>
+          <div class="honeypot" aria-hidden="true">
+            <label for="website">Sitio web</label>
+            <input
+              id="website"
+              name="website"
+              tabindex="-1"
+              autocomplete="off"
+            />
+          </div>
+          <label class="consent">
+            <input type="checkbox" name="privacy" required />
+            <span
+              >Entiendo que no debo enviar datos de salud ni información
+              personal de terceros.</span
+            >
+          </label>
+          <button class="button button-primary submit-button" type="submit">
+            Enviar consulta
+          </button>
+          <p
+            class="form-status"
+            id="form-status"
+            role="status"
+            aria-live="polite"
+          ></p>
+        </form>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <section class="help" aria-labelledby="help-title">
+        <h2 class="help-title" id="help-title">¿Necesitás ayuda ahora?</h2>
+        <p>
+          Si vos u otra persona están en peligro inmediato, llamá al
+          <a href="tel:911">911</a>. Centro de Asistencia al Suicida:
+          <a href="tel:135">135</a> (CABA y GBA) o
+          <a href="tel:08003451435">0800 345 1435</a> (todo el país), de 8 a 0
+          h. Urgencias de salud mental, las 24 horas:
+          <a href="tel:08009990091">0800 999 0091</a>.
+        </p>
+      </section>
+      <div class="footer-base">
+        <a class="brand footer-brand" href="#inicio">
+          <img src="/assets/logo.svg" alt="" width="36" height="36" />
+          <span>eudila</span>
+        </a>
+        <p>
+          eudila está en desarrollo. No realiza diagnósticos, no evalúa riesgo
+          individual y no reemplaza la atención profesional.
+        </p>
+        <div class="footer-links">
+          <a href="/privacidad">Privacidad</a>
+          <a href="/terminos">Términos</a>
+          <a href="https://github.com/Eudila/eudila">GitHub</a>
+          <a href="https://github.com/Eudila/eudila/blob/main/LICENSE"
+            >Licencia</a
+          >
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

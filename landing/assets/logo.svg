@@ -1,0 +1,21 @@
+<!-- SPDX-License-Identifier: AGPL-3.0-only -->
+<!-- Logo principal de eudila: mascota Muy agradable con carita y sin destellos. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-22 -22 264 264" color="#e65175">
+  <defs>
+    <radialGradient id="material" cx="48%" cy="46%" r="60%"><stop offset="0%" stop-color="#fff" stop-opacity=".76"/><stop offset="34%" stop-color="#fff" stop-opacity=".28"/><stop offset="72%" stop-color="currentColor" stop-opacity=".62"/><stop offset="100%" stop-color="currentColor" stop-opacity=".38"/></radialGradient>
+    <radialGradient id="edge" cx="38%" cy="24%" r="85%"><stop offset="0%" stop-color="#fff" stop-opacity=".76"/><stop offset="100%" stop-color="currentColor" stop-opacity=".3"/></radialGradient>
+    <radialGradient id="core"><stop offset="0%" stop-color="#fff"/><stop offset="22%" stop-color="#fff" stop-opacity=".96"/><stop offset="62%" stop-color="#fff" stop-opacity=".28"/><stop offset="100%" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="9"/></filter>
+  </defs>
+  <path d="M110 38C126.98 0.31 167.5 15.05 156.28 54.84C193.52 36.89 215.08 74.23 180.91 97.5C220.98 107.68 213.49 150.14 172.35 146C196.51 179.55 163.47 207.27 134.63 177.66C131.56 218.89 88.44 218.89 85.37 177.66C56.53 207.27 23.49 179.55 47.65 146C6.51 150.14 -0.98 107.68 39.09 97.5C4.92 74.23 26.48 36.89 63.72 54.84C52.5 15.05 93.02 0.31 110 38Z" fill="currentColor" opacity=".38" filter="url(#glow)"/>
+  <g fill="url(#material)" stroke="url(#edge)">
+    <path d="M110 38C126.98 0.31 167.5 15.05 156.28 54.84C193.52 36.89 215.08 74.23 180.91 97.5C220.98 107.68 213.49 150.14 172.35 146C196.51 179.55 163.47 207.27 134.63 177.66C131.56 218.89 88.44 218.89 85.37 177.66C56.53 207.27 23.49 179.55 47.65 146C6.51 150.14 -0.98 107.68 39.09 97.5C4.92 74.23 26.48 36.89 63.72 54.84C52.5 15.05 93.02 0.31 110 38Z" fill-opacity=".6" stroke-width=".8"/>
+    <path d="M110 38C126.98 0.31 167.5 15.05 156.28 54.84C193.52 36.89 215.08 74.23 180.91 97.5C220.98 107.68 213.49 150.14 172.35 146C196.51 179.55 163.47 207.27 134.63 177.66C131.56 218.89 88.44 218.89 85.37 177.66C56.53 207.27 23.49 179.55 47.65 146C6.51 150.14 -0.98 107.68 39.09 97.5C4.92 74.23 26.48 36.89 63.72 54.84C52.5 15.05 93.02 0.31 110 38Z" fill-opacity=".67" stroke-width=".95" transform="rotate(-31.51 110 110) translate(110 110) scale(.84) translate(-110 -110)"/>
+    <path d="M110 38C126.98 0.31 167.5 15.05 156.28 54.84C193.52 36.89 215.08 74.23 180.91 97.5C220.98 107.68 213.49 150.14 172.35 146C196.51 179.55 163.47 207.27 134.63 177.66C131.56 218.89 88.44 218.89 85.37 177.66C56.53 207.27 23.49 179.55 47.65 146C6.51 150.14 -0.98 107.68 39.09 97.5C4.92 74.23 26.48 36.89 63.72 54.84C52.5 15.05 93.02 0.31 110 38Z" fill-opacity=".73" stroke-width="1.18" transform="rotate(63.03 110 110) translate(110 110) scale(.68) translate(-110 -110)"/>
+    <path d="M110 38C126.98 0.31 167.5 15.05 156.28 54.84C193.52 36.89 215.08 74.23 180.91 97.5C220.98 107.68 213.49 150.14 172.35 146C196.51 179.55 163.47 207.27 134.63 177.66C131.56 218.89 88.44 218.89 85.37 177.66C56.53 207.27 23.49 179.55 47.65 146C6.51 150.14 -0.98 107.68 39.09 97.5C4.92 74.23 26.48 36.89 63.72 54.84C52.5 15.05 93.02 0.31 110 38Z" fill-opacity=".79" stroke-width="1.54" transform="rotate(-94.54 110 110) translate(110 110) scale(.52) translate(-110 -110)"/>
+    <path d="M110 38C126.98 0.31 167.5 15.05 156.28 54.84C193.52 36.89 215.08 74.23 180.91 97.5C220.98 107.68 213.49 150.14 172.35 146C196.51 179.55 163.47 207.27 134.63 177.66C131.56 218.89 88.44 218.89 85.37 177.66C56.53 207.27 23.49 179.55 47.65 146C6.51 150.14 -0.98 107.68 39.09 97.5C4.92 74.23 26.48 36.89 63.72 54.84C52.5 15.05 93.02 0.31 110 38Z" fill-opacity=".86" stroke-width="2.22" transform="rotate(126.05 110 110) translate(110 110) scale(.36) translate(-110 -110)"/>
+  </g>
+  <circle cx="110" cy="110" r="53" fill="url(#core)"/>
+  <circle cx="110" cy="110" r="38.5" fill="#fff"/>
+  <path d="M89.98 111.21Q96.7 99.2 103.42 111.21M116.58 111.21Q123.3 99.2 130.02 111.21" fill="none" stroke="#491519" stroke-width="4.55" stroke-linecap="round"/>
+</svg>
