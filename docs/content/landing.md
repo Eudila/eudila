@@ -1,5 +1,7 @@
 # eudila
 
+> **Reemplazado en parte el 26/10/2026.** El rediseño de la landing (`landing/index.html`, rama `147pop/landing-showreel`) cambia el público a psicólogos e inversión, igual que el pitch del 26/10: salen los bloques para gobiernos y desarrolladores, y la cifra del SNIC deja de usarse. El texto vigente vive en `landing/index.html`; este documento conserva la versión aprobada el 01/10/2026 como historial.
+
 Un proyecto de código abierto para registrar cómo te sentís y acercarte a recursos de ayuda.
 
 ## Un espejo tranquilo para cada estado de ánimo

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8" />
+    <title>eudila · render de la pieza</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        background: #100d18;
+      }
+      canvas {
+        display: block;
+        width: 100vw;
+        height: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="film"></canvas>
+    <script type="module">
+      import { setup, frame, FPS, DURATION } from "./pelicula.js";
+      const canvas = document.getElementById("film");
+      const font = new FontFace("Figtree", "url(/assets/Figtree.ttf)", {
+        weight: "100 900",
+      });
+      document.fonts.add(await font.load());
+      setup(canvas);
+      // render.mjs pide los cuadros en orden; abrir esta página en un navegador la reproduce.
+      window.renderFrame = (i) => {
+        frame(i);
+        return canvas.toDataURL("image/png");
+      };
+      window.stepFrame = (i) => frame(i);
+      window.FILM = { fps: FPS, frames: Math.round(FPS * DURATION) };
+      if (!navigator.webdriver) {
+        let i = 0;
+        const tick = () => {
+          frame(i++ % window.FILM.frames);
+          requestAnimationFrame(tick);
+        };
+        tick();
+      }
+      window.ready = true;
+    </script>
+  </body>
+</html>

@@ -33,6 +33,10 @@ Reconstrucción desde `main` porque la entrega informada del 07/10 no estaba en 
 - La imagen social 1200 × 630 se regeneró con Lisa y el logo vigente mediante `scripts/capture-og.cjs`.
 - El build de producción de la app principal se intentó para capturar sin herramientas de desarrollo, pero Turbopack falló al crear su proceso CSS. Se usó `next dev` y se verificó la ausencia del indicador en los PNG finales. La landing sí compila correctamente.
 
+## Rediseño en movimiento · 26/10/2026
+
+Nueva narrativa (psicólogos e inversión), mascota viva con el motor de la app y pieza de video de 32 s. Evidencia, capturas y verificación en [docs/design/evidence/landing-showreel-2026-10-26/README.md](../../docs/design/evidence/landing-showreel-2026-10-26/README.md). `landing-390-full.png` y `landing-1440-full.png` se regeneraron con `npm run check:visual` (movimiento reducido: la versión quieta).
+
 ## Pendientes externos
 
 1. Confirmar el dominio comprado y conectarlo al proyecto Vercel correcto.
