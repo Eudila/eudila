@@ -174,6 +174,8 @@ with sync_playwright() as p:
     # Hold the existing frame boundary to inspect actual saving, not a gallery mock.
     page.goto(base + '/registro/emocion')
     page.get_by_role('button', name='Calma', exact=True).click()
+    page.get_by_role('button', name='Tranquilo', exact=True).click()
+    page.get_by_role('button', name='Sereno', exact=True).click()
     page.get_by_role('link', name='Siguiente', exact=True).click()
     page.get_by_role('link', name='Revisar registro', exact=True).click()
     page.set_viewport_size({'width': 390, 'height': 568})
@@ -229,7 +231,7 @@ with sync_playwright() as p:
     }''')
     page.wait_for_url(base + '/hoy')
     records = page.evaluate("JSON.parse(sessionStorage.getItem('eudila-preview-records-v1'))")
-    assert len(records) == 1 and records[0]['emotion']['nombre'] == 'Calma'
+    assert len(records) == 1 and records[0]['emotion']['nombre'] == 'Sereno'
     page.evaluate("document.documentElement.style.fontSize = '100%'")
     page.set_viewport_size({'width': 390, 'height': 844})
 

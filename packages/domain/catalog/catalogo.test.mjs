@@ -17,7 +17,7 @@ const document = readFileSync(
 );
 
 test("filas importables, nombres únicos y seis sugerencias", () => {
-  assert.equal(catalog.version, "1.0.0");
+  assert.equal(catalog.version, "1.1.0");
   assert.equal(catalog.idioma, "es-AR");
   const ids = new Set();
   for (const table of ["emociones", "factores_vida"]) {
@@ -44,7 +44,7 @@ test("filas importables, nombres únicos y seis sugerencias", () => {
       if (table === "emociones") assert.equal(typeof row.sugerida, "boolean");
     }
   }
-  assert.equal(catalog.emociones.length, 21);
+  assert.equal(catalog.emociones.length, 96);
   assert.equal(catalog.factores_vida.length, 15);
   assert.deepEqual(
     catalog.emociones
@@ -63,7 +63,9 @@ test("documento y JSON comparten etiquetas e identidades estables", () => {
         .split("\n")
         .find(
           (value) =>
-            value.includes(` | ${row.nombre} | `) && !value.includes(row.id),
+            value.startsWith("| `") &&
+            value.includes(` | ${row.nombre} | `) &&
+            !value.includes(row.id),
         );
       assert.ok(line, `Falta documentar ${row.nombre}`);
       const slug = line.match(/^\| `([a-z-]+)` \|/)[1];

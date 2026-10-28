@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: AGPL-3.0-only
-'''Con variables públicas exportadas: uv run --with playwright python "app/app/(paciente)/registro/emociones.live.test.py"'''
+"""Con variables públicas exportadas: uv run --with playwright python app/registro/emociones.live.test.py"""
 from pathlib import Path
 from time import monotonic, sleep
 from urllib.parse import urlparse
@@ -54,25 +54,27 @@ with tempfile.TemporaryFile() as log:
             assert sorted(actual, key=lambda row: row["id"]) == sorted(expected, key=lambda row: row["id"]), "La base no coincide con el catálogo ANI-96"
             quick = page.get_by_role("group", name="Emociones sugeridas")
             expect(quick.get_by_role("button")).to_have_count(6)
-            assert set(quick.get_by_role("button").all_text_contents()) == {row["nombre"] for row in actual if row["sugerida"]}
-            choice = quick.get_by_role("button", name="Alegría", exact=True)
+            assert set(quick.get_by_role("button").all_text_contents()) == {"Tristeza", "Enfado", "Miedo", "Calma", "Felicidad", "Fuerza"}
+            choice = quick.get_by_role("button", name="Miedo", exact=True)
             choice.focus()
             page.keyboard.press("Enter")
-            expect(choice).to_be_focused()
-            expect(choice).to_have_attribute("aria-pressed", "true")
+            expect(page.get_by_role("heading", level=2)).to_be_focused()
+            page.get_by_role("button", name="Preocupado", exact=True).click()
+            page.get_by_role("button", name="Excluido", exact=True).click()
+            expect(page.get_by_role("button", name="Excluido", exact=True)).to_have_attribute("aria-pressed", "true")
             opener = page.get_by_role("button", name="Ver todas las emociones")
             opener.focus()
             page.keyboard.press("Enter")
             dialog = page.get_by_role("dialog", name="Todas las emociones")
             search = page.get_by_role("searchbox", name="Buscar emoción")
             expect(search).to_be_focused()
-            expect(dialog.locator("button[aria-pressed]")).to_have_count(21)
+            expect(dialog.locator("button[aria-pressed]")).to_have_count(81)
             for key in ["Tab", "Shift+Tab"]:
                 for _ in range(25):
                     page.keyboard.press(key)
                     assert dialog.evaluate("e => e.contains(document.activeElement) || document.activeElement === document.body")
-            search.fill("ALEGRIA")
-            expect(dialog.locator("button[aria-pressed]")).to_have_text("Alegría")
+            search.fill("EXCLUIDO")
+            expect(dialog.locator("button[aria-pressed]")).to_have_text("Excluido")
             page.keyboard.press("Escape")
             expect(dialog).not_to_be_visible()
             expect(opener).to_be_focused()
@@ -112,7 +114,7 @@ with tempfile.TemporaryFile() as log:
             assert page.evaluate("JSON.parse(sessionStorage.getItem('eudila-draft-v1')).emotionId") == selected["id"]
             assert not errors, errors
             browser.close()
-            print(f"ANI-64 real ({catalog_url}): REST GET, catálogo 21/6, chips, alternativas/UUID, búsqueda, teclado/foco/Escape, recarga y reflujo correctos; no se escribieron registros.")
+            print(f"Rueda real ({catalog_url}): REST GET, catálogo {len(expected)}, tres niveles, alternativas/UUID, búsqueda, teclado/foco/Escape, recarga y reflujo correctos; no se escribieron registros.")
     finally:
         server.terminate()
         try:

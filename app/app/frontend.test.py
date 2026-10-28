@@ -55,8 +55,9 @@ try:
             page.get_by_role('button', name='Siguiente', exact=True).click()
             page.get_by_role('slider').fill(str(mood))
             page.get_by_role('link', name='Siguiente', exact=True).click()
-            if emotion == 'Calma':
-                page.get_by_role('button', name=emotion, exact=True).click()
+            if emotion == 'Sereno':
+                for word in ['Calma', 'Tranquilo', 'Sereno']:
+                    page.get_by_role('button', name=word, exact=True).click()
             else:
                 page.get_by_role('button', name='Ver todas las emociones').click()
                 page.get_by_role('button', name=emotion, exact=True).click()
@@ -69,12 +70,25 @@ try:
             page.get_by_role('link', name='Revisar registro').click()
             expect(page.get_by_role('heading', name='Revisá tu registro')).to_be_visible()
 
-        draft('Tarde', 2, 'Calma', [])
+        draft('Tarde', 4, 'Sereno', [])
+        page.get_by_role('link', name='Cambiar emoción', exact=True).click()
+        page.get_by_role('button', name='Cambiar Calma', exact=True).click()
+        page.get_by_role('button', name='Calma', exact=True).click()
+        page.go_back()
+        expect(page.get_by_role('button', name='Guardar en vista previa')).to_be_disabled()
+        page.goto(base + '/registro/factores')
+        expect(page.get_by_role('link', name='Revisar registro')).to_have_count(0)
+        page.get_by_role('link', name='Completá los pasos anteriores').click()
+        page.get_by_role('button', name='Tranquilo', exact=True).click()
+        page.get_by_role('button', name='Sereno', exact=True).click()
+        page.get_by_role('link', name='Siguiente', exact=True).click()
+        page.get_by_role('link', name='Revisar registro').click()
         expect(page.locator('main')).to_contain_text('Sin factores')
         page.get_by_role('button', name='Guardar en vista previa').click()
         page.wait_for_url(base + '/hoy')
         records = page.evaluate(f'JSON.parse(sessionStorage.getItem({json.dumps(key)}))')
-        assert len(records) == 1 and records[0]['mood'] == 2 and records[0]['factors'] == []
+        assert len(records) == 1 and records[0]['mood'] == 4 and records[0]['factors'] == []
+        assert records[0]['emotion']['nombre'] == 'Sereno'
         assert page.evaluate("sessionStorage.getItem('eudila-draft-v1')") is None
 
         draft('Registro libre', 7, 'No sé cómo nombrarlo', ['Familia', 'Otro factor'])
@@ -114,10 +128,10 @@ try:
         expect(day_link).to_be_visible()
         if artifacts:
             page.screenshot(path=str(artifacts / 'eudila-frontend-calendario.png'))
-        assert '4' in day_link.get_attribute('aria-label'), day_link.get_attribute('aria-label')
+        assert 'promedio 5 de 7' in day_link.get_attribute('aria-label'), day_link.get_attribute('aria-label')
         day_link.focus()
         page.keyboard.press('Enter')
-        expect(page.locator('main')).to_contain_text('Calma')
+        expect(page.locator('main')).to_contain_text('Sereno')
         expect(page.locator('main')).to_contain_text('Familia')
         assert page.request.get(base + '/calendario/2026-02-30').status == 404
         assert page.get_by_role('link', name='Día siguiente', exact=True).count() == 0
@@ -162,7 +176,7 @@ try:
                 (artifacts / pdf.name).write_bytes(pdf.read_bytes())
             reader = PdfReader(pdf)
             text = '\n'.join(p.extract_text() for p in reader.pages)
-            for expected in ['Calma', 'No sé cómo nombrarlo', 'Familia']:
+            for expected in ['Sereno', 'No sé cómo nombrarlo', 'Familia']:
                 assert expected in text, (expected, text)
             assert all(abs(float(p.mediabox.width) - 595.28) < 2 for p in reader.pages)
 

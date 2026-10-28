@@ -4,6 +4,7 @@
 import Link from "next/link";
 import { useDraft } from "./registro";
 import { useCatalog } from "./emociones";
+import { emotionComplete } from "@eudila/domain/catalog/rueda.ts";
 
 export default function Factores() {
   const { draft, update } = useDraft();
@@ -11,9 +12,10 @@ export default function Factores() {
   const unavailableSelections = draft.factors.filter(
     (id) => !rows.some((row) => row.id === id),
   );
+  const hasEmotion = emotionComplete(draft.emotionId, draft.mood);
   const canContinue =
     draft.type &&
-    draft.emotionId &&
+    hasEmotion &&
     (status === "ready" || status === "empty") &&
     !unavailableSelections.length;
 
@@ -91,7 +93,7 @@ export default function Factores() {
             </button>
           </div>
         )}
-      {!draft.type || !draft.emotionId ? (
+      {!draft.type || !hasEmotion ? (
         <Link
           href={!draft.type ? "/registro/tipo" : "/registro/emocion"}
           className="min-h-touch text-action underline"

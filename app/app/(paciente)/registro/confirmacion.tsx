@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useDraft } from "./registro";
 import { useCatalog } from "./emociones";
+import { emotionComplete, emotionPath } from "@eudila/domain/catalog/rueda.ts";
 import { useHistory } from "../historial/state";
 import {
   pendingRecordKey,
@@ -45,12 +46,17 @@ export default function Confirmacion() {
   }, []);
   const router = useRouter();
   const emotion = emotions.rows.find((row) => row.id === draft.emotionId);
+  const emotionTrail = emotionPath(draft.emotionId)
+    .map((id) => emotions.rows.find((row) => row.id === id)?.nombre)
+    .filter(Boolean)
+    .join(" → ");
   const selectedFactors = factors.rows.filter((row) =>
     draft.factors.includes(row.id),
   );
   const complete =
     !!draft.type &&
     !!emotion &&
+    emotionComplete(draft.emotionId, draft.mood) &&
     selectedFactors.length === draft.factors.length;
   const loading = emotions.status === "loading" || factors.status === "loading";
 
@@ -141,7 +147,11 @@ export default function Confirmacion() {
             `${moods[draft.mood - 1].label} · ${draft.mood} de 7`,
             "animo",
           ],
-          ["Emoción", emotion?.nombre ?? "Falta elegir o cargar", "emocion"],
+          [
+            "Emoción",
+            emotion ? emotionTrail || emotion.nombre : "Falta elegir o cargar",
+            "emocion",
+          ],
           [
             "Factores",
             draft.factors.length

@@ -1,0 +1,22 @@
+{
+  "mode": "candidate",
+  "api": "https://app.eudila.com",
+  "candidate_commit": "1c5345634b85d8353484e9f732d12bcf1de05861",
+  "deployed_commit_at_start": "e12dd6dca2032f4726001d76480db39b403a7f03",
+  "catalog_rows": 96,
+  "saved_feelings": 36,
+  "account_isolation": true,
+  "anonymous_denied": true,
+  "retry_no_duplicates": true,
+  "ui_second_layer": 18,
+  "ui_third_layer": 6,
+  "final_feeling": "Curioso",
+  "roundtrip": true,
+  "fresh_browser": true,
+  "export_records": 37,
+  "negative_filter": true,
+  "javascript_errors": 0,
+  "session_method": "admin_generate_link_verify_no_email_sent",
+  "passed": true,
+  "synthetic_accounts_deleted": 2
+}

@@ -6,6 +6,11 @@ import Link from "next/link";
 import { Icon } from "../../ui";
 import { loadCatalogRows } from "@/lib/catalog.js";
 import {
+  emotionAllowed,
+  emotionOptions,
+  emotionPath,
+} from "@eudila/domain/catalog/rueda.ts";
+import {
   previewEnabled,
   previewEmotions,
   previewFactors,
@@ -66,25 +71,54 @@ export function useCatalog(table: "emociones" | "factores_vida") {
 
 export default function Emociones({
   selectedId,
+  mood,
   choose,
 }: {
   selectedId: string | null;
-  choose: (id: string) => void;
+  mood: number;
+  choose: (id: string | null) => void;
 }) {
   const { rows, status, retry } = useCatalog("emociones");
   const [query, setQuery] = useState("");
   const dialog = useRef<HTMLDialogElement>(null);
   const origin = useRef<HTMLButtonElement>(null);
   const search = useRef<HTMLInputElement>(null);
+  const question = useRef<HTMLHeadingElement>(null);
+  const focusQuestion = useRef(false);
   const selected = rows.find((row) => String(row.id) === selectedId);
-  const found = rows.filter((row) =>
-    searchable(row.nombre).includes(searchable(query.trim())),
+  const path = emotionPath(selectedId);
+  const optionIds = emotionOptions(selectedId, mood);
+  const options = optionIds.flatMap((id) =>
+    rows.filter((row) => row.id === id),
+  );
+  const incomplete = options.length !== optionIds.length;
+  const specific = path.length === 3;
+  const found = rows.filter(
+    (row) =>
+      emotionAllowed(row.id, mood) &&
+      searchable(row.nombre).includes(searchable(query.trim())),
   );
   const button = "control-choice emotion-choice text-left";
 
+  useEffect(() => {
+    if (focusQuestion.current) {
+      question.current?.focus();
+      focusQuestion.current = false;
+    }
+  }, [selectedId]);
+
+  function goTo(id: string | null) {
+    focusQuestion.current = true;
+    choose(id);
+  }
+
   function select(row: Emotion) {
-    choose(String(row.id));
-    dialog.current?.close();
+    if (dialog.current?.open) {
+      choose(row.id);
+      dialog.current.close();
+    } else {
+      goTo(row.id);
+    }
   }
 
   return (
@@ -112,25 +146,76 @@ export default function Emociones({
         </div>
       ) : (
         <>
+          {path.length > 0 && (
+            <nav aria-label="Tu recorrido emocional">
+              <ol className="flex flex-wrap items-center gap-x-2">
+                {path.map((id, index) => (
+                  <li key={id} className="inline-flex items-center gap-2">
+                    {index > 0 && <span aria-hidden="true">›</span>}
+                    <button
+                      type="button"
+                      className="min-h-touch text-action underline"
+                      aria-label={`Cambiar ${rows.find((row) => row.id === id)?.nombre ?? "emoción"}`}
+                      onClick={() => goTo(index === 0 ? null : path[index - 1])}
+                    >
+                      {rows.find((row) => row.id === id)?.nombre ??
+                        "Emoción no disponible"}
+                    </button>
+                  </li>
+                ))}
+              </ol>
+            </nav>
+          )}
+          <h2 ref={question} tabIndex={-1} className="text-title font-semibold">
+            {path.length === 1
+              ? options.length > 6
+                ? "¿Qué emoción se acerca más a lo que sentís?"
+                : `Dentro de ${selected?.nombre.toLocaleLowerCase("es-AR") ?? "esta familia"}, ¿qué se acerca más?`
+              : path.length === 2
+                ? "¿Qué sentimiento se acerca más?"
+                : specific
+                  ? "Así describís lo que sentís"
+                  : "¿A qué se parece más?"}
+          </h2>
           <div
             role="group"
-            aria-label="Emociones sugeridas"
+            aria-label={
+              path.length === 1
+                ? "Emociones relacionadas"
+                : path.length >= 2
+                  ? "Sentimientos relacionados"
+                  : "Emociones sugeridas"
+            }
             className="stagger flex flex-wrap gap-2"
           >
-            {rows
-              .filter((row) => row.sugerida)
-              .map((row) => (
-                <button
-                  key={row.id}
-                  type="button"
-                  className={button}
-                  aria-pressed={String(row.id) === selectedId}
-                  onClick={() => select(row)}
-                >
-                  {row.nombre}
-                </button>
-              ))}
+            {options.map((row) => (
+              <button
+                key={row.id}
+                type="button"
+                className={button}
+                aria-pressed={String(row.id) === selectedId}
+                onClick={() => select(row)}
+              >
+                {row.nombre}
+              </button>
+            ))}
           </div>
+          {incomplete && (
+            <div role="status" className="text-muted">
+              <p>
+                Faltan opciones de esta rueda. Tu elección se conserva; podés
+                reintentar o buscar otra palabra.
+              </p>
+              <button
+                type="button"
+                className="min-h-touch text-action underline"
+                onClick={retry}
+              >
+                Volver a cargar la rueda
+              </button>
+            </div>
+          )}
+          {selected && path.length === 0 && <p>Elegiste: {selected.nombre}</p>}
           <button
             ref={origin}
             type="button"
@@ -151,7 +236,7 @@ export default function Emociones({
                 ? "La emoción que habías elegido ya no está disponible. Elegí otra para continuar."
                 : "Elegí una emoción para continuar."}
           </p>
-          {selected && (
+          {selected && (specific || path.length === 0) && (
             <Link
               href="/registro/factores"
               className="action action-primary mt-auto"

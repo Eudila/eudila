@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "idioma": "es-AR",
   "emociones": [
     {
@@ -105,6 +105,381 @@
     {
       "id": "5ef2f8bc-a656-5d50-852f-67db0486cac4",
       "nombre": "Prefiero no indicarlo",
+      "sugerida": false
+    },
+    {
+      "id": "9545de24-8d18-56eb-8e95-63d9dcc8dbe9",
+      "nombre": "Arrepentido",
+      "sugerida": false
+    },
+    {
+      "id": "cb88ab9f-5e17-514f-adfe-db10e2892a03",
+      "nombre": "Culpable",
+      "sugerida": false
+    },
+    {
+      "id": "419644e0-f970-57cc-8ca4-270fd2a97f48",
+      "nombre": "Vulnerable",
+      "sugerida": false
+    },
+    {
+      "id": "db121028-5f7a-557a-bc20-6c8ca3eea34a",
+      "nombre": "Frágil",
+      "sugerida": false
+    },
+    {
+      "id": "926c3b6c-750c-5f78-ac5e-4cdf2570846c",
+      "nombre": "Solitario",
+      "sugerida": false
+    },
+    {
+      "id": "a0222c96-dd1c-5e9f-af8a-92c9d1684d68",
+      "nombre": "Aislado",
+      "sugerida": false
+    },
+    {
+      "id": "b29195e0-2712-593f-b1ef-5536f23c797e",
+      "nombre": "Deprimido",
+      "sugerida": false
+    },
+    {
+      "id": "4f1caf61-b029-5f33-bb8c-6e177f892a3d",
+      "nombre": "Miserable",
+      "sugerida": false
+    },
+    {
+      "id": "a3fe5a9c-cb08-59b8-901d-db5b73e12ab8",
+      "nombre": "Indiferente",
+      "sugerida": false
+    },
+    {
+      "id": "e58bacc8-9927-5498-8b56-4274511c7d8f",
+      "nombre": "Aburrido",
+      "sugerida": false
+    },
+    {
+      "id": "9c96cbd2-84bf-570d-b729-340d524b287f",
+      "nombre": "Decaído",
+      "sugerida": false
+    },
+    {
+      "id": "bcfd0420-a403-556b-bdee-c8e49af8dea9",
+      "nombre": "Avergonzado",
+      "sugerida": false
+    },
+    {
+      "id": "f22d513d-5948-5f18-ab1d-0310c05f0e3a",
+      "nombre": "Enfado",
+      "sugerida": false
+    },
+    {
+      "id": "7f80ffa8-14c9-5e40-aec3-7cb842d52b11",
+      "nombre": "Hostil",
+      "sugerida": false
+    },
+    {
+      "id": "88f5f0f1-2868-5750-928f-bf5f9a1fc50d",
+      "nombre": "Egoísta",
+      "sugerida": false
+    },
+    {
+      "id": "65f43f7a-37fd-530b-8762-ac3c6e8e21b1",
+      "nombre": "Irritado",
+      "sugerida": false
+    },
+    {
+      "id": "d870c9c3-c839-5c26-8b45-5e3c93f2df35",
+      "nombre": "Celoso",
+      "sugerida": false
+    },
+    {
+      "id": "72f168e6-5ea4-5cb7-92c4-8e471d30bcee",
+      "nombre": "Herido",
+      "sugerida": false
+    },
+    {
+      "id": "28ff52b0-9026-5a40-8633-66357d918e54",
+      "nombre": "Furioso",
+      "sugerida": false
+    },
+    {
+      "id": "b0dd48a7-667b-5e30-b09b-760b7b12ead5",
+      "nombre": "Estresado",
+      "sugerida": false
+    },
+    {
+      "id": "39d96f68-7eeb-55a0-91b2-ba5558f06044",
+      "nombre": "Resentido",
+      "sugerida": false
+    },
+    {
+      "id": "9fd49b04-df5e-57ec-8ad0-1c901ed5b439",
+      "nombre": "Crítico",
+      "sugerida": false
+    },
+    {
+      "id": "29f4f541-1e4b-57cd-b3ee-a45adad49b9d",
+      "nombre": "Escéptico",
+      "sugerida": false
+    },
+    {
+      "id": "073bcf73-22e7-5165-8b5d-e01a1c9c9b4c",
+      "nombre": "Molesto",
+      "sugerida": false
+    },
+    {
+      "id": "ce7f6018-9f2d-5a56-b18d-15cb0b7b261a",
+      "nombre": "Frustrado",
+      "sugerida": false
+    },
+    {
+      "id": "96c81765-7e33-5f93-93a3-0e0848d4af4e",
+      "nombre": "Débil",
+      "sugerida": false
+    },
+    {
+      "id": "94d44712-3552-509d-aa28-8d695a3c5bac",
+      "nombre": "Invisible",
+      "sugerida": false
+    },
+    {
+      "id": "f2fdd53a-97b6-5b96-98ef-f4a3384e34db",
+      "nombre": "Inseguro",
+      "sugerida": false
+    },
+    {
+      "id": "a2f5fd89-35b0-5362-9d98-a5c14e99841a",
+      "nombre": "Inferior",
+      "sugerida": false
+    },
+    {
+      "id": "5fdbcd3b-92e6-5111-8249-e74356556ed5",
+      "nombre": "Confundido",
+      "sugerida": false
+    },
+    {
+      "id": "4c622499-6868-52aa-afb0-55f2b6f5cf93",
+      "nombre": "Perplejo",
+      "sugerida": false
+    },
+    {
+      "id": "1a53c016-a705-5c39-b939-7cf9abb57b63",
+      "nombre": "Amenazado",
+      "sugerida": false
+    },
+    {
+      "id": "e21c0bfa-ed38-5dcc-8570-28183dc48fa8",
+      "nombre": "Nervioso",
+      "sugerida": false
+    },
+    {
+      "id": "9fa32b16-8af5-5198-859e-699e2b0e2d1b",
+      "nombre": "Ansioso",
+      "sugerida": false
+    },
+    {
+      "id": "0f6f7181-ac63-5d1b-994f-46c9d6d2f39f",
+      "nombre": "Rechazado",
+      "sugerida": false
+    },
+    {
+      "id": "159a0ad1-53b0-507a-8ecf-21ff640a50e0",
+      "nombre": "Preocupado",
+      "sugerida": false
+    },
+    {
+      "id": "7d20f8fd-f5df-5473-a954-996e69f1e00b",
+      "nombre": "Excluido",
+      "sugerida": false
+    },
+    {
+      "id": "688e11e4-b9bc-51a1-99c5-89083b19a82f",
+      "nombre": "Conectado",
+      "sugerida": false
+    },
+    {
+      "id": "e8039901-af6f-5d86-ae7c-76e90ce036dc",
+      "nombre": "Arropado",
+      "sugerida": false
+    },
+    {
+      "id": "75992eb6-473d-59b7-b792-4a0853232594",
+      "nombre": "Confiado",
+      "sugerida": false
+    },
+    {
+      "id": "2d0b359f-005a-58c9-a023-2252d66a3812",
+      "nombre": "Sensible",
+      "sugerida": false
+    },
+    {
+      "id": "9781a180-3704-5c92-a50e-40cdbc7ce7b6",
+      "nombre": "Agradecido",
+      "sugerida": false
+    },
+    {
+      "id": "884de888-1017-5749-b14c-8c64be9e7655",
+      "nombre": "Cariñoso",
+      "sugerida": false
+    },
+    {
+      "id": "aff60cb4-d35d-54cd-9dd0-7910028ccbef",
+      "nombre": "Tranquilo",
+      "sugerida": false
+    },
+    {
+      "id": "0a18f8e8-b1b6-5313-8084-4fb02843cad5",
+      "nombre": "Sereno",
+      "sugerida": false
+    },
+    {
+      "id": "39b78c20-e411-5fde-bbbb-2a2268080a64",
+      "nombre": "Considerado",
+      "sugerida": false
+    },
+    {
+      "id": "93b648e8-f52f-5495-bd5e-d725c4240536",
+      "nombre": "Relajado",
+      "sugerida": false
+    },
+    {
+      "id": "b633ceee-3d9e-5d9e-b944-0d55068a7077",
+      "nombre": "Aliviado",
+      "sugerida": false
+    },
+    {
+      "id": "df800ee5-f1fb-56a6-a29d-e4cffdf40c2f",
+      "nombre": "Recogido",
+      "sugerida": false
+    },
+    {
+      "id": "b347400b-19dc-51e7-9960-d7056c6ccec1",
+      "nombre": "Felicidad",
+      "sugerida": false
+    },
+    {
+      "id": "8ceab405-cff5-5aae-a9f2-1da3013eab30",
+      "nombre": "Optimista",
+      "sugerida": false
+    },
+    {
+      "id": "c9fc3cf4-f8af-5e2d-8c42-6c1fba33690e",
+      "nombre": "Esperanzado",
+      "sugerida": false
+    },
+    {
+      "id": "e49a7be4-1c56-5f3d-93fc-ab0d2c0bf4f8",
+      "nombre": "Entusiasmado",
+      "sugerida": false
+    },
+    {
+      "id": "618bc380-3189-5cf9-b098-510dc7faa34b",
+      "nombre": "Energético",
+      "sugerida": false
+    },
+    {
+      "id": "6f00d8f3-bda5-5049-a3aa-be1e5eec13c6",
+      "nombre": "Juguetón",
+      "sugerida": false
+    },
+    {
+      "id": "77045335-98d7-56bc-aaca-c3e4873ce42f",
+      "nombre": "Excitado",
+      "sugerida": false
+    },
+    {
+      "id": "ca593568-adca-5941-8d6b-c5607d6b6acc",
+      "nombre": "Alegre",
+      "sugerida": false
+    },
+    {
+      "id": "565be8bd-2286-53e1-8395-5072640f11ae",
+      "nombre": "Sorprendido",
+      "sugerida": false
+    },
+    {
+      "id": "083b355f-be00-5962-a676-9c9ed2943495",
+      "nombre": "Aceptado",
+      "sugerida": false
+    },
+    {
+      "id": "8a42f6b5-9a12-52c5-8c8d-85ab7b3cc4bb",
+      "nombre": "Valorado",
+      "sugerida": false
+    },
+    {
+      "id": "26849c28-c7e2-5df6-810a-4d9b6cf4a8eb",
+      "nombre": "Interesado",
+      "sugerida": false
+    },
+    {
+      "id": "f799ad5c-05b5-588e-8618-b4ed325d5433",
+      "nombre": "Curioso",
+      "sugerida": false
+    },
+    {
+      "id": "d48b1b5b-d7ee-5456-8590-ad19156d15a6",
+      "nombre": "Fuerza",
+      "sugerida": false
+    },
+    {
+      "id": "869f2c42-c672-51ae-ba27-e438b77e170e",
+      "nombre": "Empoderado",
+      "sugerida": false
+    },
+    {
+      "id": "98d8a4c7-9e9b-5e63-bfd0-d810ab02c61a",
+      "nombre": "Enfocado",
+      "sugerida": false
+    },
+    {
+      "id": "09a49b7b-7fb7-5778-8f90-555f3b9ce427",
+      "nombre": "Fiel",
+      "sugerida": false
+    },
+    {
+      "id": "4ac06569-37e0-5558-aa94-cbb1689a8858",
+      "nombre": "Leal",
+      "sugerida": false
+    },
+    {
+      "id": "a0887547-5c14-51f8-85e3-8aaafbdf2459",
+      "nombre": "Reconocido",
+      "sugerida": false
+    },
+    {
+      "id": "b71cd5c3-d49e-5cd1-a866-471b225e8344",
+      "nombre": "Respetado",
+      "sugerida": false
+    },
+    {
+      "id": "2af9540e-d272-50d6-96fe-e6e9bcbec588",
+      "nombre": "Valiente",
+      "sugerida": false
+    },
+    {
+      "id": "d4455bc4-a6d4-5602-829b-919a16f1417d",
+      "nombre": "Creativo",
+      "sugerida": false
+    },
+    {
+      "id": "29201cfa-b4ff-5546-bede-7eb22d9d31cd",
+      "nombre": "Fuerte",
+      "sugerida": false
+    },
+    {
+      "id": "2910afec-e079-5190-91ea-0fd2450a65bf",
+      "nombre": "Exitoso",
+      "sugerida": false
+    },
+    {
+      "id": "d0b76070-1854-559c-9433-990cb02b9f42",
+      "nombre": "Orgulloso",
+      "sugerida": false
+    },
+    {
+      "id": "7b410926-e47f-5c50-bb1f-8277aa85a1a8",
+      "nombre": "Seguro",
       "sugerida": false
     }
   ],

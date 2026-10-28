@@ -1,8 +1,8 @@
-# Catálogo de emociones y factores de vida · v1.0.0
+# Catálogo de emociones y factores de vida · v1.1.0
 
 Entrega de ANI-96 para ANI-50, ANI-64 y ANI-65. Responsable: Agustín Pedernera, por reasignación solicitada el 04/10/2026. Idioma: español argentino (`es-AR`).
 
-El [JSON de datos semilla](../../data/catalogo-v1.json) es la fuente de las etiquetas, los identificadores y las sugerencias. Contiene **18 etiquetas afectivas, tres alternativas de respuesta y 15 factores de vida**. Este documento explica las decisiones y el contrato de integración.
+El [JSON de datos semilla](../../packages/domain/catalog/catalogo-v1.json) es la fuente de las etiquetas, los identificadores y las sugerencias. Contiene **93 etiquetas afectivas, tres alternativas de respuesta y 15 factores de vida** (18 etiquetas originales y 75 incorporadas de la rueda). Este documento explica las decisiones y el contrato de integración.
 
 ## Criterios y fuentes
 
@@ -15,7 +15,7 @@ El catálogo es un vocabulario editorial para describir la propia experiencia. L
 
 Fuentes consultadas el 04/10/2026. Se usan como fundamento conceptual, sin reproducir escalas. Las explicaciones de las tablas son criterios de contenido, no definiciones diagnósticas ni instrucciones para interpretar a otra persona.
 
-## Selección inicial y lista completa
+## Selección inicial y lista completa · versión anterior
 
 Se muestran primero **Alegría, Calma, Tristeza, Enojo, Miedo y Preocupación**: seis palabras cortas que permiten expresar experiencias variadas sin llenar la primera pantalla. Es una decisión de usabilidad, no una afirmación de frecuencia poblacional ni una prescripción de lo que alguien debería sentir.
 
@@ -57,6 +57,135 @@ Identificadores de alternativas para filtrar sin depender de las etiquetas:
 | `no-se-como-nombrarlo` | `f0d3a478-e3fa-5503-a6e2-3b58df5a9c15` | No sé cómo nombrarlo |
 | `prefiero-no-indicarlo` | `5ef2f8bc-a656-5d50-852f-67db0486cac4` | Prefiero no indicarlo |
 
+## Rueda de emociones · 27/10/2026
+
+El usuario aprobó conservar el slider y recorrer con casillas la rueda de la foto `WhatsApp Image 2026-10-26 at 15.06.53.jpeg`, atribuida en la propia imagen a Gloria Willcox (1982), con crédito visual a @anabelcornago / El sonido de la hierba al crecer. Se transcriben sus palabras y relaciones; no se reproduce la ilustración ni se afirma validación clínica de esta adaptación.
+
+La app Next.js usa `packages/domain/catalog/rueda-emociones.json`: 36 rutas `[familiaId, emocionId, sentimientoId]`, seis familias y tres niveles. Con ánimo 1–3 se presentan únicamente Tristeza, Enfado y Miedo; con 5–7, únicamente Calma, Felicidad y Fuerza; Neutral muestra las seis. La búsqueda usa las mismas familias y mantiene las tres alternativas. El campo histórico `sugerida` se conserva para compatibilidad con el prototipo y deja de gobernar las casillas de Next.js.
+
+Cada selección abre el siguiente nivel. El sentimiento exterior requiere elección explícita; no se deduce del slider ni se interpreta el anillo como intensidad. Volver a una familia o emoción reemplaza la elección más específica del borrador. Se continúa al elegir el sentimiento exterior o una de las tres alternativas. Cambiar el ánimo limpia una elección incompatible del borrador sin alterar registros guardados. El registro guarda únicamente el ID elegido; el recorrido se deriva sin cambiar el esquema de registros.
+
+Las 21 opciones anteriores mantienen UUID, nombre y significado. Los adjetivos de la imagen se conservan como etiquetas diferentes de los sustantivos anteriores (por ejemplo, Preocupado y Preocupación); no se remapean registros históricos. La migración `20261028000000_rueda_emociones.sql` agrega 75 filas con `on conflict do nothing`, y debe aplicarse antes de publicar la interfaz. También cubre instalaciones nuevas antes del seed histórico.
+
+| Familia | Emoción | Sentimiento exterior |
+| --- | --- | --- |
+| Tristeza | Arrepentido | Culpable |
+| Tristeza | Vulnerable | Frágil |
+| Tristeza | Solitario | Aislado |
+| Tristeza | Deprimido | Miserable |
+| Tristeza | Indiferente | Aburrido |
+| Tristeza | Decaído | Avergonzado |
+| Enfado | Hostil | Egoísta |
+| Enfado | Irritado | Celoso |
+| Enfado | Herido | Furioso |
+| Enfado | Estresado | Resentido |
+| Enfado | Crítico | Escéptico |
+| Enfado | Molesto | Frustrado |
+| Miedo | Débil | Invisible |
+| Miedo | Inseguro | Inferior |
+| Miedo | Confundido | Perplejo |
+| Miedo | Amenazado | Nervioso |
+| Miedo | Ansioso | Rechazado |
+| Miedo | Preocupado | Excluido |
+| Calma | Conectado | Arropado |
+| Calma | Confiado | Sensible |
+| Calma | Agradecido | Cariñoso |
+| Calma | Tranquilo | Sereno |
+| Calma | Considerado | Relajado |
+| Calma | Aliviado | Recogido |
+| Felicidad | Optimista | Esperanzado |
+| Felicidad | Entusiasmado | Energético |
+| Felicidad | Juguetón | Excitado |
+| Felicidad | Alegre | Sorprendido |
+| Felicidad | Aceptado | Valorado |
+| Felicidad | Interesado | Curioso |
+| Fuerza | Empoderado | Enfocado |
+| Fuerza | Fiel | Leal |
+| Fuerza | Reconocido | Respetado |
+| Fuerza | Valiente | Creativo |
+| Fuerza | Fuerte | Exitoso |
+| Fuerza | Orgulloso | Seguro |
+
+Etiquetas nuevas; las tres familias Calma, Miedo y Tristeza reutilizan sus IDs originales:
+
+| Clave estable | Etiqueta | Sugerida histórica | Origen |
+| --- | --- | --- | --- |
+| `arrepentido` | Arrepentido | No | Rueda de la foto. |
+| `culpable` | Culpable | No | Rueda de la foto. |
+| `vulnerable` | Vulnerable | No | Rueda de la foto. |
+| `fragil` | Frágil | No | Rueda de la foto. |
+| `solitario` | Solitario | No | Rueda de la foto. |
+| `aislado` | Aislado | No | Rueda de la foto. |
+| `deprimido` | Deprimido | No | Rueda de la foto. |
+| `miserable` | Miserable | No | Rueda de la foto. |
+| `indiferente` | Indiferente | No | Rueda de la foto. |
+| `aburrido` | Aburrido | No | Rueda de la foto. |
+| `decaido` | Decaído | No | Rueda de la foto. |
+| `avergonzado` | Avergonzado | No | Rueda de la foto. |
+| `enfado` | Enfado | No | Rueda de la foto. |
+| `hostil` | Hostil | No | Rueda de la foto. |
+| `egoista` | Egoísta | No | Rueda de la foto. |
+| `irritado` | Irritado | No | Rueda de la foto. |
+| `celoso` | Celoso | No | Rueda de la foto. |
+| `herido` | Herido | No | Rueda de la foto. |
+| `furioso` | Furioso | No | Rueda de la foto. |
+| `estresado` | Estresado | No | Rueda de la foto. |
+| `resentido` | Resentido | No | Rueda de la foto. |
+| `critico` | Crítico | No | Rueda de la foto. |
+| `esceptico` | Escéptico | No | Rueda de la foto. |
+| `molesto` | Molesto | No | Rueda de la foto. |
+| `frustrado` | Frustrado | No | Rueda de la foto. |
+| `debil` | Débil | No | Rueda de la foto. |
+| `invisible` | Invisible | No | Rueda de la foto. |
+| `inseguro` | Inseguro | No | Rueda de la foto. |
+| `inferior` | Inferior | No | Rueda de la foto. |
+| `confundido` | Confundido | No | Rueda de la foto. |
+| `perplejo` | Perplejo | No | Rueda de la foto. |
+| `amenazado` | Amenazado | No | Rueda de la foto. |
+| `nervioso` | Nervioso | No | Rueda de la foto. |
+| `ansioso` | Ansioso | No | Rueda de la foto. |
+| `rechazado` | Rechazado | No | Rueda de la foto. |
+| `preocupado` | Preocupado | No | Rueda de la foto. |
+| `excluido` | Excluido | No | Rueda de la foto. |
+| `conectado` | Conectado | No | Rueda de la foto. |
+| `arropado` | Arropado | No | Rueda de la foto. |
+| `confiado` | Confiado | No | Rueda de la foto. |
+| `sensible` | Sensible | No | Rueda de la foto. |
+| `agradecido` | Agradecido | No | Rueda de la foto. |
+| `carinoso` | Cariñoso | No | Rueda de la foto. |
+| `tranquilo` | Tranquilo | No | Rueda de la foto. |
+| `sereno` | Sereno | No | Rueda de la foto. |
+| `considerado` | Considerado | No | Rueda de la foto. |
+| `relajado` | Relajado | No | Rueda de la foto. |
+| `aliviado` | Aliviado | No | Rueda de la foto. |
+| `recogido` | Recogido | No | Rueda de la foto. |
+| `felicidad` | Felicidad | No | Rueda de la foto. |
+| `optimista` | Optimista | No | Rueda de la foto. |
+| `esperanzado` | Esperanzado | No | Rueda de la foto. |
+| `entusiasmado` | Entusiasmado | No | Rueda de la foto. |
+| `energetico` | Energético | No | Rueda de la foto. |
+| `jugueton` | Juguetón | No | Rueda de la foto. |
+| `excitado` | Excitado | No | Rueda de la foto. |
+| `alegre` | Alegre | No | Rueda de la foto. |
+| `sorprendido` | Sorprendido | No | Rueda de la foto. |
+| `aceptado` | Aceptado | No | Rueda de la foto. |
+| `valorado` | Valorado | No | Rueda de la foto. |
+| `interesado` | Interesado | No | Rueda de la foto. |
+| `curioso` | Curioso | No | Rueda de la foto. |
+| `fuerza` | Fuerza | No | Rueda de la foto. |
+| `empoderado` | Empoderado | No | Rueda de la foto. |
+| `enfocado` | Enfocado | No | Rueda de la foto. |
+| `fiel` | Fiel | No | Rueda de la foto. |
+| `leal` | Leal | No | Rueda de la foto. |
+| `reconocido` | Reconocido | No | Rueda de la foto. |
+| `respetado` | Respetado | No | Rueda de la foto. |
+| `valiente` | Valiente | No | Rueda de la foto. |
+| `creativo` | Creativo | No | Rueda de la foto. |
+| `fuerte` | Fuerte | No | Rueda de la foto. |
+| `exitoso` | Exitoso | No | Rueda de la foto. |
+| `orgulloso` | Orgulloso | No | Rueda de la foto. |
+| `seguro` | Seguro | No | Rueda de la foto. |
+
 ## Factores de vida
 
 Se pueden elegir **cero, uno o varios**. Son ámbitos que la persona considera relacionados con su experiencia; no prueban una causa. Cada ámbito puede asociarse con experiencias agradables, desagradables, mixtas o cambiantes. No hay signos, pesos ni jerarquías de importancia preasignados.
@@ -83,7 +212,7 @@ La selección vacía `[]` significa “sin factores seleccionados”; no disting
 
 ## Contrato de datos semilla para ANI-50
 
-`data/catalogo-v1.json` contiene `version`, `idioma`, `emociones` y `factores_vida`. Los metadatos raíz pertenecen al archivo, no son columnas de las tablas. Los slugs de las tablas anteriores documentan la identidad; no son columnas adicionales ni etiquetas visibles.
+`packages/domain/catalog/catalogo-v1.json` contiene `version`, `idioma`, `emociones` y `factores_vida`. Los metadatos raíz pertenecen al archivo, no son columnas de las tablas. Los slugs de las tablas anteriores documentan la identidad; no son columnas adicionales ni etiquetas visibles.
 
 - Importar `emociones` como filas `{id: UUID, nombre: string, sugerida: boolean}`.
 - Importar `factores_vida` como filas `{id: UUID, nombre: string}`.
@@ -111,13 +240,18 @@ Antes de publicar una modificación, revisar claridad, cobertura, duplicados, su
 Para comprobar el formato, las identidades, las alternativas, el borrador y la correspondencia con este documento:
 
 ```sh
-node --test data/catalogo.test.mjs
+node --test packages/domain/catalog/catalogo.test.mjs
 ```
 
 Para comprobar la lectura de estas filas en el prototipo, las sugerencias, el listado completo, una alternativa, la selección múltiple y la recarga:
 
 ```sh
-uv run --with playwright python data/catalogo.browser.test.py
+uv run --with playwright python docs/historia/prototype/catalogo.browser.test.py
 ```
 
 La segunda comprobación simula respuestas REST únicamente dentro del navegador de prueba. No configura una base real ni introduce categorías de respaldo en el frontend. La implementación del esquema y la disponibilidad del endpoint continúan en ANI-50; la entrega editorial y los datos semilla de ANI-96 quedan completos.
+
+
+### Ampliación de las opciones por capa · 27/10/2026
+
+Al elegir Felicidad, Calma o Fuerza, se ofrecen juntas las 18 emociones de segunda capa de esas tres familias. Al elegir una emoción de segunda capa se ofrecen los seis sentimientos exteriores de su familia/color. El sentimiento final determina su ubicación y recorrido canónicos en la rueda, incluso si refina una elección intermedia distinta. Los IDs y las 36 relaciones de la referencia se conservan.
