@@ -228,6 +228,24 @@ a:hover {
   color: var(--color-text);
 }
 
+.nav-github {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  color: var(--color-muted);
+}
+
+.nav-github:hover {
+  color: var(--color-text);
+}
+
+.nav-github svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
 /* Secciones -------------------------------------------------------------- */
 main:not(.legal) > section {
   max-width: var(--content);
