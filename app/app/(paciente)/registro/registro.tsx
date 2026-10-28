@@ -296,11 +296,11 @@ export default function Registro({ paso }: { paso: string }) {
                 role="status"
                 aria-live="polite"
                 aria-atomic="true"
-                className="mood-state font-display text-center text-state font-bold"
+                className="mood-state mood-rise font-display text-center text-state font-bold"
               >
                 {mood.label}
               </p>
-              <div>
+              <div className="mood-rise">
                 <label htmlFor="mood-range" className="sr-only">
                   Estado de ánimo
                 </label>
@@ -349,12 +349,12 @@ export default function Registro({ paso }: { paso: string }) {
                   <span className="text-right">Muy agradable</span>
                 </div>
               </div>
-              <p className="mood-secondary text-center">
+              <p className="mood-secondary mood-rise text-center">
                 {draft.mood} de 7 · No hay una respuesta correcta.
               </p>
               <Link
                 href="/registro/emocion"
-                className={`${action} mt-auto`}
+                className={`${action} mood-rise mt-auto`}
                 style={moodActionStyle(draft.mood)}
               >
                 Siguiente
