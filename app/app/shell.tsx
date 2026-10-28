@@ -4,6 +4,7 @@
 import {
   useLayoutEffect,
   useRef,
+  useState,
   type CSSProperties,
   type ReactNode,
 } from "react";
@@ -22,6 +23,15 @@ export default function AppShell({ children }: { children: ReactNode }) {
     ["emocion", "factores", "confirmacion"].some(
       (step) => pathname === `/registro/${step}`,
     );
+  // Tipo -> Ánimo es el único cruce desde el lienzo neutro: el fondo se funde.
+  const [previous, setPrevious] = useState(pathname);
+  const [fromNeutral, setFromNeutral] = useState(false);
+  if (previous !== pathname) {
+    setPrevious(pathname);
+    setFromNeutral(
+      pathname === "/registro/animo" && previous === "/registro/tipo",
+    );
+  }
   const root = useRef<HTMLDivElement>(null);
   const controller = useRef<ReturnType<typeof createMoodController> | null>(
     null,
@@ -56,6 +66,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
       data-mood={emotional ? draft.mood : undefined}
       data-mood-position={emotional ? moodInput.position : undefined}
       data-tint={tinted ? draft.mood : undefined}
+      data-enter={emotional && fromNeutral ? "" : undefined}
       style={
         tinted
           ? ({

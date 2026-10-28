@@ -100,6 +100,35 @@ body {
   );
 }
 
+/* Tipo -> Ánimo: el fondo se funde desde el lienzo neutro hacia el ambiente
+   del ánimo. Solo corre al entrar; después manda el slider cuadro a cuadro. */
+.app-shell[data-enter] {
+  animation: mood-ambient-in 600ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@keyframes mood-ambient-in {
+  from {
+    --mood-ambient: var(--color-canvas);
+    --mood-floor: var(--color-canvas-floor);
+  }
+}
+
+/* La mascota florece y el resto sube detrás de ella. */
+.mood-screen .mood-orb {
+  animation: orb-bloom 520ms 120ms var(--ease-out-quart) both;
+}
+
+.mood-rise {
+  animation: route-enter 320ms 260ms var(--ease-out-quart) both;
+}
+
+@keyframes orb-bloom {
+  from {
+    opacity: 0;
+    transform: scale(0.72);
+  }
+}
+
 /* The slider drives the ambient per frame; elsewhere changes use brand motion. */
 .app-shell:not([data-mood]) {
   transition:
@@ -626,6 +655,12 @@ dialog::backdrop {
   .stagger > * {
     animation-name: route-fade;
     animation-delay: 0ms;
+  }
+
+  .app-shell[data-enter],
+  .mood-screen .mood-orb,
+  .mood-rise {
+    animation: none;
   }
 
   .app-shell,
