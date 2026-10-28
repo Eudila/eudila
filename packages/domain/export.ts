@@ -154,13 +154,9 @@ export function recordsCsv(records: RecordEntry[]): string {
   return `\uFEFF${rows.map((row) => row.map(csvCell).join(",")).join("\r\n")}\r\n`;
 }
 
-export function recordsJson(records: RecordEntry[]): string {
-  return JSON.stringify(records, null, 2);
-}
-
 export function exportFilename(
   now: Date,
-  extension: "csv" | "json" | "pdf",
+  extension: "csv" | "pdf",
   preview = true,
 ): string {
   return `eudila-${preview ? "vista-previa-" : ""}historial-${localDayKey(now)}.${extension}`;
