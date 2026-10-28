@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -43,6 +44,14 @@ await cp(path.join(root, "assets"), path.join(dist, "assets"), {
 });
 
 let html = await readFile(path.join(dist, "index.html"), "utf8");
+const stylesVersion = createHash("sha256")
+  .update(await readFile(path.join(dist, "styles.css")))
+  .digest("hex")
+  .slice(0, 12);
+html = html.replace(
+  'href="/styles.css"',
+  `href="/styles.css?v=${stylesVersion}"`,
+);
 if (process.env.SITE_URL) {
   const siteUrl = process.env.SITE_URL.replace(/\/$/, "");
   html = html.replace(
