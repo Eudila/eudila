@@ -37,6 +37,7 @@ def request(path, method='GET', data=None, token=None, key=anon, prefer=None):
 
 def login(page, email):
     page.goto(base + '/ingresar')
+    page.wait_for_function("sessionStorage.getItem('eudila-draft-owner') === 'guest'")
     page.get_by_label('Email', exact=True).fill(email)
     page.get_by_label('Contraseña', exact=True).fill(password)
     page.get_by_role('button', name='Ingresar', exact=True).click()
@@ -57,6 +58,34 @@ try:
     owner = users[0]['id']
     emotions = request('/rest/v1/emociones?select=*')[1]
     factors = request('/rest/v1/factores_vida?select=*')[1]
+    seeds = json.loads((root / 'packages/domain/catalog/catalogo-v1.json').read_text())
+    paths = json.loads((root / 'packages/domain/catalog/rueda-emociones.json').read_text())
+    assert {row['id']: row['nombre'] for row in emotions} == {row['id']: row['nombre'] for row in seeds['emociones']}
+    # Cuenta sintética separada: probar los 36 sentimientos sin alterar los casos siguientes.
+    wheel_email = 'wheel-' + uuid.uuid4().hex[:12] + '@example.com'
+    code, wheel_user = request('/auth/v1/admin/users', 'POST', {'email': wheel_email, 'password': password, 'email_confirm': True}, key=admin)
+    assert code in [200, 201]
+    users.append(wheel_user)
+    code, wheel_session = request('/auth/v1/token?grant_type=password', 'POST', {'email': wheel_email, 'password': password})
+    assert code == 200
+    wheel_token = wheel_session['access_token']
+    expected_feelings = set()
+    for family, emotion, feeling in paths:
+        expected_feelings.add(feeling)
+        code, result = request('/rest/v1/rpc/guardar_registro', 'POST', {
+            'p_user_id': wheel_user['id'], 'p_id': str(uuid.uuid4()),
+            'p_recorded_at': '2026-10-27T12:00:00.000Z', 'p_type': 'libre',
+            'p_mood': 6 if family in {row[0] for row in paths[18:]} else 2,
+            'p_emotion_id': feeling, 'p_factor_ids': [],
+        }, wheel_token)
+        assert code in [200, 204], ('Sentimiento rechazado por la DB', feeling, code, result)
+    code, saved_feelings = request('/rest/v1/registros?select=emotion_id,emotion:emociones(id,nombre)', token=wheel_token)
+    assert code == 200 and len(saved_feelings) == 36
+    assert {row['emotion_id'] for row in saved_feelings} == expected_feelings
+    names = {row['id']: row['nombre'] for row in emotions}
+    assert all(row['emotion'] == {'id': row['emotion_id'], 'nombre': names[row['emotion_id']]} for row in saved_feelings)
+    assert request('/rest/v1/registros?select=id', token=token) == (200, [])
+    assert request('/rest/v1/registros?select=id', token=other_token) == (200, [])
     payload = {'p_user_id': owner, 'p_id': str(uuid.uuid4()), 'p_recorded_at': '2026-10-27T12:00:00.000Z', 'p_type': 'libre', 'p_mood': 4, 'p_emotion_id': emotions[0]['id'], 'p_factor_ids': [f['id'] for f in factors[:2]]}
     code, result = request('/rest/v1/rpc/guardar_registro', 'POST', payload, token)
     assert code in [200, 204], ('Guardar registro y factores', code, result)
@@ -100,14 +129,19 @@ try:
         page.get_by_role('button', name='Siguiente', exact=True).click()
         page.get_by_role('slider').fill('6')
         page.get_by_role('link', name='Siguiente', exact=True).click()
-        page.get_by_role('button', name='Calma', exact=True).click()
+        page.get_by_role('button', name='Fuerza', exact=True).click()
+        expect(page.get_by_role('group', name='Emociones relacionadas').get_by_role('button')).to_have_count(18)
+        page.get_by_role('button', name='Optimista', exact=True).click()
+        expect(page.get_by_role('group', name='Sentimientos relacionados').get_by_role('button')).to_have_count(6)
+        page.get_by_role('button', name='Curioso', exact=True).click()
         page.get_by_role('link', name='Siguiente', exact=True).click()
         for factor in factors[:2]:
             page.get_by_role('checkbox', name=factor['nombre'], exact=True).check()
         page.get_by_role('link', name='Revisar registro').click()
+        expect(page.locator('dl')).to_contain_text('Felicidad → Interesado → Curioso')
         save = page.get_by_role('button', name='Guardar registro', exact=True)
         expect(save).to_be_enabled()
-        artifacts = root / 'docs/design/evidence/registros-cuenta-2026-10-27'
+        artifacts = Path(os.environ.get('ACCOUNT_ARTIFACT_DIR', root / 'docs/design/evidence/registros-cuenta-2026-10-27'))
         artifacts.mkdir(parents=True, exist_ok=True)
         for width in [320, 390]:
             page.set_viewport_size({'width': width, 'height': 844})
@@ -132,6 +166,8 @@ try:
         page.get_by_role('button', name='Reintentar guardado', exact=True).click()
         expect(page.locator('main').get_by_role('alert')).to_contain_text('No pudimos guardar')
         assert len(request('/rest/v1/registros?select=*', token=token)[1]) == 2
+        stored = request('/rest/v1/registros?select=mood,emotion_id&emotion_id=eq.' + next(row['id'] for row in emotions if row['nombre'] == 'Curioso'), token=token)[1]
+        assert len(stored) == 1 and stored[0]['mood'] == 6
         page.unroute(api + '/rest/v1/rpc/guardar_registro')
         page.reload()
         page.get_by_role('button', name='Guardar registro', exact=True).click()
@@ -142,11 +178,11 @@ try:
         assert page.evaluate('sessionStorage.getItem("eudila-pending-record-v1")') is None
         assert len(request('/rest/v1/registros?select=*', token=token)[1]) == 2
         page.reload()
-        expect(page.locator('main')).to_contain_text('Calma')
+        expect(page.locator('main')).to_contain_text('Curioso')
         page.screenshot(path=str(artifacts / 'hoy.png'), full_page=True)
         sibling = context.new_page()
         sibling.goto(base + '/hoy')
-        expect(sibling.locator('main')).to_contain_text('Calma')
+        expect(sibling.locator('main')).to_contain_text('Curioso')
         for route in ['/calendario', '/evolucion', '/factores', '/exportar']:
             page.goto(base + route)
             expect(page.locator('main')).not_to_contain_text('todavía no está disponible')
@@ -156,6 +192,7 @@ try:
             page.get_by_role('button', name='Descargar JSON').click()
         exported = json.loads(Path(download.value.path()).read_text())
         assert len(exported) == 2
+        assert any(record['emotion'] == {'id': next(row['id'] for row in emotions if row['nombre'] == 'Curioso'), 'nombre': 'Curioso'} for record in exported)
         assert all(record['source'] == 'account' for record in exported)
         page.screenshot(path=str(artifacts / 'exportar.png'), full_page=True)
         # Fallo de lectura nunca se presenta como historial vacío.
@@ -193,7 +230,7 @@ try:
         expect(page.get_by_role('button', name='Descargar JSON')).to_be_disabled()
         assert not errors, errors
         browser.close()
-    print('PASS: transacción, validaciones, RLS entre cuentas/anon, reintentos idempotentes, borrador ante fallos, persistencia entre recargas/navegadores, consumidores y exportación >1000 registros.')
+    print('PASS: catálogo 96, 36 sentimientos guardados/leídos en DB, cruce Fuerza → Optimista → Curioso con 18/6 opciones, sentimiento final persistido/exportado, RLS entre cuentas/anon, reintentos idempotentes, borrador ante fallos, recargas/navegadores y exportación >1000 registros.')
 finally:
     for user in users:
         assert request('/auth/v1/admin/users/' + user['id'], 'DELETE', key=admin)[0] == 200

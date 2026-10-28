@@ -63,7 +63,7 @@ try:
         }
         # A lower mood does not hide Alegría or alter the suggestion set.
         page.get_by_role("button", name="Ver todas las emociones").click()
-        expect(page.locator("#emotion-results button")).to_have_count(21)
+        expect(page.locator("#emotion-results button")).to_have_count(len(catalog["emociones"]))
         assert set(page.locator("#emotion-results button").all_text_contents()) == {
             row["nombre"] for row in catalog["emociones"]
         }
@@ -91,7 +91,7 @@ try:
         assert set(requests) == {"emociones", "factores_vida"}
         assert not errors, errors
         browser.close()
-        print("Catálogo: REST, seis sugerencias, 21 respuestas, 15 factores, UUID y recarga correctos")
+        print("Catálogo: REST, seis sugerencias, catálogo completo, 15 factores, UUID y recarga correctos")
 finally:
     server.shutdown()
     server.server_close()

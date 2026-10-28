@@ -14,6 +14,7 @@ import { moods } from "@eudila/mood/moods.js";
 import MoodOrb from "@eudila/mood/orb.tsx";
 import Mascota, { type MascotaHandle } from "@eudila/mood/mascota.tsx";
 import Emociones from "./emociones";
+import { emotionAllowed } from "@eudila/domain/catalog/rueda.ts";
 import Factores from "./factores";
 import Confirmacion from "./confirmacion";
 import type { Draft } from "@eudila/domain/records.ts";
@@ -56,12 +57,16 @@ export function RegistroProvider({ children }: { children: React.ReactNode }) {
       setPersistent(false);
     }
     const initial = restored ?? newDraft();
+    if (initial.emotionId && !emotionAllowed(initial.emotionId, initial.mood))
+      initial.emotionId = null;
     setDraft(initial);
     setMoodInput({ position: initial.mood, animate: false });
     setReady(true);
   }, []);
 
   function persist(next: Draft) {
+    if (next.emotionId && !emotionAllowed(next.emotionId, next.mood))
+      next = { ...next, emotionId: null };
     setDraft(next);
     try {
       sessionStorage.setItem(draftKey, JSON.stringify(next));
@@ -372,6 +377,7 @@ export default function Registro({ paso }: { paso: string }) {
               </p>
               <Emociones
                 selectedId={draft.emotionId}
+                mood={draft.mood}
                 choose={(emotionId) => update({ ...draft, emotionId })}
               />
               <Link

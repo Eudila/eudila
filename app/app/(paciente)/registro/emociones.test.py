@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: AGPL-3.0-only
-'''uv run --with playwright python "app/app/(paciente)/registro/emociones.test.py"'''
+"""uv run --with playwright python app/registro/emociones.test.py"""
 from pathlib import Path
 from time import monotonic, sleep
 from urllib.request import urlopen
@@ -13,6 +13,10 @@ from playwright.sync_api import sync_playwright, expect
 
 project = next(p for p in Path(__file__).resolve().parents if (p / "next.config.mjs").exists())
 seeds = json.loads((project.parent / "packages/domain/catalog/catalogo-v1.json").read_text())
+paths = json.loads((project.parent / "packages/domain/catalog/rueda-emociones.json").read_text())
+names = {row["id"]: row["nombre"] for row in seeds["emociones"]}
+artifacts = project.parent / "docs/design/evidence/rueda-emociones-2026-10-27"
+artifacts.mkdir(parents=True, exist_ok=True)
 with socket.socket() as listener:
     listener.bind(("127.0.0.1", 0))
     port = listener.getsockname()[1]
@@ -59,20 +63,84 @@ with tempfile.TemporaryFile() as log:
             page.goto(base + "/registro/tipo")
             page.get_by_role("radio", name="Tarde", exact=True).check()
             page.get_by_role("button", name="Siguiente", exact=True).click()
-            page.get_by_role("slider").fill("2")
+            page.get_by_role("slider").fill("1")
             page.get_by_role("link", name="Siguiente", exact=True).click()
             quick = page.get_by_role("group", name="Emociones sugeridas")
+            expect(quick.get_by_role("button")).to_have_count(3)
+            assert quick.get_by_role("button").all_text_contents() == ["Tristeza", "Enfado", "Miedo"]
+            page.get_by_role("button", name="Ver todas las emociones").click()
+            page.get_by_role("searchbox").fill("alegr")
+            expect(page.get_by_role("dialog").get_by_role("status")).to_have_text("No hay resultados para esa búsqueda.")
+            page.keyboard.press("Escape")
+            page.get_by_role("link", name="Cambiar ánimo", exact=True).click()
+            page.get_by_role("slider").fill("4")
+            page.get_by_role("link", name="Siguiente", exact=True).click()
             expect(quick.get_by_role("button")).to_have_count(6)
-            assert set(quick.get_by_role("button").all_text_contents()) == {row["nombre"] for row in rows if row["sugerida"]}
-            quick.get_by_role("button", name="Alegría", exact=True).click()
-            expect(quick.get_by_role("button", name="Alegría", exact=True)).to_have_attribute("aria-pressed", "true")
-            primary = page.get_by_role("link", name="Siguiente", exact=True)
-            assert primary.evaluate("e => e.getBoundingClientRect().height >= 50 && parseFloat(getComputedStyle(e).borderRadius) >= e.getBoundingClientRect().height / 2"), "La acción principal debe ser una cápsula de al menos 50px"
             for width, height in [(320, 568), (390, 844), (520, 900)]:
                 page.set_viewport_size({"width": width, "height": height})
                 page.locator("main").evaluate("e => e.scrollTop = 0")
+                quick.evaluate("async e => Promise.all(e.getAnimations({subtree: true}).map(animation => animation.finished))")
                 bounds = quick.get_by_role("button").evaluate_all("items => items.map(e => {const r = e.getBoundingClientRect(), main = e.closest('main').getBoundingClientRect(); return {top: r.top, bottom: r.bottom, mainTop: main.top, mainBottom: main.bottom};})")
                 assert all(item["top"] >= item["mainTop"] and item["bottom"] <= item["mainBottom"] and item["bottom"] - item["top"] >= 44 for item in bounds), f"Sugerencias visibles y táctiles a {width}px: {bounds}"
+            page.set_viewport_size({"width": 390, "height": 844})
+            page.emulate_media(reduced_motion="reduce")
+            page.screenshot(path=str(artifacts / "familias.png"), animations="disabled")
+            # Las 36 ramas llegan al sentimiento exterior solo por elección explícita.
+            for family_id, emotion_id, feeling_id in paths:
+                family, emotion, feeling = [names[key] for key in [family_id, emotion_id, feeling_id]]
+                quick.get_by_role("button", name=family, exact=True).click()
+                related = page.get_by_role("group", name="Emociones relacionadas")
+                expect(related.get_by_role("button")).to_have_count(18 if family in ["Calma", "Felicidad", "Fuerza"] else 6)
+                expect(page.get_by_role("link", name="Siguiente", exact=True)).to_have_count(0)
+                expect(page.get_by_role("heading", level=2)).to_be_focused()
+                if emotion == "Preocupado":
+                    page.screenshot(path=str(artifacts / "emociones.png"), animations="disabled")
+                related.get_by_role("button", name=emotion, exact=True).click()
+                assert page.evaluate("JSON.parse(sessionStorage.getItem('eudila-draft-v1')).emotionId") == emotion_id
+                final = page.get_by_role("group", name="Sentimientos relacionados")
+                expect(final.get_by_role("button")).to_have_text([names[route[2]] for route in paths if route[0] == family_id])
+                expect(page.get_by_role("link", name="Siguiente", exact=True)).to_have_count(0)
+                if feeling == "Excluido":
+                    page.screenshot(path=str(artifacts / "sentimiento.png"), animations="disabled")
+                final.get_by_role("button", name=feeling, exact=True).click()
+                expect(final.get_by_role("button", name=feeling, exact=True)).to_have_attribute("aria-pressed", "true")
+                assert page.evaluate("JSON.parse(sessionStorage.getItem('eudila-draft-v1')).emotionId") == feeling_id
+                expect(page.get_by_role("link", name="Siguiente", exact=True)).to_be_visible()
+                page.get_by_role("button", name="Cambiar " + family, exact=True).click()
+                assert page.evaluate("JSON.parse(sessionStorage.getItem('eudila-draft-v1')).emotionId") is None
+            # Restauración del nivel, corrección del matiz y conservación al cambiar ánimo.
+            for name in ["Miedo", "Preocupado", "Excluido"]:
+                page.get_by_role("button", name=name, exact=True).click()
+            page.reload()
+            expect(page.get_by_role("navigation", name="Tu recorrido emocional")).to_contain_text("Excluido")
+            page.get_by_role("button", name="Cambiar Excluido", exact=True).click()
+            expect(page.get_by_role("link", name="Siguiente", exact=True)).to_have_count(0)
+            page.get_by_role("button", name="Excluido", exact=True).click()
+            page.get_by_role("link", name="Cambiar ánimo", exact=True).click()
+            page.get_by_role("slider").fill("6")
+            page.get_by_role("link", name="Siguiente", exact=True).click()
+            expect(page.get_by_role("navigation", name="Tu recorrido emocional")).to_have_count(0)
+            expect(quick.get_by_role("button")).to_have_text(["Calma", "Felicidad", "Fuerza"])
+            page.get_by_role("link", name="Cambiar ánimo", exact=True).click()
+            page.get_by_role("slider").fill("4")
+            page.get_by_role("link", name="Siguiente", exact=True).click()
+            for name in ["Miedo", "Preocupado", "Excluido"]:
+                page.get_by_role("button", name=name, exact=True).click()
+            primary = page.get_by_role("link", name="Siguiente", exact=True)
+            assert primary.evaluate("e => e.getBoundingClientRect().height >= 50 && parseFloat(getComputedStyle(e).borderRadius) >= e.getBoundingClientRect().height / 2")
+            primary.click()
+            page.get_by_role("link", name="Revisar registro", exact=True).click()
+            expect(page.locator("dl")).to_contain_text("Miedo → Preocupado → Excluido")
+            page.screenshot(path=str(artifacts / "revision.png"), animations="disabled")
+            page.get_by_role("link", name="Cambiar emoción", exact=True).click()
+            # Reflujo también con las tres etiquetas de la rueda visibles.
+            for width in [320, 390]:
+                for percent in [100, 200]:
+                    page.set_viewport_size({"width": width, "height": 844})
+                    page.evaluate(f"document.documentElement.style.fontSize = '{percent}%'")
+                    assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
+                    assert page.locator("main").evaluate("e => e.scrollWidth <= e.clientWidth")
+            page.evaluate("document.documentElement.style.fontSize = '100%'")
             page.set_viewport_size({"width": 390, "height": 844})
             opener = page.get_by_role("button", name="Ver todas las emociones")
             opener.focus()
@@ -81,7 +149,7 @@ with tempfile.TemporaryFile() as log:
             search = page.get_by_role("searchbox", name="Buscar emoción")
             expect(search).to_be_focused()
             assert dialog.get_by_role("heading").evaluate("e => getComputedStyle(e).fontFamily.toLowerCase().includes('figtree') && getComputedStyle(e).fontWeight === '700'"), "El título debe usar Figtree Bold"
-            expect(dialog.locator('button[aria-pressed]')).to_have_count(21)
+            expect(dialog.locator('button[aria-pressed]')).to_have_count(81)
             for _ in range(12):
                 page.keyboard.press("Tab")
                 # Chrome permite pasar por su barra; ningún control de fondo recibe foco.
@@ -100,9 +168,9 @@ with tempfile.TemporaryFile() as log:
             expect(opener).to_be_focused()
             opener.click()
             expect(search).to_have_value("")
-            search.fill("ALEGRIA")
+            search.fill("EXCLUIDO")
             expect(dialog.locator('button[aria-pressed]')).to_have_count(1)
-            expect(dialog.locator('button[aria-pressed]')).to_have_text("Alegría")
+            expect(dialog.locator('button[aria-pressed]')).to_have_text("Excluido")
             search.fill("no se")
             search.focus()
             page.keyboard.press("Tab")
@@ -163,7 +231,8 @@ with tempfile.TemporaryFile() as log:
             expect(page.get_by_role("status")).to_contain_text("No se pudo cargar")
             response.update(rows=rows[:2])
             page.get_by_role("button", name="Volver a intentar").click()
-            expect(quick.get_by_role("button")).to_have_count(1)
+            expect(quick.get_by_role("button")).to_have_count(0)
+            expect(page.get_by_role("status").filter(has_text="Faltan opciones")).to_be_visible()
             expect(page.get_by_role("status").filter(has_text="habías elegido")).to_contain_text("ya no está disponible")
             assert page.evaluate("JSON.parse(sessionStorage.getItem('eudila-draft-v1')).emotionId") == chosen["id"]
             expect(page.get_by_role("link", name="Siguiente", exact=True)).to_have_count(0)
@@ -227,7 +296,7 @@ with tempfile.TemporaryFile() as log:
             assert not external, external
             unconfigured.close()
             browser.close()
-            print("ANI-64: REST, seis sugerencias, 21 opciones, alternativas/UUID, búsqueda sin tildes, teclado/foco, recarga, Ayuda, responsive, errores/reintento, storage bloqueado y ausencia de configuración correctos")
+            print("Rueda: 36 ramas, 96 opciones, filtro por ánimo, niveles/volver/recarga, revisión, REST, alternativas/UUID, búsqueda, teclado/foco, reflujo, errores/reintento, catálogo parcial, storage bloqueado y ausencia de configuración correctos")
     except Exception:
         log.seek(0)
         print(log.read().decode()[-5000:])
