@@ -47,7 +47,7 @@ try:
         page.goto(base + '/hoy')
         assert page.evaluate(f'sessionStorage.getItem({json.dumps(key)})') is None
         page.goto(base + '/exportar')
-        assert page.get_by_role('button', name='Descargar JSON', exact=True).count() == 0 or not page.get_by_role('button', name='Descargar JSON', exact=True).is_enabled()
+        assert page.get_by_role('button', name='Descargar CSV', exact=True).count() == 0 or not page.get_by_role('button', name='Descargar CSV', exact=True).is_enabled()
 
         def draft(moment, mood, emotion, factors):
             page.goto(base + '/registro/tipo')
@@ -150,20 +150,17 @@ try:
         expect(page.locator('main')).to_contain_text('Fecha no disponible')
 
         page.goto(base + '/exportar')
-        for extension, label in [('json', 'Descargar JSON'), ('csv', 'Descargar CSV')]:
-            with page.expect_download() as download_event:
-                page.get_by_role('button', name=label, exact=True).click()
-            download = download_event.value
-            raw = Path(download.path()).read_bytes()
-            assert download.suggested_filename.endswith('.' + extension)
-            if extension == 'json':
-                assert json.loads(raw) == records
-            else:
-                assert raw.startswith(b'\xef\xbb\xbf')
-                rows = list(csv.DictReader(io.StringIO(raw.decode('utf-8-sig'))))
-                assert len(rows) == 2 and rows[1]['id'] == pending_id
-                assert rows[1]['emocion'] == 'No sé cómo nombrarlo'
-                assert len(json.loads(rows[1]['factor_ids'])) == 2
+        assert page.get_by_role('button', name='Descargar JSON', exact=True).count() == 0
+        with page.expect_download() as download_event:
+            page.get_by_role('button', name='Descargar CSV', exact=True).click()
+        download = download_event.value
+        raw = Path(download.path()).read_bytes()
+        assert download.suggested_filename.endswith('.csv')
+        assert raw.startswith(b'\xef\xbb\xbf')
+        rows = list(csv.DictReader(io.StringIO(raw.decode('utf-8-sig'))))
+        assert len(rows) == 2 and rows[1]['id'] == pending_id
+        assert rows[1]['emocion'] == 'No sé cómo nombrarlo'
+        assert len(json.loads(rows[1]['factor_ids'])) == 2
         if artifacts:
             page.screenshot(path=str(artifacts / 'eudila-frontend-exportar.png'))
         page.evaluate('window.print = () => { window.didPrint = true; }')
@@ -202,6 +199,18 @@ try:
         expect(sample.get_by_role('status')).to_have_text('3 registros en el período.')
         sample.get_by_label('Período del informe').select_option('all')
         expect(sample.get_by_role('status')).to_have_text('4 registros en el período.')
+        # Rango personalizado: solo los días elegidos; invertido bloquea el PDF.
+        days = sorted(sample.evaluate("(rs) => rs.map(r => new Date(r.recordedAt).toLocaleDateString('sv-SE'))", example_records))
+        inside = sum(days[1] <= d <= days[2] for d in days)
+        sample.get_by_label('Período del informe').select_option('custom')
+        sample.get_by_label('Desde').fill(days[1])
+        sample.get_by_label('Hasta').fill(days[2])
+        expect(sample.get_by_role('status')).to_have_text(f'{inside} registros en el período.')
+        expect(sample.get_by_role('button', name='Imprimir / guardar PDF', exact=True)).to_be_enabled()
+        sample.get_by_label('Desde').fill(days[-1])
+        sample.get_by_label('Hasta').fill(days[0])
+        expect(sample.get_by_role('button', name='Imprimir / guardar PDF', exact=True)).to_be_disabled()
+        expect(sample.locator('#report-range-help')).to_be_visible()
         # Muchas filas prueban paginación real sin recortar al alto del shell.
         many = [{**example_records[0], 'id': f'pagination-{i}', 'emotion': {**example_records[0]['emotion'], 'nombre': f'Calma registro {i}'}} for i in range(60)]
         sample.evaluate('(records) => sessionStorage.setItem("eudila-preview-records-v1", JSON.stringify(records))', many)
@@ -227,11 +236,11 @@ try:
         broken.goto(base + '/exportar')
         expect(broken.locator('main')).to_contain_text('Conservamos los datos originales')
         assert broken.evaluate(f'sessionStorage.getItem({json.dumps(key)})') == '{invalid'
-        assert broken.get_by_role('button', name='Descargar JSON', exact=True).count() == 0 or not broken.get_by_role('button', name='Descargar JSON', exact=True).is_enabled()
+        assert broken.get_by_role('button', name='Descargar CSV', exact=True).count() == 0 or not broken.get_by_role('button', name='Descargar CSV', exact=True).is_enabled()
         corrupt.close()
         assert not errors, errors
         browser.close()
-    print('Frontend: registro, edición, guardado/reintento, calendario, descargas CSV/JSON, PDF, corrupción y reflujo verificados.')
+    print('Frontend: registro, edición, guardado/reintento, calendario, descarga CSV, PDF, corrupción y reflujo verificados.')
 finally:
     if server:
         server.terminate()
