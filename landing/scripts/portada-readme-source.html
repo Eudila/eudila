@@ -1,0 +1,82 @@
+<!doctype html>
+<!-- Portada clara del README (1920 × 1080). Regenerar:
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --hide-scrollbars --window-size=1920,1080 --virtual-time-budget=3000 --screenshot=.github/assets/portada-claro.png file://$PWD/landing/scripts/portada-readme-source.html
+  Colores de packages/brand/tokens.css (modo claro del 27/10/2026). -->
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      @font-face {
+        font-family: Figtree;
+        src: url("../assets/Figtree.ttf") format("truetype");
+        font-weight: 100 900;
+      }
+
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        margin: 0;
+        overflow: hidden;
+      }
+
+      body {
+        display: grid;
+        place-content: center;
+        justify-items: center;
+        gap: 56px;
+        background:
+          radial-gradient(
+            140% 45% at 50% 0%,
+            rgb(230 81 117 / 0.16),
+            transparent 70%
+          ),
+          linear-gradient(180deg, #f6f4fa 0%, #ece8f4 100%);
+        color: #1a1626;
+        font-family: Figtree, sans-serif;
+      }
+
+      .lockup {
+        display: flex;
+        align-items: center;
+        gap: 40px;
+      }
+
+      .lockup img {
+        width: 270px;
+        height: 270px;
+      }
+
+      .lockup span {
+        font-size: 230px;
+        font-weight: 700;
+        letter-spacing: -0.05em;
+        line-height: 1;
+      }
+
+      p {
+        margin: 0;
+        color: #4f4862;
+        font-size: 48px;
+        font-weight: 500;
+        letter-spacing: -0.02em;
+      }
+
+      .sello {
+        padding: 18px 36px;
+        border-radius: 999px;
+        background: #e65175;
+        color: #1d1d1f;
+        font-size: 32px;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="lockup">
+      <img src="../assets/logo.svg" alt="" /><span>eudila</span>
+    </div>
+    <p>Lo que pasa entre sesiones, también llega a la consulta.</p>
+    <div class="sello">✦ Ganadores · Hackathon Noainova 2026</div>
+  </body>
+</html>
