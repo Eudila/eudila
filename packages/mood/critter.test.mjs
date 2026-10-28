@@ -73,6 +73,16 @@ test("dos mascotas no se mueven sincronizadas", () => {
   );
 });
 
+test("Muy desagradable mantiene su posición sin temblar", () => {
+  const c = new Critter({ mood: 1, random: () => 0.5 });
+  const positions = frames(c, [0, 0.05, 0.1, 0.5, 1, 3, 6]).map((frame) =>
+    JSON.parse(frame).find(([key]) => key === "translate"),
+  );
+  for (const position of positions) {
+    assert.deepEqual(position, ["translate", 100, 103]);
+  }
+});
+
 test("con movimiento reducido queda quieta e ignora los momentos", () => {
   const c = new Critter({ mood: 7 });
   c.reduced = true;
