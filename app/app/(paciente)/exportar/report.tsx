@@ -22,7 +22,6 @@ export default function Report({
     <article className="history-report" aria-labelledby="report-title">
       <header>
         <p className="font-semibold">eudila</p>
-        <p>Vista previa. No representa el historial de una cuenta.</p>
         <h2 id="report-title" className="font-display text-question font-bold">
           Resumen de registros
         </h2>

@@ -1,0 +1,45 @@
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: [CI]
+    branches: [main]
+    types: [completed]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: eudila-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Production
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_repository.full_name == github.repository &&
+      (github.event.workflow_run.event == 'push' || github.event.workflow_run.event == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    environment:
+      name: production
+      url: https://app.eudila.com
+    steps:
+      - name: Deploy verified commit
+        env:
+          DEPLOY_SHA: ${{ github.event.workflow_run.head_sha }}
+          SSH_KEY: ${{ secrets.EUDILA_VPS_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.EUDILA_VPS_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          [[ "$DEPLOY_SHA" =~ ^[a-f0-9]{40}$ ]]
+          umask 077
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/eudila
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          trap 'rm -f ~/.ssh/eudila' EXIT
+          ssh -i ~/.ssh/eudila -o IdentitiesOnly=yes -o BatchMode=yes \
+            -o StrictHostKeyChecking=yes -o ConnectTimeout=15 \
+            -o ServerAliveInterval=15 -o ServerAliveCountMax=4 \
+            root@169.58.232.26 "deploy $DEPLOY_SHA"

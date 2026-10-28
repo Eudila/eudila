@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { restoreRecords, type CatalogItem, type RecordEntry } from "@eudila/domain/records.ts";
+import {
+  restoreRecords,
+  type CatalogItem,
+  type RecordEntry,
+} from "@eudila/domain/records.ts";
 
 const selection =
   "id,recorded_at,type,mood,emotion:emociones(id,nombre),factors:registro_factores(factor:factores_vida(id,nombre))";

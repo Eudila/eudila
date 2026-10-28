@@ -36,7 +36,7 @@ El prototipo estático usa por separado `prototype/config.js` (`url`, `anonKey`)
 - Las tres alternativas explícitas de ANI-96 son opciones válidas. Si el UUID restaurado ya no aparece en el catálogo, se pide otra elección sin borrar silenciosamente el borrador.
 - Cortar la conexión y recargar el paso: mostrar error y reintento sin perder la selección. Una lectura que no responde termina con error después de 10 segundos de actividad del navegador.
 
-El botón «Siguiente» lleva a `/registro/factores`, que permite elegir ninguno, uno o varios factores. Desde el 27/10/2026, la confirmación guarda registros y factores en la cuenta autenticada mediante una transacción Supabase; requiere aplicar la migración `20261027031110_registros_cuenta.sql`. Sin sesión no simula persistencia. El modo preview sigue usando exclusivamente la pestaña. La lectura del catálogo por sí sola no certifica autenticación, aislamiento ni guardado; esas comprobaciones están en `app/historial/account.test.py` y en el [plan de registros de cuenta](../plans/2026-10-27-registros-cuenta.md).
+El botón «Siguiente» lleva a `/registro/factores`, que permite elegir ninguno, uno o varios factores. Desde el 27/10/2026, la confirmación guarda registros y factores en la cuenta autenticada mediante una transacción Supabase; requiere aplicar la migración `20261027031110_registros_cuenta.sql`. Sin sesión no simula persistencia. El modo preview sigue usando exclusivamente la pestaña. La lectura del catálogo por sí sola no certifica autenticación, aislamiento ni guardado; esas comprobaciones están en `app/app/(paciente)/historial/account.test.py` y en el [plan de registros de cuenta](../plans/2026-10-27-registros-cuenta.md).
 
 ## Evidencia previa a la base
 

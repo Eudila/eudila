@@ -46,7 +46,7 @@ Implementado y verificado localmente el 27/10/2026, autorizado por el pedido «h
 
 - `node --test`: 38 pruebas aprobadas.
 - `npm run lint`, `npm run typecheck`, `npm run format:check` y builds de producción con cuenta y preview: aprobados.
-- `app/historial/account.test.py`: aprobado contra Supabase Docker y build de producción. Dos cuentas aisladas, anon bloqueado, validaciones, rollback completo, respuesta perdida seguida de recarga/reintento sin duplicados, persistencia entre navegadores, borrador conservado, limpieza al cambiar de cuenta y exportación de 1003 registros.
+- `app/app/(paciente)/historial/account.test.py`: aprobado contra Supabase Docker y build de producción. Dos cuentas aisladas, anon bloqueado, validaciones, rollback completo, respuesta perdida seguida de recarga/reintento sin duplicados, persistencia entre navegadores, borrador conservado, limpieza al cambiar de cuenta y exportación de 1003 registros.
 - `app/auth/browser.test.py`: aprobado (incluye sesión/recarga/logout, recuperación y aislamiento del perfil).
 - `app/frontend.test.py`: aprobado con preview, incluido reintento tras quota, calendario, descargas y PDF multipágina.
 - `app/analisis/browser.test.py`: aprobado con preview y sin configuración de cuenta. `app/registro/emociones.test.py`: aprobado sin configuración de cuenta. Las pruebas que requieren otro dev se ejecutaron en una copia temporal aislada para conservar el servidor de desarrollo existente.

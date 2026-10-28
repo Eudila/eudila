@@ -6,7 +6,11 @@ import { previewEnabled } from "../../frontend-preview";
 import { authConfigured } from "../../auth/config";
 import { authClient } from "../../auth/client";
 import { loadAccountRecords, saveAccountRecord } from "./account";
-import { createExamples, restoreRecords, type RecordEntry } from "@eudila/domain/records.ts";
+import {
+  createExamples,
+  restoreRecords,
+  type RecordEntry,
+} from "@eudila/domain/records.ts";
 
 const storageKey = "eudila-preview-records-v1";
 const HistoryContext = createContext<{

@@ -65,7 +65,19 @@ Revisión por SSH el 27/10/2026 (28/10 UTC): los seis servicios del proyecto est
 
 El repositorio ya tiene `.github/workflows/ci.yml`: GitHub Actions verifica pull requests y pushes a `main` con Node 24, instalación reproducible, lint, tipos, formato, pruebas unitarias y compilaciones de app y landing. También admite ejecución manual. La nueva [ejecución de verificación](https://github.com/Eudila/eudila/actions/runs/40612703757) del commit `a657a15fd88fd3033cf4860daddf863a1bb7e6c2` terminó correctamente: todos los pasos aprobados, 49 segundos.
 
-**No conectar todavía un despliegue automático desde `main` sin integrar el guardado de cuenta de producción.** Esa rama ya usa workspaces (`app/`, `landing/`, `packages/`), pero no contiene `account.ts` ni la migración `20261027031110_registros_cuenta.sql`; su historial conserva solamente la implementación de preview. La versión activa incluye esos cambios sin commit. Reemplazarla directamente por `main` quitaría la persistencia de cuenta del frontend, aunque el CI pase. Antes de automatizar, integrar esos cambios en la estructura vigente y comprobar el recorrido real con cuentas. La inspección y ejecución del CI no modificaron la app, los secretos ni la base del VPS.
+En la revisión inicial, `main` ya usaba workspaces (`app/`, `landing/`, `packages/`), pero no incluía el guardado de cuenta de producción. Para habilitar CD se integraron `account.ts`, la migración `20261027031110_registros_cuenta.sql`, todos sus consumidores y el botón Google blanco en la estructura actual. El build de producción y la prueba Next.js con Supabase local verificaron RLS, guardado, respuesta perdida/reintento sin duplicados, recarga, otro navegador y exportación de más de 1000 registros.
+
+## Despliegue continuo
+
+Autorizado por el usuario el 27/10/2026 (28/10 UTC). `.github/workflows/deploy.yml` sigue únicamente un CI exitoso de `main`, por push o ejecución manual; las ejecuciones de PR no acceden al VPS. El entorno GitHub `production` admite solo `main` y contiene la clave dedicada `EUDILA_VPS_SSH_KEY` y el host verificado `EUDILA_VPS_KNOWN_HOSTS`. No contiene la contraseña de root ni secretos de Supabase.
+
+La clave pública usa `restrict,command="/usr/local/sbin/eudila-deploy-ssh"`. Solo admite `deploy <SHA de main>`; se comprobó que rechaza comandos de shell. Los scripts versionados en `app/infra/scripts/deploy-release.sh` y `deploy-ssh.sh` están instalados como `/usr/local/sbin/eudila-deploy` y `/usr/local/sbin/eudila-deploy-ssh`, root:root 755. Para actualizarlos, revisar el diff e instalarlos por una sesión administrativa; el pipeline no sustituye sus propios permisos.
+
+El script bloquea despliegues concurrentes, omite commits superados, archiva el SHA exacto desde GitHub, comprueba que las migraciones de esa versión ya estén aplicadas y compila en un contenedor limitado a 2,5 GB/1,5 CPU. Solo recibe variables públicas de la configuración existente, con preview desactivado. Una migración nueva requiere revisión, respaldo y aplicación manual antes de volver a ejecutar el CI; el pipeline nunca resetea ni restaura la base.
+
+La imagen candidata se prueba antes del cambio. Solo se recrea `web`; se espera que responda y se recarga nginx, comprobando HTTPS. Si falla la activación se restauran imagen, enlaces y metadatos, se espera el servidor anterior y se recarga nginx. Los tests simulan fallos de build, activación, HTTPS y migración pendiente. El VPS conserva ambos mounts de caché (`/app/.next/cache` para rollback anterior y `/app/app/.next/cache` para workspaces).
+
+Se eliminan `node_modules` y `.next` del código fuente después del intento; se conservan código, contexto Docker, imágenes y metadatos de las releases. No hay borrado automático de versiones: vigilar el espacio en `/opt` y conservar la activa y las necesarias para rollback al limpiar. Para repetir una publicación, ejecutar manualmente el workflow CI en `main`; si ya está activa, se omite.
 
 ## Volver a la versión anterior
 
