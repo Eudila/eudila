@@ -307,3 +307,7 @@ A pedido del usuario, la app, la landing y el panel usan el tema claro del canva
 ## Contacto de la landing · 28/10/2026
 
 El formulario conserva su diseño y tokens, agrega Turnstile Managed claro y compacto antes del botón y comunica guardado solo tras confirmación del servidor. El mensaje queda en tabla privada; los errores conservan campos y renuevan el token. No cambia la mascota ni se cierra una brecha visual por integrar protección. Evidencia local y estado de producción en [contacto de la landing](evidence/contacto-landing-2026-10-28/README.md).
+
+## Turnstile horizontal · 28/10/2026
+
+A pedido del usuario, el widget de contacto pasa de compacto (cuadrado) a flexible horizontal. Se conserva el tema claro; el contenedor ocupa todo el ancho disponible, con mínimo de 300 px centrado. En 320 px y con texto al 200% puede usar parte del margen de la sección para quedar completo, sin escalar ni recortar el iframe. Se mantiene la validación de tokens y el guardado. La comprobación de reflujo verifica 65 px de alto y ambos bordes dentro de la pantalla. La navegación de la cabecera permite salto de línea: el ícono GitHub agregado recientemente y «Hablemos» desbordaban juntos al ampliar el texto; no cierra otras brechas visuales.

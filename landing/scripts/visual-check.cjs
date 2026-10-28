@@ -15,7 +15,8 @@ async function mockTurnstile(context) {
         body: `window.turnstile = {
       render(selector, options) {
         const widget = document.createElement('div');
-        widget.style.width = options.size === 'compact' ? '150px' : '300px';
+        widget.style.width = options.size === 'flexible' ? '100%' : options.size === 'compact' ? '150px' : '300px';
+        widget.style.minWidth = options.size === 'compact' ? '150px' : '300px';
         widget.style.height = options.size === 'compact' ? '140px' : '65px';
         document.querySelector(selector).appendChild(widget);
         window.challengeOptions = options;
@@ -82,6 +83,15 @@ async function mockTurnstile(context) {
 
     const layout = await page.evaluate(() => ({
       viewport: document.documentElement.clientWidth,
+      widgetHeight: document
+        .querySelector("#contact-turnstile")
+        .firstElementChild.getBoundingClientRect().height,
+      widgetLeft: document
+        .querySelector("#contact-turnstile")
+        .getBoundingClientRect().left,
+      widgetRight: document
+        .querySelector("#contact-turnstile")
+        .getBoundingClientRect().right,
       widgetFits:
         document
           .querySelector("#contact-turnstile")
@@ -92,6 +102,15 @@ async function mockTurnstile(context) {
         .filter((image) => !image.complete || image.naturalWidth === 0)
         .map((image) => image.getAttribute("src")),
     }));
+    assert.equal(
+      layout.widgetHeight,
+      65,
+      "Turnstile debe conservar el formato horizontal",
+    );
+    assert.ok(
+      layout.widgetLeft >= 0 && layout.widgetRight <= layout.viewport,
+      `widget fuera de pantalla en ${item.width}px × ${item.scale}`,
+    );
     assert.equal(
       layout.widgetFits,
       true,
