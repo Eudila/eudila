@@ -1,0 +1,13 @@
+{
+  "route": "/registro/animo",
+  "viewport": "390x844",
+  "engine": "Chromium (Chrome)",
+  "frames": 73,
+  "maxPositionDriftPx": [
+    1.244131908606505e-9,
+    5.335152764018858e-9
+  ],
+  "otherMoodMoves": true,
+  "reducedMotionStill": true,
+  "pageErrors": []
+}

@@ -1140,25 +1140,35 @@ html:not(.js) .day-mood {
   transform-origin: center;
 }
 
-.glyph-app .app-phone,
-.glyph-app .app-download {
+.glyph-app .app-phone {
   fill: none;
+  stroke: var(--color-text);
   stroke-width: 2.5;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
-.glyph-app .app-phone {
-  stroke: var(--color-text);
+.glyph-app .app-store-icon {
+  width: 26px;
+  height: 26px;
+  fill: var(--color-action-fill);
+  transform-box: fill-box;
+  transform-origin: center;
 }
 
-.glyph-app .app-download {
-  stroke: var(--color-action-fill);
+.glyph-app .app-store-apple {
+  --store-exit-x: -46px;
+  --store-exit-y: -6px;
+}
+
+.glyph-app .app-store-google {
+  --store-exit-x: 46px;
+  --store-exit-y: 6px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .glyph-app .app-download {
-    animation: app-download 2.4s var(--ease-out-quart) infinite;
+  .glyph-app .app-store-icon {
+    animation: app-store-emerge 4.8s var(--ease-brand) infinite;
   }
 
   .glyph-health .pulse-base {
@@ -1182,13 +1192,16 @@ html:not(.js) .day-mood {
   }
 }
 
-@keyframes app-download {
+@keyframes app-store-emerge {
   0%,
+  15%,
+  80%,
   100% {
-    transform: translateY(-2px);
+    transform: translate(0, 0) scale(1);
   }
-  50% {
-    transform: translateY(2px);
+  40%,
+  55% {
+    transform: translate(var(--store-exit-x), var(--store-exit-y)) scale(1.06);
   }
 }
 
