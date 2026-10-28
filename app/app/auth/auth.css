@@ -176,7 +176,7 @@
   margin-bottom: 12px;
 }
 .auth-access .action.auth-google {
-  border-color: var(--color-white);
+  border-color: var(--color-line-strong);
   background: var(--color-white);
   color: var(--color-graphite);
 }
@@ -214,7 +214,7 @@
   inset: 0;
   z-index: 50;
   overflow: hidden;
-  color: var(--color-text);
+  color: var(--intro-ink, var(--color-text));
 }
 .intro canvas {
   position: absolute;
@@ -277,6 +277,7 @@
   border: 7px solid var(--color-white);
   border-radius: var(--radius-pill);
   background: var(--color-mood-4);
+  /* Over the dark stage, the halo of the dark canvas. */
   box-shadow: 0 0 0 9px rgb(255 255 255 / 0.16);
 }
 .intro-word {
@@ -321,6 +322,27 @@
 :root:has(.intro[data-playing]) .app-header {
   position: relative;
   z-index: 51;
+}
+/* The stage is dark over the light page: its ink follows the lights
+   (--intro-dim, 0 lit to 1 dark, set per frame by the opener). */
+:root:has(.intro[data-playing]) {
+  --intro-ink: color-mix(
+    in srgb,
+    #f4f1fa calc(var(--intro-dim, 0) * 100%),
+    var(--color-text)
+  );
+}
+.intro-line.text-muted {
+  color: color-mix(
+    in srgb,
+    #dad5ea calc(var(--intro-dim, 0) * 100%),
+    var(--color-muted)
+  );
+}
+:root:has(.intro[data-playing]) .app-help.action,
+.intro-skip.action-text {
+  border-color: var(--intro-ink, var(--color-text));
+  color: var(--intro-ink, var(--color-text));
 }
 /* The canvas draws the logo while it is away (opacity keeps it readable). */
 :root:has(.intro[data-hold]) .app-brand {

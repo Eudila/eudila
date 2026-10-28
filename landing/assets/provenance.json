@@ -8,8 +8,8 @@
     "license": "SIL Open Font License 1.1"
   },
   "app-tipo.png · app-animo.png · app-emocion.png · app-factores.png · app-confirmacion.png": {
-    "source": "scripts/capture-app.cjs sobre la app Next.js en vista previa, rama 147pop/landing-showreel (app igual a origin/main 7d98557)",
-    "description": "Capturas reales de los cinco pasos: área útil de un celular (390 × 763) más barra de estado e indicador de inicio con el color de cada borde, 780 × 1688; un mismo borrador ficticio (Noche, Agradable, Alivio, Amistades y Actividad física)"
+    "source": "scripts/capture-app.cjs sobre la app Next.js en vista previa (build de producción), rama claude/modo-claro-y-panel, tema claro, 27/10/2026",
+    "description": "Capturas reales de los cinco pasos en tema claro: área útil de un celular (390 × 763) más barra de estado e indicador de inicio con el color de cada borde y su tinta, 780 × 1688; un mismo borrador ficticio (Noche, Agradable, Alivio, Amistades y Actividad física)"
   },
   "eudila-film.mp4": {
     "source": "scripts/render-film.mjs + film/pelicula.js + mascota.js (sincronizado desde packages/mood/critter.ts)",

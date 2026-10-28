@@ -56,6 +56,10 @@ const TAU = Math.PI * 2,
   PI = Math.PI;
 const LAYERS = [0, 1, 2, 3, 4];
 const WHITE = [255, 255, 255];
+// Dark "Lisa" stage (packages/brand/tokens.css before 27/10/2026).
+const LISA = [26, 22, 38],
+  LISA_FLOOR = [16, 13, 24],
+  LISA_BOTTOM = [7, 20, 22];
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const seg = (t: number, start: number, length: number) =>
@@ -131,11 +135,13 @@ export default function Intro({
     const css = getComputedStyle(document.documentElement);
     const token = (name: string, fallback: string) =>
       hex(css.getPropertyValue(name).trim(), fallback);
-    // The stage is the brand canvas with the lights down.
-    const top = mix(token("--color-canvas", "#1a1626"), [0, 0, 0], 0.45),
-      bottom = mix(token("--color-canvas-floor", "#100d18"), [0, 0, 0], 0.45),
+    // The stage is the dark "Lisa" canvas with the lights down, also over the
+    // light page (27/10/2026): sparks, rings and cores are white light. The
+    // page's own light comes back as the logo lands in the header.
+    const top = mix(LISA, [0, 0, 0], 0.45),
+      bottom = mix(LISA_FLOOR, [0, 0, 0], 0.45),
       graphite = token("--color-graphite", "#1d1d1f"),
-      floor = token("--color-mood-bottom", "#071416");
+      floor = LISA_BOTTOM;
     const ACCENT = moods.map((m) => hex(m.accent, "#ffffff"));
     const accentAt = (m: number) => {
       const v = clamp(m, 1, 7) - 1,
@@ -439,12 +445,16 @@ export default function Intro({
         lockE = brandEase(seg(t, S.lock, 0.8)),
         swingX = cx + ((m - 4) / 3) * Lx;
 
-      // Lights down; the coral of the brand canvas comes back at the end.
-      const D =
-        smooth(seg(t, 0, S.dim)) *
-        lerp(1, 0.6, brandEase(seg(t, S.bloom, 0.8))) *
-        (1 - handE);
+      // Lights down; the light page comes back as the hand lands. (Over the
+      // dark canvas the bloom lifted them to 0.6; on light that reads gray.)
+      const D = smooth(seg(t, 0, S.dim)) * (1 - handE);
       if (D > 0.002) wash([top, bottom], D);
+      // Ink over the stage: light once the lights are down, the page's dark
+      // ink again as they come back (labels, tagline, wordmark, Ayuda).
+      document.documentElement.style.setProperty(
+        "--intro-dim",
+        String(smooth(seg(D, 0.2, 0.25))),
+      );
       // The state's ambient, as on the slider screen.
       const F =
         smooth(seg(t, S.impact, 0.6)) * (1 - smooth(seg(t, S.gather, 0.7)));
@@ -824,6 +834,7 @@ export default function Intro({
       // Marked when it ends: SessionScope remounts the page once the session
       // resolves, and a mark at the start would make that remount skip it.
       document.cookie = `${COOKIE}=1; path=/; samesite=lax`;
+      document.documentElement.style.removeProperty("--intro-dim");
       delete el.dataset.hold;
       if (skipped && !reduced) {
         reveal(60);
@@ -878,6 +889,7 @@ export default function Intro({
     return () => {
       cancelled = done = true;
       stop?.();
+      document.documentElement.style.removeProperty("--intro-dim");
       resize.disconnect();
       media.removeEventListener("change", onMotion);
       removeEventListener("keydown", onKey);
