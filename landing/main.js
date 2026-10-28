@@ -22,7 +22,7 @@
 
   if (!form || !status || !submit) return;
 
-  if (config.contactEnabled !== true) {
+  if (config.contactEnabled !== true || !config.turnstileSitekey) {
     for (const control of form.querySelectorAll("input, textarea, button"))
       control.disabled = true;
     status.dataset.state = "error";
@@ -31,9 +31,47 @@
     return;
   }
 
+  let widgetId;
+  let token = "";
+  let busy = false;
+  submit.disabled = true;
+  window.onContactTurnstileLoad = () => {
+    widgetId = window.turnstile.render("#contact-turnstile", {
+      sitekey: config.turnstileSitekey,
+      action: "contact",
+      theme: "light",
+      size: "compact",
+      callback(value) {
+        token = value;
+        submit.disabled = busy || !token;
+      },
+      "expired-callback"() {
+        token = "";
+        submit.disabled = true;
+      },
+      "error-callback"() {
+        token = "";
+        submit.disabled = true;
+        status.dataset.state = "error";
+        status.textContent =
+          "No pudimos cargar la verificación. Recargá la página para volver a intentarlo.";
+      },
+    });
+  };
+  const challenge = document.createElement("script");
+  challenge.src =
+    "https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onContactTurnstileLoad&render=explicit";
+  challenge.async = true;
+  challenge.onerror = () => {
+    status.dataset.state = "error";
+    status.textContent =
+      "No pudimos cargar la verificación. Recargá la página para volver a intentarlo.";
+  };
+  document.head.appendChild(challenge);
+
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    if (submit.disabled) return;
+    if (busy || !token) return;
 
     status.textContent = "";
     status.removeAttribute("data-state");
@@ -41,12 +79,10 @@
     if (!form.reportValidity()) return;
 
     const body = Object.fromEntries(new FormData(form).entries());
-    delete body.privacy;
-    // El motivo viaja dentro del mensaje: la API conserva sus cuatro campos.
-    if (body.interest)
-      body.message = `Motivo: ${body.interest}\n\n${body.message}`;
-    delete body.interest;
+    body.privacy = body.privacy === "on";
+    body["cf-turnstile-response"] = token;
 
+    busy = true;
     submit.disabled = true;
     submit.textContent = "Enviando…";
 
@@ -58,19 +94,22 @@
       });
 
       const result = await response.json().catch(() => ({}));
-      if (!response.ok)
-        throw new Error(result.error || "No pudimos entregar la consulta.");
+      if (!response.ok || result.ok !== true)
+        throw new Error(result.error || "No pudimos guardar la consulta.");
 
       form.reset();
       status.dataset.state = "success";
       status.textContent =
-        "Consulta enviada. El equipo de Eudila va a responder a tu email.";
+        "Guardamos tu consulta. El equipo de Eudila va a responder a tu email.";
     } catch (error) {
       status.dataset.state = "error";
-      status.textContent = `${error.message || "No pudimos entregar la consulta."} Tus datos siguen en el formulario para que puedas reintentar.`;
+      status.textContent = `${error.message || "No pudimos guardar la consulta."} Tus datos siguen en el formulario para que puedas reintentar.`;
     } finally {
-      submit.disabled = false;
+      busy = false;
+      token = "";
+      submit.disabled = true;
       submit.textContent = "Enviar consulta";
+      if (widgetId !== undefined) window.turnstile.reset(widgetId);
     }
   });
 })();

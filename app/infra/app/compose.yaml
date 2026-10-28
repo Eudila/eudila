@@ -104,6 +104,11 @@ services:
     image: eudila-app-web:latest
     restart: unless-stopped
     depends_on: [auth, rest]
+    environment:
+      CONTACT_DATABASE_URL: http://rest:3000
+      SUPABASE_SERVICE_ROLE_KEY: ${SERVICE_ROLE_KEY}
+      TURNSTILE_SECRET: ${TURNSTILE_SECRET:-}
+      TURNSTILE_HOSTNAMES: ${TURNSTILE_HOSTNAMES:-}
     mem_limit: 512m
     read_only: true
     tmpfs: [/tmp, /app/app/.next/cache]
