@@ -79,6 +79,56 @@ La imagen candidata se prueba antes del cambio. Solo se recrea `web`; se espera 
 
 Se eliminan `node_modules` y `.next` del código fuente después del intento; se conservan código, contexto Docker, imágenes y metadatos de las releases. No hay borrado automático de versiones: vigilar el espacio en `/opt` y conservar la activa y las necesarias para rollback al limpiar. Para repetir una publicación, ejecutar manualmente el workflow CI en `main`; si ya está activa, se omite.
 
+## Landing y panel en el despliegue continuo · 27/10/2026
+
+Hasta acá `eudila-deploy` solo publicaba la app: la landing se subía a mano con `npm run deploy:vps` y por eso eudila.com siguió oscura después del modo claro. Desde esta versión del script, cada despliegue de `main` también publica:
+
+- **Landing** (`/opt/eudila-landing`, proyecto `eudila-landing`): compila `landing/dist`, arma la imagen nginx con `Dockerfile`, `nginx.conf` y `security-headers.conf` del commit, la prueba como candidata y cambia solo el servicio `web`. Si no responde, vuelve la imagen anterior.
+- **Panel** (`/opt/eudila-dashboard`, proyecto `eudila-dashboard`): compila el dashboard en modo standalone, arma la imagen con `app/infra/dashboard/Dockerfile`, la prueba y cambia solo `web`. Si existe `secrets/tunnel-token`, deja corriendo su túnel. Publica dashboard.eudila.com.
+
+Cada proyecto es opcional: se publica solo si su carpeta tiene `compose.yaml`, y anota su commit en `DEPLOYED_COMMIT` dentro de esa carpeta. Si la app ya sirve el commit y falta alguno de los otros, el script compila y publica solo lo que falta. Del repositorio solo se toman código y contextos de imagen: los `compose.yaml` de los tres proyectos son los del servidor, así que un commit no puede cambiar montajes, redes ni privilegios. Un fallo de la landing o del panel marca el despliegue como fallido pero no revierte la app.
+
+### Instalación (una vez, como root en el VPS)
+
+1. Revisar e instalar el script nuevo:
+
+   ```sh
+   cd /opt/eudila-app
+   git --git-dir=repository.git fetch --quiet origin main:refs/heads/main
+   git --git-dir=repository.git show main:app/infra/scripts/deploy-release.sh > /tmp/eudila-deploy
+   diff -u /usr/local/sbin/eudila-deploy /tmp/eudila-deploy | less
+   install -o root -g root -m 755 /tmp/eudila-deploy /usr/local/sbin/eudila-deploy
+   ```
+
+2. Confirmar que la landing vive en este VPS: `ls /opt/eudila-landing/compose.yaml` y `docker ps --filter name=eudila-landing`. Si eudila.com se sirve desde otro lado, esta parte no aplica.
+
+3. Crear el proyecto del panel con el `compose.yaml` revisado y el token de su túnel (ver Cloudflare abajo):
+
+   ```sh
+   install -d -m 700 /opt/eudila-dashboard /opt/eudila-dashboard/secrets
+   git --git-dir=repository.git show main:app/infra/dashboard/compose.yaml > /opt/eudila-dashboard/compose.yaml
+   install -o 65532 -m 600 /dev/null /opt/eudila-dashboard/secrets/tunnel-token
+   read -rs TOKEN   # pegar el token y Enter; no queda en el historial
+   printf '%s' "$TOKEN" > /opt/eudila-dashboard/secrets/tunnel-token && unset TOKEN
+   ```
+
+4. Publicar el commit actual de `main`: `eudila-deploy "$(git --git-dir=repository.git rev-parse main)"`, o en GitHub, Actions → CI → Run workflow sobre `main`. Como la app ya sirve ese commit, solo se compilan y publican la landing y el panel.
+
+5. Comprobar: `cat /opt/eudila-landing/DEPLOYED_COMMIT /opt/eudila-dashboard/DEPLOYED_COMMIT`, `docker ps --filter name=eudila-` y https://eudila.com y https://dashboard.eudila.com en una ventana privada.
+
+### Cloudflare
+
+El panel usa un túnel propio, como la landing: su `cloudflared` está en la red del proyecto `eudila-dashboard` y no ve a la app ni a su base.
+
+1. Zero Trust → Networks → Tunnels → **Create a tunnel** → Cloudflared. Nombre: `eudila-dashboard`.
+2. En «Install and run connectors» elegir Docker y copiar solo el token (el texto largo después de `--token`). No correr el comando: el token va en `/opt/eudila-dashboard/secrets/tunnel-token` (paso 3).
+3. **Public hostname**: subdominio `dashboard`, dominio `eudila.com`, sin path. Service: tipo `HTTP`, URL `web:3000`. Cloudflare crea solo el registro DNS `dashboard` (CNAME al túnel, con proxy).
+4. El túnel pasa a «Healthy» cuando el VPS levanta `eudila-dashboard-tunnel` (paso 4).
+
+Opcional: para que la vista previa no sea pública, Zero Trust → Access → Applications → Self-hosted con el dominio `dashboard.eudila.com` y una política con los emails del equipo. El sitio ya pide no indexarse.
+
+La landing no cambia en Cloudflare. Las capturas del teléfono llevan `?v=claro` para no salir de la caché vieja. Si a los cinco minutos la página sigue oscura, purgar la caché: Caching → Configuration → Purge Everything.
+
 ## Volver a la versión anterior
 
 Revertir solo la app. La migración es aditiva y debe conservarse para no perder registros que se hayan guardado desde el despliegue.

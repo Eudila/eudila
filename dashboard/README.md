@@ -15,6 +15,10 @@ npm run dev:dashboard
 
 Abrí <http://127.0.0.1:3001>. Para el build de producción: `npm run build:dashboard` y `npm run start --workspace @eudila/dashboard`.
 
+## Publicación
+
+Se publica en https://dashboard.eudila.com con el despliegue continuo de `main`, como proyecto Docker propio (`/opt/eudila-dashboard`, sin acceso a la app ni a su base) y su propio túnel de Cloudflare. Imagen: [`app/infra/dashboard/Dockerfile`](../app/infra/dashboard/Dockerfile); proyecto: [`compose.yaml`](../app/infra/dashboard/compose.yaml). Instalación única y Cloudflare: [operación del VPS](../docs/ops/vps-eudila.md#landing-y-panel-en-el-despliegue-continuo--27102026).
+
 ## Qué hay
 
 | Ruta              | Pantalla                                                                                                                                           |

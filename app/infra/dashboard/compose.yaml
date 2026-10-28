@@ -1,0 +1,34 @@
+# Panel del psicólogo (vista previa con datos ficticios) en dashboard.eudila.com.
+# Proyecto propio, como la landing: sin puertos publicados, sin red compartida con la app
+# y sin acceso a su base. El tráfico público llega por su propio túnel de Cloudflare.
+# Se instala una sola vez en /opt/eudila-dashboard (ver docs/ops/vps-eudila.md); después
+# el despliegue continuo solo cambia la imagen eudila-dashboard:latest.
+name: eudila-dashboard
+services:
+  web:
+    image: eudila-dashboard:latest
+    container_name: eudila-dashboard
+    restart: unless-stopped
+    mem_limit: 384m
+    cpus: 0.5
+    pids_limit: 256
+    read_only: true
+    tmpfs: [/tmp, /app/dashboard/.next/cache]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    logging: { driver: json-file, options: { max-size: 10m, max-file: "3" } }
+  cloudflared:
+    profiles: [tunnel]
+    image: cloudflare/cloudflared@sha256:51c9cefcb4569df44e1ad403ab1d3d8065aa8e84339bcfc6aee75502e1140339
+    container_name: eudila-dashboard-tunnel
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run --url http://web:3000
+    environment:
+      TUNNEL_TOKEN_FILE: /run/secrets/tunnel_token
+    secrets: [tunnel_token]
+    depends_on: [web]
+    mem_limit: 128m
+    logging: { driver: json-file, options: { max-size: 10m, max-file: "3" } }
+secrets:
+  tunnel_token:
+    file: ./secrets/tunnel-token
