@@ -1,6 +1,8 @@
 <div align="center">
 
-<img src="landing/assets/og-eudila.png" alt="eudila: lo que pasa entre sesiones, también llega a la consulta" width="760" />
+<a href="https://eudila.com/assets/eudila-film.mp4"><img src="landing/assets/eudila-film-poster.jpg" alt="La mascota de eudila junto al logo: lo que pasa entre sesiones, también llega a la consulta" width="760" /></a>
+
+<sub>▶ Tocá la imagen para ver eudila en 30 segundos</sub>
 
 <h3>Registro emocional abierto para pacientes y psicólogos</h3>
 
@@ -15,7 +17,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/licencia-AGPL--3.0-7c3aed" alt="Licencia AGPL-3.0" /></a>
   <img src="https://img.shields.io/badge/Next.js-16-000000?logo=nextdotjs" alt="Next.js 16" />
   <img src="https://img.shields.io/badge/Supabase-Auth-3ecf8e?logo=supabase&logoColor=white" alt="Supabase" />
-  <img src="https://img.shields.io/badge/🏆_Hackathon_Noainova-2026-f472b6" alt="Ganadores Hackathon Noainova 2026" />
+  <a href="https://noainnova.com.ar/"><img src="https://img.shields.io/badge/🏆_NOA_Innova-ganadores_2026-0305C6" alt="Ganadores Hackathon NOA Innova 2026" /></a>
 </p>
 
 </div>
@@ -101,6 +103,14 @@ CI las ejecuta en Node.js 24 en cada pull request.
 - Panel para psicólogos con todos sus pacientes.
 - Integración con Apple Health y Samsung Health.
 - Más adelante, alertas tempranas con consentimiento y siempre con un humano decidiendo.
+
+## Reconocimiento
+
+<a href="https://noainnova.com.ar/"><img src=".github/assets/noa-innova.png" alt="NOA Innova · Hackathon 2026 · Ganadores" width="300" align="right" /></a>
+
+eudila ganó el **Hackathon NOA Innova 2026**, la hackathon regional del Norte Argentino: 48 horas en Salta, en agosto de 2026. Fue la primera validación externa del proyecto y el impulso para llevarlo a los consultorios.
+
+<br clear="right" />
 
 ## Equipo
 
