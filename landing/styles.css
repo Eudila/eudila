@@ -1140,7 +1140,27 @@ html:not(.js) .day-mood {
   transform-origin: center;
 }
 
+.glyph-app .app-phone,
+.glyph-app .app-download {
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.glyph-app .app-phone {
+  stroke: var(--color-text);
+}
+
+.glyph-app .app-download {
+  stroke: var(--color-action-fill);
+}
+
 @media (prefers-reduced-motion: no-preference) {
+  .glyph-app .app-download {
+    animation: app-download 2.4s var(--ease-out-quart) infinite;
+  }
+
   .glyph-health .pulse-base {
     fill: none;
     stroke: var(--color-line);
@@ -1159,6 +1179,16 @@ html:not(.js) .day-mood {
 
   .glyph-forecast .alert {
     animation: alert 2.4s var(--ease-out-quart) infinite;
+  }
+}
+
+@keyframes app-download {
+  0%,
+  100% {
+    transform: translateY(-2px);
+  }
+  50% {
+    transform: translateY(2px);
   }
 }
 
