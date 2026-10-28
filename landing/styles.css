@@ -723,16 +723,6 @@ html:not(.js) .day-mood {
   margin-bottom: clamp(1.75rem, 4vw, 2.75rem);
 }
 
-@media (min-width: 860px) {
-  .reel-head {
-    grid-template-columns: 1fr minmax(0, 24rem);
-  }
-}
-
-.reel-head p {
-  color: var(--color-muted);
-}
-
 .reel-frame {
   position: relative;
   margin: 0;
@@ -1358,8 +1348,7 @@ html:not(.js) .day-mood {
   margin-bottom: 1.25rem;
   border: 1.5px solid var(--color-line);
   border-radius: 50%;
-  font: 700 1.75rem/1 var(--font-display);
-  letter-spacing: -0.02em;
+  object-fit: cover;
 }
 
 .mono-psy {
