@@ -173,13 +173,6 @@ a:hover {
   transform: none;
 }
 
-.text-link {
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.75rem;
-  font-weight: 600;
-}
-
 /* Cabecera --------------------------------------------------------------- */
 .site-header {
   display: flex;
