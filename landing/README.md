@@ -24,7 +24,7 @@ npm run build
 npx serve dist
 ```
 
-El build local no envía formularios ni carga analítica. El formulario queda visible pero deshabilitado, con un aviso explícito de que todavía no existe una casilla monitoreada. La lógica de entrega se habilita únicamente en un build de publicación con toda la configuración requerida. El motivo elegido en «Te escribo por» viaja como primera línea del mensaje; la API conserva sus cuatro campos.
+El build local deja el formulario visible pero deshabilitado. El build de publicación lo habilita al configurar el endpoint y la sitekey pública. El motivo elegido se guarda separado del mensaje. La analítica es opcional e independiente del contacto.
 
 ## Regenerar activos
 
@@ -44,20 +44,50 @@ VPS_HOST=usuario@ip-del-vps SSHPASS='…' npm run deploy:vps   # o sin SSHPASS s
 
 Desde el 27/10/2026 el despliegue continuo de `main` también publica la landing cuando `/opt/eudila-landing/compose.yaml` existe en el VPS ([cómo](../docs/ops/vps-eudila.md#landing-y-panel-en-el-despliegue-continuo--27102026)); este script queda para la instalación inicial o un servidor sin despliegue continuo. El script compila, sube `dist/` y `app/infra/landing/` y corre `docker compose up -d --build`. La contraseña va solo por entorno y no se guarda. El tráfico público llega por un túnel de Cloudflare: poné el token en `/opt/eudila-landing/secrets/tunnel-token` en el VPS y el siguiente despliegue levanta también `cloudflared` (perfil `tunnel`). Cloudflare termina el HTTPS.
 
-Mientras no haya casilla monitoreada y Resend, el formulario sigue deshabilitado y remite al canal de GitHub: nginx no ejecuta `api/contact.mjs`.
+## Contacto: PostgreSQL y Turnstile
 
-## Variables para publicar en Vercel
+El formulario envía a `https://app.eudila.com/api/contact`. La ruta Next.js reutiliza `api/contact.mjs`; nginx de la landing sigue sirviendo archivos estáticos. No requiere Resend, otra aplicación ni acceso anónimo a la base.
 
-- `EUDILA_RELEASE=true`
-- `SITE_URL=https://dominio-del-proyecto`
-- `CONTACT_TO`: casilla monitoreada que recibe las consultas.
-- `CONTACT_FROM`: remitente verificado en Resend, por ejemplo `Eudila <web@dominio>`.
-- `RESEND_API_KEY`: credencial de entrega; configurar únicamente como secreto de Vercel.
-- `UMAMI_SCRIPT_URL`: script del proveedor Umami elegido.
-- `UMAMI_WEBSITE_ID`: identificador del sitio en Umami.
+Antes de habilitarlo:
 
-El build de publicación falla si falta cualquiera de estas variables. La analítica respeta Do Not Track, no conserva query/hash y este sitio no agrega cookies ni almacenamiento del navegador.
+1. Respaldar la base y aplicar `app/supabase/migrations/20261028090000_contacto_landing.sql`; registrar el nombre en `public.eudila_migrations`, como las migraciones anteriores.
+2. Configurar en **runtime del contenedor web** `TURNSTILE_SECRET`, `TURNSTILE_HOSTNAMES=eudila.com,www.eudila.com`, `CONTACT_DATABASE_URL=http://rest:3000` y `SUPABASE_SERVICE_ROLE_KEY` (mapeada desde `SERVICE_ROLE_KEY` en Compose). Para Supabase Cloud/local, la URL de PostgREST termina en `/rest/v1`. No poner secretos en variables públicas ni en el build.
+3. Revisar e instalar el Compose y `deploy-release.sh` actualizados: el CD no reemplaza estos archivos operativos automáticamente.
+4. Configurar en `/opt/eudila-app/.env` las variables **públicas de build** siguientes y reconstruir ambos proyectos:
 
-Antes de considerar ANI-76 terminada hay que comprobar entrega real a `CONTACT_TO`, dominio propio, HTTPS, captura móvil, navegación con teclado y el fetch público de `og-eudila.png` por un depurador social.
+```dotenv
+EUDILA_RELEASE=true
+LANDING_SITE_URL=https://eudila.com
+CONTACT_ENDPOINT=https://app.eudila.com/api/contact
+TURNSTILE_SITEKEY=0x4AAAAAAFpbyBWDyMPwazeV
+TURNSTILE_HOSTNAMES=eudila.com,www.eudila.com
+```
 
-En Vercel, configurar Root Directory `landing` y permitir archivos fuera de ese directorio (paquetes compartidos). El comando `npm run build` ejecuta la sincronización antes del build; no invocar `node scripts/build.mjs` directamente.
+En el script manual de la landing, usar `SITE_URL` en lugar de `LANDING_SITE_URL`. `EUDILA_RELEASE=true` exige `SITE_URL`, `CONTACT_ENDPOINT` y `TURNSTILE_SITEKEY`; no requiere secretos de backend ni analítica. El widget está creado en Cloudflare, modo Managed, dominios eudila.com/www.eudila.com y sin pre-clearance. Su secret se recupera directamente al destino privado, nunca por chat.
+
+La API valida campos y consentimiento, limita el cuerpo real a 16 KiB y consume un intento antes de Siteverify. El límite compartido es **5 intentos por IP cada 15 minutos**, incluso para solicitudes inválidas; responde `429` con `Retry-After`. PostgreSQL actualiza el contador atómicamente y purga los vencidos al recibir otra solicitud. La clave es un HMAC de IP; no se guardan IP ni tokens con el mensaje. Solo el servidor puede insertar mensajes; anon/authenticated no pueden leer ni escribir, y la credencial del servidor tampoco puede leerlos. El equipo consulta con acceso administrativo a la base:
+
+```sql
+select created_at, name, email, organization, interest, message
+from public.contact_messages order by created_at desc;
+```
+
+El gateway debe reemplazar `X-Forwarded-For` con la IP que Cloudflare autentica, como hace `app/infra/app/gateway.conf`. No exponer Next.js directamente a Internet con encabezados de IP arbitrarios. El adaptador Vercel se conserva, pero no es el despliegue validado; requiere una fuente de IP igualmente confiable.
+
+La verificación exige `success === true`, acción `contact` y hostname permitido. El token se renueva después de cada intento. Un fallo conserva los campos y no confirma guardado. CORS solo admite los orígenes HTTPS del widget. El formulario no envía emails ni agrega una bandeja de administración. Si el servidor confirma la escritura pero se pierde su respuesta, un reintento con un token nuevo puede duplicar la consulta.
+
+Pruebas:
+
+```sh
+node --test landing/api/contact.test.mjs
+LANDING_URL=http://127.0.0.1:4173/ npm run check:visual --workspace @eudila/landing
+# PostgreSQL descartable, sin puertos ni volumen; nunca producción:
+docker run -d --rm --name eudila-contact-test --tmpfs /var/lib/postgresql/data -e POSTGRES_HOST_AUTH_METHOD=trust postgres:17-alpine
+docker exec eudila-contact-test psql -U postgres -c 'create role anon; create role authenticated; create role service_role bypassrls;'
+CONTACT_TEST_CONTAINER=eudila-contact-test node --test landing/api/contact.sql.test.mjs
+docker stop eudila-contact-test
+```
+
+La prueba HTTP opcional `CONTACT_TEST_REST_URL=http://127.0.0.1:55439 node --test landing/api/contact.rest.test.mjs` exige PostgREST conectado a esa misma base descartable, con `PGRST_DB_ANON_ROLE=anon` y la clave JWT ficticia definida en la prueba. Solo acepta loopback y comprueba INSERT real sin SELECT.
+
+La prueba SQL recrea únicamente las tablas de contacto del contenedor descartable indicado. Las pruebas del navegador simulan Turnstile para comprobar expiración, errores y renovación; no certifican tokens reales. Antes de considerar el canal activado, verificar en HTTPS un envío real, su fila en la base, el rechazo de replay y `429`. Las comprobaciones locales y pendientes de producción se registran en `docs/design/evidence/contacto-landing-2026-10-28/README.md`.

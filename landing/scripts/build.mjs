@@ -7,14 +7,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dist = path.join(root, "dist");
 const release = process.env.EUDILA_RELEASE === "true";
 
-const required = [
-  "SITE_URL",
-  "CONTACT_TO",
-  "CONTACT_FROM",
-  "RESEND_API_KEY",
-  "UMAMI_SCRIPT_URL",
-  "UMAMI_WEBSITE_ID",
-];
+const required = ["SITE_URL", "TURNSTILE_SITEKEY", "CONTACT_ENDPOINT"];
 const missing = required.filter((name) => !process.env[name]);
 if (release && missing.length) {
   throw new Error(
@@ -64,7 +57,8 @@ await writeFile(path.join(dist, "index.html"), html);
 const runtime = `window.EUDILA_CONFIG = Object.freeze(${JSON.stringify(
   {
     contactEnabled: release && missing.length === 0,
-    contactEndpoint: "/api/contact",
+    contactEndpoint: process.env.CONTACT_ENDPOINT || "/api/contact",
+    turnstileSitekey: process.env.TURNSTILE_SITEKEY || "",
     umamiScriptUrl: process.env.UMAMI_SCRIPT_URL || "",
     umamiWebsiteId: process.env.UMAMI_WEBSITE_ID || "",
   },

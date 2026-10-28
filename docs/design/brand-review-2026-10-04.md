@@ -303,3 +303,7 @@ Las aplicaciones ahora viven en `app/` y `landing/`, directamente en la raíz. E
 
 A pedido del usuario, la app, la landing y el panel usan el tema claro del canvas «Panel del psicólogo» (página Claro) como predeterminado: Nube teñida de violeta, tinta de «Lisa», acción coral oscurecida para AA y ambientes pastel por estado, con la misma luz coral arriba. La mascota, el logo y los siete colores de estado no cambian. La apertura conserva su escenario oscuro y devuelve la luz al aterrizar. [Decisión, contrastes y excepciones](../decisiones/2026-10-27-modo-claro.md). No se cierra ninguna brecha global por este cambio.
 
+
+## Contacto de la landing · 28/10/2026
+
+El formulario conserva su diseño y tokens, agrega Turnstile Managed claro y compacto antes del botón y comunica guardado solo tras confirmación del servidor. El mensaje queda en tabla privada; los errores conservan campos y renuevan el token. No cambia la mascota ni se cierra una brecha visual por integrar protección. Evidencia local y estado de producción en [contacto de la landing](evidence/contacto-landing-2026-10-28/README.md).

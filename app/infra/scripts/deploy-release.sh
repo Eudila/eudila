@@ -88,6 +88,8 @@ compile() {
   docker run --rm --memory 2500m --memory-swap 2500m --cpus 1.5 --pids-limit 512 \
     --cap-drop=ALL --security-opt no-new-privileges \
     -v "$1:/src" -v eudila-app-npm:/root/.npm -w /src \
+    -e EUDILA_RELEASE="${EUDILA_RELEASE:-false}" -e SITE_URL="${LANDING_SITE_URL:-}" \
+    -e CONTACT_ENDPOINT="${CONTACT_ENDPOINT:-}" -e TURNSTILE_SITEKEY="${TURNSTILE_SITEKEY:-}" \
     -e EUDILA_STANDALONE=true -e NEXT_TELEMETRY_DISABLED=1 -e NODE_OPTIONS=--max-old-space-size=1792 \
     -e NEXT_PUBLIC_SUPABASE_URL="$PUBLIC_URL" -e NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY="$ANON_KEY" \
     -e NEXT_PUBLIC_CATALOG_URL="$PUBLIC_URL" -e NEXT_PUBLIC_CATALOG_ANON_KEY="$ANON_KEY" \
