@@ -2,6 +2,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import Intro from "../empezar/intro";
@@ -71,7 +72,7 @@ export default function Welcome({ intro: opener }: { intro: boolean }) {
         </div>
         <button
           type="button"
-          className="action action-secondary"
+          className="action action-secondary auth-google"
           onClick={google}
           disabled={busy || !authConfigured || !googleEnabled}
           aria-busy={busy}
@@ -80,6 +81,14 @@ export default function Welcome({ intro: opener }: { intro: boolean }) {
             !googleEnabled ? "Google todavía no está habilitado" : undefined
           }
         >
+          <Image
+            src="/brand/google-g.png"
+            alt=""
+            width={20}
+            height={20}
+            className="size-5 shrink-0 object-contain"
+            unoptimized
+          />
           {busy ? "Conectando…" : "Continuar con Google"}
         </button>
         <Link href="/ingresar" className="action action-primary">

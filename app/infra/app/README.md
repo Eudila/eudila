@@ -48,7 +48,7 @@ Está apagado (`EMAIL_AUTH_ENABLED=false`): confirmar cuentas y recuperar claves
 
 ## Datos y respaldo
 
-Los datos viven en el volumen `eudila-app_db-data`. Los registros emocionales todavía no se guardan en cuentas (ver `PRODUCT.md`): hoy la base tiene usuarios, perfiles y el catálogo. Respaldo manual:
+Los datos viven en el volumen `eudila-app_db-data`: usuarios, perfiles, catálogo y registros emocionales privados por cuenta. Respaldo manual:
 
 ```sh
 docker compose -p eudila-app exec -T db pg_dump -U postgres -h localhost postgres | gzip > eudila-$(date +%F).sql.gz
@@ -58,4 +58,12 @@ docker compose -p eudila-app exec -T db pg_dump -U postgres -h localhost postgre
 
 `compose.test.yaml` publica la puerta de entrada en `127.0.0.1:8090`. Se usó para validar el despliegue completo antes de subirlo: generar un `.env` con `node gen-env.mjs http://127.0.0.1:8090`, copiar el código a `src/` y correr `COMPOSE_TEST=1 bash up.sh`.
 
-El build usa npm workspaces y `EUDILA_STANDALONE=true`; el servidor resultante es `app/server.js` dentro de standalone. Código Next y sus variables locales viven en `app`; Supabase sigue en la raíz.
+El build usa npm workspaces y `EUDILA_STANDALONE=true`; el servidor resultante es `app/server.js` dentro de standalone. Código Next, sus variables locales y Supabase viven en `app/`.
+
+## Despliegue continuo del VPS existente
+
+El flujo vigente es `.github/workflows/deploy.yml` y los scripts `app/infra/scripts/deploy-release.sh` y `deploy-ssh.sh`, instalados como `/usr/local/sbin/eudila-deploy` y `/usr/local/sbin/eudila-deploy-ssh`. `up.sh` y `deploy-app.sh` sirven para el arranque inicial; no se ejecutan para una actualización de la app ya publicada.
+
+`Deploy` solo sigue ejecuciones exitosas de CI de `main` por push o ejecución manual; no ejecuta código de pull requests en el VPS. Usa secretos del entorno `production`, limitado a `main`: `EUDILA_VPS_SSH_KEY` y `EUDILA_VPS_KNOWN_HOSTS`. La pública se instala en `authorized_keys` con `restrict,command="/usr/local/sbin/eudila-deploy-ssh"`: solo admite `deploy <SHA de main>`, sin shell ni forwarding. La contraseña y secretos de Auth permanecen fuera de GitHub.
+
+Se conserva la configuración del servidor. El build recibe solo variables públicas y preview desactivado; las nuevas migraciones deben aplicarse previamente con revisión y respaldo. La publicación mantiene las releases previas y restaura imagen, enlaces y metadatos si falla la activación. [Operación, evidencia y rollback](../../../docs/ops/vps-eudila.md).

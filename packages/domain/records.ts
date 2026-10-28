@@ -13,8 +13,10 @@ export type RecordEntry = {
   mood: number;
   emotion: CatalogItem;
   factors: CatalogItem[];
-  source: "preview" | "example";
+  source: "preview" | "example" | "account";
 };
+
+export const pendingRecordKey = "eudila-pending-record-v1";
 
 export function localDayKey(value: Date | string): string {
   const date = typeof value === "string" ? new Date(value) : value;
@@ -87,7 +89,7 @@ export function restoreRecords(raw: string | null): RecordEntry[] {
         entry.factors.some((item: unknown) => !isCatalogItem(item)) ||
         new Set(entry.factors.map((item: CatalogItem) => item.id)).size !==
           entry.factors.length ||
-        !["preview", "example"].includes(entry.source),
+        !["preview", "example", "account"].includes(entry.source),
     ) ||
     new Set(value.map((entry) => entry.id)).size !== value.length
   ) {

@@ -49,7 +49,7 @@ function MoodShape({ mood, small = false }: { mood: number; small?: boolean }) {
 }
 
 export function HistoryGate({ children }: { children: React.ReactNode }) {
-  const { ready, problem, preview, retry } = useHistory();
+  const { ready, problem, available, retry } = useHistory();
   if (!ready) return <p role="status">Preparando tus registros…</p>;
   if (problem)
     return (
@@ -60,13 +60,10 @@ export function HistoryGate({ children }: { children: React.ReactNode }) {
         </button>
       </div>
     );
-  if (!preview)
+  if (!available)
     return (
       <div className="space-y-4">
-        <p role="status">
-          El historial de tu cuenta todavía no está disponible. Podrás consultar
-          tus registros cuando se habilite la conexión.
-        </p>
+        <p role="status">Ingresá a tu cuenta para consultar tus registros.</p>
         <Link href="/registro/tipo" className={textAction}>
           Preparar un registro
         </Link>
@@ -206,7 +203,7 @@ function MoodLegend({ calendar = false }: { calendar?: boolean }) {
 }
 
 export function TodayView() {
-  const { records, ready, loadExamples } = useHistory();
+  const { records, ready, preview, loadExamples } = useHistory();
   const [exampleProblem, setExampleProblem] = useState<string | null>(null);
   // Guardado plays once, right after the confirmation step saved a record.
   const [saved] = useState(savedMood);
@@ -251,7 +248,7 @@ export function TodayView() {
                 Todavía no hay registros de hoy. Cuando quieras, podés dedicar
                 un momento a registrar cómo te sentís.
               </p>
-              {!records.length && (
+              {preview && !records.length && (
                 <>
                   <button
                     type="button"

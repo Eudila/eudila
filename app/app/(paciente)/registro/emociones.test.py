@@ -132,11 +132,11 @@ with tempfile.TemporaryFile() as log:
             page.wait_for_url(base + "/registro/factores")
             expect(page.get_by_role("checkbox")).to_have_count(15)
             page.get_by_role("link", name="Revisar registro").click()
-            expect(page.get_by_role("status").filter(has_text="El guardado en tu cuenta")).to_contain_text("El guardado en tu cuenta todavía no está habilitado")
+            expect(page.get_by_role("status").filter(has_text="Ingresá a tu cuenta")).to_contain_text("Ingresá a tu cuenta para guardar el registro")
             assert page.get_by_role("button", name="Guardar en vista previa").count() == 0
             assert page.evaluate("sessionStorage.getItem('eudila-preview-records-v1')") is None
             page.goto(base + "/exportar")
-            expect(page.locator("main")).to_contain_text("Todavía no hay datos de cuenta para exportar")
+            expect(page.locator("main")).to_contain_text("Ingresá a tu cuenta para exportar tus registros")
             assert page.get_by_role("button", name="Descargar JSON").count() == 0
             page.goto(base + "/registro/factores")
             page.get_by_role("link", name="Volver", exact=True).click()

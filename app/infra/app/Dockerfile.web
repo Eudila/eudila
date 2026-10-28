@@ -5,6 +5,7 @@ WORKDIR /app
 COPY standalone ./
 COPY static ./app/.next/static
 COPY public ./app/public
+RUN chmod -R a+rX /app
 USER node
 EXPOSE 3000
 CMD ["node", "app/server.js"]

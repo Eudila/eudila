@@ -75,7 +75,7 @@ try:
         if not preview:
             for route in ['/evolucion', '/factores', '/factores/' + factors[0]['id']]:
                 page.goto(base + route)
-                expect(main).to_contain_text('El historial de tu cuenta todavía no está disponible')
+                expect(main).to_contain_text('Ingresá a tu cuenta para consultar tus registros')
                 expect(main.locator('svg[role="img"]')).to_have_count(0)
             assert not errors, errors
             browser.close()
