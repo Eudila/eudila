@@ -355,7 +355,7 @@ export default function Registro({ paso }: { paso: string }) {
                 </div>
               </div>
               <p className="mood-secondary mood-rise text-center">
-                {draft.mood} de 7 · No hay una respuesta correcta.
+                {draft.mood} de 7
               </p>
               <Link
                 href="/registro/emocion"
