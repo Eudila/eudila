@@ -1345,8 +1345,11 @@ html:not(.js) .day-mood {
 /* 9 · Equipo ------------------------------------------------------------- */
 .team-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(13rem, 100%), 1fr));
-  gap: 2.5rem 2rem;
+  /* Una sola fila; en pantallas angostas se desliza en vez de apilarse. */
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(11rem, 1fr);
+  overflow-x: auto;
+  gap: 2rem;
   margin: clamp(2.5rem, 6vw, 4rem) 0 0;
   padding: 0;
   list-style: none;
