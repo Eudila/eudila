@@ -148,7 +148,7 @@ export default function Tokens() {
                 </p>
                 <p
                   data-contrast
-                  className="rounded-control px-4 py-3 text-white"
+                  className="rounded-control px-4 py-3 text-text"
                   style={{ backgroundColor: `var(${token}-ambient)` }}
                 >
                   Texto sobre ambiente

@@ -12,13 +12,13 @@ app/                   Next.js, configuración y .env.local
     scripts/           Assets, Supabase local y despliegues
     architecture.test.mjs
 landing/               Sitio estático y endpoint de contacto
-dashboard/             Documentación del futuro panel del psicólogo
+dashboard/             Panel del psicólogo: vista previa con datos ficticios
 packages/              Dominio, mascota y marca compartidos
 docs/                  Arquitectura, decisiones, diseño e historia
 .github/               CI
 ```
 
-Las aplicaciones importan paquetes por `@eudila/*`. Los paquetes nunca importan apps ni el prototipo. `domain` no depende de React ni de Next; usa las etiquetas de los estados de `mood/moods.js`. La lectura HTTP del catálogo vive en `app/lib/catalog.js`, fuera del dominio. El dashboard está documentado como una aplicación futura y todavía no tiene workspace ejecutable.
+Las aplicaciones importan paquetes por `@eudila/*`. Los paquetes nunca importan apps ni el prototipo. `domain` no depende de React ni de Next; usa las etiquetas de los estados de `mood/moods.js`. La lectura HTTP del catálogo vive en `app/lib/catalog.js`, fuera del dominio. El dashboard es el workspace `@eudila/dashboard`: una vista previa con datos ficticios que usa `brand` y `mood`, sin acceso a datos reales ([decisión](../decisiones/2026-10-27-panel-vista-previa.md)).
 
 Los grupos de rutas no cambian las URL. `/auth/callback`, `/registro/tipo`, `/hoy` y el resto de los destinos conservan sus contratos. `SessionScope`, `RegistroProvider` e `HistoryProvider` conservan su ciclo y claves de almacenamiento. Auth sigue validando con `getUser`; perfiles siguen protegidos por RLS. No se migran ni borran datos.
 

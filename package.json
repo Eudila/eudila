@@ -11,14 +11,16 @@
     "dev": "npm run dev --workspace @eudila/app --",
     "build": "npm run build --workspace @eudila/app",
     "start": "npm run start --workspace @eudila/app --",
+    "dev:dashboard": "npm run dev --workspace @eudila/dashboard --",
+    "build:dashboard": "npm run build --workspace @eudila/dashboard",
     "lint": "eslint . --max-warnings=0",
-    "typecheck": "npm run typecheck --workspace @eudila/app",
+    "typecheck": "npm run typecheck --workspace @eudila/app && npm run typecheck --workspace @eudila/dashboard",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "supabase:start": "node app/infra/scripts/local-auth.mjs",
     "supabase:stop": "supabase --workdir app stop",
     "test:auth": "uv run --with playwright python app/app/auth/browser.test.py",
-    "test": "node --test \"packages/**/*.test.mjs\" \"app/**/*.test.mjs\" \"landing/**/*.test.mjs\"",
+    "test": "node --test \"packages/**/*.test.mjs\" \"app/**/*.test.mjs\" \"dashboard/**/*.test.mjs\" \"landing/**/*.test.mjs\"",
     "build:landing": "npm run build --workspace @eudila/landing",
     "sync:assets": "node app/infra/scripts/sync-assets.mjs",
     "pretest": "npm run sync:assets"
@@ -39,6 +41,7 @@
   },
   "workspaces": [
     "app",
+    "dashboard",
     "landing",
     "packages/*"
   ]

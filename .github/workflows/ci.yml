@@ -36,4 +36,5 @@ jobs:
       - name: Unit tests
         run: npm test
       - run: npm run build
+      - run: npm run build:dashboard
       - run: npm run build:landing

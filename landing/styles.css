@@ -8,7 +8,7 @@
 }
 
 :root {
-  --color-line-soft: rgb(214 208 230 / 0.14);
+  --color-line-soft: rgb(26 22 38 / 0.1);
   --mood-spectrum: linear-gradient(
     90deg,
     #892fc9,
@@ -37,19 +37,16 @@
 
 html {
   min-height: 100%;
-  color-scheme: dark;
+  color-scheme: light;
   scroll-behavior: smooth;
-  /* Lienzo «Lisa»: base violeta y una sola luz coral arriba. */
+  /* Lienzo claro (27/10/2026): Nube teñida de violeta y la luz coral de «Lisa»
+     arriba. */
   background:
-    radial-gradient(
-      140% 45% at 50% 0%,
-      rgb(230 81 117 / 0.12),
-      transparent 70%
-    ),
+    radial-gradient(140% 45% at 50% 0%, rgb(230 81 117 / 0.1), transparent 70%),
     linear-gradient(
       180deg,
       var(--color-canvas) 0%,
-      #171320 56%,
+      #f1eef7 56%,
       var(--color-canvas-floor) 100%
     );
   background-attachment: fixed;
@@ -98,7 +95,7 @@ a:hover {
 }
 
 :focus-visible {
-  outline: 3px solid var(--color-white);
+  outline: 3px solid var(--color-text);
   outline-offset: 4px;
 }
 
@@ -109,7 +106,7 @@ a:hover {
   left: 0.5rem;
   padding: 0.75rem 1rem;
   border-radius: var(--radius-control);
-  background: var(--color-white);
+  background: var(--color-action-fill);
   color: var(--color-on-action);
   font-weight: 700;
   transform: translateY(-160%);
@@ -148,7 +145,7 @@ a:hover {
 }
 
 .button-primary:hover {
-  background: #ec6a89;
+  background: #d8436a;
   text-decoration: none;
 }
 
@@ -158,7 +155,7 @@ a:hover {
 }
 
 .button-secondary:hover {
-  background: rgb(246 194 207 / 0.1);
+  background: rgb(166 42 84 / 0.08);
   text-decoration: none;
 }
 
@@ -441,7 +438,7 @@ h2 {
   border: 7px solid var(--color-white);
   border-radius: var(--radius-pill);
   background: var(--mood-accent);
-  box-shadow: 0 0 0 9px rgb(255 255 255 / 0.16);
+  box-shadow: 0 0 0 9px rgb(26 22 38 / 0.1);
 }
 
 .mood-range::-moz-range-thumb {
@@ -451,7 +448,7 @@ h2 {
   border: 7px solid var(--color-white);
   border-radius: var(--radius-pill);
   background: var(--mood-accent);
-  box-shadow: 0 0 0 9px rgb(255 255 255 / 0.16);
+  box-shadow: 0 0 0 9px rgb(26 22 38 / 0.1);
 }
 
 .mood-range:focus-visible {
@@ -846,7 +843,7 @@ html:not(.js) .day-mood {
   padding: 0.5rem 0 0.7rem;
   border: 0;
   background: none;
-  color: rgb(218 213 234 / 0.62);
+  color: rgb(79 72 98 / 0.75);
   font: 700 clamp(1.5rem, 2.6vw, 2.125rem) / 1.1 var(--font-display);
   letter-spacing: var(--tracking-brand);
   text-align: left;
@@ -907,9 +904,9 @@ html:not(.js) .day-mood {
   border-radius: calc(var(--screen-r) + var(--bezel));
   background: #0b0a10;
   box-shadow:
-    0 0 0 1px rgb(214 208 230 / 0.34),
+    0 0 0 1px rgb(26 22 38 / 0.2),
     inset 0 0 0 1px rgb(255 255 255 / 0.06),
-    0 40px 90px rgb(0 0 0 / 0.5);
+    0 30px 70px rgb(26 22 38 / 0.18);
 }
 
 .phone-screens {
@@ -1407,7 +1404,7 @@ html:not(.js) .day-mood {
 }
 
 .interest label:has(:focus-visible) {
-  outline: 3px solid var(--color-white);
+  outline: 3px solid var(--color-text);
   outline-offset: 3px;
 }
 
@@ -1488,7 +1485,7 @@ html:not(.js) .day-mood {
 }
 
 .form-status[data-state="success"] {
-  color: #b6d57a;
+  color: #3a6b1f;
 }
 
 .form-status[data-state="error"] {

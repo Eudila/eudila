@@ -5,18 +5,18 @@
 @source "../../packages/mood";
 
 :root {
-  color-scheme: dark;
-  /* Beside the phone-width shell on wide screens: the same "Lisa" canvas. */
+  color-scheme: light;
+  /* Beside the phone-width shell on wide screens: the same light canvas. */
   background:
     radial-gradient(
       140% 45% at 50% 0%,
-      color-mix(in srgb, var(--color-mood-7-orb) 12%, transparent),
+      color-mix(in srgb, var(--color-mood-7-orb) 10%, transparent),
       transparent 70%
     ),
     linear-gradient(
       180deg,
       var(--color-canvas) 0%,
-      color-mix(in srgb, var(--color-canvas) 72%, var(--color-graphite)) 56%,
+      color-mix(in srgb, var(--color-canvas) 50%, var(--color-canvas-floor)) 56%,
       var(--color-canvas-floor) 100%
     );
   min-height: 100%;
@@ -33,13 +33,13 @@ body {
 @property --mood-ambient {
   syntax: "<color>";
   inherits: true;
-  initial-value: #1a1626;
+  initial-value: #f6f4fa;
 }
 
 @property --mood-floor {
   syntax: "<color>";
   inherits: true;
-  initial-value: #100d18;
+  initial-value: #ece8f4;
 }
 
 /* Coral light intensity: 1 off-mood, 0 while the registro shows the mood ambient. */
@@ -49,8 +49,8 @@ body {
   initial-value: 1;
 }
 
-/* One continuous canvas. Off-mood, "Lisa" (24/10/2026): the deep violet base
-   with a faint coral light from the top, so the coral actions and mascot lead.
+/* One continuous canvas. Off-mood, the light base (27/10/2026) keeps "Lisa"'s
+   faint coral light from the top, so the coral actions and mascot lead.
    The registro steps dim the light and take the draft's ambient and floor;
    the controller animates the slider.
    React owns --mood-base and the controller owns --mood-live, so neither
@@ -68,7 +68,7 @@ body {
       140% 45% at 50% 0%,
       color-mix(
         in srgb,
-        var(--color-mood-7-orb) calc(12% * var(--glow)),
+        var(--color-mood-7-orb) calc(10% * var(--glow)),
         transparent
       ),
       transparent 70%
@@ -76,17 +76,17 @@ body {
     linear-gradient(
       180deg,
       var(--mood-ambient) 0%,
-      color-mix(in srgb, var(--mood-ambient) 72%, var(--color-graphite)) 56%,
+      color-mix(in srgb, var(--mood-ambient) 55%, var(--color-canvas)) 56%,
       var(--mood-floor) 100%
     );
   /* Sized to the viewport like the page's, so wide screens show no seam. */
   background-attachment: fixed;
 }
 
-/* From the slider to the review, links and secondary actions take a light
-   tint of the chosen orb: >= 5.4:1 on every ambient, card and floor. */
+/* From the slider to the review, links and secondary actions take a dark
+   shade of the chosen orb: AA on every light ambient, card and floor. */
 .app-shell[data-tint] {
-  --color-action: color-mix(in srgb, var(--mood-orb) 45%, var(--color-white));
+  --color-action: color-mix(in srgb, var(--mood-orb) 30%, var(--color-text));
   --color-action-fill: var(--action-accent, var(--mood-orb));
 }
 
@@ -95,7 +95,7 @@ body {
   background: linear-gradient(
     180deg,
     var(--mood-ambient) 0%,
-    color-mix(in srgb, var(--mood-ambient) 72%, var(--color-graphite)) 56%,
+    color-mix(in srgb, var(--mood-ambient) 55%, var(--color-canvas)) 56%,
     var(--mood-floor) 100%
   );
 }
@@ -195,7 +195,7 @@ body {
 }
 
 :focus-visible {
-  outline: calc(var(--spacing) * 0.75) solid var(--color-white);
+  outline: calc(var(--spacing) * 0.75) solid var(--color-text);
   outline-offset: calc(var(--spacing) * 0.75);
 }
 
@@ -265,8 +265,8 @@ body {
 }
 
 .action:focus-visible {
-  /* Dark inner ring + light outer ring separate the control from any ambient. */
-  outline: 3px solid var(--color-white);
+  /* Light inner ring + dark outer ring separate the control from any ambient. */
+  outline: 3px solid var(--color-text);
   outline-offset: 3px;
   box-shadow: 0 0 0 3px var(--color-mood-bottom);
 }
@@ -312,9 +312,9 @@ body {
   /* Compact utility, always available in one tap; not the screen's main CTA. */
   min-height: 44px;
   padding: 6px 12px;
-  border-color: var(--color-white);
+  border-color: var(--color-text);
   background: transparent;
-  color: var(--color-white);
+  color: var(--color-text);
 }
 
 .control-choice {
@@ -341,7 +341,7 @@ body {
 }
 
 .control-choice:has(input:focus-visible) {
-  outline: 3px solid var(--color-white);
+  outline: 3px solid var(--color-text);
   outline-offset: 2px;
 }
 
@@ -379,7 +379,7 @@ dialog {
 }
 
 dialog::backdrop {
-  background: rgb(0 0 0 / 0.55);
+  background: rgb(26 22 38 / 0.45);
 }
 
 /* Disclosure: secondary explanations stay one tap away. */
@@ -473,7 +473,7 @@ dialog::backdrop {
 }
 
 .app-header a[href="#contenido"] {
-  color: var(--color-white);
+  color: var(--color-text);
 }
 
 .mood-screen {
@@ -515,7 +515,7 @@ dialog::backdrop {
   flex-shrink: 0;
   place-items: center;
   border-radius: var(--radius-pill);
-  color: var(--color-white);
+  color: var(--color-text);
   cursor: pointer;
 }
 
@@ -525,7 +525,7 @@ dialog::backdrop {
   height: 32px;
   place-items: center;
   border-radius: var(--radius-pill);
-  background: rgb(255 255 255 / 0.14);
+  background: rgb(26 22 38 / 0.07);
   transition: background-color 150ms var(--ease-out-quart);
 }
 
@@ -535,11 +535,11 @@ dialog::backdrop {
 }
 
 .mood-navigation-control:hover .mood-navigation-symbol {
-  background: rgb(255 255 255 / 0.22);
+  background: rgb(26 22 38 / 0.11);
 }
 
 .mood-navigation-control:active .mood-navigation-symbol {
-  background: rgb(255 255 255 / 0.3);
+  background: rgb(26 22 38 / 0.15);
 }
 
 /* At short heights, scroll the entire canvas instead of clipping enlarged text
@@ -636,7 +636,7 @@ dialog::backdrop {
   border: 7px solid var(--color-white);
   border-radius: var(--radius-pill);
   background: var(--mood-accent, var(--color-mood-4));
-  box-shadow: 0 0 0 9px rgb(255 255 255 / 0.16);
+  box-shadow: 0 0 0 9px rgb(26 22 38 / 0.1);
 }
 
 .mood-range::-moz-range-thumb {
@@ -646,7 +646,7 @@ dialog::backdrop {
   border: 7px solid var(--color-white);
   border-radius: var(--radius-pill);
   background: var(--mood-accent, var(--color-mood-4));
-  box-shadow: 0 0 0 9px rgb(255 255 255 / 0.16);
+  box-shadow: 0 0 0 9px rgb(26 22 38 / 0.1);
 }
 
 @media (prefers-reduced-motion: reduce) {

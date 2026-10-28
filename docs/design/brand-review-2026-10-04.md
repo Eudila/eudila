@@ -294,3 +294,8 @@ La arquitectura solicitada separa `apps/web` y `apps/landing`. La fuente canóni
 ### Organización para publicación · 27/10/2026
 
 Las aplicaciones ahora viven en `app/` y `landing/`, directamente en la raíz. El código compartido conserva `packages/mood` y `packages/brand`; `app/app/globals.css` importa sus tokens. PRODUCT.md y DESIGN.md quedan como documentos internos locales ignorados por Git. Esta mudanza no cambia decisiones visuales ni cierra brechas de marca.
+
+## Modo claro por defecto · 27/10/2026
+
+A pedido del usuario, la app, la landing y el panel usan el tema claro del canvas «Panel del psicólogo» (página Claro) como predeterminado: Nube teñida de violeta, tinta de «Lisa», acción coral oscurecida para AA y ambientes pastel por estado, con la misma luz coral arriba. La mascota, el logo y los siete colores de estado no cambian. La apertura conserva su escenario oscuro y devuelve la luz al aterrizar. [Decisión, contrastes y excepciones](../decisiones/2026-10-27-modo-claro.md). No se cierra ninguna brecha global por este cambio.
+

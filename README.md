@@ -51,7 +51,7 @@ Nació para ayudar a prevenir el suicidio. **No diagnostica:** ordena la informa
 - **Accesible:** teclado, lectores de pantalla, contraste AA, texto al 200 % y movimiento reducido.
 
 > [!NOTE]
-> Las cuentas con email ya funcionan. La sincronización de los registros con la cuenta y el panel para psicólogos están en desarrollo.
+> Las cuentas con email ya funcionan. La sincronización de los registros con la cuenta y el panel para psicólogos están en desarrollo; el panel ya tiene una [vista previa con datos ficticios](dashboard/README.md).
 
 ## Probalo en local
 
@@ -72,7 +72,7 @@ Abrí <http://127.0.0.1:3000>. Arranca en vista previa, sin base de datos: los r
 ```text
 app/          App Next.js: registro, historial, análisis y cuenta (+ Supabase e infra)
 landing/      Sitio público estático
-dashboard/    Futuro panel del psicólogo
+dashboard/    Panel del psicólogo: vista previa con datos ficticios
 packages/     domain (lógica), mood (mascota y estados), brand (tokens y logos)
 docs/         Arquitectura, decisiones, diseño e historia
 ```
@@ -90,6 +90,7 @@ npm run typecheck
 npm run format:check
 npm test
 npm run build
+npm run build:dashboard
 npm run build:landing
 ```
 

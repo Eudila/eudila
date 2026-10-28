@@ -6,56 +6,57 @@
   --color-graphite: #1d1d1f;
   --color-fog: #6e6e73;
   --color-white: #ffffff;
-  --color-mood-bottom: #071416;
-  --color-mood-secondary: #e6e2f0;
+  --color-mood-bottom: #f3f0f8;
+  --color-mood-secondary: #4f4862;
 
-  /* Dark canvas everywhere (decision 18/10/2026), deep violet base. Since
-     24/10/2026 "Lisa": one faint coral light instead of Aurora's three. AA at
-     the brightest point on a card: text 11.9, secondary 9.3, action 8.6.
-     Neutrals are tinted toward the base's violet; the green-gray ones were
-     left over from the turquoise canvas. */
-  --color-canvas: #1a1626;
-  --color-canvas-floor: #100d18;
-  --color-surface: #18151f;
-  --color-raised: rgb(214 208 230 / 0.06);
-  --color-text: #f4f1fa;
-  --color-muted: #dad5ea;
-  --color-line: rgb(214 208 230 / 0.3);
-  --color-line-strong: rgb(214 208 230 / 0.48);
-  /* Default action color is the logo's coral (24/10/2026). Fills use the
-     icon coral with Graphite ink (4.65:1); text and outlines use a light coral
-     (orb + 65% white) that keeps AA at the canvas's brightest point on a card. */
-  --color-action: #f6c2cf;
+  /* Light canvas by default (decision 27/10/2026, docs/decisiones). Nube
+     tinted toward the "Lisa" violet, Lisa's ink as text and the logo's coral
+     darkened for AA on light. Same faint coral light from the top. The dark
+     "Lisa" values (canvas #1a1626, floor #100d18, text #f4f1fa, action
+     #f6c2cf, ambients #32134d…#712127) stay in Git history and on the
+     "Oscuro" page of the design canvas. */
+  --color-canvas: #f6f4fa;
+  --color-canvas-floor: #ece8f4;
+  --color-surface: #ffffff;
+  --color-raised: rgb(26 22 38 / 0.045);
+  --color-text: #1a1626;
+  --color-muted: #4f4862;
+  --color-line: rgb(26 22 38 / 0.22);
+  /* Field borders: >= 3:1 on surface and floor (WCAG 1.4.11). */
+  --color-line-strong: rgb(26 22 38 / 0.48);
+  /* Text and outlines use a deep coral (AA on canvas, floor and cards); fills
+     keep the icon coral with Graphite ink (4.65:1). */
+  --color-action: #a62a54;
   --color-action-fill: var(--color-mood-7-orb);
   --color-on-action: var(--color-graphite);
 
   --color-mood-1: #892fc9;
   --color-mood-1-orb: #a845da;
-  --color-mood-1-ambient: #32134d;
+  --color-mood-1-ambient: #efe3fa;
   --color-mood-1-ink: var(--color-white);
   --color-mood-2: #5b4ce1;
   --color-mood-2-orb: #8a68d8;
-  --color-mood-2-ambient: #26235b;
+  --color-mood-2-ambient: #e7e5fb;
   --color-mood-2-ink: var(--color-white);
   --color-mood-3: #209ae7;
   --color-mood-3-orb: #3bbadf;
-  --color-mood-3-ambient: #123f60;
+  --color-mood-3-ambient: #ddeffb;
   --color-mood-3-ink: var(--color-graphite);
   --color-mood-4: #2ec0bc;
   --color-mood-4-orb: #5fd3d0;
-  --color-mood-4-ambient: #0f5654;
+  --color-mood-4-ambient: #d9f3f2;
   --color-mood-4-ink: var(--color-graphite);
   --color-mood-5: #77cb47;
   --color-mood-5-orb: #b6d57a;
-  --color-mood-5-ambient: #285b25;
+  --color-mood-5-ambient: #e6f4da;
   --color-mood-5-ink: var(--color-graphite);
   --color-mood-6: #fe9613;
   --color-mood-6-orb: #f2b24a;
-  --color-mood-6-ambient: #6c3b0b;
+  --color-mood-6-ambient: #fdebd2;
   --color-mood-6-ink: var(--color-graphite);
   --color-mood-7: #ff4a4b;
   --color-mood-7-orb: #e65175;
-  --color-mood-7-ambient: #712127;
+  --color-mood-7-ambient: #fce1e7;
   --color-mood-7-ink: var(--color-graphite);
 
   --font-sans:

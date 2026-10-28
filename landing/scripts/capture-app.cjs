@@ -55,16 +55,16 @@ async function phoneScreen(browser, png) {
       <div id="top" style="height:${STATUS}px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:4px 30px 0 40px;box-sizing:border-box">
         <span style="letter-spacing:-0.01em">9:41</span>
         <svg width="66" height="12" viewBox="0 0 66 12" aria-hidden="true">
-          <rect x="0" y="8" width="3" height="4" rx="1" fill="#fff"/><rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="#fff"/>
-          <rect x="10" y="3" width="3" height="9" rx="1" fill="#fff"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#fff"/>
-          <path d="M28.5 3.6a8.6 8.6 0 0 1 11 0M30.6 6.3a5.3 5.3 0 0 1 6.8 0M32.7 9a2 2 0 0 1 2.6 0" stroke="#fff" stroke-width="1.6" stroke-linecap="round" fill="none"/>
-          <rect x="43.5" y="0.5" width="20" height="11" rx="3.2" stroke="#fff" stroke-opacity=".45" fill="none"/>
-          <rect x="45.5" y="2.5" width="16" height="7" rx="1.6" fill="#fff"/><rect x="64.5" y="4" width="1.5" height="4" rx=".7" fill="#fff" fill-opacity=".45"/>
+          <rect x="0" y="8" width="3" height="4" rx="1" fill="currentColor"/><rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="currentColor"/>
+          <rect x="10" y="3" width="3" height="9" rx="1" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx="1" fill="currentColor"/>
+          <path d="M28.5 3.6a8.6 8.6 0 0 1 11 0M30.6 6.3a5.3 5.3 0 0 1 6.8 0M32.7 9a2 2 0 0 1 2.6 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+          <rect x="43.5" y="0.5" width="20" height="11" rx="3.2" stroke="currentColor" stroke-opacity=".45" fill="none"/>
+          <rect x="45.5" y="2.5" width="16" height="7" rx="1.6" fill="currentColor"/><rect x="64.5" y="4" width="1.5" height="4" rx=".7" fill="currentColor" fill-opacity=".45"/>
         </svg>
       </div>
       <img id="app" style="width:${W}px;height:${H - STATUS - HOME}px;display:block;flex:none" />
       <div id="bottom" style="height:${HOME}px;flex:none;display:grid;place-items:center">
-        <span style="width:134px;height:5px;border-radius:3px;background:rgba(255,255,255,.72)"></span>
+        <span style="width:134px;height:5px;border-radius:3px;background:currentColor;opacity:.72"></span>
       </div>
     </div></body></html>`);
   await page.evaluate(
@@ -77,17 +77,21 @@ async function phoneScreen(browser, png) {
       c.height = img.naturalHeight;
       const ctx = c.getContext("2d");
       ctx.drawImage(img, 0, 0);
-      const color = (y) => {
+      // Each bar takes its edge's color, and dark ink on the light theme.
+      const paint = (id, y) => {
         const [r, g, b] = ctx.getImageData(
           Math.round(c.width / 2),
           y,
           1,
           1,
         ).data;
-        return `rgb(${r} ${g} ${b})`;
+        const bar = document.getElementById(id);
+        bar.style.background = `rgb(${r} ${g} ${b})`;
+        bar.style.color =
+          0.2126 * r + 0.7152 * g + 0.0722 * b > 140 ? "#1a1626" : "#fff";
       };
-      document.getElementById("top").style.background = color(1);
-      document.getElementById("bottom").style.background = color(c.height - 2);
+      paint("top", 1);
+      paint("bottom", c.height - 2);
     },
     `data:image/png;base64,${png.toString("base64")}`,
   );
@@ -97,13 +101,18 @@ async function phoneScreen(browser, png) {
 }
 
 async function main() {
-  const browser = await chromium.launch({ channel: "chrome", headless: true });
+  // CAPTURE_CHANNEL="" uses Playwright's own Chromium when Chrome is missing.
+  const channel = process.env.CAPTURE_CHANNEL ?? "chrome";
+  const browser = await chromium.launch({
+    channel: channel || undefined,
+    headless: true,
+  });
   for (const [name, route, draft] of shots) {
     const context = await browser.newContext({
       viewport: { width: W, height: H - STATUS - HOME },
       deviceScaleFactor: SCALE,
       reducedMotion: "reduce",
-      colorScheme: "dark",
+      colorScheme: "light",
       locale: "es-AR",
     });
     // Borrador ficticio en la pestaña: el mismo mecanismo que usa la vista previa.
