@@ -42,7 +42,7 @@ El build local no envía formularios ni carga analítica. El formulario queda vi
 VPS_HOST=usuario@ip-del-vps SSHPASS='…' npm run deploy:vps   # o sin SSHPASS si usás clave SSH
 ```
 
-El script compila, sube `dist/` y `app/infra/landing/` y corre `docker compose up -d --build`. La contraseña va solo por entorno y no se guarda. El tráfico público llega por un túnel de Cloudflare: poné el token en `/opt/eudila-landing/secrets/tunnel-token` en el VPS y el siguiente despliegue levanta también `cloudflared` (perfil `tunnel`). Cloudflare termina el HTTPS.
+Desde el 27/10/2026 el despliegue continuo de `main` también publica la landing cuando `/opt/eudila-landing/compose.yaml` existe en el VPS ([cómo](../docs/ops/vps-eudila.md#landing-y-panel-en-el-despliegue-continuo--27102026)); este script queda para la instalación inicial o un servidor sin despliegue continuo. El script compila, sube `dist/` y `app/infra/landing/` y corre `docker compose up -d --build`. La contraseña va solo por entorno y no se guarda. El tráfico público llega por un túnel de Cloudflare: poné el token en `/opt/eudila-landing/secrets/tunnel-token` en el VPS y el siguiente despliegue levanta también `cloudflared` (perfil `tunnel`). Cloudflare termina el HTTPS.
 
 Mientras no haya casilla monitoreada y Resend, el formulario sigue deshabilitado y remite al canal de GitHub: nginx no ejecuta `api/contact.mjs`.
 
