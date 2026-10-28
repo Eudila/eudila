@@ -254,13 +254,13 @@ footer{color:var(--muted);font-size:.875rem;border-top:1px solid var(--line);pad
     <div class="section-head">
       <p class="eyebrow">Una mascota, siete estados</p>
       <h2>Siete temperamentos</h2>
-      <p>Cambia el ritmo, nunca el juicio. En lo desagradable respira más lento, se hunde un poco y tirita apenas; en lo agradable se balancea y da saltitos. Tocá cada una para que salte.</p>
+      <p>Cambia el ritmo, nunca el juicio. En lo desagradable respira más lento y se hunde un poco; Muy desagradable queda sin tiritona. En lo agradable se balancea y da saltitos. Tocá cada una para que salte.</p>
     </div>
     <div class="strip-scroll">
       <div class="strip">
         <div class="strip-art"><canvas id="c-siete" aria-label="Siete versiones de la mascota, una por estado"></canvas></div>
         <div class="strip-names">
-          <span>Muy desagradable<small>5,6 s · tirita</small></span>
+          <span>Muy desagradable<small>5,6 s · sin tiritona</small></span>
           <span>Desagradable<small>5 s · se hunde</small></span>
           <span>Algo desagradable<small>4,5 s · onda</small></span>
           <span>Neutral<small>4 s · quieta</small></span>
@@ -318,7 +318,7 @@ footer{color:var(--muted);font-size:.875rem;border-top:1px solid var(--line);pad
         <ul>
           <li><strong>Ojos.</strong> DESIGN.md descarta caras tipo emoji. «Mirada» necesita una decisión documentada antes de entrar a la app.</li>
           <li><strong>Guardado igual para todos.</strong> Celebra que registraste, no cómo te sentís; la marca no felicita estados agradables.</li>
-          <li><strong>Temperamentos sin castigo.</strong> La tiritona de lo desagradable es de 1 px; nunca debe leerse como reproche.</li>
+          <li><strong>Temperamentos sin castigo.</strong> Muy desagradable no tirita; en los demás estados la tiritona no supera 0,6 px y nunca debe leerse como reproche.</li>
           <li><strong>«Tu eudila» revela ánimo.</strong> Si se comparte, comparte datos; tiene que quedar privado por defecto.</li>
           <li><strong>Dónde vive.</strong> La marca pide no animar historial, inputs ni tarjetas: la mascota va en ánimo, splash, vacíos y Ayuda.</li>
         </ul>
@@ -499,7 +499,7 @@ function drawOrb(ctx, o) {
 /* Temperamento por estado (1–7), interpolado */
 const TEMPER = {
   bp: [5.6, 5.0, 4.5, 4, 4, 3.6, 3.2], ba: [.012, .014, .016, .018, .02, .024, .028],
-  sh: [1.1, .6, .15, 0, 0, 0, 0], sw: [0, 0, 0, 0, 1.2, 2.4, 3.6],
+  sh: [0, .6, .15, 0, 0, 0, 0], sw: [0, 0, 0, 0, 1.2, 2.4, 3.6],
   sink: [.06, .035, .012, 0, -.005, -.012, -.02], hop: [0, 0, 0, 0, 0, .035, .07]
 };
 const tem = (k, m) => { const a = TEMPER[k]; m = clamp(m, 1, 7); const i = Math.min(5, Math.floor(m - 1)); return lerp(a[i], a[i + 1], m - 1 - i); };

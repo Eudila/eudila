@@ -34,7 +34,7 @@ La mascota **es el orbe**, no un personaje aparte: cinco capas translúcidas, n�
 1. **Nunca sigue al puntero, ni directa ni indirectamente.** Sin mirada hacia el mouse, sin saltos al pasar por encima (hover), sin mirar al pulgar del slider. La mirada es autónoma. La única entrada del puntero es el toque o clic, que dispara una reacción (salto o sacudida).
 2. **Movimientos independientes.** Cada mascota tiene su propio reloj: fase aleatoria de 0 a 20 s para balanceo, saltitos, tiritona y destellos; fase de respiración y de giro aleatorias; parpadeo y cambios de mirada con tiempos propios (el primero entre 0 y 2,5 s). Dos mascotas en pantalla nunca se mueven sincronizadas.
 3. **Neutral tiene tres capas.** Las dos capas interiores (escalas .52 y .36) no se dibujan en Neutral. Su opacidad es `clamp(|ánimo − 4| × 1,5)`: aparecen gradualmente al alejarse de Neutral (completas a ±0,67), para no saltar durante el arrastre. Vale para el orbe y la mascota.
-4. **Sin juicio.** Guardado celebra igual en los siete estados: celebra que registraste, no cómo te sentís. En lo desagradable la mascota se vuelve más lenta y pesada, nunca castigada. La tiritona máxima es 1,1 px a radio 110.
+4. **Sin juicio.** Guardado celebra igual en los siete estados: celebra que registraste, no cómo te sentís. En lo desagradable la mascota se vuelve más lenta y pesada, nunca castigada. Muy desagradable queda sin tiritona por pedido del usuario (28/10/2026); en los demás estados la tiritona máxima es 0,6 px a radio 110.
 5. **Movimiento reducido:** mascota quieta (sin respiración, giro, titileo, parpadeo ni mirada), cambios instantáneos, momentos omitidos.
 6. **Dónde vive:** viva (con movimiento) en el logo, la pantalla de ánimo, el splash, los estados vacíos y Ayuda. En historial, tarjetas, fichas y listas aparece **quieta con su carita** (24/10/2026, pedido del usuario: «que el eudila con los ojos aparezca de forma consistente en todas las pantallas»). Usa los mismos ojos por estado, sin parpadeo, mirada ni respiración, y en tamaños compactos la cara va agrandada ×1,75 como en el logo (`MoodOrb compact`). La regla de movimiento de DESIGN.md sigue vigente.
 
@@ -72,13 +72,15 @@ Interpolados con la posición continua del slider.
 
 | Estado | Respiración | Amplitud | Otro rasgo |
 | --- | --- | --- | --- |
-| Muy desagradable | 5,6 s | ±1,2% | se hunde 6%, tiritona 1,1 |
+| Muy desagradable | 5,6 s | ±1,2% | se hunde 6%, sin tiritona |
 | Desagradable | 5,0 s | ±1,4% | se hunde 3,5%, tiritona .6 |
 | Algo desagradable | 4,5 s | ±1,6% | se hunde 1,2%, tiritona .15 |
 | Neutral | 4 s | ±1,8% | tres capas, quieto |
 | Algo agradable | 4 s | ±2,0% | ondulación radial de 8 s (ya en la app), balanceo 1,2° |
 | Agradable | 3,6 s | ±2,4% | balanceo 2,4° (período 3,4 s) |
 | Muy agradable | 3,2 s | ±2,8% | balanceo 3,6°, saltito de 7% del radio cada 3,2 s |
+
+**28/10/2026 · sin temblor en Muy desagradable:** pedido del usuario aplicado al motor compartido, la referencia viva y la copia generada de la landing. Conserva la respiración y la mirada. [Verificación del selector Next.js real](../evidence/mascota-sin-temblor-2026-10-28/README.md).
 
 ## Momentos
 
