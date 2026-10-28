@@ -8,7 +8,7 @@ export default defineConfig([
   ...nextVitals,
   ...nextTypescript,
   prettier,
-  { settings: { next: { rootDir: "app/" } } },
+  { settings: { next: { rootDir: ["app/", "dashboard/"] } } },
   {
     // Los scripts de herramientas de la landing son CommonJS.
     files: ["**/*.cjs"],
