@@ -21,14 +21,28 @@ async function loadTs(relative, replacements = {}) {
   return { url, module: await import(url) };
 }
 import * as api from "@eudila/domain/export.ts";
+const react = {
+  react: import.meta.resolve("react"),
+  "react/jsx-runtime": import.meta.resolve("react/jsx-runtime"),
+};
+const { url: orbUrl } = await loadTs(
+  import.meta.resolve("@eudila/mood/orb.tsx"),
+  {
+    "./moods.js": import.meta.resolve("@eudila/mood/moods.js"),
+    "./critter": import.meta.resolve("@eudila/mood/critter.ts"),
+    ...react,
+  },
+);
 const {
   module: { default: Report },
 } = await loadTs("./report.tsx", {
   "@eudila/domain/records.ts": import.meta.resolve("@eudila/domain/records.ts"),
   "@eudila/domain/export.ts": import.meta.resolve("@eudila/domain/export.ts"),
   "@eudila/mood/moods.js": import.meta.resolve("@eudila/mood/moods.js"),
-  "react/jsx-runtime": import.meta.resolve("react/jsx-runtime"),
+  "@eudila/mood/orb.tsx": orbUrl,
+  ...react,
 });
+const text = (html) => html.replace(/<[^>]+>/g, "");
 
 const originalTimezone = process.env.TZ;
 process.env.TZ = "America/Argentina/Buenos_Aires";
@@ -157,22 +171,14 @@ test("CSV conserva acentos, comillas, saltos, ISO e identificadores; neutraliza 
   assert.ok(csv.endsWith("\r\n"));
 });
 
-test("JSON roundtrip conserva todos los campos y relaciones sin depender del período PDF", () => {
-  const records = [
-    entry("old", "2025-01-01T12:00:00Z"),
-    entry("current", "2026-10-04T12:00:00Z", {
-      factors: [],
-      source: "example",
-    }),
-  ];
-  assert.deepEqual(JSON.parse(api.recordsJson(records)), records);
-  assert.match(
-    api.exportFilename(new Date("2026-10-04T03:00:00Z"), "json"),
-    /^eudila-vista-previa-historial-2026-10-04\.json$/,
+test("nombre de archivo distingue vista previa de cuenta", () => {
+  assert.equal(
+    api.exportFilename(new Date("2026-10-04T03:00:00Z"), "csv"),
+    "eudila-vista-previa-historial-2026-10-04.csv",
   );
   assert.equal(
-    api.exportFilename(new Date("2026-10-04T03:00:00Z"), "json", false),
-    "eudila-historial-2026-10-04.json",
+    api.exportFilename(new Date("2026-10-04T03:00:00Z"), "pdf", false),
+    "eudila-historial-2026-10-04.pdf",
   );
 });
 
@@ -241,7 +247,7 @@ test("informe describe todos los datos y ausencias sin diagnóstico ni clasifica
       generatedAt,
     }),
   );
-  for (const text of [
+  for (const expected of [
     "2 registros",
     "1 día con al menos un registro",
     "1 día sin registro",
@@ -254,7 +260,9 @@ test("informe describe todos los datos y ausencias sin diagnóstico ni clasifica
     "no ofrece diagnósticos",
     "15:00:00",
   ])
-    assert.ok(html.includes(text), text);
+    assert.ok(text(html).includes(expected), expected);
+  assert.match(html, /logo-mascota\.svg/);
+  assert.match(html, /var\(--color-mood-4\)/);
   assert.ok(
     !/nivel de riesgo|depresión|ansiedad detectada|tendencia positiva|tendencia negativa/i.test(
       html,

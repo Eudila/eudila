@@ -4,14 +4,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useHistory } from "../historial/state";
-import type { RecordEntry } from "@eudila/domain/records.ts";
+import { parseDayKey, type RecordEntry } from "@eudila/domain/records.ts";
 import {
   exportFilename,
   formatDay,
   recordsCsv,
-  recordsJson,
   reportPeriod,
   summarize,
+  type Period,
   type PeriodChoice,
 } from "@eudila/domain/export.ts";
 import Report from "./report";
@@ -19,6 +19,8 @@ import { Disclosure, Icon } from "../../ui";
 import "./exportar.css";
 
 const actionClass = "action action-secondary";
+const fieldClass =
+  "min-h-touch w-full rounded-field border border-line bg-surface px-3 py-3";
 
 export default function Exportar() {
   const { records, ready, available, problem, retry } = useHistory();
@@ -49,30 +51,38 @@ export default function Exportar() {
 
 function ExportControls({ records }: { records: RecordEntry[] }) {
   const { preview } = useHistory();
-  const [choice, setChoice] = useState<PeriodChoice>("7");
+  const [choice, setChoice] = useState<PeriodChoice | "custom">("7");
+  const [range, setRange] = useState<Period>({ start: "", end: "" });
   const [generatedAt, setGeneratedAt] = useState(() => new Date());
   const [problem, setProblem] = useState<string | null>(null);
-  const period = reportPeriod(records, choice, generatedAt);
-  const summary = summarize(records, period);
+  // Custom dates stay inside the whole history, so the day list stays bounded.
+  const history = reportPeriod(records, "all", generatedAt);
+  const rangeValid =
+    !!parseDayKey(range.start) &&
+    !!parseDayKey(range.end) &&
+    range.start <= range.end &&
+    range.start >= history.start &&
+    range.end <= history.end;
+  const period =
+    choice === "custom"
+      ? rangeValid
+        ? range
+        : null
+      : reportPeriod(records, choice, generatedAt);
+  const summary = period && summarize(records, period);
+  const count = summary?.chronology.length ?? 0;
 
-  function download(format: "csv" | "json") {
+  function download() {
     if (!records.length) return;
     let url: string | null = null;
     let anchor: HTMLAnchorElement | null = null;
     try {
-      const content =
-        format === "csv" ? recordsCsv(records) : recordsJson(records);
       url = URL.createObjectURL(
-        new Blob([content], {
-          type:
-            format === "csv"
-              ? "text/csv;charset=utf-8"
-              : "application/json;charset=utf-8",
-        }),
+        new Blob([recordsCsv(records)], { type: "text/csv;charset=utf-8" }),
       );
       anchor = document.createElement("a");
       anchor.href = url;
-      anchor.download = exportFilename(generatedAt, format, preview);
+      anchor.download = exportFilename(generatedAt, "csv", preview);
       document.body.append(anchor);
       anchor.click();
       setProblem(null);
@@ -91,7 +101,7 @@ function ExportControls({ records }: { records: RecordEntry[] }) {
   }
 
   function printReport() {
-    if (!summary.chronology.length) return;
+    if (!count) return;
     const previousTitle = document.title;
     try {
       document.title = exportFilename(generatedAt, "pdf", preview).replace(
@@ -119,9 +129,9 @@ function ExportControls({ records }: { records: RecordEntry[] }) {
             en un lugar seguro y elegí con quién compartirlos.
           </p>
           <p>
-            CSV y JSON incluyen todos los registros; el período del informe no
-            modifica esas descargas. Para el PDF, elegí «Guardar como PDF» en la
-            ventana de impresión.
+            El CSV incluye todos los registros; el período del informe no lo
+            modifica. Para el PDF, elegí «Guardar como PDF» en la ventana de
+            impresión.
           </p>
         </Disclosure>
         {!records.length && (
@@ -153,19 +163,10 @@ function ExportControls({ records }: { records: RecordEntry[] }) {
               type="button"
               disabled={!records.length}
               className={actionClass}
-              onClick={() => download("csv")}
+              onClick={download}
             >
               <Icon name="download" />
               Descargar CSV
-            </button>
-            <button
-              type="button"
-              disabled={!records.length}
-              className={actionClass}
-              onClick={() => download("json")}
-            >
-              <Icon name="download" />
-              Descargar JSON
             </button>
           </div>
         </section>
@@ -179,9 +180,12 @@ function ExportControls({ records }: { records: RecordEntry[] }) {
           <select
             id="report-period"
             value={choice}
-            className="min-h-touch w-full rounded-field border border-line bg-surface px-3 py-3"
+            className={fieldClass}
             onChange={(event) => {
-              setChoice(event.target.value as PeriodChoice);
+              const next = event.target.value as PeriodChoice | "custom";
+              // Start the custom range from what was on screen.
+              if (next === "custom" && period) setRange(period);
+              setChoice(next);
               setGeneratedAt(new Date());
             }}
           >
@@ -193,16 +197,55 @@ function ExportControls({ records }: { records: RecordEntry[] }) {
                 ? "Todo el historial de esta pestaña"
                 : "Todo el historial de tu cuenta"}
             </option>
+            <option value="custom">Elegir fechas</option>
           </select>
-          <p className="text-muted">
-            {formatDay(period.start)} al {formatDay(period.end)}
-          </p>
+          {choice === "custom" && (
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(9rem,1fr))] gap-3">
+              {(["start", "end"] as const).map((edge) => (
+                <label key={edge} className="block space-y-1">
+                  <span className="block">
+                    {edge === "start" ? "Desde" : "Hasta"}
+                  </span>
+                  <input
+                    type="date"
+                    required
+                    value={range[edge]}
+                    min={
+                      edge === "end" && range.start
+                        ? range.start
+                        : history.start
+                    }
+                    max={
+                      edge === "start" && range.end ? range.end : history.end
+                    }
+                    aria-invalid={!rangeValid}
+                    aria-describedby={
+                      rangeValid ? undefined : "report-range-help"
+                    }
+                    className={fieldClass}
+                    onChange={(event) => {
+                      setRange({ ...range, [edge]: event.target.value });
+                      setGeneratedAt(new Date());
+                    }}
+                  />
+                </label>
+              ))}
+            </div>
+          )}
+          {period ? (
+            <p className="text-muted">
+              {formatDay(period.start)} al {formatDay(period.end)}
+            </p>
+          ) : (
+            <p id="report-range-help">
+              Elegí una fecha de inicio anterior o igual a la de fin, entre el{" "}
+              {formatDay(history.start)} y el {formatDay(history.end)}.
+            </p>
+          )}
           <p role="status">
-            {summary.chronology.length}{" "}
-            {summary.chronology.length === 1 ? "registro" : "registros"} en el
-            período.
+            {count} {count === 1 ? "registro" : "registros"} en el período.
           </p>
-          {!summary.chronology.length && records.length > 0 && (
+          {period && !count && records.length > 0 && (
             <p>
               No hay registros en este período. Elegí otro período para preparar
               el informe.
@@ -210,7 +253,7 @@ function ExportControls({ records }: { records: RecordEntry[] }) {
           )}
           <button
             type="button"
-            disabled={!summary.chronology.length}
+            disabled={!count}
             className={actionClass}
             onClick={printReport}
           >
@@ -220,7 +263,7 @@ function ExportControls({ records }: { records: RecordEntry[] }) {
         </section>
         {problem && <p role="alert">{problem}</p>}
       </div>
-      {!!summary.chronology.length && (
+      {period && !!count && (
         <Report records={records} period={period} generatedAt={generatedAt} />
       )}
     </>
