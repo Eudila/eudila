@@ -1,6 +1,6 @@
 <div align="center">
 
-<a href="https://eudila.com/assets/eudila-film.mp4"><img src="landing/assets/eudila-film-poster.jpg" alt="La mascota de eudila junto al logo: lo que pasa entre sesiones, también llega a la consulta" width="760" /></a>
+<a href="https://eudila.com/assets/eudila-film.mp4"><img src=".github/assets/portada-claro.png" alt="La mascota de eudila junto al logo: lo que pasa entre sesiones, también llega a la consulta" width="760" /></a>
 
 <sub>▶ Tocá la imagen para ver eudila en 30 segundos</sub>
 
@@ -14,8 +14,8 @@
 
 <p>
   <a href="https://github.com/Eudila/eudila/actions/workflows/ci.yml"><img src="https://github.com/Eudila/eudila/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/licencia-AGPL--3.0-7c3aed" alt="Licencia AGPL-3.0" /></a>
-  <img src="https://img.shields.io/badge/Next.js-16-000000?logo=nextdotjs" alt="Next.js 16" />
+  <a href="LICENSE"><img src="https://img.shields.io/badge/licencia-AGPL--3.0-a62a54" alt="Licencia AGPL-3.0" /></a>
+  <img src="https://img.shields.io/badge/Next.js-16-1a1626?logo=nextdotjs" alt="Next.js 16" />
   <img src="https://img.shields.io/badge/Supabase-Auth-3ecf8e?logo=supabase&logoColor=white" alt="Supabase" />
   <a href="https://noainnova.com.ar/"><img src="https://img.shields.io/badge/🏆_NOA_Innova-ganadores_2026-0305C6" alt="Ganadores Hackathon NOA Innova 2026" /></a>
 </p>
