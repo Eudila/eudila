@@ -181,7 +181,9 @@ function OriginalRecords({ records }: { records: RecordEntry[] }) {
             <p className="text-muted">
               {record.source === "example"
                 ? "Ejemplo ficticio"
-                : "Registro de esta vista previa"}
+                : record.source === "account"
+                  ? "Registro de tu cuenta"
+                  : "Registro de esta vista previa"}
             </p>
           </li>
         ))}
@@ -301,10 +303,12 @@ export function FactorsView({ range }: { range: Range }) {
 }
 
 function FactorContent({ range, id }: { range: Range; id: string }) {
-  const { records } = useHistory();
+  const { records, preview } = useHistory();
   const name =
     factorName(records, id) ??
-    previewFactors.find((factor) => factor.id === id)?.nombre;
+    (preview
+      ? previewFactors.find((factor) => factor.id === id)?.nombre
+      : undefined);
   const series = analysis(records, range, new Date(), id);
   const values = moods.map(
     (_, index) =>
@@ -342,9 +346,8 @@ function FactorContent({ range, id }: { range: Range; id: string }) {
         </>
       ) : (
         <p role="status">
-          No encontramos este factor en el historial de esta pestaña ni en el
-          catálogo de vista previa. Podés volver al listado para consultar los
-          factores disponibles.
+          No encontramos este factor en tus registros. Podés volver al listado
+          para consultar los factores disponibles.
         </p>
       )}
     </>
@@ -352,11 +355,13 @@ function FactorContent({ range, id }: { range: Range; id: string }) {
 }
 
 export function FactorView({ range, id }: { range: Range; id: string }) {
-  const { records, ready, preview, problem } = useHistory();
+  const { records, ready, preview, available, problem } = useHistory();
   const name =
-    ready && preview && !problem
+    ready && available && !problem
       ? (factorName(records, id) ??
-        previewFactors.find((factor) => factor.id === id)?.nombre ??
+        (preview
+          ? previewFactors.find((factor) => factor.id === id)?.nombre
+          : undefined) ??
         "Factor no disponible")
       : "Detalle del factor";
   return (

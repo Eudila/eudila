@@ -22,10 +22,14 @@ export default function Report({
     <article className="history-report" aria-labelledby="report-title">
       <header>
         <p className="font-semibold">eudila</p>
-        <p>Vista previa. No representa el historial de una cuenta.</p>
         <h2 id="report-title" className="font-display text-question font-bold">
           Resumen de registros
         </h2>
+        <p>
+          {records.some((record) => record.source === "account")
+            ? "Historial de tu cuenta."
+            : "Vista previa. No representa el historial de una cuenta."}
+        </p>
         <p>
           {formatDay(period.start)} al {formatDay(period.end)} · Ambas fechas
           incluidas.
@@ -77,7 +81,9 @@ export default function Report({
                 Origen:{" "}
                 {record.source === "example"
                   ? "Ejemplo"
-                  : "Registro de vista previa"}
+                  : record.source === "account"
+                    ? "Registro de tu cuenta"
+                    : "Registro de vista previa"}
               </p>
             </li>
           ))}

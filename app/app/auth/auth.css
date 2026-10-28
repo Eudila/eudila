@@ -175,6 +175,15 @@
 .auth-gateway .auth-intro {
   margin-bottom: 12px;
 }
+.auth-access .action.auth-google {
+  border-color: var(--color-white);
+  background: var(--color-white);
+  color: var(--color-graphite);
+}
+.auth-access .auth-google:disabled {
+  border-style: solid;
+  opacity: 0.6;
+}
 .auth-access .auth-switch {
   display: flex;
   flex-direction: column;

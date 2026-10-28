@@ -6,6 +6,7 @@ import { authConfigured } from "./config";
 import { authClient } from "./client";
 import { HistoryProvider } from "../(paciente)/historial/state";
 import { RegistroProvider } from "../(paciente)/registro/registro";
+import { pendingRecordKey } from "@eudila/domain/records.ts";
 
 export default function SessionScope({ children }: { children: ReactNode }) {
   const [identity, setIdentity] = useState("initial");
@@ -20,6 +21,7 @@ export default function SessionScope({ children }: { children: ReactNode }) {
         if (previous !== id && (previous !== null || id !== "guest")) {
           sessionStorage.removeItem("eudila-draft-v1");
           sessionStorage.removeItem("eudila-preview-records-v1");
+          sessionStorage.removeItem(pendingRecordKey);
         }
         sessionStorage.setItem("eudila-draft-owner", id);
       } catch {
@@ -38,7 +40,7 @@ export default function SessionScope({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
   return (
-    <HistoryProvider key={identity}>
+    <HistoryProvider key={identity} identity={identity}>
       <RegistroProvider>{children}</RegistroProvider>
     </HistoryProvider>
   );

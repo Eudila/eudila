@@ -161,6 +161,7 @@ export function recordsJson(records: RecordEntry[]): string {
 export function exportFilename(
   now: Date,
   extension: "csv" | "json" | "pdf",
+  preview = true,
 ): string {
-  return `eudila-vista-previa-historial-${localDayKey(now)}.${extension}`;
+  return `eudila-${preview ? "vista-previa-" : ""}historial-${localDayKey(now)}.${extension}`;
 }

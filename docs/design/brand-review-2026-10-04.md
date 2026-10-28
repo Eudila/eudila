@@ -1,5 +1,7 @@
 # Brechas estéticas de eudila · revisión del 04/10/2026
 
+**Integración para CD del 28/10/2026:** se conservaron en los workspaces actuales el guardado de cuenta y el botón Google blanco ya publicados. No cambia la identidad visual ni el estado de las brechas. Se comprobó el recorrido Next.js real con dos cuentas locales: guardar, recargar, otro navegador, consumidores, exportación, aislamiento y reintento tras respuesta perdida. La prueba generó nuevamente las capturas en `evidence/registros-cuenta-2026-10-27/`. [Plan del despliegue continuo](../plans/2026-10-28-vps-cd.md).
+
 **Estado:** desde el 23/10/2026 el branding vigente incluye la mascota eudila y el logo Muy agradable ([especificación](mascota/README.md)); sus brechas de implementación VIS-13 a VIS-17 quedaron resueltas el 24/10/2026 en las rutas Next.js reales (evidencias `mascota-logo`, `mascota-animo` y `mascota-momentos` de esa fecha). Diagnóstico original conservado como baseline; VIS-05/10/11 verificadas en acciones y contraste (04/10), VIS-01/07 verificadas en ambiente y composición (05/10). VIS-02/03/06 verificadas en material, geometría y movimiento (05/10). VIS-04 resuelta con pruebas automatizadas en Chromium/WebKit/Firefox y prueba manual en Safari confirmada por el usuario (05/10). VIS-08/09/12 siguen abiertas; VIS-08 y VIS-12 tienen avance parcial. Baseline: `main` en `414ceca4b31220c2be760ed0cd58daa9cfaa3e5a` (PR #9). Próximas sesiones deben consultar este informe junto con `DESIGN.md`, actualizar estados y conservar evidencia; no repetir la definición de marca desde cero.
 
 ## Fuentes y autoridad
@@ -16,6 +18,10 @@
 El PDF es de uso interno. Los videos y fotogramas de marca permanecen fuera del repo de producto; los hashes y esta descripción permiten identificar las fuentes en otras sesiones. No confundir ausencia del archivo fuente en otro checkout con permiso para improvisar otra identidad.
 
 ## Método y límites
+
+**27/10/2026 · botón Google blanco:** excepción solicitada por el usuario para el proveedor: blanco/Grafito y G oficial multicolor. Conserva el recorrido, foco y movimiento reducido. [Evidencia en la bienvenida real](evidence/google-blanco-2026-10-27/README.md); no cierra otras brechas de marca.
+
+**27/10/2026 · persistencia de cuenta:** la confirmación, Hoy y Exportar se integran con el historial privado de Supabase conservando composición y tokens. Las cuentas usan «Guardar registro», los errores preservan el borrador y los ejemplos quedan exclusivos del preview. [Evidencia local sobre Next.js real](evidence/registros-cuenta-2026-10-27/README.md). Este cambio funcional no cierra brechas de marca ni certifica el despliegue remoto.
 
 Se extrajeron y visualizaron fotogramas de toda la duración: presentación cada segundo (0–14 s), motion cada dos segundos (0–18 s), y secuencia adicional cada 200 ms entre 1.5 y 2.5 s. Las planchas permiten comparar etapas de forma/color/ambiente y posiciones de capas/partículas. Los tiempos de respiración/giro/transición se toman del PDF; no se presentan como medición experimental del video. No se infieren háptica, interacción real ni comportamiento del sistema a partir de una animación renderizada.
 
