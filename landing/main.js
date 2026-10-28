@@ -40,7 +40,7 @@
       sitekey: config.turnstileSitekey,
       action: "contact",
       theme: "light",
-      size: "compact",
+      size: "flexible",
       callback(value) {
         token = value;
         submit.disabled = busy || !token;

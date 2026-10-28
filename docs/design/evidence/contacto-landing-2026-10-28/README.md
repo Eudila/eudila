@@ -28,3 +28,9 @@ Falta acceso administrativo al VPS. El host está identificado en el workflow (`
 No se verificó un token de producción por el endpoint protegido ni su replay real; esa comprobación, el guardado en la base desplegada y 429 sobre HTTPS quedan pendientes. El canal público sigue en su estado previo hasta completar esos pasos.
 
 No se agregaron emails ni bandeja de administración. Un reintento con token nuevo después de perder una respuesta puede duplicar la consulta.
+
+## Ajuste horizontal solicitado · 28/10/2026
+
+A pedido del usuario se reemplaza el cuadrado compacto por `size: "flexible"`: franja horizontal de 65 px de alto, ancho del formulario y mínimo nativo de 300 px. El grid permite achicar su pista y el contenedor se centra, usando parte del margen a 320 px y con texto al 200%, sin escalar el contenido de Cloudflare ni recortarlo. La cabecera también permite envolver GitHub y «Hablemos»: juntos provocaban un desborde de 366 px al ampliar texto.
+
+El chequeo existente exige ahora 65 px de alto, ancho mínimo y ambos bordes dentro del viewport. Se prueba el widget oficial con clave de pruebas y se conserva el flujo de envío, expiración y renovación. [Formulario horizontal a 390 px](turnstile-horizontal-390.png); el aviso rojo corresponde a la clave de pruebas.
