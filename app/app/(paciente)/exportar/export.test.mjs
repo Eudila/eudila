@@ -170,6 +170,26 @@ test("JSON roundtrip conserva todos los campos y relaciones sin depender del per
     api.exportFilename(new Date("2026-10-04T03:00:00Z"), "json"),
     /^eudila-vista-previa-historial-2026-10-04\.json$/,
   );
+  assert.equal(
+    api.exportFilename(new Date("2026-10-04T03:00:00Z"), "json", false),
+    "eudila-historial-2026-10-04.json",
+  );
+});
+
+test("el informe de cuenta identifica su origen sin presentarse como preview", () => {
+  const records = [
+    entry("account", "2026-10-04T12:00:00Z", { source: "account" }),
+  ];
+  const html = renderToStaticMarkup(
+    createElement(Report, {
+      records,
+      period: { start: "2026-10-04", end: "2026-10-04" },
+      generatedAt: new Date("2026-10-04T12:00:00Z"),
+    }),
+  );
+  assert.match(html, /Historial de tu cuenta/);
+  assert.match(html, /Registro de tu cuenta/);
+  assert.doesNotMatch(html, /vista previa|Vista previa/);
 });
 
 test("conteos distinguen UUID de alternativas y conservan selección en cronología", () => {

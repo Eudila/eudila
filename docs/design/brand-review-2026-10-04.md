@@ -17,6 +17,10 @@ El PDF es de uso interno. Los videos y fotogramas de marca permanecen fuera del 
 
 ## Método y límites
 
+**27/10/2026 · botón Google blanco:** excepción solicitada por el usuario para el proveedor: blanco/Grafito y G oficial multicolor. Conserva el recorrido, foco y movimiento reducido. [Evidencia en la bienvenida real](evidence/google-blanco-2026-10-27/README.md); no cierra otras brechas de marca.
+
+**27/10/2026 · persistencia de cuenta:** la confirmación, Hoy y Exportar se integran con el historial privado de Supabase conservando composición y tokens. Las cuentas usan «Guardar registro», los errores preservan el borrador y los ejemplos quedan exclusivos del preview. [Evidencia local sobre Next.js real](evidence/registros-cuenta-2026-10-27/README.md). Este cambio funcional no cierra brechas de marca ni certifica el despliegue remoto.
+
 Se extrajeron y visualizaron fotogramas de toda la duración: presentación cada segundo (0–14 s), motion cada dos segundos (0–18 s), y secuencia adicional cada 200 ms entre 1.5 y 2.5 s. Las planchas permiten comparar etapas de forma/color/ambiente y posiciones de capas/partículas. Los tiempos de respiración/giro/transición se toman del PDF; no se presentan como medición experimental del video. No se infieren háptica, interacción real ni comportamiento del sistema a partir de una animación renderizada.
 
 Se abrió el build de producción de Next.js en Chrome a 390×844, con preview activo. Se capturaron los siete estados del slider, inicio e ingreso y se inspeccionó su composición. [Plancha de baseline Next.js](evidence/nextjs-brand-baseline-2026-10-04.png). Se revisó además el código que determina las diferencias y se calculó contraste sRGB. Esto no es una auditoría clínica ni una prueba multiplataforma: Safari/Firefox, texto al 200% y movimiento reducido deben verificarse en la implementación de las correcciones.

@@ -1,13 +1,17 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useDraft } from "./registro";
 import { useCatalog } from "./emociones";
 import { useHistory } from "../historial/state";
-import type { RecordEntry } from "@eudila/domain/records.ts";
+import {
+  pendingRecordKey,
+  restoreRecords,
+  type RecordEntry,
+} from "@eudila/domain/records.ts";
 import { moods } from "@eudila/mood/moods.js";
 import MoodOrb from "@eudila/mood/orb.tsx";
 
@@ -32,6 +36,13 @@ export default function Confirmacion() {
     null,
   );
   const inFlight = useRef(false);
+  const mounted = useRef(true);
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
   const router = useRouter();
   const emotion = emotions.rows.find((row) => row.id === draft.emotionId);
   const selectedFactors = factors.rows.filter((row) =>
@@ -44,13 +55,29 @@ export default function Confirmacion() {
   const loading = emotions.status === "loading" || factors.status === "loading";
 
   async function save() {
-    if (!complete || !history.ready || !history.preview || inFlight.current)
+    if (!complete || !history.ready || !history.available || inFlight.current)
       return;
     inFlight.current = true;
     setSaving(true);
     setError(null);
     try {
       const fingerprint = JSON.stringify(draft);
+      if (!history.preview && !pending.current) {
+        let raw: string | null = null;
+        try {
+          raw = sessionStorage.getItem(pendingRecordKey);
+        } catch {
+          // shortcut: sin storage el ID dura esta pantalla; recargar pierde también el borrador.
+        }
+        if (raw) {
+          const previous = JSON.parse(raw);
+          if (previous?.fingerprint === fingerprint) {
+            const [entry] = restoreRecords(JSON.stringify([previous.entry]));
+            if (entry.source === "account")
+              pending.current = { fingerprint, entry };
+          }
+        }
+      }
       if (pending.current?.fingerprint !== fingerprint) {
         pending.current = {
           fingerprint,
@@ -61,16 +88,27 @@ export default function Confirmacion() {
             mood: draft.mood,
             emotion: { id: emotion!.id, nombre: emotion!.nombre },
             factors: selectedFactors.map(({ id, nombre }) => ({ id, nombre })),
-            source: "preview",
+            source: history.preview ? "preview" : "account",
           },
         };
+      }
+      if (!history.preview) {
+        try {
+          sessionStorage.setItem(
+            pendingRecordKey,
+            JSON.stringify(pending.current),
+          );
+        } catch {
+          // El intento en memoria permite reintentar aunque el navegador bloquee storage.
+        }
       }
       // Dejar que la interfaz anuncie el guardado antes de escribir almacenamiento.
       await new Promise<void>((resolve) =>
         requestAnimationFrame(() => resolve()),
       );
-      history.saveRecord(pending.current.entry);
-      markSaved(draft.mood);
+      const saved = await history.saveRecord(pending.current.entry);
+      if (!mounted.current) return;
+      markSaved(saved.mood);
       discard();
       router.replace("/hoy");
     } catch (problem) {
@@ -163,10 +201,10 @@ export default function Confirmacion() {
           disponibles. Tu borrador se conserva.
         </p>
       )}
-      {!history.preview && (
+      {history.ready && !history.available && (
         <p role="status" className="text-muted">
-          El guardado en tu cuenta todavía no está habilitado. Tu borrador se
-          conserva en esta pestaña para que puedas seguir editándolo.
+          Ingresá a tu cuenta para guardar el registro. Tu borrador se conserva
+          en esta pestaña para que puedas seguir editándolo.
         </p>
       )}
       {history.problem && (
@@ -182,12 +220,17 @@ export default function Confirmacion() {
         </div>
       )}
       {error && <p role="alert">{error}</p>}
-      {history.preview && (
+      {history.available && (
         <>
           <button
             type="button"
             onClick={save}
-            disabled={!complete || !history.ready || saving}
+            disabled={
+              !complete ||
+              !history.ready ||
+              (!history.preview && !!history.problem) ||
+              saving
+            }
             aria-busy={saving}
             className="action action-primary mt-auto"
           >
@@ -196,7 +239,9 @@ export default function Confirmacion() {
                 className={saving || error ? "invisible" : undefined}
                 aria-hidden={saving || !!error}
               >
-                Guardar en vista previa
+                {history.preview
+                  ? "Guardar en vista previa"
+                  : "Guardar registro"}
               </span>
               <span
                 className={saving || !error ? "invisible" : undefined}

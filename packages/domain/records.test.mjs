@@ -28,6 +28,11 @@ const examples = createExamples(new Date("2026-10-04T18:30:00.000Z"));
 assert.deepEqual(restoreRecords(JSON.stringify(examples)), examples);
 assert.deepEqual(restoreRecords(null), []);
 assert.deepEqual(restoreRecords("[]"), []);
+assert.equal(
+  restoreRecords(JSON.stringify([{ ...examples[0], source: "account" }]))[0]
+    .source,
+  "account",
+);
 assert.equal(averageMood([]), null);
 assert.equal(averageMood(examples), 5);
 const original = examples[0];
@@ -63,7 +68,7 @@ for (const raw of [
   JSON.stringify([original, { ...original, id: "bad", mood: 8 }]),
   JSON.stringify([{ ...original, recordedAt: "2026-02-30T10:00:00.000Z" }]),
   JSON.stringify([{ ...original, recordedAt: "2026-10-04T24:00:00.000Z" }]),
-  JSON.stringify([{ ...original, source: "account" }]),
+  JSON.stringify([{ ...original, source: "unknown" }]),
   JSON.stringify([
     { ...original, factors: [original.factors[0], original.factors[0]] },
   ]),

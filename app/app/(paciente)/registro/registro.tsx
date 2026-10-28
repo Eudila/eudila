@@ -17,6 +17,7 @@ import Emociones from "./emociones";
 import Factores from "./factores";
 import Confirmacion from "./confirmacion";
 import type { Draft } from "@eudila/domain/records.ts";
+import { pendingRecordKey } from "@eudila/domain/records.ts";
 import { moodActionStyle } from "../../actions";
 import { Icon, type IconName } from "../../ui";
 
@@ -88,6 +89,7 @@ export function RegistroProvider({ children }: { children: React.ReactNode }) {
     setMoodInput({ position: 4, animate: false });
     try {
       sessionStorage.removeItem(draftKey);
+      sessionStorage.removeItem(pendingRecordKey);
     } catch {
       setPersistent(false);
     }

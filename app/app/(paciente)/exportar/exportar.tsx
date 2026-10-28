@@ -21,7 +21,7 @@ import "./exportar.css";
 const actionClass = "action action-secondary";
 
 export default function Exportar() {
-  const { records, ready, preview, problem, retry } = useHistory();
+  const { records, ready, available, problem, retry } = useHistory();
   return (
     <div className="export-page space-y-6 px-6 py-8">
       <div className="export-controls space-y-3">
@@ -30,12 +30,9 @@ export default function Exportar() {
         </h1>
       </div>
       {!ready ? (
-        <p role="status">Preparando los registros de esta pestaña…</p>
-      ) : !preview ? (
-        <p>
-          La exportación del historial de tu cuenta estará disponible cuando se
-          conecte el guardado. Todavía no hay datos de cuenta para exportar.
-        </p>
+        <p role="status">Preparando tus registros…</p>
+      ) : !available ? (
+        <p>Ingresá a tu cuenta para exportar tus registros.</p>
       ) : problem ? (
         <div role="alert" className="space-y-3">
           <p>{problem}</p>
@@ -51,6 +48,7 @@ export default function Exportar() {
 }
 
 function ExportControls({ records }: { records: RecordEntry[] }) {
+  const { preview } = useHistory();
   const [choice, setChoice] = useState<PeriodChoice>("7");
   const [generatedAt, setGeneratedAt] = useState(() => new Date());
   const [problem, setProblem] = useState<string | null>(null);
@@ -74,7 +72,7 @@ function ExportControls({ records }: { records: RecordEntry[] }) {
       );
       anchor = document.createElement("a");
       anchor.href = url;
-      anchor.download = exportFilename(generatedAt, format);
+      anchor.download = exportFilename(generatedAt, format, preview);
       document.body.append(anchor);
       anchor.click();
       setProblem(null);
@@ -96,7 +94,10 @@ function ExportControls({ records }: { records: RecordEntry[] }) {
     if (!summary.chronology.length) return;
     const previousTitle = document.title;
     try {
-      document.title = exportFilename(generatedAt, "pdf").replace(/\.pdf$/, "");
+      document.title = exportFilename(generatedAt, "pdf", preview).replace(
+        /\.pdf$/,
+        "",
+      );
       window.print();
       setProblem(null);
     } catch {
@@ -145,7 +146,7 @@ function ExportControls({ records }: { records: RecordEntry[] }) {
             {records.length === 1
               ? "1 registro"
               : `${records.length} registros`}{" "}
-            en esta pestaña
+            {preview ? "en esta pestaña" : "en tu cuenta"}
           </p>
           <div className="flex flex-wrap gap-3">
             <button
@@ -187,7 +188,11 @@ function ExportControls({ records }: { records: RecordEntry[] }) {
             <option value="7">Últimos 7 días, incluido hoy</option>
             <option value="30">Últimos 30 días, incluido hoy</option>
             <option value="90">Últimos 90 días, incluido hoy</option>
-            <option value="all">Todo el historial de esta pestaña</option>
+            <option value="all">
+              {preview
+                ? "Todo el historial de esta pestaña"
+                : "Todo el historial de tu cuenta"}
+            </option>
           </select>
           <p className="text-muted">
             {formatDay(period.start)} al {formatDay(period.end)}

@@ -27,6 +27,11 @@ export default function Report({
           Resumen de registros
         </h2>
         <p>
+          {records.some((record) => record.source === "account")
+            ? "Historial de tu cuenta."
+            : "Vista previa. No representa el historial de una cuenta."}
+        </p>
+        <p>
           {formatDay(period.start)} al {formatDay(period.end)} · Ambas fechas
           incluidas.
         </p>
@@ -77,7 +82,9 @@ export default function Report({
                 Origen:{" "}
                 {record.source === "example"
                   ? "Ejemplo"
-                  : "Registro de vista previa"}
+                  : record.source === "account"
+                    ? "Registro de tu cuenta"
+                    : "Registro de vista previa"}
               </p>
             </li>
           ))}
